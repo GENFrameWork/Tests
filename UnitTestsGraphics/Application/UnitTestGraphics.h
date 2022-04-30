@@ -134,6 +134,7 @@ class INPCURSOR;
 class UI_XEVENT;
 class UI_ELEMENT;
 class UI_ELEMENT_TEXT;
+class INPWINDOWSKEYBOARDHOOK_XEVENT;
 class GRPXEVENT;
 class GRPBITMAP;
 class GRPBITMAPSEQUENCE;
@@ -168,6 +169,7 @@ class UNITTESTGRAPHICS : public APPGRAPHICS, public XFSMACHINE
 
     bool                            UnitTest_AVIVideoWrite                  ();
 
+    void                            HandleEvent_WINDOWSKeyboardHook         (INPWINDOWSKEYBOARDHOOK_XEVENT* event);
     void                            HandleEvent_UserInterface               (UI_XEVENT* event);
     void                            HandleEvent_Graphics                    (GRPXEVENT* event);
     void                            HandleEvent                             (XEVENT* xevent);

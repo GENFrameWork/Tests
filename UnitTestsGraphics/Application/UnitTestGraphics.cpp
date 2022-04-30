@@ -87,6 +87,7 @@
 #include "GRPXEvent.h"
 
 #include "INPManager.h"
+#include "INPWINDOWSKeyboardHook_XEvent.h"
 
 #include "UI_XEvent.h"
 #include "UI_Manager.h"
@@ -279,11 +280,12 @@ bool UNITTESTGRAPHICS::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
 
-  #ifdef WINDOWS
-  kbhook = new INPWINDOWSKEYBOARDHOOK(unittestgraphics->GetApplicationHandle());
-  if(!kbhook) return false;
+  #ifdef WINDOWS  
+  INPWINDOWSKEYBOARDHOOK::GetInstance().SetApplicationHandle(unittestgraphics->GetApplicationHandle());  
+  INPWINDOWSKEYBOARDHOOK::GetInstance().Activate();  
 
-  kbhook->Activate();
+  SubscribeEvent(INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_PRESSKEY   , &INPWINDOWSKEYBOARDHOOK::GetInstance());         
+  SubscribeEvent(INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_UNPRESSKEY , &INPWINDOWSKEYBOARDHOOK::GetInstance());         
   #endif
 
   //--------------------------------------------------------------------------------------
@@ -436,14 +438,12 @@ bool UNITTESTGRAPHICS::AppProc_End()
 //--------------------------------------------------------------------------------------
 
   #ifdef WINDOWS
-  if(kbhook)
-    {
-      kbhook->Deactivate();
-      delete kbhook;
-      kbhook = NULL;
-    }      
-  #endif
+  UnSubscribeEvent(INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_PRESSKEY   , &INPWINDOWSKEYBOARDHOOK::GetInstance());         
+  UnSubscribeEvent(INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_UNPRESSKEY , &INPWINDOWSKEYBOARDHOOK::GetInstance());         
 
+  INPWINDOWSKEYBOARDHOOK::GetInstance().Deactivate();
+  INPWINDOWSKEYBOARDHOOK::DelInstance();
+  #endif
 
   //--------------------------------------------------------------------------------------
   
@@ -1156,6 +1156,32 @@ bool UNITTESTGRAPHICS::UnitTest_AVIVideoWrite()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         void UNITTESTGRAPHICS::HandleEvent_WINDOWSKeyboardHook(INPWINDOWSKEYBOARDHOOK_XEVENT* event)
+* @brief      Handle Event for the observer manager of this class
+* @note       INTERNAL
+* @ingroup    GRAPHIC
+* 
+* @param[in]  event : 
+* 
+* @return     void : does not return anything. 
+* 
+* ---------------------------------------------------------------------------------------------------------------------*/
+void UNITTESTGRAPHICS::HandleEvent_WINDOWSKeyboardHook(INPWINDOWSKEYBOARDHOOK_XEVENT* event)
+{
+   switch(event->GetEventType())
+    {
+      case INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_PRESSKEY    : XTRACE_PRINTCOLOR(XTRACE_COLOR_RED   , __L("Hook keyboard: vkCode %04X, scanCode %08X, flags %08X"), event->GetVKCode(), event->GetScanCode(), event->GetFlags());
+                                                            break;
+
+      case INPWINDOWSKEYBOARDHOOK_XEVENT_TYPE_UNPRESSKEY  : XTRACE_PRINTCOLOR(XTRACE_COLOR_GREEN , __L("Hook keyboard: vkCode %04X, scanCode %08X, flags %08X"), event->GetVKCode(), event->GetScanCode(), event->GetFlags());
+                                                            break;
+    }
+} 
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void UNITTESTGRAPHICS::HandleEvent_UserInterface(UI_XEVENT* event)
 * @brief      Handle Event for the observer manager of this class
 * @note       INTERNAL
@@ -1240,19 +1266,26 @@ void UNITTESTGRAPHICS::HandleEvent(XEVENT* xevent)
 
   switch(xevent->GetEventFamily())
     {
-      case XEVENT_TYPE_GRAPHICS       : { GRPXEVENT* event = (GRPXEVENT*)xevent;
-                                          if(!event) return;
+      case XEVENT_TYPE_GRAPHICS         : { GRPXEVENT* event = (GRPXEVENT*)xevent;
+                                            if(!event) return;
 
-                                          HandleEvent_Graphics(event);
-                                        }
-                                        break;
+                                            HandleEvent_Graphics(event);
+                                          }
+                                          break;
 
-      case XEVENT_TYPE_USERINTERFACE  : { UI_XEVENT* event = (UI_XEVENT*)xevent;
-                                          if(!event) return;
+      case XEVENT_TYPE_USERINTERFACE    : { UI_XEVENT* event = (UI_XEVENT*)xevent;
+                                            if(!event) return;
 
-                                          HandleEvent_UserInterface(event);
-                                        }
-                                        break;
+                                           HandleEvent_UserInterface(event);
+                                          }
+                                          break;
+
+      case XEVENT_TYPE_WINDOWS_KBDHOOK  : { INPWINDOWSKEYBOARDHOOK_XEVENT* event = (INPWINDOWSKEYBOARDHOOK_XEVENT*)xevent;
+                                            if(!event) return;
+
+                                            HandleEvent_WINDOWSKeyboardHook(event);
+                                          } 
+                                          break;
     }
 }
 
