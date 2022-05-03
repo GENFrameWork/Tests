@@ -33,11 +33,23 @@
  set(XFILE_HEX_FEATURE                                   true    CACHE BOOL "Activate XFile HEX format"                                  FORCE)  
  set(XFILE_DFU_FEATURE                                   true    CACHE BOOL "Activate XFile DFU format"                                  FORCE)  
  set(XFILE_RIFF_FEATURE                                  true    CACHE BOOL "Activate XFile RIFF format"                                 FORCE)  
-
+  
+ set(HASH_FEATURE                                        true    CACHE BOOL "Activate Hash"                                              FORCE)
+ set(HASH_CRC16_FEATURE                                  true    CACHE BOOL "Activate Hash CRC16"                                        FORCE)  
+ set(HASH_CKS16_FEATURE                                  true    CACHE BOOL "Activate Hash CKS16"                                        FORCE)  
+ set(HASH_CRC32_FEATURE                                  true    CACHE BOOL "Activate Hash CRC32"                                        FORCE)
+ set(HASH_MD5_FEATURE                                    true    CACHE BOOL "Activate Hash MD5"                                          FORCE)
  set(HASH_SHA1_FEATURE                                   true    CACHE BOOL "Activate Hash SHA1"                                         FORCE)    
  set(HASH_SHA2_FEATURE                                   true    CACHE BOOL "Activate Hash SHA2"                                         FORCE)
- set(HASH_WHIRLPOOL_FEATURE                              true    CACHE BOOL "Activate Hash Whirlpool"                                    FORCE)  
-                  
+ set(HASH_COMP128V1_FEATURE                              true    CACHE BOOL "Activate Hash COMP128V1"                                    FORCE)
+ set(HASH_WHIRLPOOL_FEATURE                              true    CACHE BOOL "Activate Hash Whirlpool"                                    FORCE)    
+ set(CIPHER_SYMMETRIC_FEATURE                            true    CACHE BOOL "Activate Cipher Symetric"                                   FORCE)
+ set(CIPHER_ASYMMETRIC_FEATURE                           true    CACHE BOOL "Activate Cipher Asymetric"                                  FORCE)
+ set(CIPHER_SYMMETRIC_DES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric DES"                               FORCE)
+ set(CIPHER_SYMMETRIC_AES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric AES"                               FORCE)
+ set(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                   true    CACHE BOOL "Activate Cipher Symetric BlowFish"                          FORCE)
+ set(CIPHER_ASYMMETRIC_RSA_FEATURE                       true    CACHE BOOL "Activate Cipher ASymetric RSA"                              FORCE) 
+
  set(DIO_FEATURE                                         true    CACHE BOOL "Activate Data Input/Output"                                 FORCE) 
  set(DIO_STREAMUART_FEATURE                              true    CACHE BOOL "Activate Data Input/Output Stream UART"                     FORCE)
  set(DIO_STREAMBLUETOOTH_FEATURE                         true    CACHE BOOL "Activate Data Input/Output Stream Bluetooth"                FORCE)
