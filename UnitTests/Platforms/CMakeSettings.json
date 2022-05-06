@@ -46,7 +46,7 @@
       "cmakeCommandArgs": "-DTARGET=pc",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x86_x64" ]
+      "inheritEnvironments": [ "clang_cl_x86_x64" ]
     },
     {
       "name": "Linux Debian imx6",
@@ -72,8 +72,7 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_arm" ],
-      "wslPath": "${defaultWSLPath}",
-      "variables": []
+      "wslPath": "${defaultWSLPath}"
     }
   ]
 }

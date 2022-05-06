@@ -65,6 +65,7 @@
 #include "XSharedMemoryManager.h"
 #include "XProcessManager.h"
 #include "XLicense.h"
+#include "XOrderedList.h"
 
 #include "HashMD5.h"
 #include "HashSHA1.h"
@@ -170,7 +171,6 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         UNITTEST::UNITTEST
@@ -187,7 +187,6 @@ UNITTEST::UNITTEST() :  XFSMACHINE(0)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         UNITTEST::~UNITTEST
@@ -202,7 +201,6 @@ UNITTEST::~UNITTEST()
 {
   Clean();
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -245,7 +243,6 @@ bool UNITTEST::InitFSMachine()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::AppProc_PlatformIni()
@@ -274,8 +271,6 @@ bool UNITTEST::AppProc_PlatformIni()
 
   return true;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -416,10 +411,6 @@ bool UNITTEST::AppProc_Ini()
 }
 
 
-
-
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         UNITTEST::AppProc_FirstUpdate
@@ -450,7 +441,6 @@ bool UNITTEST::AppProc_FirstUpdate()
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -525,7 +515,6 @@ bool UNITTEST::AppProc_Update()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         UNITTEST::AppProc_End
@@ -561,7 +550,6 @@ bool UNITTEST::AppProc_End()
       GEN_XFACTORY.DeleteTimer(xtimerupdateconsole);
       xtimerupdateconsole = NULL;
     }
-
 
   //--------------------------------------------------------------------------------------
 
@@ -606,7 +594,6 @@ bool UNITTEST::AppProc_End()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::AppProc_PlatformEnd()
@@ -620,7 +607,6 @@ bool UNITTEST::AppProc_PlatformEnd()
 {
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -657,8 +643,6 @@ bool UNITTEST::KeyValidSecuences(int key)
 
   return true;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -698,7 +682,6 @@ bool UNITTEST::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefe
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool SCRIPT::Show_Header(bool separator)
@@ -724,7 +707,6 @@ bool UNITTEST::Show_Header(bool separator)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool SCRIPT::Show_AppStatus()
@@ -739,7 +721,6 @@ bool UNITTEST::Show_AppStatus()
   XSTRING string;
   XSTRING string2;
 
-
   //-------------------------------------------------------------------------------
   // Platforms
 
@@ -751,7 +732,6 @@ bool UNITTEST::Show_AppStatus()
   string  = __L("Plataforma");
   string2.Format(__L("%s"), platformstr.Get());
   Show_Line(string, string2);
-
 
   //-------------------------------------------------------------------------------
   // Memory status
@@ -808,7 +788,6 @@ bool UNITTEST::Show_AppStatus()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Show_AllStatus()
@@ -831,7 +810,6 @@ bool UNITTEST::Show_AllStatus()
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -926,7 +904,6 @@ bool UNITTEST::Do_Tests()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Params_IsModeServer()
@@ -954,7 +931,6 @@ bool UNITTEST::Params_IsModeServer()
 
   return modeserver;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1013,7 +989,6 @@ bool UNITTEST::Test_XString(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_XBuffer(UNITTEST* tests)
@@ -1034,8 +1009,7 @@ bool UNITTEST::Test_XBuffer(UNITTEST* tests)
   XDWORD    valuedword = 0;
   XVARIANT  variant;
   XSTRING   string;
-
-  
+ 
   buffer.Resize(32);
 
   buffer.Set((XBYTE)0x01, 0);
@@ -1128,7 +1102,6 @@ bool UNITTEST::Test_XBuffer(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_XRand(UNITTEST* tests)
@@ -1161,7 +1134,6 @@ bool UNITTEST::Test_XRand(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1214,7 +1186,6 @@ bool UNITTEST::Test_XVector(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1276,7 +1247,6 @@ bool UNITTEST::Test_XTrace(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1383,7 +1353,6 @@ bool UNITTEST::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexchild)
@@ -1413,7 +1382,6 @@ bool UNITTEST::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexchild)
 
   return false;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1515,7 +1483,6 @@ bool UNITTEST::Test_XTree(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_XDir(UNITTEST* tests)
@@ -1560,7 +1527,6 @@ bool UNITTEST::Test_XDir(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_Threads(UNITTEST* tests)
@@ -1601,7 +1567,6 @@ bool UNITTEST::Test_Threads(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1660,7 +1625,6 @@ bool UNITTEST::Test_DateTime(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_HASH(UNITTEST* tests)
@@ -1711,7 +1675,6 @@ bool UNITTEST::Test_HASH(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1774,7 +1737,6 @@ bool UNITTEST::Test_DIOStreamTCPIPConnection(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_System(UNITTEST* tests)
@@ -1802,7 +1764,6 @@ bool UNITTEST::Test_XSystem(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_SharedMemory(UNITTEST* tests)
@@ -1823,7 +1784,6 @@ bool UNITTEST::Test_SharedMemory(UNITTEST* tests)
   bool modeserver = tests->Params_IsModeServer();
 
   tests->console->Printf(__L("   Creating Shared Memory: %s \n"), (modeserver?__L("[Master]"):__L("[Slave]")));
-
   
   XBYTE*    pointer = NULL;
   XDWORD    size    = 0;
@@ -1873,8 +1833,6 @@ bool UNITTEST::Test_SharedMemory(UNITTEST* tests)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_GPIO(UNITTEST* tests)
@@ -1914,7 +1872,6 @@ bool UNITTEST::Test_GPIO(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_WebClient(UNITTEST* tests)
@@ -1941,7 +1898,6 @@ bool UNITTEST::Test_WebClient(UNITTEST* tests)
   tests->SubscribeEvent(DIOWEBCLIENT_XEVENT_TYPE_READBODYBLOCK   , &webclient);
   tests->SubscribeEvent(DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB        , &webclient);
 
-
   //url = __L("http://ovh.net/files/10Mio.dat");
   url = __L("http://ovh.net/files/1Gio.dat");
   webclient.Set_Port(80);
@@ -1964,8 +1920,6 @@ bool UNITTEST::Test_WebClient(UNITTEST* tests)
 
   return true;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2046,7 +2000,6 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
             tests->console->Printf(__L("\n\n"));
           }
 
-
         if(useragentID)
           {
             XSTRING browser;
@@ -2059,7 +2012,6 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
 
             tests->console->Printf(__L("\n"));
           }
-
 
         if(translation)
           {
@@ -2126,7 +2078,6 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
                                             XLANGUAGE_ISO_639_3_CODE_VIE     , //   Vietnamese
                                             XLANGUAGE_ISO_639_3_CODE_WEL     , //   Welsh
                                             XLANGUAGE_ISO_639_3_CODE_YID     , //   Yiddish
-
                                          };
 
             XSTRING origin;
@@ -2150,7 +2101,6 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
 
             tests->console->Printf(__L("\n"));
           }
-
 
         if(macmanufactured)
           {
@@ -2199,7 +2149,6 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_MPSSE(UNITTEST* tests)
@@ -2232,7 +2181,6 @@ bool UNITTEST::Test_MPSSE(UNITTEST* tests)
 
   return status;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2278,7 +2226,6 @@ bool UNITTEST::Test_DNSProtocol(UNITTEST* tests)
 
   return status;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2341,7 +2288,6 @@ bool UNITTEST::Test_DIOCheckTCPIPConnections(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_WifiEnum(UNITTEST* tests)
@@ -2377,7 +2323,6 @@ bool UNITTEST::Test_WifiEnum(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_WakeOnLAN(UNITTEST* tests)
@@ -2411,7 +2356,6 @@ bool UNITTEST::Test_WakeOnLAN(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_DIOStreamTLS(UNITTEST* tests)
@@ -2431,7 +2375,6 @@ bool UNITTEST::Test_DIOStreamTLS(UNITTEST* tests)
   DIOSTREAMTLS*       diostream    = NULL;
   XSTRING             line;
   bool                status       = false;
-
 
   diostreamcfg.GetRemoteURL()->Set(__L("www.google.es"));
   diostreamcfg.SetMode(DIOSTREAMMODE_CLIENT);
@@ -2471,12 +2414,9 @@ bool UNITTEST::Test_DIOStreamTLS(UNITTEST* tests)
     }
 
   delete diostream;
-    
-
+ 
   return status;
-
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2567,8 +2507,6 @@ bool UNITTEST::Test_AppAlerts(UNITTEST* tests)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_BluetoothEnum(UNITTEST* tests)
@@ -2625,8 +2563,6 @@ bool UNITTEST::Test_BluetoothEnum(UNITTEST* tests)
 
   return true;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2693,7 +2629,6 @@ bool UNITTEST::Test_BluetoothLEEnum(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_NTP_InternetServices(UNITTEST* tests)
@@ -2750,7 +2685,6 @@ bool UNITTEST::Test_NTP_InternetServices(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_Sound(UNITTEST* tests)
@@ -2764,9 +2698,7 @@ bool UNITTEST::Test_NTP_InternetServices(UNITTEST* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool UNITTEST::Test_Sound(UNITTEST* tests)
 {
-
   bool status = false;
-
 
   #ifdef SND_ACTIVE
   
@@ -2807,8 +2739,6 @@ bool UNITTEST::Test_Sound(UNITTEST* tests)
 
   return status;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2875,7 +2805,6 @@ bool UNITTEST::Test_ProcessManager(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_GetUserAndDomain(UNITTEST* tests)
@@ -2900,8 +2829,6 @@ bool UNITTEST::Test_GetUserAndDomain(UNITTEST* tests)
 
   return status;
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2967,8 +2894,6 @@ bool UNITTEST::Test_I2C_GPIO_MCP2317(UNITTEST* tests)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UNITTEST::Test_SPI_GPIO_MCP2317(UNITTEST* tests)
@@ -3019,8 +2944,6 @@ bool UNITTEST::Test_SPI_GPIO_MCP2317(UNITTEST* tests)
 	
   return true;	
 }
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3088,9 +3011,6 @@ bool UNITTEST::Test_WifiManagerMode(UNITTEST* tests)
 }
 
 
-
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_NotificationsManager(UNITTEST* tests)
@@ -3133,8 +3053,6 @@ bool UNITTEST::Test_NotificationsManager(UNITTEST* tests)
  
   return true;
 } 
-
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3291,7 +3209,6 @@ bool UNITTEST::Test_ATCommandGSM(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_SNMP(UNITTEST* tests)
@@ -3329,7 +3246,6 @@ bool UNITTEST::Test_SNMP(UNITTEST* tests)
 	
   return status;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3382,7 +3298,6 @@ bool UNITTEST::Test_XFileXML(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_XFileRIFF(UNITTEST* tests)
@@ -3413,7 +3328,6 @@ bool UNITTEST::Test_XFileRIFF(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3512,7 +3426,6 @@ bool UNITTEST::Test_DIOStreamUSBConnection(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_XFileDFU(UNITTEST* tests)
@@ -3549,7 +3462,6 @@ bool UNITTEST::Test_XFileDFU(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_SystemHostFile(UNITTEST* tests)
@@ -3570,7 +3482,6 @@ bool UNITTEST::Test_SystemHostFile(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3600,7 +3511,6 @@ bool UNITTEST::Test_SystemBatteryLevel(UNITTEST* tests)
 
   return status;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3685,7 +3595,6 @@ bool UNITTEST::Test_LedNeoPixelWS2812B(UNITTEST* tests)
   
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3793,8 +3702,6 @@ bool UNITTEST::Test_DIOPCap(UNITTEST* tests)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_XProperty(UNITTEST* tests)
@@ -3817,7 +3724,6 @@ bool UNITTEST::Test_XProperty(UNITTEST* tests)
   
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -3882,11 +3788,6 @@ bool UNITTEST::Test_XLicense(UNITTEST* tests)
 }
 
 
-
-
-
-
-
 #ifdef WINDOWS
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -3919,7 +3820,6 @@ bool UNITTEST::Test_WindowsACL(UNITTEST* tests)
 }
 
 #endif
-
 
 
 #ifdef LINUX
@@ -4032,7 +3932,6 @@ bool UNITTEST::Test_DBUS(UNITTEST* tests)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UNITTEST::Test_NetWorkManager(UNITTEST* tests)
@@ -4097,7 +3996,6 @@ bool UNITTEST::Test_NetWorkManager(UNITTEST* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -4311,8 +4209,6 @@ bool UNITTEST::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void UNITTEST::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
@@ -4334,7 +4230,6 @@ void UNITTEST::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
     }
   */
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -4388,8 +4283,6 @@ void UNITTEST::HandleEvent_WebClient(DIOWEBCLIENT_XEVENT* event)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         UNITTEST::HandleEvent
@@ -4424,7 +4317,6 @@ void UNITTEST::HandleEvent(XEVENT* xevent)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void UNITTEST::ThreadRunFunction(void* param)
@@ -4449,7 +4341,6 @@ void UNITTEST::ThreadRunFunction(void* param)
 
   GEN_XSLEEP.MilliSeconds(100);
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------

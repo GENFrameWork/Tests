@@ -11,6 +11,7 @@
 # Compile Selection
  include("${GEN_DIRECTORY}/GEN/GEN_CMakeLists_Compile.txt") 
 
+
 # --------------------------------------------------------------------
 # Warnings control
  include("${GEN_DIRECTORY}/GEN/GEN_CMakeLists_Warnings.txt") 
@@ -32,7 +33,7 @@
 
  set(XFILE_HEX_FEATURE                                   true    CACHE BOOL "Activate XFile HEX format"                                  FORCE)  
  set(XFILE_DFU_FEATURE                                   true    CACHE BOOL "Activate XFile DFU format"                                  FORCE)  
- set(XFILE_RIFF_FEATURE                                  true    CACHE BOOL "Activate XFile RIFF format"                                 FORCE)  
+ set(XFILE_RIFF_FEATURE                                  true    CACHE BOOL "Activate XFile RIFF format"                                 FORCE) 
   
  set(HASH_FEATURE                                        true    CACHE BOOL "Activate Hash"                                              FORCE)
  set(HASH_CRC16_FEATURE                                  true    CACHE BOOL "Activate Hash CRC16"                                        FORCE)  
@@ -49,6 +50,11 @@
  set(CIPHER_SYMMETRIC_AES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric AES"                               FORCE)
  set(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                   true    CACHE BOOL "Activate Cipher Symetric BlowFish"                          FORCE)
  set(CIPHER_ASYMMETRIC_RSA_FEATURE                       true    CACHE BOOL "Activate Cipher ASymetric RSA"                              FORCE) 
+
+ set(COMPRESS_GZ_FEATURE                                 true    CACHE BOOL "Activate Compres GZ"                                        FORCE)  
+ set(COMPRESS_LZRW1KH_FEATURE                            true    CACHE BOOL "Activate Compres LZRW1KH"                                   FORCE)  
+ set(COMPRESS_LZW_FEATURE                                true    CACHE BOOL "Activate Compres LZW"                                       FORCE)  
+ set(COMPRESS_ZIP_FEATURE                                true    CACHE BOOL "Activate Compres ZIP"                                       FORCE)  
 
  set(DIO_FEATURE                                         true    CACHE BOOL "Activate Data Input/Output"                                 FORCE) 
  set(DIO_STREAMUART_FEATURE                              true    CACHE BOOL "Activate Data Input/Output Stream UART"                     FORCE)
@@ -75,12 +81,10 @@
  set(DIO_LEDNEOPIXELWS2812B_FEATURE                      true    CACHE BOOL "Activate Data Input/Output Led Neopixel WS2812B"            FORCE) 
 #set(DIO_PCAP_FEATURE                                    true    CACHE BOOL "Activate Data Input/Output Cap"                             FORCE)
 
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  set(DIO_LINUX_DBUS_FEATURE                              true    CACHE BOOL "Activate Linux DBus"                                        FORCE) 
  set(DIO_LINUX_NETWORKMANAGER_FEATURE                    true    CACHE BOOL "Activate Linux Network Manager"                             FORCE)
 endif()
-
 
 #set(SND_FEATURE                                         true    CACHE BOOL "Activate Sound"                                             FORCE)
 
@@ -98,7 +102,6 @@ endif()
  set(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE              true    CACHE BOOL "Activate Application CFG Check Resorces HW"                 FORCE)  
  set(APP_CFG_DNSRESOLVED_FEATURE                         true    CACHE BOOL "Activate Application CFG DNS Resolved"                      FORCE)  
  set(APP_CFG_ALERTS_FEATURE                              true    CACHE BOOL "Activate Application CFG Alerts"                            FORCE)  
-
 
 
 # --------------------------------------------------------------------
@@ -120,6 +123,7 @@ endif()
  set(APP_DIRECTORY_APPLICATION   "../Application")
  list(APPEND INCLUDES_DIR ${APP_DIRECTORY_APPLICATION})
 
+
 # --------------------------------------------------------------------
 # Source code of the Application
 
@@ -136,14 +140,13 @@ endif()
  endif()
 
 
-
-
 # --------------------------------------------------------------------
 # Create proyect 
 
  include_directories(${INCLUDES_DIR})
 
  add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+
 
 # --------------------------------------------------------------------
 # Add Libraries
