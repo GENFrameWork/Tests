@@ -1848,7 +1848,6 @@ bool UNITTEST::Test_GPIO(UNITTEST* tests)
 {   
   bool status = false;  
 
-  
   #ifdef DIOGPIO_ACTIVE
   
   GEN_DIOGPIO.SetMode(UNITTEST_GPIOENTRYID_TESTGPIO, DIOGPIO_MODE_OUTPUT);
@@ -1863,8 +1862,6 @@ bool UNITTEST::Test_GPIO(UNITTEST* tests)
     }
           
   status = true;
-
-  //--------------------------------------------------------------
 
   #endif
 

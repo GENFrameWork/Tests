@@ -78,8 +78,20 @@
  set(DIO_ONOTIFICATIONS_MANAGER_FEATURE                  true    CACHE BOOL "Activate Notifications Nanager"                             FORCE)
  set(DIO_WIFIMANAGERMODE_FEATURE                         true    CACHE BOOL "Activate Data Input/Output Wifi Manager Mode"               FORCE) 
  set(DIO_SNMP_FEATURE                                    true    CACHE BOOL "Activate SNMP (Simple Network Management Protocol)"         FORCE)
+ set(DIO_BUSPIRATE_FEATURE                               true    CACHE BOOL "Activate Data Input/Output Bus Pirate 4.0"                  FORCE)
+ set(DIO_CLICLIENT_FEATURE                               true    CACHE BOOL "Activate Data Input/Output CLI CLient"                      FORCE)
+ set(DIO_MODBUSCLIENT_FEATURE                            true    CACHE BOOL "Activate Data Input/Output ModBus Client (UART/TCPIP)"      FORCE)
  set(DIO_LEDNEOPIXELWS2812B_FEATURE                      true    CACHE BOOL "Activate Data Input/Output Led Neopixel WS2812B"            FORCE) 
 #set(DIO_PCAP_FEATURE                                    true    CACHE BOOL "Activate Data Input/Output Cap"                             FORCE)
+
+ set(DIO_STREAMSPI_FEATURE                               true    CACHE BOOL "Activate Data Input/Output Stream SPI"                      FORCE)  
+ set(DIO_SPI_GPIO_MCP23S17_FEATURE                       true    CACHE BOOL "Activate Data SPI GPIO MCP23S17"                            FORCE)
+ set(DIO_SPI_LCDDISPLAY_PCF8833_FEATURE                  true    CACHE BOOL "Activate Data SPI LCD Display PCF8833"                      FORCE)  
+ set(DIO_SPI_OLEDDISPLAY_SSD1306_FEATURE                 true    CACHE BOOL "Activate Data SPI OLED Display SSD1306"                     FORCE)
+ set(DIO_SPI_OLEDDISPLAY_SSD1331_FEATURE                 true    CACHE BOOL "Activate Data SPI OLED Display SSD1331"                     FORCE)
+ set(DIO_SPI_TFTDISPLAY_ILI9341_FEATURE                  true    CACHE BOOL "Activate Data SPI TFT Display ILI9341"                      FORCE)
+ set(DIO_SPI_TFTDISPLAY_ST7789_FEATURE                   true    CACHE BOOL "Activate Data SPI TFT Display ST7789"                       FORCE)
+ set(DIO_SPI_TOUCHSCREEN_STMPE610_FEATURE                true    CACHE BOOL "Activate Data SPI Touch Screen STMPE610"                    FORCE)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  set(DIO_LINUX_DBUS_FEATURE                              true    CACHE BOOL "Activate Linux DBus"                                        FORCE) 
@@ -115,8 +127,8 @@ endif()
 # Source code of the GEN in this Application
 
  include("${GEN_DIRECTORY}/GEN/GEN_CMakeLists.txt") 
-                   
-                   
+
+                        
 # --------------------------------------------------------------------
 # Directorys of the Application
 
@@ -125,11 +137,18 @@ endif()
 
 
 # --------------------------------------------------------------------
-# Source code of the Application
+# Source code of the Application 
+
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOIEC60870_5.cpp")
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOModBusElectricMeter.cpp")      
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOPiFace.cpp")   
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOStreamUDPAcknowledge.cpp")
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOStringProtocol.cpp")
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOTemHumSensorAM2301.cpp")
+ list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOXTraceInterStreams.cpp")
 
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_CFG.cpp")
-
 
  if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_WindowsPlatform.cpp")
