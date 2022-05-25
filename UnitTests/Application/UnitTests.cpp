@@ -824,7 +824,7 @@ bool UNITTEST::Show_AllStatus()
 bool UNITTEST::Do_Tests()
 {
   UNITTEST_LIST_FUNCTION listfunctions[] =  { { false  , Test_XString                    , __L("Test XString")                    },
-                                              { false  , Test_XBuffer                    , __L("Test XBuffer")                    },
+                                              { true   , Test_XBuffer                    , __L("Test XBuffer")                    },
                                               { false  , Test_XVector                    , __L("Test XVector")                    },
                                               { false  , Test_XRand                      , __L("Test_XRand")                      },
                                               { false  , Test_XTrace                     , __L("Test XTrace")                     },
