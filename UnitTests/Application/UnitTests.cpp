@@ -142,7 +142,7 @@
 #include "APPAlerts.h"
 
 #ifdef WINDOWS
-  #include "MainProcWindows.h" 
+  #include "MainProcWINDOWS.h" 
   #include "XWINDOWSAccessControlLists.h"
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"  
   #include "UnitTests_WindowsPlatform.h"
@@ -725,9 +725,9 @@ bool UNITTEST::Show_AppStatus()
   // Platforms
 
   XSTRING           platformstr;
-  XSYSTEM_PLATFORM  platform;
+//XSYSTEM_PLATFORM  platform;
   
-  platform = GEN_XSYSTEM.GetPlatform(&platformstr);
+//platform = GEN_XSYSTEM.GetPlatform(&platformstr);
 
   string  = __L("Plataforma");
   string2.Format(__L("%s"), platformstr.Get());
@@ -956,9 +956,10 @@ bool UNITTEST::Test_XString(UNITTEST* tests)
   string += __L(" mas... ");
 
   int index = string.Find(__L("mas"), true);
+  if(index == XSTRING_NOTFOUND) return false;
 
   XSTRING_CREATEOEM(string, charvar)
-  printf(charvar);
+  printf((char*)charvar);
   XSTRING_DELETEOEM(string, charvar)
 
 
@@ -2078,7 +2079,7 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
                                          };
 
             XSTRING origin;
-            int     index = 0;
+          //int     index = 0;
 
             origin = __L("La mesa de mi casa es roja");
             tests->console->Printf(__L("> %s\n"),origin.Get());
@@ -2092,7 +2093,7 @@ bool UNITTEST::Test_ScraperWeb(UNITTEST* tests)
                       else tests->console->Printf(__L("> (Special chars)\n"));
 
                     origin = translate.Get();
-                    index = c+1;
+                    //index = c+1;
                   }
               }
 
@@ -2483,6 +2484,7 @@ bool UNITTEST::Test_SystemCPUUsage(UNITTEST* tests)
 bool UNITTEST::Test_AppAlerts(UNITTEST* tests)
 {
   int status[APP_ALERT_TYPE_MAX];
+  int result = false;
 
   if(GEN_APPALERTS.Ini(&APP_CFG.GetInstance() , APPLICATION_NAMEAPP 
                                               , APPLICATION_VERSION
@@ -2491,16 +2493,17 @@ bool UNITTEST::Test_AppAlerts(UNITTEST* tests)
                                               , status
                                               , NULL))
     {
-      int result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta."));
-
-      result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta 2."));
+      int result;
+      
+      result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta."));
+      if(result) result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta 2."));
   
       GEN_APPALERTS.End();
     }
 
   GEN_APPALERTS.DelInstance();
 
-  return true;
+  return result;
 }
 
 
@@ -3311,6 +3314,7 @@ bool UNITTEST::Test_XFileRIFF(UNITTEST* tests)
 {
   XFILERIFF xfileRIFF;  
   XPATH     xpath;
+  bool      status = false;
 
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
   xpath.Slash_Add();
@@ -3318,12 +3322,12 @@ bool UNITTEST::Test_XFileRIFF(UNITTEST* tests)
 
   if(xfileRIFF.Open(xpath.Get()))
     {
-      bool status = xfileRIFF.ReadAllLists();
+      status = xfileRIFF.ReadAllLists();
 
       xfileRIFF.Close();
-  }
+    }
 
-  return true;
+  return status;
 }
 
 
@@ -3713,10 +3717,11 @@ bool UNITTEST::Test_DIOPCap(UNITTEST* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool UNITTEST::Test_XProperty(UNITTEST* tests)
 {
-  UNITTEST_PROPERTY    foo(10.0f, 10.0f );
+  /*
+  UNITTEST_PROPERTY    foo(10.0f, 10.0f);
   
   foo.x  = foo.z;
-
+  */
 
   
   return true;

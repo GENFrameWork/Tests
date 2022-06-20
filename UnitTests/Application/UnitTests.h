@@ -108,17 +108,18 @@ typedef struct
 class UNITTEST_PROPERTY
 { 
   public:                                     
-                      UNITTEST_PROPERTY          () : x(this), y(this), z(this)
+                      UNITTEST_PROPERTY       () : x(this), y(this), z(this)
                       {
                         x_ = 0.0f;
                         y_ = 0.0f;
                         z_ = 10.0f;
                       }
-
-                      UNITTEST_PROPERTY          (double x0, double y0) : x_(x0), y_(y0), x(this), y(this), z(this)
+                      /*
+                      UNITTEST_PROPERTY       (double x0, double y0) : x_(x0), y_(y0), x(this), y(this), z(this)
                       {
                         z_ = 10.0f;
                       } 
+                      */
 
     void              SetX                    (double x) 
                       { 
@@ -169,9 +170,11 @@ class UNITTEST_PROPERTY2
 
                       }
 
+                      /*
                       UNITTEST_PROPERTY2         (UNITTEST_PROPERTY data0) : data_(data0), data(this)
                       {
                       }
+                      */
 
     void              SetX                    (UNITTEST_PROPERTY data)
                       {
