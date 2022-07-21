@@ -431,10 +431,7 @@ bool UNITTEST::AppProc_FirstUpdate()
 
   //--------------------------------------------------------------------------------------
 
-  //xtimerupdateconsole = GEN_XFACTORY.CreateTimer();
-
   GEN_XFACTORY_CREATE(xtimerupdateconsole,CreateTimer())
-
   if(!xtimerupdateconsole) return false;
 
   //--------------------------------------------------------------------------------------
@@ -725,9 +722,9 @@ bool UNITTEST::Show_AppStatus()
   // Platforms
 
   XSTRING           platformstr;
-//XSYSTEM_PLATFORM  platform;
+  XSYSTEM_PLATFORM  platform;
   
-//platform = GEN_XSYSTEM.GetPlatform(&platformstr);
+  platform = GEN_XSYSTEM.GetPlatform(&platformstr);
 
   string  = __L("Plataforma");
   string2.Format(__L("%s"), platformstr.Get());

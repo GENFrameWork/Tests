@@ -34,6 +34,8 @@
  set(XFILE_HEX_FEATURE                                   true    CACHE BOOL "Activate XFile HEX format"                                  FORCE)  
  set(XFILE_DFU_FEATURE                                   true    CACHE BOOL "Activate XFile DFU format"                                  FORCE)  
  set(XFILE_RIFF_FEATURE                                  true    CACHE BOOL "Activate XFile RIFF format"                                 FORCE) 
+
+ set(XTESTSMANAGER_FEATURE                               true    CACHE BOOL "Activate Tests Manager"                                     FORCE)                              
   
  set(HASH_FEATURE                                        true    CACHE BOOL "Activate Hash"                                              FORCE)
  set(HASH_CRC16_FEATURE                                  true    CACHE BOOL "Activate Hash CRC16"                                        FORCE)  
@@ -79,7 +81,6 @@
  set(DIO_WIFIMANAGERMODE_FEATURE                         true    CACHE BOOL "Activate Data Input/Output Wifi Manager Mode"               FORCE) 
  set(DIO_SNMP_FEATURE                                    true    CACHE BOOL "Activate SNMP (Simple Network Management Protocol)"         FORCE)
  set(DIO_BUSPIRATE_FEATURE                               true    CACHE BOOL "Activate Data Input/Output Bus Pirate 4.0"                  FORCE)
- set(DIO_CLICLIENT_FEATURE                               true    CACHE BOOL "Activate Data Input/Output CLI CLient"                      FORCE)
  set(DIO_MODBUSCLIENT_FEATURE                            true    CACHE BOOL "Activate Data Input/Output ModBus Client (UART/TCPIP)"      FORCE)
  set(DIO_LEDNEOPIXELWS2812B_FEATURE                      true    CACHE BOOL "Activate Data Input/Output Led Neopixel WS2812B"            FORCE) 
 #set(DIO_PCAP_FEATURE                                    true    CACHE BOOL "Activate Data Input/Output Cap"                             FORCE)
@@ -143,7 +144,6 @@ endif()
  list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOModBusElectricMeter.cpp")      
  list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOPiFace.cpp")   
  list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOStreamUDPAcknowledge.cpp")
- list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOStringProtocol.cpp")
  list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOTemHumSensorAM2301.cpp")
  list(APPEND SOURCES "${GEN_DIRECTORY_SOURCES_DATAIO}/DIOXTraceInterStreams.cpp")
 
