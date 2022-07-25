@@ -1,10 +1,10 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       APP_GEN_Defines.h
+* @file       UnitTests_XString.h
 *
-* @class      APP_GEN_DEFINES
-* @brief      GEN Defines of the Application
-* @ingroup
+* @class      
+* @brief      Unit Tests for XString class (GEN FrameWork)
+* @ingroup    TESTS
 *
 * @copyright  GEN Group. All right reserved.
 *
@@ -26,39 +26,23 @@
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _APP_GEN_DEFINES_H_
-#define _APP_GEN_DEFINES_H_
+#ifndef _UNITTESTS_H_
+#define _UNITTESTS_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
+
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
+#define UNITTEST_XSTRING_CLASSNAME  XString
 
-#ifdef HW_STM32
-  
-  #define MICROCONTROLLER
-
-  #define XTRACE_ACTIVE
-  //#define XMEMORY_CONTROL_ACTIVE 
-
-  #define XEEPROMMEMORYMANAGER_ACTIVE
-
-  #define DIO_ACTIVE
-  #define DIOGPIO_ACTIVE
-  #define DIOUART_ACTIVE
-  //#define DIOUSB_ACTIVE
-  #define DIOI2C_ACTIVE
-  #define DIOSPI_ACTIVE
-
-  #define DIOLEDNEOPIXELWS2812B_ACTIVE
+/*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-  #define APP_ACTIVE
- 
-
-#endif
+/*---- INLINE FUNCTIONS ----------------------------------------------------------------------------------------------*/
 
 
 #endif
+
 
 
