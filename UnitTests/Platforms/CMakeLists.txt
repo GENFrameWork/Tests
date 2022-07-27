@@ -27,9 +27,7 @@
  set(XMEMORY_CONTROL_FEATURE                             true    CACHE BOOL "Activate XMemory Control"                                   FORCE)
 
  set(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  true    CACHE BOOL "Activate Linux CodePage Editor Visual Studio CP1252"        FORCE)   
-
-  
-                                     
+                            
  set(APP_FEATURE                                         true    CACHE BOOL "Activate Application modules"                               FORCE)
 
 # --------------------------------------------------------------------
