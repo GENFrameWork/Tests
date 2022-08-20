@@ -53,6 +53,7 @@
  set(CIPHER_SYMMETRIC_AES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric AES"                               FORCE)
  set(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                   true    CACHE BOOL "Activate Cipher Symetric BlowFish"                          FORCE)
  set(CIPHER_ASYMMETRIC_RSA_FEATURE                       true    CACHE BOOL "Activate Cipher ASymetric RSA"                              FORCE) 
+ set(CIPHER_ASYMMETRIC_CURVE25519_FEATURE                false   CACHE BOOL "Activate Cipher ASymetric Curve25519"                       FORCE) 
 
  set(COMPRESS_GZ_FEATURE                                 true    CACHE BOOL "Activate Compres GZ"                                        FORCE)  
  set(COMPRESS_LZRW1KH_FEATURE                            true    CACHE BOOL "Activate Compres LZRW1KH"                                   FORCE)  

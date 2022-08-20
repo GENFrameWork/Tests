@@ -457,38 +457,38 @@ bool DEVTESTSCONSOLE::AppProc_Update()
     {
       switch(GetCurrentState())
         {
-          case DEVTESTSCONSOLE_XFSMSTATE_NONE        : break;
+          case DEVTESTSCONSOLE_XFSMSTATE_NONE         : break;
 
-          case DEVTESTSCONSOLE_XFSMSTATE_INI         : SetEvent(DEVTESTSCONSOLE_XFSMEVENT_UPDATE);
-                                                break;
+          case DEVTESTSCONSOLE_XFSMSTATE_INI          : SetEvent(DEVTESTSCONSOLE_XFSMEVENT_UPDATE);
+                                                        break;
 
-          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE      : if(GetExitType() == APPBASE_EXITTYPE_UNKNOWN)
-                                                  {
-                                                    if(xtimerupdateconsole)
-                                                      {
-                                                        if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
+          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE       : if(GetExitType() == APPBASE_EXITTYPE_UNKNOWN)
                                                           {
-                                                            Show_AllStatus();
-                                                            xtimerupdateconsole->Reset();
-                                                          }
+                                                            if(xtimerupdateconsole)
+                                                              {
+                                                                if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
+                                                                  {
+                                                                    Show_AllStatus();
+                                                                    xtimerupdateconsole->Reset();
+                                                                  }
                                                     
-                                                        #ifndef DEVTESTSCONSOLE_NOKEY
-                                                        if(console->KBHit())
-                                                          {
-                                                            //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[press key]"));
+                                                                #ifndef DEVTESTSCONSOLE_NOKEY
+                                                                if(console->KBHit())
+                                                                  {
+                                                                    //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[press key]"));
 
-                                                            int key = console->GetChar();
-                                                            KeyValidSecuences(key);
-                                                          }
-                                                        #else                                                    
-                                                        Do_Tests(); 
-                                                        #endif
+                                                                    int key = console->GetChar();
+                                                                    KeyValidSecuences(key);
+                                                                  }
+                                                                #else                                                    
+                                                                Do_Tests(); 
+                                                                #endif
                   
-                                                      }
-                                                  }
-                                                break;
+                                                              }
+                                                          }
+                                                        break;
 
-          case DEVTESTSCONSOLE_XFSMSTATE_END         : break;
+          case DEVTESTSCONSOLE_XFSMSTATE_END          : break;
 
         }
     }
@@ -500,10 +500,10 @@ bool DEVTESTSCONSOLE::AppProc_Update()
 
           switch(GetCurrentState())
             {
-              case DEVTESTSCONSOLE_XFSMSTATE_NONE    : break;
-              case DEVTESTSCONSOLE_XFSMSTATE_INI     : break;
-              case DEVTESTSCONSOLE_XFSMSTATE_UPDATE  : break;
-              case DEVTESTSCONSOLE_XFSMSTATE_END     : break;
+              case DEVTESTSCONSOLE_XFSMSTATE_NONE     : break;
+              case DEVTESTSCONSOLE_XFSMSTATE_INI      : break;
+              case DEVTESTSCONSOLE_XFSMSTATE_UPDATE   : break;
+              case DEVTESTSCONSOLE_XFSMSTATE_END      : break;
             }
         }
     }
