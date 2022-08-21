@@ -273,6 +273,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_DIOCheckTCPIPConnections       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WifiEnum                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);
+    static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);
     static bool                     Test_AppAlerts                      (DEVTESTSCONSOLE* tests);

@@ -71,6 +71,7 @@
 #include "HashSHA1.h"
 #include "HashSHA2.h"
 #include "HashWhirlpool.h"
+#include "CipherCurve25519.h"
 
 #include "DIOFactory.h"
 #include "DIOStreamDeviceIP.h"
@@ -842,7 +843,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                },
-                                                      { true   , Test_DIOStreamTLS               , __L("Test DIOStreamTLS")               },         
+                                                      { true   , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
+                                                      { false  , Test_DIOStreamTLS               , __L("Test DIOStreamTLS")               },         
                                                       { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
@@ -2346,6 +2348,67 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
   status = wakeonlan->SendActivation(&MAC, &broadcastIP);
 
   delete wakeonlan;
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
+* @brief      Test_CipherCurve25519
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
+{
+  CIPHERCURVE25519  curve25519;
+  XRAND*            xrand         = NULL;
+  XBYTE             privatekey[2][32];
+  XBYTE             publickey[2][32] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+                                         { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+                                       };
+  XBYTE             sharedkey[32] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }; 
+  bool              status        = false;
+
+  xrand = GEN_XFACTORY.CreateRand();
+  if(!xrand) return false;
+
+  for(int c=0; c<32; c++)
+    {
+      privatekey[0][c] = xrand->Max(255);
+      privatekey[1][c] = xrand->Max(255);
+    }
+
+  GEN_XFACTORY.DeleteRand(xrand);
+
+  for(int c=0; c<2; c++)
+    {
+      status = curve25519.CreateKey(privatekey[c], publickey[c]);
+
+      if(status)
+        {    
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Private key %d:" ), c+1); 
+          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_PURPLE, privatekey[c], 32, 1, 16); 
+
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Public key %d:"), c+1); 
+          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, publickey[c], 32, 1, 16); 
+        }
+    }
+
+  if(status)
+    { 
+      status = curve25519.CreateKey(privatekey[0], sharedkey, publickey[1]);
+      if(status)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Shared key:")); 
+          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, sharedkey, 32, 1, 16); 
+        }
+    }
 
   return status;
 }
