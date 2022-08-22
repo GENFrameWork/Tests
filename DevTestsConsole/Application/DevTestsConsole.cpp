@@ -2366,52 +2366,58 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
 {
-  CIPHERCURVE25519  curve25519;
-  XRAND*            xrand         = NULL;
-  XBYTE             privatekey[2][32];
-  XBYTE             publickey[2][32] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-                                         { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-                                       };
-  XBYTE             sharedkey[32] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }; 
-  bool              status        = false;
-
-  xrand = GEN_XFACTORY.CreateRand();
-  if(!xrand) return false;
-
-  for(int c=0; c<32; c++)
-    {
-      privatekey[0][c] = xrand->Max(255);
-      privatekey[1][c] = xrand->Max(255);
-    }
-
-  GEN_XFACTORY.DeleteRand(xrand);
+  CIPHERCURVE25519  curve25519[2];
+  bool              status           = false; 
 
   for(int c=0; c<2; c++)
     {
-      status = curve25519.CreateKey(privatekey[c], publickey[c]);
+      status = curve25519[c].GenerateRandomPrivateKey();
+      
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Private key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
+      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_PRIVATE), 32, 1, 32); 
 
-      if(status)
-        {    
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Private key %d:" ), c+1); 
-          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_PURPLE, privatekey[c], 32, 1, 16); 
+      if(!status) break;
 
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Public key %d:"), c+1); 
-          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, publickey[c], 32, 1, 16); 
-        }
+      status = curve25519[c].CreatePublicKey();
+
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Public  key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
+      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC), 32, 1, 32);    
+
+      if(!status) break;     
     }
 
   if(status)
-    { 
-      status = curve25519.CreateKey(privatekey[0], sharedkey, publickey[1]);
-      if(status)
-        {
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Shared key:")); 
-          XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, sharedkey, 32, 1, 16); 
+    {   
+      curve25519[0].CreateSharedKey(curve25519[1].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC));
+      curve25519[1].CreateSharedKey(curve25519[0].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC));
+
+      for(int c=0; c<2; c++)
+        {    
+          status = curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)?true:false;
+
+          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Shared  key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
+          if(status) XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), 32, 1, 32);         
+
+          if(!status) break;
         }
+     
+      if(status)
+        {      
+          for(int c=0; c<CIPHERCURVE25519_MAXKEY; c++)
+            {
+              if(curve25519[0].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)[c] != curve25519[1].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)[c]) status = false;
+            }
+
+          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Shared  Key are equal : %s"), status?__L("Ok"):__L("Error!")); 
+        }
+
     }
 
-  return status;
+  XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 All generated : %s"), status?__L("Ok"):__L("Error!")); 
+
+  return status ;
 }
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
