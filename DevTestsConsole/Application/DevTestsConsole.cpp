@@ -2412,6 +2412,9 @@ bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
       status = true;
     }
 
+
+  delete filekeys;
+
   return status;
 }
 
