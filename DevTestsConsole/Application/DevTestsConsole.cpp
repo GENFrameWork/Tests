@@ -39,6 +39,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "Version.h"
+
 #include "XFactory.h"
 #include "XPath.h"
 #include "XDateTime.h"
@@ -57,6 +59,9 @@
 #include "XFileDFU.h"
 #include "XVariant.h"
 #include "XTranslation.h"
+#include "XTranslation_GEN.h"
+#include "XTranslation.h"
+#include "XLanguage_ISO_639_3.h"
 #include "XScheduler.h"
 #include "XScheduler_XEvent.h"
 #include "XThread.h"
@@ -71,6 +76,9 @@
 #include "HashSHA1.h"
 #include "HashSHA2.h"
 #include "HashWhirlpool.h"
+#include "CipherKeysFileGKF.h"
+#include "CipherKeysFilePEM.h"
+#include "CipherRSA.h"
 #include "CipherCurve25519.h"
 
 #include "DIOFactory.h"
@@ -295,6 +303,8 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //-------------------------------------------------------------------------------------------------
 
+  GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
+
   GetApplicationName()->Set(APPLICATION_NAMEAPP);
 
   //--------------------------------------------------------------------------------------------------
@@ -321,15 +331,12 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
 
-
   //Test_DIOWifiManagerMode(this);
-
 
   XTRACE_SETAPPLICATIONNAME((*GetApplicationName()));
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
   XTRACE_SETAPPLICATIONID(string);
   //XTRACE_SETLOCALIPFILTER(172);
-
 
   APP_CFG_SETAUTOMATICTRACETARGETS
 
@@ -346,8 +353,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   */
 
-  GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_SPA);
-
+  GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_SPA); 
 
   //--------------------------------------------------------------------------------------
 
@@ -367,6 +373,26 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
       stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
       console->PrintMessage(stringresult.Get(), 0, false, true);
+
+      XSTRING SO_ID;
+      status = GEN_XSYSTEM.GetOperativeSystemID(SO_ID);
+
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Application ROOT path: %s"),  GEN_XPATHSMANAGER.GetPathSection(XPATHSMANAGERSECTIONTYPE_ROOT)->xpath->Get());
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%s"),  GEN_VERSION.GetAppVersion()->Get());   
+      XTRACE_PRINTSTATUS(__L("S.O. version"), SO_ID.Get()); 
+
+      stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
+      APP_LOG_ENTRY(((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
+           
+      APP_LOG_ENTRY(((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APP_CFG_LOG_SECTIONID_INITIATION, false,  __L("Identificacion SO: %s"), SO_ID.Get());
+
+      XDWORD total = 0;
+      XDWORD free  = 0;
+
+      GEN_XSYSTEM.GetMemoryInfo(total,free);
+
+      APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_INITIATION, false, XT_L(XTRANSLATION_GEN_ID_APPLOG_TOTALMEMORY), total, free, GEN_XSYSTEM.GetFreeMemoryPercent());
+
     }
 
   //--------------------------------------------------------------------------------------
@@ -695,9 +721,9 @@ bool DEVTESTSCONSOLE::Show_Header(bool separator)
 {
   XSTRING header;
 
-  if(!console->TipicalHeader_Create(APPLICATION_YEAROFCREATION, APPLICATION_NAMEAPP, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, DEVTESTSCONSOLE_ENTERPRISE, header)) return false;
-
-  console->Printf(header.Get());
+  header = GEN_VERSION.GetAppTitle()->Get();
+  
+  console->Printf(__L(" %s"),header.Get());
   console->Printf(__L("\n"));
   if(separator) console->Printf(__L("\n"));
 
@@ -830,8 +856,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
-                                                      { false  , Test_DateTime                   , __L("Test_DateTime")                   },
-                                                      { false  , Test_HASH                       , __L("Test HASH")                       },
+                                                      { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
                                                       { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
@@ -842,8 +867,11 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DNSProtocol                , __L("Test DNS Protocol")               },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
-                                                      { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                },
-                                                      { true   , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
+                                                      { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
+                                                      { false  , Test_Hash                       , __L("Test Hash")                       },
+                                                      { true   , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
+                                                      { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
+                                                      { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
                                                       { false  , Test_DIOStreamTLS               , __L("Test DIOStreamTLS")               },         
                                                       { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
@@ -1627,58 +1655,6 @@ bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_HASH(DEVTESTSCONSOLE* tests)
-* @brief      Test_HASH
-* @ingroup    APPLICATION
-*
-* @param[in]  tests :
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_HASH(DEVTESTSCONSOLE* tests)
-{
-  if(!tests->console) return false;
-
-  XBUFFER  input;
-  XSTRING  leyend;
-  XSTRING  string;
-
-  string = __L("The quick brown fox jumps over the lazy dog");
-
-  tests->console->Printf(__L("Sentence: \"%s\"\n\n"), string.Get());
-
-  XSTRING_CREATEOEM(string, charstr)
-  input.Add((XBYTE*)charstr, string.GetSize());
-  XSTRING_DELETEOEM(string, charstr)
-
-  for(int c=0;c<8;c++)
-    {
-      HASH* hash = NULL;
-      switch(c)
-        {
-          case  0 :  hash = new HASHCRC32();                    leyend = __L("CRC32");      break;
-          case  1 :  hash = new HASHMD5();                      leyend = __L("MD5");        break;
-          case  2 :  hash = new HASHSHA1();                     leyend = __L("SHA1");       break;
-          case  3 :  hash = new HASHSHA2(HASHSHA2TYPE_224);     leyend = __L("SHA2 224");   break;
-          case  4 :  hash = new HASHSHA2(HASHSHA2TYPE_256);     leyend = __L("SHA2 256");   break;
-          case  5 :  hash = new HASHSHA2(HASHSHA2TYPE_384);     leyend = __L("SHA2 384");   break;
-          case  6 :  hash = new HASHSHA2(HASHSHA2TYPE_512);     leyend = __L("SHA2 512");   break;
-          case  7 :  hash = new HASHWHIRLPOOL();                leyend = __L("Whirpool");   break;
-        }
-
-      if(!hash) return false;
-
-      tests->Test_Hash(hash, input, leyend.Get());
-      delete hash;
-    }
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
 * @brief      Test_DIOStreamTCPIPConnection
 * @ingroup    APPLICATION
@@ -2355,6 +2331,172 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
+* @brief      Test_Hash
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
+{
+  if(!tests->console) return false;
+
+  XBUFFER  input;
+  XSTRING  leyend;
+  XSTRING  string;
+
+  string = __L("The quick brown fox jumps over the lazy dog");
+
+  tests->console->Printf(__L("Sentence: \"%s\"\n\n"), string.Get());
+
+  XSTRING_CREATEOEM(string, charstr)
+  input.Add((XBYTE*)charstr, string.GetSize());
+  XSTRING_DELETEOEM(string, charstr)
+
+  for(int c=0;c<8;c++)
+    {
+      HASH* hash = NULL;
+      switch(c)
+        {
+          case  0 :  hash = new HASHCRC32();                    leyend = __L("CRC32");      break;
+          case  1 :  hash = new HASHMD5();                      leyend = __L("MD5");        break;
+          case  2 :  hash = new HASHSHA1();                     leyend = __L("SHA1");       break;
+          case  3 :  hash = new HASHSHA2(HASHSHA2TYPE_224);     leyend = __L("SHA2 224");   break;
+          case  4 :  hash = new HASHSHA2(HASHSHA2TYPE_256);     leyend = __L("SHA2 256");   break;
+          case  5 :  hash = new HASHSHA2(HASHSHA2TYPE_384);     leyend = __L("SHA2 384");   break;
+          case  6 :  hash = new HASHSHA2(HASHSHA2TYPE_512);     leyend = __L("SHA2 512");   break;
+          case  7 :  hash = new HASHWHIRLPOOL();                leyend = __L("Whirpool");   break;
+        }
+
+      if(!hash) return false;
+
+      tests->Test_Hash(hash, input, leyend.Get());
+      delete hash;
+    }
+
+  return true;
+}
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
+* @brief      Test_CipherFileKeys
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
+{
+  bool status = false;
+
+	XPATH	 	 xpath;
+	XPATH		 xpathgeneric;	
+
+	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathgeneric);
+	xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
+	
+	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM(xpath);	
+  if(filekeys) 
+    {
+
+
+
+      status = true;
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
+* @brief      Test_CipherRSA
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
+{
+  CIPHERRSA* cipher = new CIPHERRSA();
+	if(!cipher) return false; 
+
+  bool status = false;
+	
+	XPATH	 	 xpath;
+	XPATH		 xpathgeneric;	
+
+	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathgeneric);
+	xpath.Create(3 , xpathgeneric.Get(), __L("keys"), CIPHERKEYSFILEGKF_EXT);	
+	
+	CIPHERKEYSFILEGKF*		filekeys   = new CIPHERKEYSFILEGKF(xpath);	
+	CIPHERKEYRSAPUBLIC*		publickey  = NULL;
+	CIPHERKEYRSAPRIVATE*	privatekey = NULL;		
+		
+	publickey  = (CIPHERKEYRSAPUBLIC*)filekeys->GetKey(CIPHERKEYTYPE_PUBLIC);
+	privatekey = (CIPHERKEYRSAPRIVATE*)filekeys->GetKey(CIPHERKEYTYPE_PRIVATE);
+
+	if(!publickey || !privatekey)
+		{
+			status = false;
+
+		} else status = true;
+
+	XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Load RSA keys : %s"), (status?__L("Ok."):__L("Fail.")));	
+	
+	if(status)
+	  {
+      XBUFFER input;
+      XBYTE   inputdata[]	= "Esta es una prueba de un texto largo para ser encriptado usando la RSA. La prueba consiste en que sea mas largo que la clave, osea mas de 128 bytes de largo, y que ademas tenga una longitud que no sea complemento de 2, para que queden bien los Paddings internos de la funcion. Pues eso. se acabo el rollo de pollo.";
+
+      input.Delete();
+	    input.Add((XBYTE*)inputdata, sizeof(inputdata));
+
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Data to cipher:"));	
+      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, input);
+
+      status = false;
+  
+	    if(cipher->SetKey(publickey))
+		    {
+			    if(cipher->SetKey(privatekey)) 
+				    {					
+					    if(cipher->Cipher(input, CIPHERKEYTYPE_PRIVATE))
+						    {
+                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Data cipher:"));	
+                  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*cipher->GetResult()));
+
+							    cipher->Uncipher((*cipher->GetResult()), CIPHERKEYTYPE_PUBLIC); 
+						    }
+
+					    status = input.Compare(cipher->GetResult());						  
+				    }
+		    }
+    }
+		
+	XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Test RSA keys : %s"), (status?__L("Ok."):__L("Fail.")));	
+
+	delete filekeys;
+	
+	delete cipher;
+
+	return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
 * @brief      Test_CipherCurve25519
 * @ingroup    APPLICATION
@@ -2417,7 +2559,6 @@ bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
 
   return status ;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -2533,7 +2674,6 @@ bool DEVTESTSCONSOLE::Test_SystemCPUUsage(DEVTESTSCONSOLE* tests)
 
   return true;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------

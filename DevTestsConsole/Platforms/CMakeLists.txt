@@ -48,10 +48,12 @@
  set(HASH_COMP128V1_FEATURE                              true    CACHE BOOL "Activate Hash COMP128V1"                                    FORCE)
  set(HASH_WHIRLPOOL_FEATURE                              true    CACHE BOOL "Activate Hash Whirlpool"                                    FORCE)    
  set(CIPHER_SYMMETRIC_FEATURE                            true    CACHE BOOL "Activate Cipher Symetric"                                   FORCE)
- set(CIPHER_ASYMMETRIC_FEATURE                           true    CACHE BOOL "Activate Cipher Asymetric"                                  FORCE)
  set(CIPHER_SYMMETRIC_DES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric DES"                               FORCE)
  set(CIPHER_SYMMETRIC_AES_FEATURE                        true    CACHE BOOL "Activate Cipher Symetric AES"                               FORCE)
  set(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                   true    CACHE BOOL "Activate Cipher Symetric BlowFish"                          FORCE)
+ set(CIPHER_ASYMMETRIC_FEATURE                           true    CACHE BOOL "Activate Cipher Asymetric"                                  FORCE) 
+ set(CIPHER_ASYMMETRIC_FILEKEY_GFK                       true    CACHE BOOL "Activate Cipher Asymetric File Key (.Gen Key File)"         FORCE) 
+ set(CIPHER_ASYMMETRIC_FILEKEY_PEM                       true    CACHE BOOL "Activate Cipher Asymetric File Key (.PEM)"                  FORCE) 
  set(CIPHER_ASYMMETRIC_RSA_FEATURE                       true    CACHE BOOL "Activate Cipher ASymetric RSA"                              FORCE) 
  set(CIPHER_ASYMMETRIC_CURVE25519_FEATURE                true    CACHE BOOL "Activate Cipher ASymetric Curve25519"                       FORCE) 
 

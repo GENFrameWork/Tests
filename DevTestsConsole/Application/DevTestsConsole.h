@@ -77,17 +77,16 @@ enum DEVTESTSCONSOLE_GPIOENTRYID
 };
 
 
-
 #define APPLICATION_VERSION                       0
 #define APPLICATION_SUBVERSION                    1
 #define APPLICATION_SUBVERSIONERR                 0
 
-#define APPLICATION_NAMEAPP                       __L("devtestsconsole")
-#define APPLICATION_NAMEFILE                      __L("Unit tests")
+#define APPLICATION_NAMEAPP                       __L("Developed Tests Console")
+#define APPLICATION_NAMEFILE                      __L("devtestsconsole")
+
+#define APPLICATION_OWNER                         __L("GEN Group")
 
 #define APPLICATION_YEAROFCREATION                2022
-
-#define DEVTESTSCONSOLE_ENTERPRISE                __L("GEN Group")
 
 //#define DEVTESTSCONSOLE_NOKEY
 
@@ -260,8 +259,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XTree                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XDir                           (DEVTESTSCONSOLE* tests);
     static bool                     Test_Threads                        (DEVTESTSCONSOLE* tests);
-    static bool                     Test_DateTime                       (DEVTESTSCONSOLE* tests);
-    static bool                     Test_HASH                           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DateTime                       (DEVTESTSCONSOLE* tests);    
     static bool                     Test_DIOStreamTCPIPConnection       (DEVTESTSCONSOLE* tests);
     static bool                     Test_XSystem                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_SharedMemory                   (DEVTESTSCONSOLE* tests);    
@@ -273,6 +271,9 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_DIOCheckTCPIPConnections       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WifiEnum                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);
+    static bool                     Test_Hash                           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
+    static bool											Test_CipherRSA									    (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);
