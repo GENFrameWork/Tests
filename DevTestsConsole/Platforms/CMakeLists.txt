@@ -83,7 +83,7 @@
  set(DIO_ALERTS_FEATURE                                  true    CACHE BOOL "Activate Data Input/Output Alerts"                          FORCE)  
  set(DIO_ONOTIFICATIONS_MANAGER_FEATURE                  true    CACHE BOOL "Activate Notifications Nanager"                             FORCE)
  set(DIO_WIFIMANAGERMODE_FEATURE                         true    CACHE BOOL "Activate Data Input/Output Wifi Manager Mode"               FORCE) 
- set(DIO_SNMP_FEATURE                                    true    CACHE BOOL "Activate SNMP (Simple Network Management Protocol)"         FORCE)
+#set(DIO_SNMP_FEATURE                                    true    CACHE BOOL "Activate SNMP (Simple Network Management Protocol)"         FORCE)
  set(DIO_BUSPIRATE_FEATURE                               true    CACHE BOOL "Activate Data Input/Output Bus Pirate 4.0"                  FORCE)
  set(DIO_MODBUSCLIENT_FEATURE                            true    CACHE BOOL "Activate Data Input/Output ModBus Client (UART/TCPIP)"      FORCE)
  set(DIO_LEDNEOPIXELWS2812B_FEATURE                      true    CACHE BOOL "Activate Data Input/Output Led Neopixel WS2812B"            FORCE) 

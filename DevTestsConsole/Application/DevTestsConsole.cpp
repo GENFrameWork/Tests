@@ -3432,8 +3432,11 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 {  
-  XSTRING			string;		
   bool        status = false;
+
+  #ifdef DIO_SNMP_ACTIVE
+
+  XSTRING			string;		
 
 	DIOSNMP* snmp = new DIOSNMP();
 	if(snmp)  
@@ -3451,7 +3454,9 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
         }
 
       delete snmp;
-		}        	
+		}     
+
+  #endif   	
 	
   return status;
 }
