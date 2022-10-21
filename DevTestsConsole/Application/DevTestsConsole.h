@@ -254,6 +254,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XTrace                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLogs                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XVector                        (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XVectorSTL                     (DEVTESTSCONSOLE* tests);
     bool                            Test_XTree_AddChilds                (XTREE_NODE_TEST* node, int nchild);
     bool                            Test_XTree_InsertChilds             (XTREE_NODE_TEST* node, int indexchild);
     static bool                     Test_XTree                          (DEVTESTSCONSOLE* tests);
@@ -273,7 +274,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_Hash                           (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
-    static bool											Test_CipherRSA									    (DEVTESTSCONSOLE* tests);
+    static bool							Test_CipherRSA				   	      (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);
@@ -300,6 +301,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_DIOPCap                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_XProperty                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLicense                       (DEVTESTSCONSOLE* tests);
+    
 
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);

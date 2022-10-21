@@ -48,6 +48,8 @@
 #include "XDir.h"
 #include "XRand.h"
 #include "XDir.h"
+#include "XVector.h"
+#include "XVectorSTL.h"
 #include "XString.h"
 #include "XSystem.h"
 #include "XLog.h"
@@ -851,6 +853,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
   DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                    , __L("Test XString")                    },
                                                       { false  , Test_XBuffer                    , __L("Test XBuffer")                    },
                                                       { false  , Test_XVector                    , __L("Test XVector")                    },
+                                                      { true   , Test_XVectorSTL                 , __L("Test XVector STL")                },
                                                       { false  , Test_XRand                      , __L("Test_XRand")                      },
                                                       { false  , Test_XTrace                     , __L("Test XTrace")                     },
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
@@ -870,7 +873,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
                                                       { false  , Test_Hash                       , __L("Test Hash")                       },
-                                                      { true   , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
+                                                      { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
                                                       { false  , Test_DIOStreamTLS               , __L("Test DIOStreamTLS")               },         
@@ -1212,6 +1215,54 @@ bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
   vector.DeleteContents();
   vector.DeleteAll();
 
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn             bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
+* @brief       Test_XVectorSTL
+* @ingroup     APPLICATION
+* 
+* @param[in]   tests : 
+* 
+* @return         bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
+{
+  if(!tests->console) return false;
+ 
+  XVECTORSTL<int>  vector;
+ 
+  vector.Add(10);
+  vector.Add(50);
+  vector.Add(10);
+
+  int number = vector.Get(1);
+
+  vector.Delete(50);
+
+  vector.DeleteAll();
+ 
+
+
+  XVECTORSTL<XSTRING*> vector2;
+
+  for(int c=0; c<11; c++)
+    {
+      XSTRING* string = new XSTRING();
+      if(string)
+        {
+          string->Set(__L("hola"));
+        }
+
+      vector2.Add(string);
+    }
+
+  vector2.DeleteAll();
 
   return true;
 }
