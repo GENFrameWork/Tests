@@ -45,6 +45,9 @@
 
 #include "APPConsole.h"
 
+#include "DevTestsConsole_XProperty.h"
+#include "DevTestsConsole_XSerializable.h"
+
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 enum DEVTESTSCONSOLEXFSMEVENTS
@@ -90,10 +93,8 @@ enum DEVTESTSCONSOLE_GPIOENTRYID
 
 //#define DEVTESTSCONSOLE_NOKEY
 
-
 class DEVTESTSCONSOLE;
 typedef bool (*DEVTESTSCONSOLE_FUNCTION)(DEVTESTSCONSOLE* tests);
-
 
 typedef struct
 {
@@ -103,108 +104,13 @@ typedef struct
 
 } DEVTESTSCONSOLE_LIST_FUNCTION;
 
-
-class DEVTESTSCONSOLE_PROPERTY
-{ 
-  public:                                     
-                      DEVTESTSCONSOLE_PROPERTY        () : x(this), y(this), z(this)
-                      {
-                        x_ = 0.0f;
-                        y_ = 0.0f;
-                        z_ = 10.0f;
-                      }
-                      /*
-                      DEVTESTSCONSOLE_PROPERTY        (double x0, double y0) : x_(x0), y_(y0), x(this), y(this), z(this)
-                      {
-                        z_ = 10.0f;
-                      } 
-                      */
-
-    void              SetX                            (double x) 
-                      { 
-                        x_ = x; 
-                      }
-
-    double            GetX                            () 
-                      { 
-                        return x_; 
-                      } 
-
-    XPROPERTY<DEVTESTSCONSOLE_PROPERTY, double, &DEVTESTSCONSOLE_PROPERTY::GetX, &DEVTESTSCONSOLE_PROPERTY::SetX> x;
-
-    void              SetY                            (double y) 
-                      { 
-                        y_ = y;                       
-                      }
-
-    double            GetY                            () 
-                      { 
-                        return y_; 
-                      }
-
-   
-    XPROPERTY<DEVTESTSCONSOLE_PROPERTY, double, &DEVTESTSCONSOLE_PROPERTY::GetY, &DEVTESTSCONSOLE_PROPERTY::SetY> y;
-
-
-    double            GetZ                            ()
-                      {
-                        return z_;
-                      }
-
-
-    XPROPERTYG<DEVTESTSCONSOLE_PROPERTY, double, &DEVTESTSCONSOLE_PROPERTY::GetZ> z;
-
-    double            x_;
-    double            y_;
-    double            z_;   
-};
-
-
-
-class DEVTESTSCONSOLE_PROPERTY2
-{
-  public:
-                      DEVTESTSCONSOLE_PROPERTY2         () :  data(this)
-                      {
-
-                      }
-
-                      /*
-                      DEVTESTSCONSOLE_PROPERTY2         (DEVTESTSCONSOLE_PROPERTY data0) : data_(data0), data(this)
-                      {
-                      }
-                      */
-
-    void              SetX                              (DEVTESTSCONSOLE_PROPERTY data)
-                      {
-                        data_.x = data.x;
-                      }
-
-    DEVTESTSCONSOLE_PROPERTY GetX                       ()
-                      {
-                        return data_;
-                      }
-
-    
-    XPROPERTY<DEVTESTSCONSOLE_PROPERTY2, DEVTESTSCONSOLE_PROPERTY, &DEVTESTSCONSOLE_PROPERTY2::GetX, &DEVTESTSCONSOLE_PROPERTY2::SetX>  data;
-
-    DEVTESTSCONSOLE_PROPERTY data2;
-
-
-  private:
-
-    DEVTESTSCONSOLE_PROPERTY data_;
-
-};
-
-
-
-#define DEVTESTSCONSOLE_MAXNTHREADS                      5
+#define DEVTESTSCONSOLE_MAXNTHREADS               5
 
 
 typedef XTREE_NODE<XSTRING*>                      XTREE_NODE_TEST;
 typedef XTREE_NODE_ITERATOR<XSTRING*>             XTREE_NODE_ITERATOR_TEST;
 typedef XTREE<XSTRING*>                           XTREE_TEST;
+
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
@@ -254,7 +160,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XTrace                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLogs                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XVector                        (DEVTESTSCONSOLE* tests);
-    static bool                     Test_XVectorSTL                     (DEVTESTSCONSOLE* tests);
+  //static bool                     Test_XVectorSTL                     (DEVTESTSCONSOLE* tests);
     bool                            Test_XTree_AddChilds                (XTREE_NODE_TEST* node, int nchild);
     bool                            Test_XTree_InsertChilds             (XTREE_NODE_TEST* node, int indexchild);
     static bool                     Test_XTree                          (DEVTESTSCONSOLE* tests);
@@ -274,7 +180,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_Hash                           (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
-    static bool							Test_CipherRSA				   	      (DEVTESTSCONSOLE* tests);
+    static bool							        Test_CipherRSA				   	          (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);
@@ -301,8 +207,8 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_DIOPCap                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_XProperty                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLicense                       (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XSerializable                  (DEVTESTSCONSOLE* tests);
     
-
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
     #endif

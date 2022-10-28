@@ -23,6 +23,8 @@
 
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Default.txt") 
 
+ #option(DEBUG_FEATURE "Activate Debug mode" ON)
+
  set(DEBUG_FEATURE                                       true    CACHE BOOL "Activate Debug mode"                                        FORCE)
  set(XTRACE_FEATURE                                      true    CACHE BOOL "Activate XTrace"                                            FORCE)
  set(XTRACE_NOINTERNET_FEATURE                           true    CACHE BOOL "Activate No need for trace dependencies with the Internet"  FORCE)                        
@@ -32,11 +34,14 @@
  set(XPROCESSMANAGER_FEATURE                             true    CACHE BOOL "Activate Process Manager"                                   FORCE)
  set(XLICENSE_FEATURE                                    true    CACHE BOOL "Activate License functions"                                 FORCE)
 
+ set(XSERIALIZABLE_BINARY_FEATURE                        true    CACHE BOOL "Activate Serializable Binary"                               FORCE)
+ set(XSERIALIZABLE_JSON_FEATURE                          true    CACHE BOOL "Activate Serializable JSON"                                 FORCE)
+
  set(XFILE_HEX_FEATURE                                   true    CACHE BOOL "Activate XFile HEX format"                                  FORCE)  
  set(XFILE_DFU_FEATURE                                   true    CACHE BOOL "Activate XFile DFU format"                                  FORCE)  
  set(XFILE_RIFF_FEATURE                                  true    CACHE BOOL "Activate XFile RIFF format"                                 FORCE) 
 
- set(XTESTSMANAGER_FEATURE                               true    CACHE BOOL "Activate Tests Manager"                                     FORCE)                              
+ set(XTESTSMANAGER_FEATURE                               true    CACHE BOOL "Activate Tests Manager"                                     FORCE)
   
  set(HASH_FEATURE                                        true    CACHE BOOL "Activate Hash"                                              FORCE)
  set(HASH_CRC16_FEATURE                                  true    CACHE BOOL "Activate Hash CRC16"                                        FORCE)  

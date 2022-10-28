@@ -49,7 +49,7 @@
 #include "XRand.h"
 #include "XDir.h"
 #include "XVector.h"
-#include "XVectorSTL.h"
+//#include "XVectorSTL.h"
 #include "XString.h"
 #include "XSystem.h"
 #include "XLog.h"
@@ -73,6 +73,7 @@
 #include "XProcessManager.h"
 #include "XLicense.h"
 #include "XOrderedList.h"
+#include "XSerializable.h"
 
 #include "HashMD5.h"
 #include "HashSHA1.h"
@@ -853,7 +854,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
   DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                    , __L("Test XString")                    },
                                                       { false  , Test_XBuffer                    , __L("Test XBuffer")                    },
                                                       { false  , Test_XVector                    , __L("Test XVector")                    },
-                                                      { true   , Test_XVectorSTL                 , __L("Test XVector STL")                },
+                                                    //{ false  , Test_XVectorSTL                 , __L("Test XVector STL")                },
                                                       { false  , Test_XRand                      , __L("Test_XRand")                      },
                                                       { false  , Test_XTrace                     , __L("Test XTrace")                     },
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
@@ -901,6 +902,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   }, 
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
+                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
 
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -1231,6 +1233,7 @@ bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
 * @return         bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
+/*
 bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -1246,26 +1249,10 @@ bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
   vector.Delete(50);
 
   vector.DeleteAll();
- 
-
-
-  XVECTORSTL<XSTRING*> vector2;
-
-  for(int c=0; c<11; c++)
-    {
-      XSTRING* string = new XSTRING();
-      if(string)
-        {
-          string->Set(__L("hola"));
-        }
-
-      vector2.Add(string);
-    }
-
-  vector2.DeleteAll();
 
   return true;
 }
+*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -4056,6 +4043,36 @@ bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 		}
 
 	return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
+* @brief      Test_XSerializable
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
+{
+  if(!tests->console) return false;
+
+  XSERIALIZATIONMETHOD* serializationmethod;
+  XBUFFER               buffer; 
+  TESTSERIALIZABLE      testserializable;
+  TESTSERIALIZABLE      testserializable2;
+
+  serializationmethod = XSERIALIZABLE::CreateBinary(buffer);
+
+  testserializable.InitSerialize(serializationmethod);
+
+  testserializable2.InitDeserialize(serializationmethod);
+
+  return true;
 }
 
 
