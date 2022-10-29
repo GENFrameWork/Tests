@@ -200,6 +200,26 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF8
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8) 
+{
+  XSTRING string1 = __L("holá mundo");
+  XSTRING string2;
+  XBUFFER buffer;
+      
+  string1.ConvertToUTF8(buffer);
+  string2.ConvertFromUTF8(buffer);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -224,8 +244,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, Base64)
 
   EXPECT_EQ(0, string.Compare(string2, false));
 }
-
-
 
 
 }
