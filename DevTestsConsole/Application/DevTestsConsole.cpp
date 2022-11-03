@@ -892,6 +892,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
                                                       { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
                                                       { false  , Test_SNMP                       , __L("Test SNMP ")                      },
+                                                      { true   , Test_XFileJSON                  , __L("Test XFile JSON")                  },  
                                                       { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
                                                       { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
                                                       { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
@@ -902,7 +903,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   }, 
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
 
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -3506,6 +3507,52 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
+* @brief      Test_XFileJSON
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
+{
+  XFILEJSON         fileJSON;
+  XFILEJSONOBJECT*  root;
+  bool              status = false;
+
+  root = fileJSON.GetRoot();
+  if(!root)
+    {
+      root = new XFILEJSONOBJECT();
+      if(!root) return false;
+
+      fileJSON.SetRoot(root);
+    }
+
+  XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
+  if(first_obj)
+    {
+       XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
+       XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba"));
+    }
+  
+  root->Add(__L("first_obj"), first_obj);
+
+  XSTRING jsonString;
+  fileJSON.EncodeAllLines(true);
+  fileJSON.GetAllInOneLine(jsonString);   
+  
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, jsonString.Get());
+
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DEVTESTSCONSOLE::Test_XFileXML(DEVTESTSCONSOLE* tests)
 * @brief      Test_XFileXML
 * @ingroup    APPLICATION
@@ -4066,7 +4113,7 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
   TESTSERIALIZABLE      testserializable;
   TESTSERIALIZABLE      testserializable2;
 
-  serializationmethod = XSERIALIZABLE::CreateBinary(buffer);
+  serializationmethod = XSERIALIZABLE::CreateInstance(buffer);
 
   testserializable.InitSerialize(serializationmethod);
 

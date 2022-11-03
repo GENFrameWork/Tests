@@ -197,6 +197,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_NotificationsManager           (DEVTESTSCONSOLE* tests);
     static bool                     Test_ATCommandGSM                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SNMP                           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XFileJSON                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_XFileXML                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_XFileRIFF                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamUSBConnection         (DEVTESTSCONSOLE* tests);
