@@ -72,7 +72,6 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
 
                                       return true;
                                     }
-
   private:
 
     void                            Clean                              ()
@@ -115,6 +114,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
                                       Clean();                     
                                     }
 
+    
     bool                            Serialize                          ()
                                     {
                                       Primitive_Add<int>(value1, __L("value1"));
@@ -139,6 +139,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
 
                                       return true;
                                     }
+
 
   private:
 
