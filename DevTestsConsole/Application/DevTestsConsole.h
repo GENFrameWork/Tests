@@ -80,6 +80,8 @@ enum DEVTESTSCONSOLE_GPIOENTRYID
 };
 
 
+
+
 #define APPLICATION_VERSION                       0
 #define APPLICATION_SUBVERSION                    1
 #define APPLICATION_SUBVERSIONERR                 0
@@ -104,6 +106,15 @@ typedef struct
 
 } DEVTESTSCONSOLE_LIST_FUNCTION;
 
+
+typedef struct
+{
+  int               index;
+  XTHREADCOLLECTED* thread;
+  DEVTESTSCONSOLE*  devtestconsole; 
+
+} DEVTESTSCONSOLE_XTHREADPARAM;
+
 #define DEVTESTSCONSOLE_MAXNTHREADS               5
 
 
@@ -117,6 +128,7 @@ typedef XTREE<XSTRING*>                           XTREE_TEST;
 class XTIME;
 class XTIMER;
 class XRAND;
+class XMUTEX;
 class XTHREAD;
 class XDIR;
 class XSCHEDULER;
@@ -238,6 +250,9 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
 
     XTIMER*                         xtimerupdateconsole;
     XMUTEX*                         xmutexshowallstatus;
+
+    XMUTEX*                         xmutexthread;    
+
 };
 
 

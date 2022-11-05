@@ -892,7 +892,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
                                                       { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
                                                       { false  , Test_SNMP                       , __L("Test SNMP ")                      },
-                                                      { true   , Test_XFileJSON                  , __L("Test XFile JSON")                  },  
+                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                  },  
                                                       { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
                                                       { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
                                                       { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
@@ -1584,7 +1584,7 @@ bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
           element.GetDateTimeFile_LastAccess()->GetDateTimeToString((XDATETIME_FORMAT_ADDDATE | XDATETIME_FORMAT_ADDTIME | XDATETIME_FORMAT_TIMEWITHSECONDS | XDATETIME_FORMAT_TEXTMONTH), datetimestr);
 
           tests->console->Printf(__L("Elements DIR: [%s] %s\n"), element.GetNameFile()->Get(), datetimestr.Get());
-         
+           
         } while(xdir->NextSearch(&element));
     }            
     
@@ -1610,20 +1610,35 @@ bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
-  XTHREADCOLLECTED* threads[DEVTESTSCONSOLE_MAXNTHREADS];
+  DEVTESTSCONSOLE_XTHREADPARAM listthread[DEVTESTSCONSOLE_MAXNTHREADS];
+  XTHREADCOLLECTED*            threads[DEVTESTSCONSOLE_MAXNTHREADS];
 
-  memset(threads, 0, DEVTESTSCONSOLE_MAXNTHREADS * sizeof(XTHREADCOLLECTED*));
+  memset(listthread , 0, DEVTESTSCONSOLE_MAXNTHREADS * sizeof(DEVTESTSCONSOLE_XTHREADPARAM));
+  memset(threads    , 0, DEVTESTSCONSOLE_MAXNTHREADS * sizeof(XTHREADCOLLECTED*));
+
+  tests->xmutexthread = GEN_XFACTORY.Create_Mutex();
+  if(!tests->xmutexthread) return false;
 
   for(int c=0; c<DEVTESTSCONSOLE_MAXNTHREADS; c++)
     {
-      void* index = 0;
+      threads[c] = CREATEXTHREAD(XTHREADGROUPID_APPOWNER, __L("DEVTESTSCONSOLE::Test_Threads"), ThreadRunFunction, (void*)&listthread[c]);
+      if(!threads[c]) return false;    
 
-      memcpy(&index, &c, sizeof(int));
+      listthread[c].index           = c;
+      listthread[c].thread          = threads[c];
+      listthread[c].devtestconsole  = tests;
 
-      threads[c] = CREATEXTHREAD(XTHREADGROUPID_APPOWNER, __L("DEVTESTSCONSOLE::Test_Threads"), ThreadRunFunction, index);
-      if(!threads[c]) return false;
+      switch(c)
+        {        
+          case 0  : threads[c]->SetPriority(XTHREADPRIORITY_LOW);       break;
+          case 1  : threads[c]->SetPriority(XTHREADPRIORITY_LOW);       break;
+          case 2  : threads[c]->SetPriority(XTHREADPRIORITY_LOW);       break;
+          case 3  : threads[c]->SetPriority(XTHREADPRIORITY_REALTIME);  break;
+          case 4  : threads[c]->SetPriority(XTHREADPRIORITY_LOW);       break;
+          default : break;
+        }
 
-      threads[c]->Ini();
+      threads[c]->Ini();      
     }
 
   GEN_XSLEEP.Seconds(5);
@@ -1632,6 +1647,8 @@ bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
     {
       DELETEXTHREAD(XTHREADGROUPID_APPOWNER, threads[c]);
     }
+
+  GEN_XFACTORY.Delete_Mutex(tests->xmutexthread);  
 
   return true;
 }
@@ -4665,16 +4682,26 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
 *---------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::ThreadRunFunction(void* param)
 {
-  //DEVTESTSCONSOLE* test = (DEVTESTSCONSOLE*)param;
-  //if(!test) return;
+  DEVTESTSCONSOLE_XTHREADPARAM* threadparam = (DEVTESTSCONSOLE_XTHREADPARAM*)param;
+  if(!threadparam) return;
 
-  XDWORD indexthread = 0;
+  //threadparam->devtestconsole->xmutexthread->Lock();
+  
+  XTRACE_PRINTCOLOR(threadparam->index+1, __L("[%02d] Into Thread ...."), threadparam->index);
 
-  memcpy(&indexthread, &param, sizeof(XDWORD));
+  /*
+  switch(threadparam->index)
+    {
+      case 0  : GEN_XSLEEP.MilliSeconds(100);   break;
+      case 1  : GEN_XSLEEP.MilliSeconds(600);   break;
+      case 2  : GEN_XSLEEP.MilliSeconds(900);   break;
+      case 3  : GEN_XSLEEP.MilliSeconds( 50);   break;
+      case 4  : GEN_XSLEEP.MilliSeconds(250);   break;
+      default : GEN_XSLEEP.MilliSeconds(150);   break;
+    }  
+  */
 
-  XTRACE_PRINTCOLOR(indexthread+1, __L("[%02d] Into Thread ...."), indexthread+1);
-
-  GEN_XSLEEP.MilliSeconds(100);
+  //threadparam->devtestconsole->xmutexthread->UnLock();
 }
 
 
@@ -4695,5 +4722,7 @@ void DEVTESTSCONSOLE::Clean()
 
   xtimerupdateconsole         = NULL;
   xmutexshowallstatus         = NULL;
+
+  xmutexthread                = NULL;
 }
 
