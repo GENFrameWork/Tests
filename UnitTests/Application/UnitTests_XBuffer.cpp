@@ -47,7 +47,7 @@
 
 
 #ifdef GOOGLETEST_ACTIVE      
-namespace test_XBuffer
+namespace TEST_XBUFFER
 {
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/

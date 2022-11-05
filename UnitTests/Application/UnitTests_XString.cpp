@@ -47,7 +47,7 @@
 
 
 #ifdef GOOGLETEST_ACTIVE      
-namespace test_xstring
+namespace TEST_XSTRING
 {
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -217,6 +217,8 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8)
       
   string1.ConvertToUTF8(buffer);
   string2.ConvertFromUTF8(buffer);
+  
+  string2.DeleteLastCharacter();
 
   EXPECT_EQ(0, string1.Compare(string2, false));
 }

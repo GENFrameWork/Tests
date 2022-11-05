@@ -860,7 +860,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
-                                                      { false  , Test_Threads                    , __L("Test_Threads")                    },
+                                                      { true   , Test_Threads                    , __L("Test_Threads")                    },
                                                       { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
@@ -902,7 +902,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   }, 
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
 
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
