@@ -75,9 +75,9 @@ bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
 * @return     DEVTESTSCONSOLE_CFG& :
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance()
+DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance(bool ini)
 {
-  if(!instance) instance = new DEVTESTSCONSOLE_CFG(APPLICATION_NAMEFILE);
+  if(!instance) instance = new DEVTESTSCONSOLE_CFG(ini?APPLICATION_NAMEFILE:NULL);
 
   return (*instance);
 }
@@ -106,114 +106,60 @@ bool DEVTESTSCONSOLE_CFG::DelInstance()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
-* @brief      Database_GetURL
+* 
+* @fn         bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
+* @brief      DoVariableMapping
 * @ingroup    APPLICATION
-*
-* @return     XSTRING* :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
 {
-  return &db_URL;
+  if(!APPCFG::DoVariableMapping())
+    {
+      return false;
+    }
+
+  //-----------------------------------------------------
+  // DATABASE
+
+  AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("-------------------------------------------------------"), 0, 1);
+  AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("Database config")                                        , 0, 2);
+  
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_URL                , &db_URL);                       AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_URL          ,  __L("URL for database")  ,60, 0);
+  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PORT               , &db_port);                      AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_PORT         ,  __L("Port for database") ,60, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME       , &db_databasename);              AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME ,  __L("Database Name")     ,60, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_USER               , &db_user);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PASSWORD           , &db_password);
+  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_TIMEOUTCONNECTION  , &db_timeoutconnection);
+
+  return true;
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
-* @brief      Database_GetPort
+* 
+* @fn         bool DEVTESTSCONSOLE_CFG::DoDefault()
+* @brief      DoDefault
 * @ingroup    APPLICATION
-*
-* @return     XDWORD :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE_CFG::DoDefault()
 {
-  return db_port;
-}
+  if(!APPCFG::DoDefault()) 
+    {
+      return false;
+    }
 
+  //------------------------------------------------------------------------------
 
+  GEN_XTRACE_NET_CFG_DEFAULT_01
+  GEN_XTRACE_NET_CFG_DEFAULT_LOCAL
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
-* @brief      Database_DatabaseName
-* @ingroup    APPLICATION
-*
-* @return     XSTRING* :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
-{
-  return &db_databasename;
-}
-
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
-* @brief      Database_GetUser
-* @ingroup    APPLICATION
-*
-* @return     XSTRING* :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
-{
-  return &db_user;
-}
-
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
-* @brief      Database_GetPassword
-* @ingroup    APPLICATION
-*
-* @return     XSTRING* :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
-{
-  return &db_password;
-}
-
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
-* @brief      Database_GetTimeoutConnection
-* @ingroup    APPLICATION
-*
-* @return     int :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
-{
-  return db_timeoutconnection;
-}
-
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DEVTESTSCONSOLE_CFG::Default()
-* @brief      Default config
-* @ingroup
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE_CFG::Default()
-{
   //------------------------------------------------------------------------------
 
   checkresourceshardware_memstatuscheckcadence    = 30;
@@ -221,10 +167,6 @@ bool DEVTESTSCONSOLE_CFG::Default()
   checkresourceshardware_cpuusagecheckcadence     = 20;
   checkresourceshardware_cpuusagelimitpercent     = 70;  
   checkresourceshardware_cpuusageprocessname     = APPLICATION_NAMEAPP; 
-
-
-  GEN_XTRACE_NET_CFG_DEFAULT_01
-  GEN_XTRACE_NET_CFG_DEFAULT_LOCAL
 
   //------------------------------------------------------------------------------
 
@@ -262,6 +204,95 @@ bool DEVTESTSCONSOLE_CFG::Default()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
+* @brief      Database_GetURL
+* @ingroup    APPLICATION
+*
+* @return     XSTRING* :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
+{
+  return &db_URL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
+* @brief      Database_GetPort
+* @ingroup    APPLICATION
+*
+* @return     XDWORD :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
+{
+  return db_port;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
+* @brief      Database_DatabaseName
+* @ingroup    APPLICATION
+*
+* @return     XSTRING* :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
+{
+  return &db_databasename;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
+* @brief      Database_GetUser
+* @ingroup    APPLICATION
+*
+* @return     XSTRING* :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
+{
+  return &db_user;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
+* @brief      Database_GetPassword
+* @ingroup    APPLICATION
+*
+* @return     XSTRING* :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
+{
+  return &db_password;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
+* @brief      Database_GetTimeoutConnection
+* @ingroup    APPLICATION
+*
+* @return     int :
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
+{
+  return db_timeoutconnection;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -278,26 +309,11 @@ DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPCFG(namefile)
 {
   Clean();
 
-  //-----------------------------------------------------
-  // DATABASE
-
-  AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("-------------------------------------------------------"), 0, 1);
-  AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("Database config")                                        , 0, 2);
-  AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("-------------------------------------------------------"), 0, 3);
-
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_URL                , &db_URL);                       AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_URL          ,  __L("URL for database")  ,60, 0);
-  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PORT               , &db_port);                      AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_PORT         ,  __L("Port for database") ,60, 0);
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME       , &db_databasename);              AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME ,  __L("Database Name")     ,60, 0);
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_USER               , &db_user);
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PASSWORD           , &db_password);
-  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_TIMEOUTCONNECTION  , &db_timeoutconnection);
-
-
-  Default();
-
-  Ini();
+  if(namefile)
+    {
+      Ini<DEVTESTSCONSOLE_CFG>();
+    }
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -312,9 +328,10 @@ DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPCFG(namefile)
 *---------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE_CFG::~DEVTESTSCONSOLE_CFG()
 {
+  End();
+
   Clean();
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------

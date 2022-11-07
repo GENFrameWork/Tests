@@ -116,6 +116,7 @@ endif()
  set(APP_INTERNETSERVICES_FEATURE                        true    CACHE BOOL "Activate Application Internet Services"                     FORCE)
  set(APP_LOG_FEATURE                                     true    CACHE BOOL "Activate Application Log"                                   FORCE)
  set(APP_ALERTS_FEATURE                                  true    CACHE BOOL "Activate Application Alerts"                                FORCE)
+ set(APP_CFG_REMOTEFILE_FEATURE                          true    CACHE BOOL "Activate Application CFG Remote File"                       FORCE)
 
  set(APP_CFG_GENERAL_FEATURE                             true    CACHE BOOL "Activate Application CFG General"                           FORCE)  
  set(APP_CFG_LOG_FEATURE                                 true    CACHE BOOL "Activate Application CFG LOG"                               FORCE)

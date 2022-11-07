@@ -51,28 +51,29 @@ class DEVTESTSCONSOLE_CFG : public APPCFG
   public:
 
 
-    static bool                     GetIsInstanced                          ();
-    static DEVTESTSCONSOLE_CFG&     GetInstance                             ();
-    static bool                     DelInstance                             ();
+    static bool                     GetIsInstanced                            ();
+    static DEVTESTSCONSOLE_CFG&     GetInstance                               (bool ini = true);
+    static bool                     DelInstance                               ();
 
-    XSTRING*                        Database_GetURL                         ();
-    XDWORD                          Database_GetPort                        ();
-    XSTRING*                        Database_DatabaseName                   ();
-    XSTRING*                        Database_GetUser                        ();
-    XSTRING*                        Database_GetPassword                    ();
-    int                             Database_GetTimeoutConnection           ();
+    bool                            DoVariableMapping                         (); 
+    bool                            DoDefault                                 ();
 
-    bool                            Default                                 ();
-
+    XSTRING*                        Database_GetURL                           ();
+    XDWORD                          Database_GetPort                          ();
+    XSTRING*                        Database_DatabaseName                     ();
+    XSTRING*                        Database_GetUser                          ();
+    XSTRING*                        Database_GetPassword                      ();
+    int                             Database_GetTimeoutConnection             ();
+    
   private:
-                                    DEVTESTSCONSOLE_CFG                     (XCHAR* namefile);
-                                    DEVTESTSCONSOLE_CFG                     (DEVTESTSCONSOLE_CFG const&);        // Don't implement
-    virtual                        ~DEVTESTSCONSOLE_CFG                     ();
+                                    DEVTESTSCONSOLE_CFG                       (XCHAR* namefile);
+                                    DEVTESTSCONSOLE_CFG                       (DEVTESTSCONSOLE_CFG const&);        // Don't implement
+    virtual                        ~DEVTESTSCONSOLE_CFG                       ();
 
-    void                            operator =                              (DEVTESTSCONSOLE_CFG const&);        // Don't implement
+    void                            operator =                                (DEVTESTSCONSOLE_CFG const&);        // Don't implement
 
 
-    void                            Clean                                   ();
+    void                            Clean                                     ();
 
     static DEVTESTSCONSOLE_CFG*     instance;
 
