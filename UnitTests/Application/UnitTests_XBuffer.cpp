@@ -40,6 +40,7 @@
 
 #include "XString.h"
 #include "XBuffer.h"
+#include "XVariant.h"
 
 #include "UnitTests_XBuffer.h"
 
@@ -47,7 +48,7 @@
 
 
 #ifdef GOOGLETEST_ACTIVE      
-namespace TEST_XBUFFER
+namespace test_XBuffer
 {
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -72,6 +73,80 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorSize)
   EXPECT_EQ(32, buffer.GetSize());
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Add)
+* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Add
+* @ingroup    UNIT TEST
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, Add)
+{
+  XBUFFER buffer;
+
+  buffer.Add((XDWORD)32)  ;
+  buffer.Add((XQWORD)64)  ;
+  buffer.Add((XBYTE)  1)  ;
+  buffer.Add((bool)true)  ;
+  buffer.Add((float)1.3)  ;
+  buffer.Add((XWORD) 16)  ;
+
+  EXPECT_EQ(20, buffer.GetSize());
+}
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Get)
+* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Get
+* @ingroup    UNIT TEST
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
+{
+  XBUFFER buffer;
+  XBYTE   byte = 0;
+
+  buffer.Add((XBYTE)128);
+  buffer.Get((XBYTE)byte, 0);
+  
+  EXPECT_EQ(byte, 128);
+  EXPECT_EQ(1, buffer.GetSize());
+
+  /*
+  buffer.Get  ((XBYTE*)&buffer, 2 , sizeof(XDWORD)) ;
+  buffer.Get  ((XBYTE*)&buffer, 10, sizeof(XQWORD)) ;
+  buffer.Get  ((XBYTE*)&buffer, 20, sizeof(XBYTE))  ;
+  buffer.Get  ((XBYTE*)&buffer, 5 , sizeof(bool))   ;
+  buffer.Get  ((XBYTE*)&buffer, 2 , sizeof(float))  ;
+  buffer.Get  ((XBYTE*)&buffer, 8 , sizeof(XWORD))  ;
+  */
+  
+}
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Extract)
+* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Extract
+* @ingroup    UNIT TEST
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, Extract)
+{
+  XBUFFER buffer;
+  XBYTE   byte = 0;
+
+  buffer.Add((XBYTE)128); 
+  buffer.Extract((XBYTE)byte, 0);
+
+  EXPECT_EQ(byte, 128);
+  EXPECT_EQ(0, buffer.GetSize());
+}
 
 }
 #endif

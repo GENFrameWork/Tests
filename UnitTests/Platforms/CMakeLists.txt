@@ -26,6 +26,8 @@
  set(GOOGLETEST_FEATURE                                  true    CACHE BOOL "Activate Google Test functionality"                         FORCE)
  set(XMEMORY_CONTROL_FEATURE                             true    CACHE BOOL "Activate XMemory Control"                                   FORCE)
 
+ set(XSLEEP_FEATURE                                      true    CACHE BOOL "Activate XSleep"                                            FORCE)
+
  set(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  true    CACHE BOOL "Activate Linux CodePage Editor Visual Studio CP1252"        FORCE)   
                             
  set(APP_FEATURE                                         true    CACHE BOOL "Activate Application modules"                               FORCE)
@@ -48,7 +50,7 @@
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XString.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
-
+ list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")
 
 # --------------------------------------------------------------------
 # Create proyect 
