@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       UnitTests_XBuffer.h
+* @file       UnitTests_XSleep.h
 *
 * @class      
-* @brief      Unit Tests for XBuffer class (GEN FrameWork)
+* @brief      Unit Tests for XSleep class (GEN FrameWork)
 * @ingroup    TESTS
 *
 * @copyright  GEN Group. All right reserved.
@@ -34,12 +34,13 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define UNITTEST_XBUFFER_CLASSNAME  XBuffer
+#define UNITTEST_XSLEEP_CLASSNAME  XSLEEP
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
 /*---- INLINE FUNCTIONS ----------------------------------------------------------------------------------------------*/
+
 
 
 #endif
