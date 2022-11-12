@@ -860,9 +860,9 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
-                                                      { true   , Test_Threads                    , __L("Test_Threads")                    },
+                                                      { false  , Test_Threads                    , __L("Test_Threads")                    },
                                                       { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
-                                                      { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
+                                                      { true   , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
                                                       { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
                                                       { false  , Test_GPIO                       , __L("Test GPIO")                       },
@@ -877,7 +877,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
-                                                      { false  , Test_DIOStreamTLS               , __L("Test DIOStreamTLS")               },         
+                                                      { false  , Test_DIOStreamTCPIP             , __L("Test DIO Stream TCPIP")           },
+                                                      { false  , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
                                                       { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
@@ -892,7 +893,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
                                                       { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
                                                       { false  , Test_SNMP                       , __L("Test SNMP ")                      },
-                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                  },  
+                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
                                                       { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
                                                       { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
                                                       { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
@@ -1730,7 +1731,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
   bool                 status       = false;
 
   diostreamcfg.SetMode(DIOSTREAMMODE_SERVER);
-  diostreamcfg.SetRemotePort(8099);
+  diostreamcfg.SetRemotePort(23);
 
   tests->console->Printf(__L("\n\nAbriendo servidor local  %s : %d\n\n"), diostreamcfg.GetLocalIP()->Get(), diostreamcfg.GetRemotePort());
 
@@ -2621,6 +2622,76 @@ bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
   XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 All generated : %s"), status?__L("Ok"):__L("Error!")); 
 
   return status ;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIP(DEVTESTSCONSOLE* tests)
+* @brief      Test_DIOStreamTCPIP
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_DIOStreamTCPIP(DEVTESTSCONSOLE* tests)
+{
+  if(!tests->console) return false;
+
+  DIOSTREAMTCPIPCONFIG  diostreamcfg;
+  DIOSTREAM*            diostream    = NULL;
+  XSTRING               line;
+  bool                  status       = false;
+
+  diostreamcfg.GetRemoteURL()->Set(__L("endorasoft.com"));
+  diostreamcfg.SetMode(DIOSTREAMMODE_CLIENT);
+  diostreamcfg.SetRemotePort(25);
+
+  line.Format(__L("Server [%s]: %d"), diostreamcfg.GetRemoteURL()->Get(), diostreamcfg.GetRemotePort());
+  tests->console->Printf(__L("   %s\n"), line.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, line.Get());
+
+  diostream = GEN_DIOFACTORY.CreateStreamIO(&diostreamcfg);
+  if(!diostream) return false;
+  
+  if(diostream->Open())
+    {
+      status = diostream->WaitToConnected(5);
+
+      line.Format(__L("Connection status: %s"), status?__L("Connected."):__L("No connected."));  
+      tests->console->Printf(__L("   %s\n"), line.Get());
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());            
+
+      if(status)
+        {       
+          XBUFFER buffer;
+          XDWORD  size = 0;
+        
+          buffer.Resize(100);
+
+          status = diostream->WaitToFilledReadingBuffer(30, 5);
+          if(status)
+            {
+              size = diostream->Read(buffer);
+            }
+
+          line.Format(__L("Read: %d bytes"), size);  
+          tests->console->Printf(__L("   %s\n"), line.Get());
+          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());             
+        }
+  
+      status = diostream->Close();
+
+      line.Format(__L("Close connection: %s"), status?__L("Ok."):__L("Error!"));  
+      tests->console->Printf(__L("   %s\n\n"), line.Get());
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
+    }
+
+  GEN_DIOFACTORY.DeleteStreamIO(diostream);
+  
+  return status;
 }
 
 
