@@ -65,7 +65,6 @@ bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance()
