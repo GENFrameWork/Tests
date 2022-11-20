@@ -165,7 +165,7 @@ bool DEVTESTSCONSOLE_CFG::DoDefault()
   checkresourceshardware_memstatuslimitpercent    = 5;
   checkresourceshardware_cpuusagecheckcadence     = 20;
   checkresourceshardware_cpuusagelimitpercent     = 70;  
-  checkresourceshardware_cpuusageprocessname     = APPLICATION_NAMEAPP; 
+  checkresourceshardware_cpuusageprocessname      = APPLICATION_NAMEAPP; 
 
   //------------------------------------------------------------------------------
 

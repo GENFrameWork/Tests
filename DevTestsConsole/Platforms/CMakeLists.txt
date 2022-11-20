@@ -27,7 +27,7 @@
 
  set(DEBUG_FEATURE                                       true    CACHE BOOL "Activate Debug mode"                                        FORCE)
  set(XTRACE_FEATURE                                      true    CACHE BOOL "Activate XTrace"                                            FORCE)
- set(XTRACE_NOINTERNET_FEATURE                           true    CACHE BOOL "Activate No need for trace dependencies with the Internet"  FORCE)                        
+#set(XTRACE_NOINTERNET_FEATURE                           true    CACHE BOOL "Activate No need for trace dependencies with the Internet"  FORCE)                        
  set(XMEMORY_CONTROL_FEATURE                             true    CACHE BOOL "Activate XMemory Control"                                   FORCE)
 
  set(XSHAREDMEMORYMANAGER_FEATURE                        true    CACHE BOOL "Activate Shared Memory Manager"                             FORCE)
