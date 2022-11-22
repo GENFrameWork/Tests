@@ -47,7 +47,7 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
                                     {
                                       Clean();
 
-                                      value2 = 0x55AA55AA;
+                                      value2 = 12345;
                                     }
 
     virtual                        ~TESTSERIALIZABLE2                  ()
@@ -92,7 +92,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
                                     {
                                       Clean();
 
-                                      value1 = 0xAA55AA55;
+                                      value1 = 54321;
 
                                       for(int c=0; c<10; c++)
                                         {

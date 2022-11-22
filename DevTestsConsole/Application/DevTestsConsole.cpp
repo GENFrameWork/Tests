@@ -862,7 +862,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
                                                       { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
-                                                      { true   , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
+                                                      { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
                                                       { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
                                                       { false  , Test_GPIO                       , __L("Test GPIO")                       },
@@ -904,7 +904,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   }, 
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
 
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -4198,14 +4198,23 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
   XSERIALIZATIONMETHOD* serializationmethod;
   XBUFFER               buffer; 
+  XFILEJSON             xfileJSON;      
+  XSTRING               alllines;
   TESTSERIALIZABLE      testserializable;
   TESTSERIALIZABLE      testserializable2;
 
-  serializationmethod = XSERIALIZABLE::CreateInstance(buffer);
+//serializationmethod = XSERIALIZABLE::CreateInstance(buffer);
+
+  serializationmethod = XSERIALIZABLE::CreateInstance(xfileJSON);
 
   testserializable.InitSerialize(serializationmethod);
+  //xfileJSON.EncodeAllLines(true);  
+  xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
 
   testserializable2.InitDeserialize(serializationmethod);
+
+
+  delete serializationmethod;
 
   return true;
 }
