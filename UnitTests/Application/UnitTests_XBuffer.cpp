@@ -73,6 +73,7 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorSize)
   EXPECT_EQ(32, buffer.GetSize());
 }
 
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         TEST(UNITTEST_XBuffer_CLASSNAME, AddAll)
@@ -96,6 +97,7 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddAll)
   EXPECT_EQ(20, buffer.GetSize());
 }
 
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Add)
@@ -113,7 +115,7 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Add)
   EXPECT_EQ(1,buffer.GetSize());
   buffer.Empty();
 
-  buffer.Add((byte)1);
+  buffer.Add((XBYTE)1);
   EXPECT_EQ(1, buffer.GetSize());
   buffer.Empty();
 
@@ -131,9 +133,9 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Add)
 
   buffer.Add((XQWORD)64);
   EXPECT_EQ(8, buffer.GetSize());
-  buffer.Empty();
-  
+  buffer.Empty();  
 }
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -154,21 +156,21 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
   float   i;
  
   buffer.Add((bool)true);
-  buffer.Get((XBYTE)byte, 0);
+  buffer.Get((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, true);
   EXPECT_EQ(1, buffer.GetSize());
   buffer.Empty();
 
   buffer.Add((XBYTE)50);
-  buffer.Get((XBYTE)byte, 0);
+  buffer.Get((XBYTE&)byte, 0);
   
   EXPECT_EQ(byte, 50);
   EXPECT_EQ(1, buffer.GetSize());
   buffer.Empty();
  
   buffer.Add((XWORD)16);
-  buffer.Get((XWORD)xword, 0);
+  buffer.Get((XWORD&)xword, 0);
 
   EXPECT_EQ(xword, 16);
   EXPECT_EQ(2, buffer.GetSize());
@@ -176,14 +178,14 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
 
 
   buffer.Add((float)1.6);
-  buffer.Get((float)i, 0);
+  buffer.Get((float&)i, 0);
 
   EXPECT_EQ(4, buffer.GetSize());
   buffer.Empty();
 
 
   buffer.Add((XDWORD)32);
-  buffer.Get((XDWORD)xdword, 0);
+  buffer.Get((XDWORD&)xdword, 0);
 
   EXPECT_EQ(xdword, 32);
   EXPECT_EQ(4, buffer.GetSize());
@@ -191,14 +193,13 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
 
 
   buffer.Add((XQWORD)64);
-  buffer.Get((XQWORD)xqword, 0);
+  buffer.Get((XQWORD&)xqword, 0);
 
   EXPECT_EQ(xqword, 64);
   EXPECT_EQ(8, buffer.GetSize());
-  buffer.Empty();
-  
-  
+  buffer.Empty();   
 }
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -220,41 +221,41 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Extract)
 
 
   buffer.Add((bool)1);
-  buffer.Extract((XBYTE)byte, 0);
+  buffer.Extract((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, 1);
   EXPECT_EQ(0, buffer.GetSize());
 
 
   buffer.Add((XBYTE)30);
-  buffer.Extract((XBYTE)byte, 0);
+  buffer.Extract((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, 30);
   EXPECT_EQ(0, buffer.GetSize());
 
 
   buffer.Add((XWORD)16);
-  buffer.Extract((XWORD)xword,0);
+  buffer.Extract((XWORD&)xword,0);
 
   EXPECT_EQ(xword, 16);
   EXPECT_EQ(0, buffer.GetSize());
 
 
   buffer.Add((XDWORD)32);
-  buffer.Extract((XDWORD)xdword, 0);
+  buffer.Extract((XDWORD&)xdword, 0);
 
   EXPECT_EQ(xdword, 32);
   EXPECT_EQ(0, buffer.GetSize());
 
 
   buffer.Add((float)1.6);
-  buffer.Extract((float)i, 0);
+  buffer.Extract((float&)i, 0);
 
   EXPECT_EQ(0, buffer.GetSize());
 
 
   buffer.Add((XQWORD)64);
-  buffer.Extract((XQWORD)xqword, 0);
+  buffer.Extract((XQWORD&)xqword, 0);
 
   EXPECT_EQ(xqword, 64);
   EXPECT_EQ(0, buffer.GetSize());

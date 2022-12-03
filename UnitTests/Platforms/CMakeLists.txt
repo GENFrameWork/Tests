@@ -1,9 +1,10 @@
 # --------------------------------------------------------------------
-# unittestsdevices : GEN Unit Test Devices (all micros)
+# unittests : GEN Unit Tests
 # --------------------------------------------------------------------
 
  cmake_minimum_required(VERSION 3.3.0)
  project(unittests)
+
 
  set(GEN_DIRECTORY "../../../../GENFrameWork") 
 
@@ -12,25 +13,22 @@
 # Compile Selection
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Compile.txt") 
 
+
 # --------------------------------------------------------------------
 # Warnings control
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
 
-# --------------------------------------------------------------------
-# Activate features/Defines
+ option(DEBUG_FEATURE                                       "Activate Debug mode"                                        true )
+ option(GOOGLETEST_FEATURE                                  "Activate Google Test functionality"                         true )
+ option(XMEMORY_CONTROL_FEATURE                             "Activate XMemory Control"                                   true )
 
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Default.txt") 
+ option(XSLEEP_FEATURE                                      "Activate XSleep"                                            true )
 
- set(DEBUG_FEATURE                                       true    CACHE BOOL "Activate Debug mode"                                        FORCE)
- set(GOOGLETEST_FEATURE                                  true    CACHE BOOL "Activate Google Test functionality"                         FORCE)
- set(XMEMORY_CONTROL_FEATURE                             true    CACHE BOOL "Activate XMemory Control"                                   FORCE)
-
- set(XSLEEP_FEATURE                                      true    CACHE BOOL "Activate XSleep"                                            FORCE)
-
- set(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  true    CACHE BOOL "Activate Linux CodePage Editor Visual Studio CP1252"        FORCE)   
+ option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  "Activate Linux CodePage Editor Visual Studio CP1252"        true )   
                             
- set(APP_FEATURE                                         true    CACHE BOOL "Activate Application modules"                               FORCE)
+ option(APP_FEATURE                                         "Activate Application modules"                               true )
+
 
 # --------------------------------------------------------------------
 # Source code of the GEN in this Application
@@ -44,6 +42,7 @@
  set(APP_DIRECTORY_APPLICATION   "../Application")
  list(APPEND INCLUDES_DIR ${APP_DIRECTORY_APPLICATION})
 
+
 # --------------------------------------------------------------------
 # Source code of the Application
 
@@ -52,12 +51,14 @@
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")
 
+
 # --------------------------------------------------------------------
 # Create proyect 
 
  include_directories(${INCLUDES_DIR})
 
  add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+
 
 # --------------------------------------------------------------------
 # Add Libraries
