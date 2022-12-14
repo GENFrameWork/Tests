@@ -84,7 +84,7 @@ int Linux_Platform_Ini(void)
 
   // -----------------------------------------------------------------------
 
-  #ifdef HW_NXP_IMX8
+  #ifdef HW_ARM64
 
   GEN_DIOGPIO.GPIOEntry_CreateByGPIO(DEVTESTSCONSOLE_GPIOENTRYID_TESTGPIO              , 73);  
   GEN_DIOGPIO.GPIOEntry_CreateByGPIO(DEVTESTSCONSOLE_GPIOENTRYID_LED_NEOPIXEL          , 73);
