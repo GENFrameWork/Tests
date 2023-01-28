@@ -18,6 +18,9 @@
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
 
+# --------------------------------------------------------------------
+# Activate features/Defines
+
  option(DEBUG_FEATURE                                       "Activate Debug mode"                                        true )
  option(XTRACE_FEATURE                                      "Activate XTrace"                                            true )
 #option(XTRACE_NOINTERNET_FEATURE                           "Activate No need for trace dependencies with the Internet"  true )                        

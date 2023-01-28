@@ -100,18 +100,18 @@ typedef bool (*DEVTESTSCONSOLE_FUNCTION)(DEVTESTSCONSOLE* tests);
 
 typedef struct
 {
-  bool            active;
+  bool                      active;
   DEVTESTSCONSOLE_FUNCTION  function;
-  XCHAR*          namefunction;
+  XCHAR*                    namefunction;
 
 } DEVTESTSCONSOLE_LIST_FUNCTION;
 
 
 typedef struct
 {
-  int               index;
-  XTHREADCOLLECTED* thread;
-  DEVTESTSCONSOLE*  devtestconsole; 
+  int                       index;
+  XTHREADCOLLECTED*         thread;
+  DEVTESTSCONSOLE*          devtestconsole; 
 
 } DEVTESTSCONSOLE_XTHREADPARAM;
 
