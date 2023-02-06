@@ -25,7 +25,8 @@
 
  option(XSLEEP_FEATURE                                      "Activate XSleep"                                            true )
 
- option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  "Activate Linux CodePage Editor Visual Studio CP1252"        true )   
+#option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  "Activate Linux CodePage Editor Visual Studio CP1252"        true )   
+ option(LINUX_VISUALSTUDIOUTF8_FEATURE                      "Activate Linux CodePage Editor UTF8"                        true )   
                             
  option(APP_FEATURE                                         "Activate Application modules"                               true )
 

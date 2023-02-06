@@ -1,4 +1,4 @@
-/**-------------------------------------------------------------------------------------------------------------------
+﻿/**-------------------------------------------------------------------------------------------------------------------
 *
 * @file       UnitTest_XString.cpp
 *
@@ -202,6 +202,29 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertASCII
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII) 
+
+{
+  XSTRING string1 = __L("Hello world!");
+  XSTRING string2;
+  XBUFFER buffer;
+      
+  string1.ConvertToASCII(buffer);
+  string2.ConvertFromASCII(buffer);
+    
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8)
 * @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF8
 * @ingroup    UNIT TEST
@@ -211,15 +234,57 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8) 
 {
-  XSTRING string1 = __L("hol� mundo");
+  XSTRING string1 = __L("แผ่นดินฮั่นเสื่อมโทรมแสนสังเวช");
   XSTRING string2;
   XBUFFER buffer;
       
-  string1.ConvertToUTF8(buffer);
+  string1.ConvertToUTF8(buffer, false);
   string2.ConvertFromUTF8(buffer);
-  
-  string2.DeleteLastCharacter();
+    
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF16)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF16
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF16) 
+{
+  XSTRING string1 = __L("𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪");
+  XSTRING string2;
+  XBUFFER buffer;
+      
+  string1.ConvertToUTF16(buffer);
+  string2.ConvertFromUTF16(buffer);
+  
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF32)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF32
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF32) 
+{
+  XSTRING string1 = __L("ᚻᛖ ᚳᚹᚫᚦ ᚦᚫᛏ ᚻᛖ ᛒᚢᛞᛖ ᚩᚾ ᚦᚫᛗ ᛚᚪᚾᛞᛖ ᚾᚩᚱᚦᚹᛖᚪᚱᛞᚢᛗ ᚹᛁᚦ ᚦᚪ ᚹᛖᛥᚫ");
+  XSTRING string2;
+  XBUFFER buffer;
+      
+  string1.ConvertToUTF16(buffer);
+  string2.ConvertFromUTF16(buffer);
+    
   EXPECT_EQ(0, string1.Compare(string2, false));
 }
 
