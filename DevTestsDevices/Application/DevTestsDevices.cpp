@@ -2397,10 +2397,11 @@ bool DEVTESTSDEVICES::Test_FileFunctions(DEVTESTSDEVICES* tests)
             
           text = __L("Hola Radiola");
 
-          XSTRING_CREATEOEM(text, chartext);
-          xbuffer.Add((XBYTE*)chartext, text.GetSize());
-          XSTRING_DELETEOEM(text, chartext);
-
+          XBUFFER charstr;
+ 
+          text.ConvertToASCII(charstr);
+          
+          xbuffer.Add((XBYTE*)charstr.Get(), text.GetSize());          
           status = xfile->Write(xbuffer);
 
           xfile->Close();

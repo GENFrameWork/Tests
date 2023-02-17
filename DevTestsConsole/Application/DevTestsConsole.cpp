@@ -986,17 +986,16 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
   XSTRING string;
   XSTRING substring;
 
-
   string = __L("hola radiola");
   string += __L(" mas... ");
 
   int index = string.Find(__L("mas"), true);
   if(index == XSTRING_NOTFOUND) return false;
 
-  XSTRING_CREATEOEM(string, charvar)
-  printf((char*)charvar);
-  XSTRING_DELETEOEM(string, charvar)
-
+  XBUFFER charstr;
+  
+  string.ConvertToASCII(charstr);
+  printf(charstr.GetPtrChar());
 
   substring.AdjustSize(32);
 
@@ -2429,9 +2428,8 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
 
   tests->console->Printf(__L("Sentence: \"%s\"\n\n"), string.Get());
 
-  XSTRING_CREATEOEM(string, charstr)
-  input.Add((XBYTE*)charstr, string.GetSize());
-  XSTRING_DELETEOEM(string, charstr)
+  XBUFFER charstr;
+  input.Add((XBYTE*)charstr.Get(), charstr.GetSize());
 
   for(int c=0;c<8;c++)
     {
