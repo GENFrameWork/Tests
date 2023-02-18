@@ -2139,7 +2139,7 @@ bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
               {
                 if(translation->Get(origin.Get(), XLANGUAGE_ISO_639_3_CODE_SPA , languajes[c], translate, 5, &localIP))
                   {
-                    if(translate.IsOEM())
+                    if(translate.IsValidASCII())
                            tests->console->Printf(__L("> %s\n"),translate.Get());
                       else tests->console->Printf(__L("> (Special chars)\n"));
 
