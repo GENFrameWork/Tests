@@ -4229,8 +4229,6 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
   xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
 
   testserializable2.InitDeserialize(serializationmethod);
-
-
   delete serializationmethod;
 
   return true;
