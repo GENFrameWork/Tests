@@ -18,7 +18,6 @@
 # Warnings control
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
-
  option(DEBUG_FEATURE                                       "Activate Debug mode"                                        true )
  option(GOOGLETEST_FEATURE                                  "Activate Google Test functionality"                         true )
  option(XMEMORY_CONTROL_FEATURE                             "Activate XMemory Control"                                   true )
@@ -51,6 +50,7 @@
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XString.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")
+ list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XVariant.cpp")
 
 
 # --------------------------------------------------------------------
