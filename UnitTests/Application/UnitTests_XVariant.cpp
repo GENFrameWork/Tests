@@ -59,15 +59,6 @@ namespace TEST_XVARIANT
                                                                 EXPECT_EQ((type)value, (type)variant); \
                                                               }
 
-#define UNITTEST_XVARIANT_CONSTRUCTOR_STRCMP(type, value)     { XVARIANT variant((type)value); \
-                                                                EXPECT_EQ(strcmp((char*)value,(char*)variant), 0);  \
-                                                              }
-
-#define UNITTEST_XVARIANT_CONSTRUCTOR_XSTRING(type, value)    { XVARIANT variant(value); \
-                                                                XSTRING  string = variant; \
-                                                                EXPECT_EQ(string.Compare(value, true), 0); \
-                                                              }
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
@@ -102,13 +93,26 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssign)
 
   UNITTEST_XVARIANT_CONSTRUCTOR(XCHAR, __C('A'));
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(XCHAR*, __L("Hello Word!"));
+  { XCHAR* value = __L("Hello Word!");
+    XVARIANT variant(value);
+    XSTRING value2 = (XCHAR*)variant;
+  
+    EXPECT_EQ(value2.Compare(value, true), 0);    
+  }  
 
-  { XSTRING value = __L("Hello Word!");
-    UNITTEST_XVARIANT_CONSTRUCTOR_XSTRING(XSTRING, value);
+  { XCHAR* value = __L("Hello Word!");
+    XVARIANT variant(value);
+    XSTRING value2 = (XSTRING)variant;
+  
+    EXPECT_EQ(value2.Compare(value, true), 0);    
+  }  
+  
+  { char* value = "Hello Word!";
+    XVARIANT variant(value);
+    char* value2 = (char*)value;
+    
+    EXPECT_EQ(strcmp(value, value2), 0);
   }
-
-  UNITTEST_XVARIANT_CONSTRUCTOR_STRCMP(char*, "Hello Word!");
 
   UNITTEST_XVARIANT_CONSTRUCTOR(char, 'A');    
 
@@ -124,7 +128,15 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssign)
 
   { XVARIANT value = (XDWORD)0x1234;
     UNITTEST_XVARIANT_CONSTRUCTOR(XDWORD, value);  
-  }      
+  }  
+
+  { void* value = (void*)0x12345678;
+    XVARIANT variant(value);
+    void* value2 = (void*)variant; 
+
+    EXPECT_EQ(value, value2); 
+  }
+    
 }
 
 

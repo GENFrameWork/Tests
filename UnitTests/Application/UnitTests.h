@@ -35,6 +35,17 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
+#define APPLICATION_VERSION                   0
+#define APPLICATION_SUBVERSION                0
+#define APPLICATION_SUBVERSIONERR             1
+
+#define APPLICATION_NAMEAPP                   __L("Unit Test")
+#define APPLICATION_NAMEFILE                  __L("unittest")
+
+#define APPLICATION_OWNER                     __L("GEN Framework")
+
+#define APPLICATION_YEAROFCREATION            2022
+
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 

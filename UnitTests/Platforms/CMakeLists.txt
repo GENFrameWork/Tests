@@ -19,6 +19,7 @@
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
  option(DEBUG_FEATURE                                       "Activate Debug mode"                                        true )
+ option(XTRACE_FEATURE                                      "Activate XTrace"                                            true )
  option(GOOGLETEST_FEATURE                                  "Activate Google Test functionality"                         true )
  option(XMEMORY_CONTROL_FEATURE                             "Activate XMemory Control"                                   true )
 
