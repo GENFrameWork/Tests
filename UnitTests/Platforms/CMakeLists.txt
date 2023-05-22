@@ -52,6 +52,7 @@
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XVariant.cpp")
+ list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XDateTime.cpp")
 
 
 # --------------------------------------------------------------------

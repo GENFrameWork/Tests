@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       UnitTests_XVariant.h
+* @file       UnitTests_XDateTime.h
 *
 * @class      
-* @brief      Unit Tests for XVariant class (GEN FrameWork)
+* @brief      Unit Tests for XDateTime class (GEN FrameWork)
 * @ingroup    TESTS
 *
 * @copyright  GEN Group. All right reserved.
@@ -26,15 +26,15 @@
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XVARIANT_H_
-#define _UNITTESTS_XVARIANT_H_
+#ifndef _UNITTESTS_XDATETIME_H_
+#define _UNITTESTS_XDATETIME_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define UNITTEST_XVARIANT_CLASSNAME  XVARIANT
+#define UNITTEST_XDATETIME_CLASSNAME  XDATETIME
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 

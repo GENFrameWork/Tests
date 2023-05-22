@@ -1,9 +1,9 @@
 ﻿/**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       UnitTest_XVariant.cpp
+* @file       UnitTest_XDateTime.cpp
 *
 * @class      
-* @brief      Unit Tests for XVariant class (GEN FrameWork)
+* @brief      Unit Tests for XDateTime class (GEN FrameWork)
 * @ingroup    TESTS
 *
 * @copyright  GEN Group. All right reserved.
@@ -40,103 +40,73 @@
 #include "gtest/gtest.h"
 #endif
 
-#include "XBuffer.h"
-#include "XVariant.h"
+#include "XFactory.h"
+#include "XDateTime.h"
 
-#include "UnitTests_XVariant.h"
+#include "UnitTests_XDateTime.h"
 
 #include "XMemory_Control.h"
 
 
 #ifdef GOOGLETEST_ACTIVE      
-namespace TEST_XVARIANT
+namespace TEST_XDATETIME
 {
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-#define UNITTEST_XVARIANT_CONSTRUCTOR(type, value)            { XVARIANT variant((type)value); \
-                                                                EXPECT_EQ((type)value, (type)variant); \
-                                                              }
+                                                              
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssign)
-* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  ConstructorAssign
+* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor)
+* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  Constructor
 * @ingroup    UNIT TEST
 * 
 * @return     Does not return anything. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssign) 
+TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor) 
 {
-  UNITTEST_XVARIANT_CONSTRUCTOR(bool, true)
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  EXPECT_NE((void*)datetime, (void*)NULL);  
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(short, -12345);
+       
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(XWORD, 12345);
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(int, -1234567890);
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, Assing)
+* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  Assing
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XDATETIME_CLASSNAME, Assing) 
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  EXPECT_NE((void*)datetime, (void*)NULL);       
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(XDWORD, 1234567890);
+  datetime->SetToZero();
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(long long, -1234567890123445);
+  datetime->SetDay(8);
+  datetime->SetMonth(1);
+  datetime->SetYear(2000);
+  datetime->SetHours(12);
+  datetime->SetMinutes(1);
+  datetime->SetSeconds(1);
+  datetime->SetMilliSeconds(100);
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(XQWORD, 1234567890123445);
+  EXPECT_EQ(datetime->GetWeekOfYear(), 1);    
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(float, -123.456f);
 
-  UNITTEST_XVARIANT_CONSTRUCTOR(double, -123456.78787f);
-
-  UNITTEST_XVARIANT_CONSTRUCTOR(XCHAR, __C('A'));
-
-  { XCHAR* value = __L("Hello Word!");
-    XVARIANT variant(value);
-    XSTRING value2 = (XCHAR*)variant;
-  
-    EXPECT_EQ(value2.Compare(value, true), 0);    
-  }  
-
-  { XCHAR* value = __L("Hello Word!");
-    XVARIANT variant(value);
-    XSTRING value2 =  (const XSTRING&)variant;
-  
-    EXPECT_EQ(value2.Compare(value, true), 0);    
-  }  
-  
-  { const char* value = "Hello Word!";
-    XVARIANT variant(value);
-    char* value2 = (char*)value;
-    
-    EXPECT_EQ(strcmp(value, value2), 0);
-  }
-
-  UNITTEST_XVARIANT_CONSTRUCTOR(char, 'A');    
-
-  { XSTRING datetimestr = __L("01/12/1969 12:30:30");
-    XSTRING datetimestr2;
-    XDATETIME value;
-    value.GetDateTimeFromString(datetimestr, XDATETIME_FORMAT_STANDARD);
-    XVARIANT variant(value);
-    XDATETIME value2 = variant;
-    value2.GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr2);
-    EXPECT_EQ(datetimestr.Compare(datetimestr2, true), 0); 
-  }
-
-  { XVARIANT value = (XDWORD)0x1234;
-    UNITTEST_XVARIANT_CONSTRUCTOR(XDWORD, value);  
-  }  
-
-  { void* value = (void*)0x12345678;
-    XVARIANT variant(value);
-    void* value2 = (void*)variant; 
-
-    EXPECT_EQ(value, value2); 
-  }
-    
+  GEN_XFACTORY.DeleteDateTime(datetime);
 }
 
 
