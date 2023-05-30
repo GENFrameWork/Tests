@@ -90,21 +90,168 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, Assing) 
 {
-  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  XDATETIME*        datetime = GEN_XFACTORY.CreateDateTime();
+  XDATETIME_DAYWEEK dayweek; 
+
+
   EXPECT_NE((void*)datetime, (void*)NULL);       
 
   datetime->SetToZero();
 
-  datetime->SetDay(8);
-  datetime->SetMonth(1);
+  datetime->SetDay(31);
+  datetime->SetMonth(12);
   datetime->SetYear(2000);
-  datetime->SetHours(12);
-  datetime->SetMinutes(1);
-  datetime->SetSeconds(1);
+  datetime->SetHours(11);
+  datetime->SetMinutes(59);
+  datetime->SetSeconds(59);
   datetime->SetMilliSeconds(100);
 
-  EXPECT_EQ(datetime->GetWeekOfYear(), 1);    
+  dayweek = datetime->GetDayOfWeek();
+  EXPECT_EQ(dayweek, XDATETIME_DAYWEEK_SUNDAY);    
+  EXPECT_EQ(datetime->GetDayOfYear(), 366);    
+  EXPECT_EQ(datetime->GetWeekOfYear(), 53);  
 
+  datetime->AddDays(1);
+
+  dayweek = datetime->GetDayOfWeek();
+  EXPECT_EQ(dayweek, XDATETIME_DAYWEEK_MONDAY);    
+  EXPECT_EQ(datetime->GetDayOfYear(), 1);    
+  EXPECT_EQ(datetime->GetWeekOfYear(), 1);  
+
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, CreateString)
+* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  CreateString
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToString) 
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  XSTRING    string;  
+  EXPECT_NE((void*)datetime, (void*)NULL);       
+
+
+  datetime->SetToZero();
+
+  datetime->SetDay(31);
+  datetime->SetMonth(12);
+  datetime->SetYear(2000);
+  datetime->SetHours(11);
+  datetime->SetMinutes(59);
+  datetime->SetSeconds(59);
+  datetime->SetMilliSeconds(100);
+
+  datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
+  EXPECT_EQ(string.Compare(__L("31/12/2000 11:59:59")), 0);
+
+  datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD | XDATETIME_FORMAT_TIMEWITHMILLISECONDS, string);
+  EXPECT_EQ(string.Compare(__L("31/12/2000 11:59:59.100")), 0);
+
+  datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601 | XDATETIME_FORMAT_TIMEWITHMILLISECONDS, string);
+  EXPECT_EQ(string.Compare(__L("2000-12-31T11:59:59.100")), 0);
+
+  datetime->AddDays(1);
+
+  datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
+  EXPECT_EQ(string.Compare(__L("01/01/2001 11:59:59")), 0);
+
+  datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD | XDATETIME_FORMAT_TIMEWITHMILLISECONDS, string);
+  EXPECT_EQ(string.Compare(__L("01/01/2001 11:59:59.100")), 0);
+
+  datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601 | XDATETIME_FORMAT_TIMEWITHMILLISECONDS, string);
+  EXPECT_EQ(string.Compare(__L("2001-01-01T11:59:59.100")), 0);
+
+
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromString)
+* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromString
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromString) 
+{  
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  XSTRING    string;  
+  EXPECT_NE((void*)datetime, (void*)NULL);   
+    
+  string = __L("31/12/2000 11:59:59");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromString(string, XDATETIME_FORMAT_STANDARD);
+  EXPECT_EQ(datetime->GetDay(), 31);
+  EXPECT_EQ(datetime->GetMonth(), 12);
+  EXPECT_EQ(datetime->GetYear(), 2000);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+
+  string = __L("31/12/2000 11:59:59.100");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromString(string, XDATETIME_FORMAT_STANDARD | XDATETIME_FORMAT_TIMEWITHMILLISECONDS);
+  EXPECT_EQ(datetime->GetDay(), 31);
+  EXPECT_EQ(datetime->GetMonth(), 12);
+  EXPECT_EQ(datetime->GetYear(), 2000);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+  EXPECT_EQ(datetime->GetMilliSeconds(), 100);
+  
+  string = __L("2000-12-31T11:59:59.100");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromStringISO8601(string, XDATETIME_FORMAT_ISO8601 | XDATETIME_FORMAT_TIMEWITHMILLISECONDS);
+  EXPECT_EQ(datetime->GetDay(), 31);
+  EXPECT_EQ(datetime->GetMonth(), 12);
+  EXPECT_EQ(datetime->GetYear(), 2000);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+  EXPECT_EQ(datetime->GetMilliSeconds(), 100);
+
+  
+  string = __L("01/01/2001 11:59:59");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromString(string, XDATETIME_FORMAT_STANDARD);
+  EXPECT_EQ(datetime->GetDay(), 1);
+  EXPECT_EQ(datetime->GetMonth(), 1);
+  EXPECT_EQ(datetime->GetYear(), 2001);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+
+  string = __L("01/01/2001 11:59:59.100");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromString(string, XDATETIME_FORMAT_STANDARD | XDATETIME_FORMAT_TIMEWITHMILLISECONDS);
+  EXPECT_EQ(datetime->GetDay(), 1);
+  EXPECT_EQ(datetime->GetMonth(), 1);
+  EXPECT_EQ(datetime->GetYear(), 2001);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+  EXPECT_EQ(datetime->GetMilliSeconds(), 100);
+  
+  string = __L("2001-01-01T11:59:59.100");
+  datetime->SetToZero();
+  datetime->GetDateTimeFromStringISO8601(string, XDATETIME_FORMAT_ISO8601 | XDATETIME_FORMAT_TIMEWITHMILLISECONDS);
+  EXPECT_EQ(datetime->GetDay(), 1);
+  EXPECT_EQ(datetime->GetMonth(), 1);
+  EXPECT_EQ(datetime->GetYear(), 2001);
+  EXPECT_EQ(datetime->GetHours(), 11);
+  EXPECT_EQ(datetime->GetMinutes(), 59);
+  EXPECT_EQ(datetime->GetSeconds(), 59);
+  EXPECT_EQ(datetime->GetMilliSeconds(), 100);
 
   GEN_XFACTORY.DeleteDateTime(datetime);
 }

@@ -851,7 +851,7 @@ bool DEVTESTSCONSOLE::Show_AllStatus()
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Do_Tests()
 {
-  DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { true   , Test_XString                    , __L("Test XString")                    },
+  DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                    , __L("Test XString")                    },
                                                       { false  , Test_XBuffer                    , __L("Test XBuffer")                    },
                                                       { false  , Test_XVector                    , __L("Test XVector")                    },
                                                     //{ false  , Test_XVectorSTL                 , __L("Test XVector STL")                },
@@ -861,7 +861,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
-                                                      { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
+                                                      { true   , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
                                                       { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
@@ -883,7 +883,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
-                                                      { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
+                                                      { true   , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
                                                       { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
@@ -1003,9 +1003,7 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
   string.UnFormat(__L("esto es una %s"), substring.Get());
 
   substring.AdjustSize();
-
-  tests->console->Printf(string.Get(), __L("\n\r"));
-
+  
   XVECTOR<XSTRING*> results;
 
   //string = __L("hola;Radiola;Prueba de example;mas");
@@ -1015,7 +1013,7 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
 
 
   string.Format(__L("Pruebá de %3.2f%%"), 10.11f);
-  tests->console->PrintMessage(string.Get(), 0, false, true);
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, string.Get());
 
 
   XBUFFER xbuffer;
@@ -1175,16 +1173,14 @@ bool DEVTESTSCONSOLE::Test_XRand(DEVTESTSCONSOLE* tests)
   for(int c=0; c<10; c++)
     {
       int value = GEN_XRAND.Between(0, 10);
-      tests->console->Printf(__L("   [%2d] Random value: %d\n"), c, value);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   [%2d] Random value: %d"), c, value);
     }
 
   for(int c=0; c<10; c++)
     {
       float value = ((float)GEN_XRAND.Between(0, 50) / (float)GEN_XRAND.Between(2, 9));
-      tests->console->Printf(__L("   [%2d] Random value: %f\n"), c, value);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   [%2d] Random value: %f"), c, value);
     }
-
-  tests->console->Printf(__L("\n"));
 
   return true;
 }
@@ -1361,7 +1357,6 @@ bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 
   for(int d=0; d<100; d++)
     {   
-
       int ndata = xrand->Between(16, 64);
 
       for(int c=0; c<100; c++)
@@ -1379,15 +1374,7 @@ bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 
           index++;
         }     
-
-      if(tests->console->KBHit()) break;
-
     }
-
-  if(tests->console->KBHit()) 
-    {
-      tests->console->GetChar();
-    }  
 
   GEN_XFACTORY.DeleteRand(xrand);
 
@@ -1551,14 +1538,11 @@ bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
 
           string.AddFormat(__L("%s"), (*it)->Get());
 
-          tests->console->Printf(__L("%s\n"), string.Get());
-          XTRACE_PRINTCOLOR(1, __L("%s"), string.Get());
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%s"), string.Get());          
         }
 
       ++it;
     }
-
-  tests->console->Printf(__L("\n"));
 
   //--------------------------------------------------------
   // Delete all
@@ -1591,7 +1575,7 @@ bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
 
   xdir->GetActual(xpath);
 
-  tests->console->Printf(__L("Current DIR: [%s]\n"), xpath.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Current DIR: [%s]"), xpath.Get());
 
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
   xpath.Slash_Add();
@@ -1602,7 +1586,7 @@ bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
               
           element.GetDateTimeFile_LastAccess()->GetDateTimeToString((XDATETIME_FORMAT_ADDDATE | XDATETIME_FORMAT_ADDTIME | XDATETIME_FORMAT_TIMEWITHSECONDS | XDATETIME_FORMAT_TEXTMONTH), datetimestr);
 
-          tests->console->Printf(__L("Elements DIR: [%s] %s\n"), element.GetNameFile()->Get(), datetimestr.Get());
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Elements DIR: [%s] %s"), element.GetNameFile()->Get(), datetimestr.Get());
            
         } while(xdir->NextSearch(&element));
     }            
@@ -1687,30 +1671,34 @@ bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
 bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 {  
   XSTRING     datetimestring;
+  XSTRING     dayofweek;
   XDATETIME*  datetime = GEN_XFACTORY.CreateDateTime();
   if(!datetime) return false;
-    
+
+  // --- Local Date --------------------------------------------------------------------    
+
   datetime->Read();
 
   datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestring);
 
-  tests->console->Printf(__L("Date %s  Number of Week %d\n"), datetimestring.Get(), datetime->GetWeekOfYear());
-  tests->console->Printf(__L("Date EPOCH: %d\n"), datetime->GetEPOCHFormat());
+  datetime->GetDayOfWeekString(dayofweek);
 
-  /*    
-  datetime->SetDay(1);
-  datetime->SetMonth(1);
-  datetime->SetHours(1);
-  datetime->SetMinutes(1);
-  datetime->SetSeconds(1);
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date %s [%s] Number of Week %d, Number of Day: %d"), datetimestring.Get(), dayofweek.Get(), datetime->GetWeekOfYear(), datetime->GetDayOfYear());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date EPOCH: %d"), datetime->GetEPOCHFormat());
 
-  for(int c=0; c<365; c++)
-    {
-      datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestring);
-      tests->console->Printf(__L("Date %s  Number of Week %d\n"), datetimestring.Get(), datetime->GetWeekOfYear());
-      datetime->AddDays(1);
-    }
-   */
+  // --- UTC Date -----------------------------------------------------------------------    
+  
+  datetime->Read(false);
+
+  datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD, datetimestring);  
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date UTC %s"), datetimestring.Get());
+  
+  datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD | XDATETIME_FORMAT_ISO8601_ADDHOUROFFSET, datetimestring);  
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date UTC %s"), datetimestring.Get());
+
+
+
+  // --- File Date ----------------------------------------------------------------------    
 
   XPATH xpath;
 
@@ -1721,7 +1709,7 @@ bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 
   datetime->GetFileDateTime(xpath);
   datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestring);
-  tests->console->Printf(__L("Date %s:%d of the file %s\n"), datetimestring.Get(), datetime->GetMilliSeconds(), xpath.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date %s:%d of the file %s"), datetimestring.Get(), datetime->GetMilliSeconds(), xpath.Get());
 
   GEN_XFACTORY.DeleteDateTime(datetime);
 
@@ -1809,8 +1797,8 @@ bool DEVTESTSCONSOLE::Test_XSystem(DEVTESTSCONSOLE* tests)
   GEN_XSYSTEM.GetPlatform(&plataform_name);
   GEN_XSYSTEM.GetOperativeSystemID(OS_ID);
 
-  tests->console->Printf(__L("   Plataform                :  %s  \n"), plataform_name.Get());
-  tests->console->Printf(__L("   Operative System Version :  %s  \n"), OS_ID.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   Plataform                :  %s"), plataform_name.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   Operative System Version :  %s"), OS_ID.Get());
 
   return true;
 }
@@ -2219,7 +2207,6 @@ bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
   if(MPSSE->Open(0))
     {
       tests->console->Printf(__L("   Device found FT%s \n"), MPSSE->GetChipTypeName());
-
 
       status = true;
 
@@ -3006,7 +2993,7 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 
   if(!tests->appinternetservices) return false;
 
-  while(!tests->console->KBHit())
+  //while(!tests->console->KBHit())
     {
       int hours = 0;
 
@@ -3014,7 +3001,7 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
       if(datetime1)
         {    
           datetime1->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Date Time SO  : %s"), datetimestr.Get()); 
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time SO  : %s"), datetimestr.Get()); 
 
           hours = datetime1->GetHours();
 
@@ -3024,12 +3011,12 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
       datetime2 = tests->appinternetservices->DateTime_GetUTC();
       if(datetime2)
         {    
-          datetime2->GetDateTimeToStringUTC((XDATETIME_FORMAT_YMD | XDATETIME_FORMAT_ADDTIME | XDATETIME_FORMAT_TIMEWITHSECONDS | XDATETIME_FORMAT_ADDTIMEMILLISECONDS), datetimestr);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Date Time UTC : %s"), datetimestr.Get());       
+          datetime2->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD, datetimestr);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time UTC : %s"), datetimestr.Get());       
 
           if(hours == datetime2->GetHours())
             {
-              break;
+              //break;
             }
 
           status = true;
