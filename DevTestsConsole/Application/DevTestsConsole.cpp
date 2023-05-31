@@ -1691,12 +1691,10 @@ bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
   datetime->Read(false);
 
   datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD, datetimestring);  
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date UTC %s"), datetimestring.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date ISO8601 (UTC) %s"), datetimestring.Get());
   
   datetime->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD | XDATETIME_FORMAT_ISO8601_ADDHOUROFFSET, datetimestring);  
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date UTC %s"), datetimestring.Get());
-
-
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DateTime] Date ISO8601 (UTC + Offset) %s"), datetimestring.Get());
 
   // --- File Date ----------------------------------------------------------------------    
 
@@ -2997,13 +2995,14 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
     {
       int hours = 0;
 
-      datetime1 = tests->appinternetservices->DateTime_GetActual();
+      datetime1 = tests->appinternetservices->DateTime_GetLocal();
       if(datetime1)
         {    
           datetime1->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time SO  : %s"), datetimestr.Get()); 
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time Local : %s"), datetimestr.Get()); 
 
-          hours = datetime1->GetHours();
+          datetime1->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD, datetimestr);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time Local ISO8601: %s"), datetimestr.Get()); 
 
           status = true;
         }
@@ -3011,14 +3010,15 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
       datetime2 = tests->appinternetservices->DateTime_GetUTC();
       if(datetime2)
         {    
+          datetime2->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time UTC : %s"), datetimestr.Get()); 
+
           datetime2->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD, datetimestr);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time UTC : %s"), datetimestr.Get());       
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time UTC ISO8601 : %s"), datetimestr.Get());       
 
-          if(hours == datetime2->GetHours())
-            {
-              //break;
-            }
-
+          datetime2->GetDateTimeToStringISO8601(XDATETIME_FORMAT_ISO8601_STANDARD | XDATETIME_FORMAT_ISO8601_ADDHOUROFFSET, datetimestr);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[NTP] Date Time UTC + offset ISO8601  : %s"), datetimestr.Get());       
+          
           status = true;
         }
 
