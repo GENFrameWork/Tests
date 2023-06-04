@@ -1677,6 +1677,11 @@ bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 
   // --- Local Date --------------------------------------------------------------------    
 
+  XSTRING function =  GEN_FUNCTION_EXEC;
+  XSTRING module   =  GEN_MODULE_EXEC;
+  int     line     =  GEN_LINE_EXEC;
+
+
   datetime->Read();
 
   datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestring);
