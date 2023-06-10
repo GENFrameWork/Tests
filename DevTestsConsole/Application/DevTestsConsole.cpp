@@ -861,7 +861,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
-                                                      { true   , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
+                                                      { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
                                                       { false  , Test_XSystem                    , __L("Test System")                     },                                          
                                                       { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
@@ -905,7 +905,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
-
+                                                      
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
                                                       #endif

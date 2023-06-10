@@ -88,7 +88,9 @@
  option(DIO_BUSPIRATE_FEATURE                               "Activate Data Input/Output Bus Pirate 4.0"                  true )
  option(DIO_MODBUSCLIENT_FEATURE                            "Activate Data Input/Output ModBus Client (UART/TCPIP)"      true )
  option(DIO_LEDNEOPIXELWS2812B_FEATURE                      "Activate Data Input/Output Led Neopixel WS2812B"            true ) 
+ option(DIO_PROTOCOL_CLI_BUS_FEATURE                        "Activate Data Input/Output Protocol in CLI Bus"             true )
 #option(DIO_PCAP_FEATURE                                    "Activate Data Input/Output Cap"                             true )
+
 
  option(DIO_STREAMSPI_FEATURE                               "Activate Data Input/Output Stream SPI"                      true )  
  option(DIO_SPI_GPIO_MCP23S17_FEATURE                       "Activate Data SPI GPIO MCP23S17"                            true )
