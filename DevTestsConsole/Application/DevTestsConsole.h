@@ -177,6 +177,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     bool                            Test_XTree_InsertChilds             (XTREE_NODE_TEST* node, int indexchild);
     static bool                     Test_XTree                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XDir                           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XVariant                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_Threads                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_DateTime                       (DEVTESTSCONSOLE* tests);    
     static bool                     Test_DIOStreamTCPIPConnection       (DEVTESTSCONSOLE* tests);

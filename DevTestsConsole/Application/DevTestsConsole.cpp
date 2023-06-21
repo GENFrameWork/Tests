@@ -860,6 +860,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
+                                                      { true   , Test_XVariant                   , __L("Test XVariant")                   },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
                                                       { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
@@ -883,7 +884,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
-                                                      { true   , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
+                                                      { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
                                                       { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
@@ -1593,6 +1594,39 @@ bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
     
 
   GEN_XFACTORY.Delete_Dir(xdir);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_XVariant(DEVTESTSCONSOLE* tests)
+* @brief      Test_XVariant
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XVariant(DEVTESTSCONSOLE* tests)
+{
+  XVARIANT variant;
+  XBUFFER  buffer;
+  XSTRING  string;
+
+  buffer.Add((XBYTE)0xAA);
+  buffer.Add((XBYTE)0x55);
+  buffer.Add((XBYTE)0xCA);
+  buffer.Add((XBYTE)0xFE);
+  
+  variant = buffer;
+
+  variant.ToString(string);
+
+  buffer.Empty();
+  buffer.ConvertFromBase64(string);
 
   return true;
 }

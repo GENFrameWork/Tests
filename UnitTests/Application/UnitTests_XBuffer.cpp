@@ -48,7 +48,7 @@
 
 
 #ifdef GOOGLETEST_ACTIVE      
-namespace test_XBuffer
+namespace TEST_XBUFFER
 {
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -99,75 +99,170 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddAll)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Add)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Add
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddBool)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddBool
 * @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
+* 
+* @return     Does not return anything. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XBUFFER_CLASSNAME, Add)
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddBool)
 {
   XBUFFER buffer;
 
   buffer.Add((bool)true);
-  EXPECT_EQ(1,buffer.GetSize());
-  buffer.Empty();
-
-  buffer.Add((XBYTE)1);
-  EXPECT_EQ(1, buffer.GetSize());
-  buffer.Empty();
-
-  buffer.Add((XWORD)16);
-  EXPECT_EQ(2, buffer.GetSize());
-  buffer.Empty();
-
-  buffer.Add((float)1.3);
-  EXPECT_EQ(4, buffer.GetSize());
-  buffer.Empty();
-
-  buffer.Add((XDWORD)32);
-  EXPECT_EQ(4, buffer.GetSize());
-  buffer.Empty();
-
-  buffer.Add((XQWORD)64);
-  EXPECT_EQ(8, buffer.GetSize());
-  buffer.Empty();  
+  EXPECT_EQ(1,buffer.GetSize());  
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Get)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Get
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddByte)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddByte
 * @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
+* 
+* @return     Does not return anything. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddByte)
+{
+  XBUFFER buffer;
+ 
+  buffer.Add((XBYTE)1);
+  EXPECT_EQ(1, buffer.GetSize()); 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddWord)
+{
+  XBUFFER buffer;
+
+  buffer.Add((XWORD)16);
+  EXPECT_EQ(2, buffer.GetSize());  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddDWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddDWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddDWord)
+{
+  XBUFFER buffer;
+
+  buffer.Add((XDWORD)32);
+  EXPECT_EQ(4, buffer.GetSize());  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddQWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddQWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddQWord)
+{
+  XBUFFER buffer;
+
+  buffer.Add((XQWORD)64);
+  EXPECT_EQ(8, buffer.GetSize());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddFloat)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddFloat
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddFloat)
+{
+  XBUFFER buffer;
+  
+  buffer.Add((float)1.3);
+  EXPECT_EQ(4, buffer.GetSize()); 
+}  
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetByte)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetByte
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetByte)
 {
   XBUFFER buffer;
   XBYTE   byte = 0;
-  XWORD   xword = 0;
-  XDWORD  xdword = 0;
-  XQWORD  xqword= 0;
-  float   i;
  
   buffer.Add((bool)true);
   buffer.Get((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, true);
-  EXPECT_EQ(1, buffer.GetSize());
-  buffer.Empty();
+  EXPECT_EQ(1, buffer.GetSize());  
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetArrayByte)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetArrayByte
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetArrayByte)
+{
+  XBUFFER buffer;
+  XBYTE   byte = 0;
+ 
   buffer.Add((XBYTE)50);
   buffer.Get((XBYTE&)byte, 0);
   
   EXPECT_EQ(byte, 50);
-  EXPECT_EQ(1, buffer.GetSize());
-  buffer.Empty();
+  EXPECT_EQ(1, buffer.GetSize());  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetWord)
+{
+  XBUFFER buffer;
+  XWORD   xword = 0;
  
   buffer.Add((XWORD)16);
   buffer.Get((XWORD&)xword, 0);
@@ -175,92 +270,204 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Get)
   EXPECT_EQ(xword, 16);
   EXPECT_EQ(2, buffer.GetSize());
   buffer.Empty();
+}
 
 
-  buffer.Add((float)1.6);
-  buffer.Get((float&)i, 0);
-
-  EXPECT_EQ(4, buffer.GetSize());
-  buffer.Empty();
-
-
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetDWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetDWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetDWord)
+{
+  XBUFFER buffer;
+  XDWORD  xdword = 0;
+ 
   buffer.Add((XDWORD)32);
   buffer.Get((XDWORD&)xdword, 0);
 
   EXPECT_EQ(xdword, 32);
   EXPECT_EQ(4, buffer.GetSize());
-  buffer.Empty();
-
-
-  buffer.Add((XQWORD)64);
-  buffer.Get((XQWORD&)xqword, 0);
-
-  EXPECT_EQ(xqword, 64);
-  EXPECT_EQ(8, buffer.GetSize());
-  buffer.Empty();   
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Extract)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Extract
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetQWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetQWord
 * @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
+* 
+* @return     Does not return anything. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XBUFFER_CLASSNAME, Extract)
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetQWord)
 {
   XBUFFER buffer;
-  XBYTE byte;
-  XWORD   xword = 0;
-  XDWORD  xdword = 0;
-  XQWORD  xqword = 0;
+  XQWORD  xqword= 0;
+    
+  buffer.Add((XQWORD)64);
+  buffer.Get((XQWORD&)xqword, 0);
+
+  EXPECT_EQ(xqword, 64);
+  EXPECT_EQ(8, buffer.GetSize());  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetFloat)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetFloat
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetFloat)
+{
+  XBUFFER buffer; 
   float   i;
+ 
+  buffer.Add((float)1.6);
+  buffer.Get((float&)i, 0);
+
+  EXPECT_EQ(4, buffer.GetSize());
+}
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractByte)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractByte
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractByte)
+{
+  XBUFFER buffer;
+  XBYTE   byte;
+  
   buffer.Add((bool)1);
   buffer.Extract((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, 1);
-  EXPECT_EQ(0, buffer.GetSize());
+  EXPECT_EQ(0, buffer.GetSize());  
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractArrayByte)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractArrayByte
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractArrayByte)
+{
+  XBUFFER buffer;
+  XBYTE   byte;
 
   buffer.Add((XBYTE)30);
   buffer.Extract((XBYTE&)byte, 0);
 
   EXPECT_EQ(byte, 30);
   EXPECT_EQ(0, buffer.GetSize());
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractWord)
+{
+  XBUFFER buffer;
+  XWORD   xword = 0;
 
   buffer.Add((XWORD)16);
   buffer.Extract((XWORD&)xword,0);
 
   EXPECT_EQ(xword, 16);
-  EXPECT_EQ(0, buffer.GetSize());
+  EXPECT_EQ(0, buffer.GetSize());  
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractDWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractDWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractDWord)
+{
+  XBUFFER buffer;
+  XDWORD  xdword = 0;
 
   buffer.Add((XDWORD)32);
   buffer.Extract((XDWORD&)xdword, 0);
 
   EXPECT_EQ(xdword, 32);
-  EXPECT_EQ(0, buffer.GetSize());
+  EXPECT_EQ(0, buffer.GetSize());  
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractQWord)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractQWord
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractQWord)
+{
+  XBUFFER buffer;
+  XQWORD  xqword = 0;
+ 
+  buffer.Add((XQWORD)64);
+  buffer.Extract((XQWORD&)xqword, 0);
+
+  EXPECT_EQ(xqword, 64);
+  EXPECT_EQ(0, buffer.GetSize());  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractFloat)
+* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractFloat
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractFloat)
+{
+  XBUFFER buffer;
+  float   i;
 
   buffer.Add((float)1.6);
   buffer.Extract((float&)i, 0);
 
   EXPECT_EQ(0, buffer.GetSize());
-
-
-  buffer.Add((XQWORD)64);
-  buffer.Extract((XQWORD&)xqword, 0);
-
-  EXPECT_EQ(xqword, 64);
-  EXPECT_EQ(0, buffer.GetSize());
-  
 }
+
 
 }
 #endif
