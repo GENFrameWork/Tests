@@ -248,7 +248,7 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssignXChar)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssignCharPtr) 
 {   
-  char*       value  = "Hello Word!";
+  char*       value  = (char*)"Hello Word!";
   XVARIANT    variant(value);
   char*       value2 = value;
 

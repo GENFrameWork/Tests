@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       UnitTests_XSleep.h
+* @file       UnitTests_XBase.h
 *
-* @class      
-* @brief      Unit Tests for XSleep class (GEN FrameWork)
+* @class      UNITTESTS_XBASE
+* @brief      Unit Tests for XBase functions and defines
 * @ingroup    TESTS
 *
 * @copyright  GEN Group. All right reserved.
@@ -26,21 +26,19 @@
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XSLEEP_H_
-#define _UNITTESTS_XSLEEP_H_
+#ifndef _UNITTESTS_XBASE_H_
+#define _UNITTESTS_XBASE_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define UNITTEST_XSLEEP_CLASSNAME  TEST_XSLEEP
+#define UNITTEST_XBASE_CLASSNAME  XBASE
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
 /*---- INLINE FUNCTIONS ----------------------------------------------------------------------------------------------*/
-
 
 
 #endif

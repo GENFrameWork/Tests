@@ -48,6 +48,7 @@
 # Source code of the Application
 
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests.cpp")
+ list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBase.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XString.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
  list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")

@@ -34,7 +34,7 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-#define UNITTEST_XDATETIME_CLASSNAME  XDATETIME
+#define UNITTEST_XDATETIME_CLASSNAME  TEST_XDATETIME
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
