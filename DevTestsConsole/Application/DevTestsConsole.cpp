@@ -146,6 +146,9 @@
 #include "SNDElement.h"
 #endif
 
+#include "INPFactory.h"
+#include "INPSimulated.h"
+
 
 #include "APPLog.h"
 #include "APPCheckResourcesHardware_XEvent.h"
@@ -184,48 +187,46 @@
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::DEVTESTSCONSOLE
+* 
+* @fn         DEVTESTSCONSOLE::DEVTESTSCONSOLE()
 * @brief      Constructor
-* @ingroup
-*
-* @param
-* @return
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-DEVTESTSCONSOLE::DEVTESTSCONSOLE() :  XFSMACHINE(0)
+* @ingroup    APPLICATION
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTSCONSOLE::DEVTESTSCONSOLE() : XFSMACHINE(0)
 {
   Clean();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::~DEVTESTSCONSOLE
+* 
+* @fn         DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
 * @brief      Destructor
-* @ingroup
-*
-* @param
-* @return
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* @note       VIRTUAL
+* @ingroup    APPLICATION
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
+
 {
   Clean();
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::InitFSMachine
-* @brief      Init FS Machine
-* @ingroup
-*
-* @param
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool DEVTESTSCONSOLE::InitFSMachine()
+* @brief      InitFSMachine
+* @ingroup    APPLICATION
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::InitFSMachine()
 {
   if(!AddState( DEVTESTSCONSOLE_XFSMSTATE_NONE            ,
@@ -286,16 +287,14 @@ bool DEVTESTSCONSOLE::AppProc_PlatformIni()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::AppProc_Ini
-* @brief      Ini Application
-* @ingroup
-*
-* @param
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool DEVTESTSCONSOLE::AppProc_Ini()
+* @brief      AppProc_Ini
+* @ingroup    APPLICATION
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_Ini()
 {
   XSTRING string;
@@ -443,16 +442,14 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::AppProc_FirstUpdate
-* @brief      First Update
-* @ingroup
-*
-* @param
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
+* @brief      AppProc_FirstUpdate
+* @ingroup    APPLICATION
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 {
   //--------------------------------------------------------------------------------------
@@ -472,16 +469,14 @@ bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         DEVTESTSCONSOLE::AppProc_Update
-* @brief      Update Application
-* @ingroup
-*
-* @param
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* @fn         bool DEVTESTSCONSOLE::AppProc_Update()
+* @brief      AppProc_Update
+* @ingroup    APPLICATION
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_Update()
 {
   if(GetEvent()==DEVTESTSCONSOLE_XFSMEVENT_NONE) // Not new event
@@ -860,7 +855,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
-                                                      { true   , Test_XVariant                   , __L("Test XVariant")                   },
+                                                      { false  , Test_XVariant                   , __L("Test XVariant")                   },
                                                       { false  , Test_Threads                    , __L("Test_Threads")                    },
                                                       { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
                                                       { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
@@ -906,6 +901,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { true   , Test_InputSimulated             , __L("Test Input Simulated")            },
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -4256,6 +4252,31 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
   testserializable2.InitDeserialize(serializationmethod);
   delete serializationmethod;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_InputSimulated(DEVTESTSCONSOLE* tests)
+* @brief      Test_InputSimulated
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_InputSimulated(DEVTESTSCONSOLE* tests)
+{
+  INPSIMULATED* inpsimulated = GEN_INPFACTORY.CreateSimulator();
+  if(!inpsimulated)
+    {
+      return false;
+    }
+
+  inpsimulated->PressKey(0x41);
 
   return true;
 }

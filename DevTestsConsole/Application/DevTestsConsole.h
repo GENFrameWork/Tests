@@ -223,6 +223,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XProperty                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLicense                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_XSerializable                  (DEVTESTSCONSOLE* tests);
+    static bool                     Test_InputSimulated                 (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
