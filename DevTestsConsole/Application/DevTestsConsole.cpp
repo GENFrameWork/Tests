@@ -3145,7 +3145,7 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
   params  = __L("--language spanish --tts");
   in      = __L("Hola radiola");
  
-  bool status = GEN_XPROCESSMANAGER.ExecuteApplication(command.Get(), params.Get(), &in, NULL, &returncode);
+  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, NULL, &returncode);
 
   */
 
@@ -3153,13 +3153,13 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
   command = __L("D:\\depen dencies\\net-tools\\bin\\snmpwalk");
   params  = __L("");
   
-  bool status = GEN_XPROCESSMANAGER.ExecuteApplication(command.Get(), params.Get(), &in, &out, &returncode);
+  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, &out, &returncode);
 
 
   XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
   */
 
-  bool status = GEN_XPROCESSMANAGER.GetApplicationRunningList(applist);
+  bool status = GEN_XPROCESSMANAGER.Application_GetRunningList(applist);
 
   if(status)
     {
