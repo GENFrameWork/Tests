@@ -2,7 +2,7 @@
 # unittests : GEN Unit Tests
 # --------------------------------------------------------------------
 
- cmake_minimum_required(VERSION 3.3.0)
+ cmake_minimum_required(VERSION 3.6.0)
  project(unittests)
 
 
