@@ -112,7 +112,8 @@
 #option(SND_FEATURE                                         "Sound"                                                     true )
 
  option(INP_FEATURE                                         "Inputs"                                                    true )
- option(INP_SIMULATED_FEATURE                               "Inputs Simulated"                                          true )
+ option(INP_SIMULATE_FEATURE                               "Inputs Simulate"                                          true )
+ option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
 
  option(APP_FEATURE                                         "Application modules"                                       true )
  option(APP_CHECKRESOURCESHARDWARE_FEATURE                  "Application Check Resources Hardwar"                       true )

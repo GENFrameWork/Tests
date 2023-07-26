@@ -147,7 +147,7 @@
 #endif
 
 #include "INPFactory.h"
-#include "INPSimulated.h"
+#include "INPSimulate.h"
 
 
 #include "APPLog.h"
@@ -901,7 +901,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
-                                                      { true   , Test_InputSimulated             , __L("Test Input Simulated")            },
+                                                      { true   , Test_InputSimulate             , __L("Test Input Simulate")            },
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -4259,8 +4259,8 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Test_InputSimulated(DEVTESTSCONSOLE* tests)
-* @brief      Test_InputSimulated
+* @fn         bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
+* @brief      Test_InputSimulate
 * @ingroup    APPLICATION
 * 
 * @param[in]  tests : 
@@ -4268,9 +4268,9 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_InputSimulated(DEVTESTSCONSOLE* tests)
+bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 {
-  INPSIMULATED* inpsimulated = GEN_INPFACTORY.CreateSimulator();
+  INPSIMULATE* inpsimulated = GEN_INPFACTORY.CreateSimulator();
   if(!inpsimulated)
     {
       return false;
