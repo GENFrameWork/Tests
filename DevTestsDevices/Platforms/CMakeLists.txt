@@ -1,5 +1,6 @@
 # --------------------------------------------------------------------
-# DevTestsDevices : GEN Developed Test Devices (all micros)
+# DevTestsDevices : Developed Test Devices (include micros)
+# GEN FrameWork
 # --------------------------------------------------------------------
 
  cmake_minimum_required(VERSION 3.6.0)
@@ -10,11 +11,13 @@
 
 # --------------------------------------------------------------------
 # Compile Selection
+
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Platform-Compiler.txt") 
 
 
 # --------------------------------------------------------------------
 # Warnings control
+
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
 
@@ -69,9 +72,9 @@
 
 
 # --------------------------------------------------------------------
-# Source code of the GEN in this Application
+# Main CMakeList of GEN
 
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists.txt") 
+ include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Main.txt") 
 
                      
 # --------------------------------------------------------------------
@@ -99,13 +102,11 @@
  endif()
 
 
-
 # --------------------------------------------------------------------
 # Create proyect 
 
- include_directories(${INCLUDES_DIR})
+ include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_CreateProject.txt") 
 
- add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
 # --------------------------------------------------------------------
 # Add Libraries

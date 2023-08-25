@@ -868,7 +868,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DNSProtocol                , __L("Test DNS Protocol")               },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
-                                                      { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
+                                                      { true   , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
                                                       { false  , Test_Hash                       , __L("Test Hash")                       },
                                                       { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
@@ -901,7 +901,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XProperty                  , __L("Test XProperty")                  },
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
-                                                      { true   , Test_InputSimulate             , __L("Test Input Simulate")            },
+                                                      { false  , Test_InputSimulate             , __L("Test Input Simulate")            },
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -2408,11 +2408,12 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
   DIOWAKEONLAN* wakeonlan = NULL;
   DIOMAC        MAC;
   DIOIP         broadcastIP;
+//XBYTE         MACdata[DIOMAC_MAXSIZE] = { 0xC8, 0x7F, 0x54, 0xAE, 0x5C, 0x80 };
   XBYTE         MACdata[DIOMAC_MAXSIZE] = { 0x10, 0xBF, 0x48, 0x78, 0x63, 0x53 };
   bool          status                  = false;
 
   MAC.Set(MACdata);
-  broadcastIP.Set(__L("192.168.1.255"));
+  broadcastIP.Set(__L("192.168.0.255"));
 
   wakeonlan = new DIOWAKEONLAN();
   if(!wakeonlan) return status;

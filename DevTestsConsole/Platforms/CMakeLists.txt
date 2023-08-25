@@ -1,5 +1,6 @@
 # --------------------------------------------------------------------
-# DevTestsConsole : GEN Develped Tests Console mode
+# DevTestsConsole : Develped Tests (Console mode)
+# GEN FrameWork.
 # --------------------------------------------------------------------
 
  cmake_minimum_required(VERSION 3.6.0)
@@ -10,11 +11,13 @@
 
 # --------------------------------------------------------------------
 # Compile Selection
+
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Platform-Compiler.txt") 
 
 
 # --------------------------------------------------------------------
 # Warnings control
+
  include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
 
 
@@ -112,7 +115,7 @@
 #option(SND_FEATURE                                         "Sound"                                                     true )
 
  option(INP_FEATURE                                         "Inputs"                                                    true )
- option(INP_SIMULATE_FEATURE                               "Inputs Simulate"                                          true )
+ option(INP_SIMULATE_FEATURE                                "Inputs Simulate"                                           true )
  option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
 
  option(APP_FEATURE                                         "Application modules"                                       true )
@@ -140,9 +143,9 @@
 
 
 # --------------------------------------------------------------------
-# Source code of the GEN in this Application
+# Main CMakeList of GEN
 
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists.txt") 
+ include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Main.txt") 
 
                         
 # --------------------------------------------------------------------
@@ -176,9 +179,7 @@
 # --------------------------------------------------------------------
 # Create proyect 
 
- include_directories(${INCLUDES_DIR})
-
- add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+ include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_CreateProject.txt") 
 
 
 # --------------------------------------------------------------------
