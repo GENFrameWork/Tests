@@ -9,17 +9,6 @@
 
  set(GEN_DIRECTORY "../../../../GENFrameWork") 
 
-# --------------------------------------------------------------------
-# Compile Selection
-
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Platform-Compiler.txt") 
-
-
-# --------------------------------------------------------------------
-# Warnings control
-
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
-
 
 # --------------------------------------------------------------------
 # Activate features/Defines

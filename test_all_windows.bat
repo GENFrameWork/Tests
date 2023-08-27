@@ -3,7 +3,7 @@ call erase_all_windows.bat
 pause
 set vctype=%1
 if "%vctype%"=="" (set vctype=Enterprise)
-set "OUTFILE=..\..\..\..\..\Output.txt"
+set "OUTFILE=..\..\..\..\Output.txt"
 set "PRINTF=..\..\..\..\..\Utilities\printf\printf"
 echo -------------------------------------------------------------
 echo 32 Bits version

@@ -11,16 +11,7 @@
 
 
 # --------------------------------------------------------------------
-# Compile Selection
-
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Platform-Compiler.txt") 
-
-
-# --------------------------------------------------------------------
-# Warnings control
-
- include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Warnings.txt") 
-
+# Activate features/Defines
 
  option(DEBUG_FEATURE                                       "Activate Debug mode"                                        true )
  option(XTRACE_FEATURE                                      "Activate XTrace"                                            true )
