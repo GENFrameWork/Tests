@@ -4277,7 +4277,7 @@ bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
       return false;
     }
 
-  inpsimulated->PressKey(0x41);
+  inpsimulated->Key_Click(0x41);
 
   return true;
 }
