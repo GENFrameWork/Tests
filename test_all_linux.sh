@@ -9,6 +9,7 @@ printf "Test Linux PC x64 ... \n\n"
 
 sh ../GEN/Batch/compile_linux.sh DevTestsConsole/Platforms/Linux /x64 devtestconsole
 sh ../GEN/Batch/compile_linux.sh DevTestsDevices/Platforms/Linux /x64 devtestsdevices
+sh ../GEN/Batch/compile_linux.sh DevTestsCanvas2D/Platforms/Linux /x64 devtestscanvas2D
 sh ../GEN/Batch/compile_linux.sh UnitTests/Platforms/Linux /x64 unit
 
 END_TIME=$(date +%s)

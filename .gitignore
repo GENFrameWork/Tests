@@ -39,6 +39,3 @@ syntax: glob
 <<<<<<< HEAD
 /Output.txt
 
-=======
-/Output.txt
->>>>>>> New_Script_Libraries
