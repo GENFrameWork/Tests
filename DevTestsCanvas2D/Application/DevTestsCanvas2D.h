@@ -95,6 +95,18 @@ enum DEVTESTSCANVAS2D_BUTTONS
 };
 
 
+class DEVTESTSCANVAS2D;
+typedef bool (*DEVTESTSCANVAS2D_FUNCTION)(DEVTESTSCANVAS2D* tests);
+
+typedef struct
+{
+  bool                        active;
+  DEVTESTSCANVAS2D_FUNCTION   function;
+  XCHAR*                      namefunction;
+
+} DEVTESTSCANVAS2D_LIST_FUNCTION;
+
+
 #define APPLICATION_VERSION                       0
 #define APPLICATION_SUBVERSION                    1
 #define APPLICATION_SUBVERSIONERR                 0
@@ -154,10 +166,13 @@ class DEVTESTSCANVAS2D : public APPGRAPHICS, public XFSMACHINE
     bool                            UpdateInput                             ();
 
     bool                            Ini_Graphics                            (GRPSCREEN* screen);
-    bool                            DrawFrame                               ();
+    bool                            DrawFrame                               ();   
 
-    bool                            CreateScripToExec                       ();
-    bool                            DeleteScripToExec                       ();
+    bool                            Do_Tests                                (); 
+
+    static bool                     Test_ScriptLibInputSimulated            (DEVTESTSCANVAS2D* tests);
+
+    static bool                     LoadScriptAndRun                        (XVECTOR<XSTRING*>* listscripts);
 
     void                            HandleEvent_Script                      (SCRIPT_XEVENT* event);
     void                            HandleEvent_Graphics                    (GRPXEVENT* event);
@@ -172,8 +187,7 @@ class DEVTESTSCANVAS2D : public APPGRAPHICS, public XFSMACHINE
 
     XSTRING                         makeaction;
 
-    GRPBITMAP*                      backgroundbmp;
-    SCRIPT*                         script;    
+    GRPBITMAP*                      backgroundbmp;  
 };
 
 #pragma endregion

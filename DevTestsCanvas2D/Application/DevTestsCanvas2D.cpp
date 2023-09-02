@@ -222,11 +222,6 @@ bool DEVTESTSCANVAS2D::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------------------
 
-  // ACTIVATEXTHREADGROUP(XTHREADGROUPID_SCHEDULER);
-  // ACTIVATEXTHREADGROUP(XTHREADGROUPID_DIOSTREAM);
-
-  //--------------------------------------------------------------------------------------------------
-
   XTRACE_SETAPPLICATIONNAME((*GetApplicationName()));
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
   XTRACE_SETAPPLICATIONID(string);
@@ -390,11 +385,9 @@ bool DEVTESTSCANVAS2D::AppProc_Update()
         {
           case DEVTESTSCANVAS2D_XFSMSTATE_NONE        : break;
 
-          case DEVTESTSCANVAS2D_XFSMSTATE_INI         : 
-                                                        break;
+          case DEVTESTSCANVAS2D_XFSMSTATE_INI         : break;
 
-          case DEVTESTSCANVAS2D_XFSMSTATE_UPDATE      : { 
-                                                          UpdateInput();
+          case DEVTESTSCANVAS2D_XFSMSTATE_UPDATE      : { UpdateInput();
 
                                                           DrawFrame();
 
@@ -416,27 +409,12 @@ bool DEVTESTSCANVAS2D::AppProc_Update()
             {
               case DEVTESTSCANVAS2D_XFSMSTATE_NONE    : break;
 
-              case DEVTESTSCANVAS2D_XFSMSTATE_INI     : if(!CreateScripToExec())
-                                                          {
-                                                            SetExitType(APPBASE_EXITTYPE_BY_SERIOUSERROR);
-                                                          }
-
-                                                        if(script)
-                                                          {  
-                                                            SCRIPT_LIB_WINDOW* scriptlibwindow = (SCRIPT_LIB_WINDOW*)script->GetLibrary(SCRIPT_LIB_NAME_WINDOW);
-                                                            if(scriptlibwindow)
-                                                              {
-                                                                scriptlibwindow->SetAppGraphics(this);
-                                                              }
-                                                          }
-
-                                                        SetEvent(DEVTESTSCANVAS2D_XFSMEVENT_UPDATE);                                                       
+              case DEVTESTSCANVAS2D_XFSMSTATE_INI     : SetEvent(DEVTESTSCANVAS2D_XFSMEVENT_UPDATE);                                                       
                                                         break;
 
               case DEVTESTSCANVAS2D_XFSMSTATE_UPDATE  : break;
 
-              case DEVTESTSCANVAS2D_XFSMSTATE_END     : DeleteScripToExec();
-                                                        break;
+              case DEVTESTSCANVAS2D_XFSMSTATE_END     : break;
             }
         }
     }
@@ -462,10 +440,6 @@ bool DEVTESTSCANVAS2D::AppProc_End()
   //--------------------------------------------------------------------------------------
 
   SetCurrentState(DEVTESTSCANVAS2D_XFSMSTATE_END);
-
-  //--------------------------------------------------------------------------------------
-
-  DeleteScripToExec();
 
   //--------------------------------------------------------------------------------------
 
@@ -564,10 +538,7 @@ bool DEVTESTSCANVAS2D::UpdateInput()
                                                           }
                                                           break; 
 
-                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : if(script) 
-                                                            {
-                                                              script->Run();
-                                                            }                             
+                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : Do_Tests();
                                                           break;
                 }
             }
@@ -758,62 +729,171 @@ bool DEVTESTSCANVAS2D::DrawFrame()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCANVAS2D::CreateScripToExec()
-* @brief      CreateScripToExec
+* @fn         bool DEVTESTSCANVAS2D::Do_Tests()
+* @brief      Do_Tests
 * @ingroup    APPLICATION
 * 
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCANVAS2D::CreateScripToExec()
+bool DEVTESTSCANVAS2D::Do_Tests()
 {
-  DeleteScripToExec();
+  DEVTESTSCANVAS2D_LIST_FUNCTION listfunctions[] =  {   { true  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    }
+                                                     
+                                                    };
 
-  XPATH   namefilescript;
-  XPATH   xpath;
-
-  if(GetExecParams())
+  for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTSCANVAS2D_LIST_FUNCTION)); c++)
     {
-      XSTRING* param = (XSTRING*)GetExecParams()->Get(0);
-      if(param) namefilescript = param->Get();
+       if(listfunctions[c].active)
+         {
+           bool status = listfunctions[c].function(this);           
+         }
     }
 
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
+* @brief      Test_ScriptLibInputSimulated
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
+{
+  /*
+  XPATH   xpath;
+  XPATH   namefilescript;
+  
   namefilescript = __L("inputsimul.js");
   
-  script = SCRIPT::Create(namefilescript.Get());  
+  SCRIPT* script = SCRIPT::Create(namefilescript.Get());  
   if(!script) 
     {
       return NULL;
     }
 
+  devtestscanvas2d->SubscribeEvent(SCRIPT_XEVENT_TYPE_ERROR, devtestscanvas2d);
+  devtestscanvas2d->SubscribeEvent(SCRIPT_XEVENT_TYPE_BREAK, devtestscanvas2d);
+
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
   xpath.Slash_Add();
   xpath += namefilescript;
 
-  return script->Load(xpath);  
-}
- 
+  if(script->Load(xpath))
+    {
+      SCRIPT_LIB_WINDOW* scriptlibwindow = (SCRIPT_LIB_WINDOW*)script->GetLibrary(SCRIPT_LIB_NAME_WINDOW);
+      if(scriptlibwindow)
+        {
+          scriptlibwindow->SetAppGraphics(devtestscanvas2d);
+        }
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCANVAS2D::DeleteScripToExec()
-* @brief      DeleteScripToExec
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCANVAS2D::DeleteScripToExec()
-{
-  if(!script) return false;
+      script->Run();
+    }
   
   delete script;
   script = NULL;
 
-  UnSubscribeEvent(SCRIPT_XEVENT_TYPE_ERROR, this);
-  UnSubscribeEvent(SCRIPT_XEVENT_TYPE_BREAK, this);
+  devtestscanvas2d->UnSubscribeEvent(SCRIPT_XEVENT_TYPE_ERROR, devtestscanvas2d);
+  devtestscanvas2d->UnSubscribeEvent(SCRIPT_XEVENT_TYPE_BREAK, devtestscanvas2d);
 
   return true;
+  */
+  
+  DEVTESTSCANVAS2D::LoadScriptAndRun(APP_CFG.Scripts_GetAll());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCANVAS2D::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts)
+* @brief      LoadScriptAndRun
+* @ingroup    APPLICATION
+* 
+* @param[in]  listscripts : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCANVAS2D::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts)
+{
+  if(!listscripts) 
+    {
+      return false;
+    }
+
+  bool status = false;
+                                                                                                     
+  for(XDWORD c=0; c<listscripts->GetSize(); c++)
+    {  
+      XSTRING* linescripts = listscripts->Get(c);    
+      if(linescripts)
+        {
+          if(!linescripts->IsEmpty())
+            {
+              XVECTOR<XSTRING*> namescripts;
+
+              linescripts->Split(__C(','), namescripts);
+
+              XSTRING* namescript = namescripts.Get(0);
+              if(namescript)
+                {
+                  SCRIPT* script = SCRIPT::Create(namescript->Get());
+                  if(script) 
+                    {
+                      SCRIPT_LIB_WINDOW* scriptlibwindow = (SCRIPT_LIB_WINDOW*)script->GetLibrary(SCRIPT_LIB_NAME_WINDOW);
+                      if(scriptlibwindow)
+                        {
+                          scriptlibwindow->SetAppGraphics(devtestscanvas2d);
+                        }
+ 
+                      for(XDWORD d=0; d<namescripts.GetSize(); d++)
+                        {  
+                          namescript = namescripts.Get(d);
+                          if(namescript)
+                            {                          
+                              XPATH xpath;     
+
+                              GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
+                              xpath.Slash_Add();
+                              xpath += namescript->Get();
+
+                              status = script->Load(xpath, true);
+                              if(!status)  
+                                {
+                                  break;
+                                }  
+                            }
+                        } 
+
+                      if(status)
+                        {                               
+                          script->Run();                              
+                        }
+
+                      delete script;
+                      script = NULL;
+
+                    }                    
+                }
+
+              namescripts.DeleteContents();
+              namescripts.DeleteAll();              
+            
+            } 
+        } 
+    }
+  
+  return status;
 }
 
 
@@ -919,8 +999,6 @@ void DEVTESTSCANVAS2D::Clean()
   cursor                      = NULL;
 
   backgroundbmp               = NULL;
-
-  script                      = NULL;
 }
 
 
