@@ -13,18 +13,23 @@ function main()
 
   Log_AddEntry(1, "Script", "[script %s] Iniciado Test...", scriptname);
 
-  ExecApplication(apppath);
+  //ExecApplication(apppath);
 
   Log_AddEntry(1, "Script", "[script %s] Exec application: %s", scriptname, appname);
  
   Window_SetPosition(appname, windowtitle, 10, 10);
-  Window_Resize(appname, windowtitle, 800, 600);
+  Window_Resize(appname, windowtitle, 700, 250);
   Window_SetFocus(appname, windowtitle);
 
   var posx = Window_GetPosX(appname, windowtitle, maskbitmapname);
   var posy = Window_GetPosY(appname, windowtitle, maskbitmapname);
 
   XTRACE_PRINTCOLOR(1, "Position of %s %d, %d", appname, posx, posy);
+
+  Window_SetFocus(appname, windowtitle);
+  InpSim_Mouse_Click(posx, posy);
+
+  Sleep(3000);
 
   /*
   InpSim_Mouse_Click(posx + 30, posy + 50);
