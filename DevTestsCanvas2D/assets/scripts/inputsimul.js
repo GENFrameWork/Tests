@@ -13,7 +13,7 @@ function main()
 
   Log_AddEntry(1, "Script", "[script %s] Iniciado Test...", scriptname);
 
-  //ExecApplication(apppath);
+  ExecApplication(apppath);
 
   Log_AddEntry(1, "Script", "[script %s] Exec application: %s", scriptname, appname);
  
