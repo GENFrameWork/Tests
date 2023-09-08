@@ -96,10 +96,13 @@
 
 #include "APPLog.h"
 
+#ifdef SCRIPT_LIB_WINDOW_ACTIVE  
+#include "Script_Lib_Window.h"
+#endif
 #include "Script_Language_G.h"
 #include "Script_Language_Lua.h"
 #include "Script_Language_Javascript.h"
-#include "Script_Lib_Window.h"
+
 
 #include "DevTestsCanvas2D_CFG.h"
 
@@ -550,8 +553,7 @@ bool DEVTESTSCANVAS2D::UpdateInput()
                   case DEVTESTSCANVAS2D_BUTTON_UP     : makeaction = __L("WALK NORTH");   break;
                   case DEVTESTSCANVAS2D_BUTTON_DOWN   : makeaction = __L("WALK SOUTH");   break;
                   case DEVTESTSCANVAS2D_BUTTON_LEFT   : makeaction = __L("WALK WEST" );   break;
-                  case DEVTESTSCANVAS2D_BUTTON_RIGHT  : makeaction = __L("WALK EAST" );   break;
-                //case DEVTESTSCANVAS2D_BUTTON_SPACE  : break;
+                  case DEVTESTSCANVAS2D_BUTTON_RIGHT  : makeaction = __L("WALK EAST" );   break;               
                 }
             }
 
@@ -738,8 +740,7 @@ bool DEVTESTSCANVAS2D::DrawFrame()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Do_Tests()
 {
-  DEVTESTSCANVAS2D_LIST_FUNCTION listfunctions[] =  {   { true  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    }
-                                                     
+  DEVTESTSCANVAS2D_LIST_FUNCTION listfunctions[] =  {   { true  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    }                                                     
                                                     };
 
   for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTSCANVAS2D_LIST_FUNCTION)); c++)
@@ -807,7 +808,9 @@ bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
   return true;
   */
   
-  DEVTESTSCANVAS2D::LoadScriptAndRun(APP_CFG.Scripts_GetAll());
+  SCRIPT::LoadScriptAndRun(APP_CFG.Scripts_GetAll(), DEVTESTSCANVAS2D::AdjustLibraries);
+
+  //DEVTESTSCANVAS2D::LoadScriptAndRun(APP_CFG.Scripts_GetAll());
 
   return true;
 }
@@ -894,6 +897,29 @@ bool DEVTESTSCANVAS2D::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts)
     }
   
   return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CBUILDER::AdjustLibraries(SCRIPT* script)
+* @brief      AdjustLibraries
+* @ingroup    APPLICATION
+* 
+* @param[in]  script : 
+* 
+* @return     void : does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
+{
+  #ifdef SCRIPT_LIB_CFG_ACTIVE  
+  SCRIPT_SET_LIB_CFG(script, APP_CFG);
+  #endif
+
+  #ifdef SCRIPT_LIB_WINDOW_ACTIVE  
+  SCRIPT_SET_LIB_APPGRAPHICS(script, devtestscanvas2d)
+  #endif
 }
 
 

@@ -174,6 +174,8 @@ class DEVTESTSCANVAS2D : public APPGRAPHICS, public XFSMACHINE
 
     static bool                     LoadScriptAndRun                        (XVECTOR<XSTRING*>* listscripts);
 
+    static void                     AdjustLibraries                         (SCRIPT* script);
+
     void                            HandleEvent_Script                      (SCRIPT_XEVENT* event);
     void                            HandleEvent_Graphics                    (GRPXEVENT* event);
     void                            HandleEvent                             (XEVENT* xevent);
