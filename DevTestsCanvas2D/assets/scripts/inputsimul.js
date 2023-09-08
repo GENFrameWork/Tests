@@ -9,7 +9,8 @@ function main()
   var appname         = "wordpad.exe";
   var apppath         = "C:\\Program Files (x86)\\Windows NT\\Accessories\\" + appname;
   var windowtitle     = "WordPad";
-  var maskbitmapname  = "inputsimul.png"
+  var maskbitmapname  = "inputsimul.png";
+  var maskbitmapname2 = "inputsimul2.png";
 
   Log_AddEntry(1, "Script", "[script %s] Iniciado Test...", scriptname);
 
@@ -21,8 +22,8 @@ function main()
   Window_Resize(appname, windowtitle, 700, 250);
   Window_SetFocus(appname, windowtitle);
 
-  var posx = Window_GetPosX(appname, windowtitle, maskbitmapname);
-  var posy = Window_GetPosY(appname, windowtitle, maskbitmapname);
+  var posx = Window_GetPosX(appname, windowtitle, maskbitmapname, maskbitmapname2);
+  var posy = Window_GetPosY(appname, windowtitle, maskbitmapname, maskbitmapname2);
 
   XTRACE_PRINTCOLOR(1, "Position of %s %d, %d", appname, posx, posy);
 

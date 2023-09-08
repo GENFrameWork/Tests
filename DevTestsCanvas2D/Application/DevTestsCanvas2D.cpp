@@ -751,7 +751,6 @@ bool DEVTESTSCANVAS2D::Do_Tests()
          }
     }
 
-
   return true;
 }
 
@@ -769,134 +768,9 @@ bool DEVTESTSCANVAS2D::Do_Tests()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
 {
-  /*
-  XPATH   xpath;
-  XPATH   namefilescript;
-  
-  namefilescript = __L("inputsimul.js");
-  
-  SCRIPT* script = SCRIPT::Create(namefilescript.Get());  
-  if(!script) 
-    {
-      return NULL;
-    }
-
-  devtestscanvas2d->SubscribeEvent(SCRIPT_XEVENT_TYPE_ERROR, devtestscanvas2d);
-  devtestscanvas2d->SubscribeEvent(SCRIPT_XEVENT_TYPE_BREAK, devtestscanvas2d);
-
-  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
-  xpath.Slash_Add();
-  xpath += namefilescript;
-
-  if(script->Load(xpath))
-    {
-      SCRIPT_LIB_WINDOW* scriptlibwindow = (SCRIPT_LIB_WINDOW*)script->GetLibrary(SCRIPT_LIB_NAME_WINDOW);
-      if(scriptlibwindow)
-        {
-          scriptlibwindow->SetAppGraphics(devtestscanvas2d);
-        }
-
-      script->Run();
-    }
-  
-  delete script;
-  script = NULL;
-
-  devtestscanvas2d->UnSubscribeEvent(SCRIPT_XEVENT_TYPE_ERROR, devtestscanvas2d);
-  devtestscanvas2d->UnSubscribeEvent(SCRIPT_XEVENT_TYPE_BREAK, devtestscanvas2d);
-
-  return true;
-  */
-  
   SCRIPT::LoadScriptAndRun(APP_CFG.Scripts_GetAll(), DEVTESTSCANVAS2D::AdjustLibraries);
 
-  //DEVTESTSCANVAS2D::LoadScriptAndRun(APP_CFG.Scripts_GetAll());
-
   return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCANVAS2D::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts)
-* @brief      LoadScriptAndRun
-* @ingroup    APPLICATION
-* 
-* @param[in]  listscripts : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCANVAS2D::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts)
-{
-  if(!listscripts) 
-    {
-      return false;
-    }
-
-  bool status = false;
-                                                                                                     
-  for(XDWORD c=0; c<listscripts->GetSize(); c++)
-    {  
-      XSTRING* linescripts = listscripts->Get(c);    
-      if(linescripts)
-        {
-          if(!linescripts->IsEmpty())
-            {
-              XVECTOR<XSTRING*> namescripts;
-
-              linescripts->Split(__C(','), namescripts);
-
-              XSTRING* namescript = namescripts.Get(0);
-              if(namescript)
-                {
-                  SCRIPT* script = SCRIPT::Create(namescript->Get());
-                  if(script) 
-                    {
-                      SCRIPT_LIB_WINDOW* scriptlibwindow = (SCRIPT_LIB_WINDOW*)script->GetLibrary(SCRIPT_LIB_NAME_WINDOW);
-                      if(scriptlibwindow)
-                        {
-                          scriptlibwindow->SetAppGraphics(devtestscanvas2d);
-                        }
- 
-                      for(XDWORD d=0; d<namescripts.GetSize(); d++)
-                        {  
-                          namescript = namescripts.Get(d);
-                          if(namescript)
-                            {                          
-                              XPATH xpath;     
-
-                              GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
-                              xpath.Slash_Add();
-                              xpath += namescript->Get();
-
-                              status = script->Load(xpath, true);
-                              if(!status)  
-                                {
-                                  break;
-                                }  
-                            }
-                        } 
-
-                      if(status)
-                        {                               
-                          script->Run();                              
-                        }
-
-                      delete script;
-                      script = NULL;
-
-                    }                    
-                }
-
-              namescripts.DeleteContents();
-              namescripts.DeleteAll();              
-            
-            } 
-        } 
-    }
-  
-  return status;
 }
 
 
