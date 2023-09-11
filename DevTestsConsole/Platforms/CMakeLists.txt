@@ -84,7 +84,6 @@
 #option(DIO_PCAP_FEATURE                                    "Data Input/Output Cap"                                     true )
  option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true )  
 
-
  option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )  
  option(DIO_SPI_GPIO_MCP23S17_FEATURE                       "Data SPI GPIO MCP23S17"                                    true )
  option(DIO_SPI_LCDDISPLAY_PCF8833_FEATURE                  "Data SPI LCD Display PCF8833"                              true )  
@@ -106,6 +105,10 @@
  option(INP_FEATURE                                         "Inputs"                                                    true )
  option(INP_SIMULATE_FEATURE                                "Inputs Simulate"                                           true )
  option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
+
+ option(SND_FEATURE                                         "Sound"                                                     true )
+ option(SND_FILE_WAV_FEATURE                                "Sound WAV file"                                            true )
+ option(SND_FILE_OGG_FEATURE                                "Sound OGG file"                                            true )
 
  option(APP_FEATURE                                         "Application modules"                                       true )
  option(APP_CHECKRESOURCESHARDWARE_FEATURE                  "Application Check Resources Hardwar"                       true )

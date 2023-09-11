@@ -1,38 +1,43 @@
 ﻿/**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @file       DevTestsConsole.cpp
-*
+* 
 * @class      DEVTESTSCONSOLE
 * @brief      Developed Tests console class
 * @ingroup    TESTS
-*
-* @copyright  GEN Group. All right reserved.
-*
+* 
+* @copyright  GEN Group. All rights reserved.
+* 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-*
+* 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-*
+* 
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 
-
-/*---- PRECOMPILATION CONTROL ----------------------------------------------------------------------------------------*/
+/*---- PRECOMPILATION INCLUDES ----------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_INCLUDES
 
 #include "GEN_Defines.h"
 
+#pragma endregion
+
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+#pragma region INCLUDES
+
+#include "DevTestsConsole.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -174,16 +179,21 @@
 
 #include "DevTestsConsole_CFG.h"
 
-#include "DevTestsConsole.h"
-
 #include "XMemory_Control.h"
+
+#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+#pragma region GENERAL_VARIABLE
 
- APPLICATIONCREATEINSTANCE(DEVTESTSCONSOLE, devtestsconsole)
+APPLICATIONCREATEINSTANCE(DEVTESTSCONSOLE, devtestsconsole)
+
+#pragma endregion
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -212,7 +222,6 @@ DEVTESTSCONSOLE::DEVTESTSCONSOLE() : XFSMACHINE(0)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
-
 {
   Clean();
 }
@@ -280,7 +289,6 @@ bool DEVTESTSCONSOLE::AppProc_PlatformIni()
   #endif  
     
   //--------------------------------------------------------------------------------------
-
 
   return true;
 }
@@ -868,7 +876,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DNSProtocol                , __L("Test DNS Protocol")               },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
-                                                      { true   , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
+                                                      { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
                                                       { false  , Test_Hash                       , __L("Test Hash")                       },
                                                       { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
@@ -880,7 +888,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -897,11 +905,10 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   }, 
-                                                      { false  , Test_XProperty                  , __L("Test XProperty")                  },
+                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
-                                                      { false  , Test_InputSimulate             , __L("Test Input Simulate")            },
+                                                      { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -4136,31 +4143,6 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Test_XProperty(DEVTESTSCONSOLE* tests)
-* @brief      Test_XProperty
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_XProperty(DEVTESTSCONSOLE* tests)
-{
-  /*
-  DEVTESTSCONSOLE_PROPERTY    foo(10.0f, 10.0f);
-  
-  foo.x  = foo.z;
-  */
-
-  
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 * @brief      Test_License
 * @ingroup    APPLICATION
@@ -4281,7 +4263,7 @@ bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 
   return true;
 }
-
+  
 
 #ifdef WINDOWS
 /**-------------------------------------------------------------------------------------------------------------------
@@ -4869,3 +4851,4 @@ void DEVTESTSCONSOLE::Clean()
   xmutexthread                = NULL;
 }
 
+#pragma endregion
