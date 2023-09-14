@@ -143,8 +143,8 @@
 #include "DIOATCMDGSM.h"
 #include "DIOSNMP.h"
 #include "DIOLedNeoPixelWS2812B.h"
-
 #include "DIOAlerts.h"
+
 
 #ifdef SND_ACTIVE
 #include "SNDFactory.h"
@@ -4054,18 +4054,29 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = 11;
+	int                  indexnetinterface = 2;
 
 	diopcap = DIOFACTORY::GetInstance().CreatePCap();
   if(!diopcap)  return false;
 
 	if(diopcap->Ini())
     { 
-				tests->console->Printf(__L("Interfaces de red disponibles: \n\n"));
+			tests->console->Printf(__L("Interfaces de red disponibles: \n\n"));
       for(int c=0; c<(int)diopcap->GetNetInterfaces()->GetSize(); c++)
         {
           netinterface = diopcap->GetNetInterface(c);
-          if(netinterface) tests->console->Printf(__L("[%2d] %s, [%s]\n"), c, netinterface->GetName()->Get(), netinterface->GetDescription()->Get());						
+          if(netinterface) 
+            {              
+              if(netinterface->GetDescription()->Find(__L("loopback traffic capture"), true) != XSTRING_NOTFOUND)
+                {
+                  if(indexnetinterface == -1)
+                    {
+                      indexnetinterface = c;                        
+                    }
+                }
+                
+               tests->console->Printf(__L("[%2d] %c %s, [%s]\n"), c, (indexnetinterface == c)?__C('*'):__C('-'), netinterface->GetName()->Get(), netinterface->GetDescription()->Get());						
+            }
 				}
 
 			tests->console->Printf(__L("\n"));
@@ -4088,10 +4099,9 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 											DIOPCAPETHERNETHEADER ethernetheader;                                                                                                             
 											if(frame->GetHeaderEthernet(ethernetheader)) 
 												{    
-                          /*                      
+                                                
 													tests->console->Printf(__L("MAC Source: %02X:%02X:%02X:%02X:%02X:%02X  MAC Target: %02X:%02X:%02X:%02X:%02X:%02X ") , ethernetheader.MACsource[0], ethernetheader.MACsource[1], ethernetheader.MACsource[2], ethernetheader.MACsource[3], ethernetheader.MACsource[4], ethernetheader.MACsource[5]
-																          																																																	  , ethernetheader.MACtarget[0], ethernetheader.MACtarget[1], ethernetheader.MACtarget[2], ethernetheader.MACtarget[3], ethernetheader.MACtarget[4], ethernetheader.MACtarget[5]);
-                          */
+																          																																																	  , ethernetheader.MACtarget[0], ethernetheader.MACtarget[1], ethernetheader.MACtarget[2], ethernetheader.MACtarget[3], ethernetheader.MACtarget[4], ethernetheader.MACtarget[5]);                          
        
 													switch(ethernetheader.type)
 														{

@@ -39,7 +39,9 @@
 #include "XScheduler.h"
 
 #include "DIOStream.h"
+#ifdef DIO_PCAP_ACTIVE
 #include "DIOPCap.h"
+#endif
 #include "DIOURL.h"
 #include "DIOGPIO.h"
 
