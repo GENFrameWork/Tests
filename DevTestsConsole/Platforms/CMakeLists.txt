@@ -15,7 +15,7 @@
 
  option(DEBUG_FEATURE                                       "Debug mode"                                                true )
  option(XTRACE_FEATURE                                      "XTrace"                                                    true )
-#option(XTRACE_NOINTERNET_FEATURE                           "No need for trace dependencies with the Internet"          true )                        
+ option(XTRACE_NOINTERNET_FEATURE                           "No need for trace dependencies with the Internet"          true )                        
  option(XMEMORY_CONTROL_FEATURE                             "XMemory Control"                                           true )
 
  option(XSHAREDMEMORYMANAGER_FEATURE                        "Shared Memory Manager"                                     true )
@@ -81,7 +81,7 @@
  option(DIO_MODBUSCLIENT_FEATURE                            "Data Input/Output ModBus Client (UART/TCPIP)"              true )
  option(DIO_LEDNEOPIXELWS2812B_FEATURE                      "Data Input/Output Led Neopixel WS2812B"                    true ) 
  option(DIO_PROTOCOL_CLI_BUS_FEATURE                        "Data Input/Output Protocol in CLI Bus"                     true )
-#option(DIO_PCAP_FEATURE                                    "Data Input/Output Cap"                                     true )
+ option(DIO_PCAP_FEATURE                                    "Data Input/Output Cap"                                     true )
  option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true )  
 
  option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )  

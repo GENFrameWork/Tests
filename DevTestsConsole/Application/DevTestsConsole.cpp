@@ -888,7 +888,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -905,7 +905,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
+                                                      { true   , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
@@ -4050,11 +4050,11 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 {
-	#ifdef DIOPCAP_ACTIVE
+	#ifdef DIO_PCAP_ACTIVE
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = 7;
+	int                  indexnetinterface = 11;
 
 	diopcap = DIOFACTORY::GetInstance().CreatePCap();
   if(!diopcap)  return false;
@@ -4087,10 +4087,12 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 									                                                                                                                                   
 											DIOPCAPETHERNETHEADER ethernetheader;                                                                                                             
 											if(frame->GetHeaderEthernet(ethernetheader)) 
-												{                          
+												{    
+                          /*                      
 													tests->console->Printf(__L("MAC Source: %02X:%02X:%02X:%02X:%02X:%02X  MAC Target: %02X:%02X:%02X:%02X:%02X:%02X ") , ethernetheader.MACsource[0], ethernetheader.MACsource[1], ethernetheader.MACsource[2], ethernetheader.MACsource[3], ethernetheader.MACsource[4], ethernetheader.MACsource[5]
 																          																																																	  , ethernetheader.MACtarget[0], ethernetheader.MACtarget[1], ethernetheader.MACtarget[2], ethernetheader.MACtarget[3], ethernetheader.MACtarget[4], ethernetheader.MACtarget[5]);
-
+                          */
+       
 													switch(ethernetheader.type)
 														{
 															case DIOPCAPETHERNETTYPE_IP			: {	DIOPCAPIPHEADER ipheader;																															
