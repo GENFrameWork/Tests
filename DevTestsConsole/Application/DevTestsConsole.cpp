@@ -4054,7 +4054,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = 2;
+	int                  indexnetinterface = -1;
 
 	diopcap = DIOFACTORY::GetInstance().CreatePCap();
   if(!diopcap)  return false;
@@ -4066,10 +4066,10 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
         {
           netinterface = diopcap->GetNetInterface(c);
           if(netinterface) 
-            {              
-              if(netinterface->GetDescription()->Find(__L("loopback traffic capture"), true) != XSTRING_NOTFOUND)
+            {          
+              if(indexnetinterface == -1)
                 {
-                  if(indexnetinterface == -1)
+                  if(netinterface->IsLoopBack())
                     {
                       indexnetinterface = c;                        
                     }
@@ -4095,42 +4095,50 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 											if(!frame) break;
 
 											if(tests->console->KBHit()) break;
-									                                                                                                                                   
-											DIOPCAPETHERNETHEADER ethernetheader;                                                                                                             
-											if(frame->GetHeaderEthernet(ethernetheader)) 
-												{    
-                                                
-													tests->console->Printf(__L("MAC Source: %02X:%02X:%02X:%02X:%02X:%02X  MAC Target: %02X:%02X:%02X:%02X:%02X:%02X ") , ethernetheader.MACsource[0], ethernetheader.MACsource[1], ethernetheader.MACsource[2], ethernetheader.MACsource[3], ethernetheader.MACsource[4], ethernetheader.MACsource[5]
-																          																																																	  , ethernetheader.MACtarget[0], ethernetheader.MACtarget[1], ethernetheader.MACtarget[2], ethernetheader.MACtarget[3], ethernetheader.MACtarget[4], ethernetheader.MACtarget[5]);                          
-       
-													switch(ethernetheader.type)
-														{
-															case DIOPCAPETHERNETTYPE_IP			: {	DIOPCAPIPHEADER ipheader;																															
-																																	if(frame->GetHeaderIP(ipheader))
-																																		{ 
-																																			DIOIP			ipsourceaddr;
-																																			XSTRING		ipsourcestring;
-																																			DIOIP			iptargetaddr;
-																																			XSTRING   iptargetstring;
-																																																																			
-																																			ipsourceaddr.Set(ipheader.sourceaddr.byte1, ipheader.sourceaddr.byte2, ipheader.sourceaddr.byte3, ipheader.sourceaddr.byte4);
-																																			iptargetaddr.Set(ipheader.targetaddr.byte1, ipheader.targetaddr.byte2, ipheader.targetaddr.byte3, ipheader.targetaddr.byte4);
+									          
+                      XSTRING string;  
 
-																																			ipsourceaddr.GetXString(ipsourcestring);
-																																			iptargetaddr.GetXString(iptargetstring);	
+                      if(!frame->GetSourceMAC()->IsZero())
+                        {
+                          frame->GetSourceMAC()->GetXString(string);
 
-																																		  tests->console->Printf(__L("IP Source: %s IP Target: %s"), ipsourcestring.Get(), iptargetstring.Get());
+                          tests->console->Printf(__L("MACs [%s"), string.Get());
+                        } 
 
-																																		}
-																																} 																																																															
-																																break;
+                      if(!frame->GetTargetMAC()->IsZero())
+                        {
+                          frame->GetTargetMAC()->GetXString(string);
 
-																										default		:	break;
-														}	
+                          tests->console->Printf(__L(" > %s]"), string.Get());
+                        }  
 
-												  tests->console->Printf(__L("\n"));
+                      if(!frame->GetSourceIP()->IsEmpty())
+                        {
+                          frame->GetSourceIP()->GetXString(string);
 
-												}
+                          tests->console->Printf(__L(" IPs [%15s"), string.Get());
+                        }
+
+                      if(!frame->GetTargetIP()->IsEmpty())
+                        {
+                          frame->GetTargetIP()->GetXString(string);
+
+                          tests->console->Printf(__L(" > %15s]"), string.Get());
+                        }
+
+                      if(frame->GetSourcePort())
+                        {                          
+                          tests->console->Printf(__L(" Ports [%5d"), frame->GetSourcePort());
+                        }
+
+                      if(frame->GetTargetPort())
+                        {                          
+                          tests->console->Printf(__L(" > %5d]"), frame->GetTargetPort());
+                        }
+
+                      tests->console->Printf(__L(" size: %d"), frame->GetDataPayLoadSize());
+                      
+                      tests->console->Printf(__L("\n"));                   
 									
 											diopcap->Frames_Delete(c);
 										}
