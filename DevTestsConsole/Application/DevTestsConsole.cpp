@@ -4054,7 +4054,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = -1;
+	int                  indexnetinterface = 2;
 
 	diopcap = DIOFACTORY::GetInstance().CreatePCap();
   if(!diopcap)  return false;
@@ -4089,7 +4089,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 								{
 									int nsize = diopcap->Frames_Get()->GetSize();
 
-									for(int c=0;c<nsize;c++)
+									for(int c=0;c<nsize;c++) 
 										{
 											DIOPCAPFRAME* frame = diopcap->Frames_Get(c);
 											if(!frame) break;
@@ -4114,9 +4114,12 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
                       if(!frame->GetSourceIP()->IsEmpty())
                         {
+                          XSTRING protocoltypestr;  
+
+                          frame->GetProtocolTypeString(protocoltypestr);
                           frame->GetSourceIP()->GetXString(string);
 
-                          tests->console->Printf(__L(" IPs [%15s"), string.Get());
+                          tests->console->Printf(__L(" %-6s IPs [%15s"), protocoltypestr.Get(), string.Get());
                         }
 
                       if(!frame->GetTargetIP()->IsEmpty())
@@ -4136,7 +4139,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
                           tests->console->Printf(__L(" > %5d]"), frame->GetTargetPort());
                         }
 
-                      tests->console->Printf(__L(" size: %d"), frame->GetDataPayLoadSize());
+                      tests->console->Printf(__L(" header size: %d,  playload size: %d"), frame->GetHeaderSize(), frame->GetDataPayLoadSize());
                       
                       tests->console->Printf(__L("\n"));                   
 									
