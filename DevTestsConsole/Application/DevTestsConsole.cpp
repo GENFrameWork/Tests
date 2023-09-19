@@ -4056,7 +4056,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
 	int                  indexnetinterface = -1;
 
-	diopcap = DIOFACTORY::GetInstance().CreatePCap();
+	diopcap = GEN_DIOFACTORY.CreatePCap();
   if(!diopcap)  return false;
 
 	if(diopcap->Ini())
@@ -4139,7 +4139,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
                           tests->console->Printf(__L(" > %5d]"), frame->GetTargetPort());
                         }
 
-                      tests->console->Printf(__L(" header size: %d,  playload size: %d"), frame->GetHeaderSize(), frame->GetDataPayLoadSize());
+                      tests->console->Printf(__L(" header size: %d,  playload size: %d"), frame->GetAllHeadersSize(), frame->GetDataPayLoadSize());
                       
                       tests->console->Printf(__L("\n"));                   
 									
@@ -4156,7 +4156,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 			diopcap->End();														
 		}
 
-	DIOFACTORY::GetInstance().DeletePCap(diopcap);
+	GEN_DIOFACTORY.DeletePCap(diopcap);
 
 	#endif
   
