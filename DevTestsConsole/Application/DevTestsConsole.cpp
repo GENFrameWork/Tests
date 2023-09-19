@@ -4054,7 +4054,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = 2;
+	int                  indexnetinterface = -1;
 
 	diopcap = DIOFACTORY::GetInstance().CreatePCap();
   if(!diopcap)  return false;

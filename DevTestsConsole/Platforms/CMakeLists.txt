@@ -116,8 +116,7 @@
  option(APP_INTERNETSERVICES_FEATURE                        "Application Internet Services"                             true )
  option(APP_LOG_FEATURE                                     "Application Log"                                           true )
  option(APP_ALERTS_FEATURE                                  "Application Alerts"                                        true )
- option(APP_CFG_REMOTEFILE_FEATURE                          "Application CFG Remote File"                               true )
-
+ 
  option(APP_CFG_GENERAL_FEATURE                             "Application CFG General"                                   true )  
  option(APP_CFG_LOG_FEATURE                                 "Application CFG LOG"                                       true )
  option(APP_CFG_INTERNETSERVICES_FEATURE                    "Application CFG Internet services"                         true )      
