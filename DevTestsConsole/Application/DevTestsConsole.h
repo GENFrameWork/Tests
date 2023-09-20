@@ -100,6 +100,9 @@ enum DEVTESTSCONSOLE_GPIOENTRYID
 
 //#define DEVTESTSCONSOLE_NOKEY
 
+#define DEVTESTSCONSOLE_TASKID_TEST               1000
+
+
 class DEVTESTSCONSOLE;
 typedef bool (*DEVTESTSCONSOLE_FUNCTION)(DEVTESTSCONSOLE* tests);
 
@@ -232,6 +235,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XLicense                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_XSerializable                  (DEVTESTSCONSOLE* tests);
     static bool                     Test_InputSimulate                  (DEVTESTSCONSOLE* tests);
+    static bool                     Test_Scheduler                      (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);

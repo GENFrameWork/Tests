@@ -905,10 +905,11 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { true   , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
+                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
+                                                      { true   , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
@@ -4286,7 +4287,73 @@ bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 
   return true;
 }
-  
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
+* @brief      Test_Scheduler
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
+{
+  XSCHEDULER*     xscheduler;
+  XSCHEDULERTASK* xtask;
+  XDATETIME       xdatetimecadence;
+  XTIMER          xtimercadence;
+  bool            status   = false;
+
+  xscheduler = new XSCHEDULER();
+  if(!xscheduler) 
+    {
+      return false;
+    }
+
+  xtask = new XSCHEDULERTASK(xscheduler);
+  if(xtask) 
+    {     
+      xdatetimecadence.SetToZero();
+
+      xtimercadence.Reset();
+      xtimercadence.AddSeconds(5);
+
+      xtimercadence.GetMeasureToDate(&xdatetimecadence);  
+
+      xtask->SetNCycles(XSCHEDULER_CYCLEFOREVER, &xdatetimecadence);
+      xtask->SetID(DEVTESTSCONSOLE_TASKID_TEST);
+      xtask->SetIsStartImmediatelyCycles(true);
+      xtask->SetIsActive(true);
+
+      status = xscheduler->Task_Add(xtask);      
+
+      tests->SubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);
+
+      if(xscheduler->Ini()) 
+        {
+           status = true;
+        }
+    }
+
+  if(status)
+    {
+      GEN_XSLEEP.Seconds(2);
+
+      xtask->StartConditionImmediately();
+
+      GEN_XSLEEP.Seconds(18);
+    }
+
+  tests->UnSubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);
+  delete xscheduler;
+   
+  return status;
+}
+
 
 #ifdef WINDOWS
 /**-------------------------------------------------------------------------------------------------------------------
@@ -4722,13 +4789,16 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
-{
-  /*
+{  
   switch(event->GetTask()->GetID())
     {
+      case DEVTESTSCONSOLE_TASKID_TEST  : { XSTRING string;
 
-    }
-  */
+                                            event->GetDateTime()->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, string);
+                                            console->Printf(__L("%s: [Task] event ...\n"), string.Get());
+                                          }
+                                          break;
+    } 
 }
 
 
