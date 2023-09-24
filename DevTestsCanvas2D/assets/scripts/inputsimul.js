@@ -25,7 +25,7 @@ function main()
   var posx = Window_GetPosX(appname, windowtitle, maskbitmapname, maskbitmapname2);
   var posy = Window_GetPosY(appname, windowtitle, maskbitmapname, maskbitmapname2);
 
-  XTRACE_PRINTCOLOR(1, "Position of %s %d, %d", appname, posx, posy);
+  TracePrintColor(1, "Position of %s %d, %d", appname, posx, posy);
 
   Window_SetFocus(appname, windowtitle);
   InpSim_Mouse_Click(posx, posy);

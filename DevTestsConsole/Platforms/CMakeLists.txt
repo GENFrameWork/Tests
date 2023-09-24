@@ -3,7 +3,7 @@
 # GEN FrameWork.
 # --------------------------------------------------------------------
 
- cmake_minimum_required(VERSION 3.6.0)
+ cmake_minimum_required(VERSION 3.14.0)
  project(devtestsconsole)
 
 
@@ -67,7 +67,7 @@
  option(DIO_SCRAPERWEB_FEATURE                              "Scraper Web"                                               true )
  option(DIO_GPIO_FEATURE                                    "Data Input/Output GPIO"                                    true )
  option(DIO_STREAMI2C_FEATURE                               "Data Input/Output Stream I2C"                              true )
- option(DIO_I2C_GPIO_MCP2317_FEATURE                        "Data I2C GPIO MCP2317"                                     true )
+ option(DIO_STREAMI2C_GPIO_MCP2317_FEATURE                  "Data I2C GPIO MCP2317"                                     true )
  option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )
  option(DIO_SPI_GPIO_MCP23S17_FEATURE                       "Data SPI GPIO MCP23S17"                                    true )   
  option(DIO_ATCMD_FEATURE                                   "AT Commands"                                               true )
@@ -85,13 +85,13 @@
  option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true )  
 
  option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )  
- option(DIO_SPI_GPIO_MCP23S17_FEATURE                       "Data SPI GPIO MCP23S17"                                    true )
- option(DIO_SPI_LCDDISPLAY_PCF8833_FEATURE                  "Data SPI LCD Display PCF8833"                              true )  
- option(DIO_SPI_OLEDDISPLAY_SSD1306_FEATURE                 "Data SPI OLED Display SSD1306"                             true )
- option(DIO_SPI_OLEDDISPLAY_SSD1331_FEATURE                 "Data SPI OLED Display SSD1331"                             true )
- option(DIO_SPI_TFTDISPLAY_ILI9341_FEATURE                  "Data SPI TFT Display ILI9341"                              true )
- option(DIO_SPI_TFTDISPLAY_ST7789_FEATURE                   "Data SPI TFT Display ST7789"                               true )
- option(DIO_SPI_TOUCHSCREEN_STMPE610_FEATURE                "Data SPI Touch Screen STMPE610"                            true )
+ option(DIO_STREAMSPI_GPIO_MCP23S17_FEATURE                 "Data SPI GPIO MCP23S17"                                    true )
+ option(DIO_STREAMSPI_LCDDISPLAY_PCF8833_FEATURE            "Data SPI LCD Display PCF8833"                              true )  
+ option(DIO_STREAMSPI_OLEDDISPLAY_SSD1306_FEATURE           "Data SPI OLED Display SSD1306"                             true )
+ option(DIO_STREAMSPI_OLEDDISPLAY_SSD1331_FEATURE           "Data SPI OLED Display SSD1331"                             true )
+ option(DIO_STREAMSPI_TFTDISPLAY_ILI9341_FEATURE            "Data SPI TFT Display ILI9341"                              true )
+ option(DIO_STREAMSPI_TFTDISPLAY_ST7789_FEATURE             "Data SPI TFT Display ST7789"                               true )
+ option(DIO_STREAMSPI_TOUCHSCREEN_STMPE610_FEATURE          "Data SPI Touch Screen STMPE610"                            true )
 
  if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
