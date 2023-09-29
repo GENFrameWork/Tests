@@ -541,7 +541,8 @@ bool DEVTESTSCANVAS2D::UpdateInput()
                                                           }
                                                           break; 
 
-                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : Do_Tests();
+                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Start Script..."));
+                                                          Do_Tests();
                                                           break;
                 }
             }
@@ -791,7 +792,7 @@ void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
   SCRIPT_SET_LIB_CFG(script, APP_CFG);
   #endif
 
-  #ifdef SCRIPT_LIB_WINDOW_ACTIVE  
+  #ifdef SCRIPT_LIB_WINDOWS_DEBUG  
   SCRIPT_SET_LIB_APPGRAPHICS(script, devtestscanvas2d)
   #endif
 }

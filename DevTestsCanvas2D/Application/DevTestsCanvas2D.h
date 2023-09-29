@@ -112,7 +112,7 @@ typedef struct
 #define APPLICATION_SUBVERSIONERR                 0
 
 #define APPLICATION_NAMEAPP                       __L("DevTestsCanvas2D")
-#define APPLICATION_NAMEFILE                      __L("canvas2d")
+#define APPLICATION_NAMEFILE                      __L("devtestscanvas2d")
 
 #define APPLICATION_OWNER                         __L("GEN Group")
 
