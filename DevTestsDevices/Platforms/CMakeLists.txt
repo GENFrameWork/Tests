@@ -15,6 +15,7 @@ set(GEN_DIRECTORY "../../../../GENFrameWork")
 
 option(DEBUG_FEATURE                                       "Debug mode"                                                true )
 option(XTRACE_FEATURE                                      "XTrace"                                                    true )
+option(XTRACE_NOINTERNET_FEATURE                           "No need for trace dependencies with Internet"              true )
 option(XMEMORY_CONTROL_FEATURE                             "XMemory Control"                                           true )
                                                                                                                        
 option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                  "Linux CodePage Editor Visual Studio CP1252"                true )   
