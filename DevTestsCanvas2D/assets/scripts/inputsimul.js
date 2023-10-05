@@ -27,9 +27,21 @@ function main()
 
   TracePrintColor(1, "Position of %s %d, %d", appname, posx, posy);
 
-  Window_SetFocus(appname, windowtitle);
-  InpSim_Mouse_Click(posx, posy);
+  Window_Minimize(appname, windowtitle, true);
+  Sleep(1000);
 
+  Window_Minimize(appname, windowtitle, false);
+  Sleep(1000);
+
+  Window_Maximize(appname, windowtitle, true);
+  Sleep(1000);
+
+  Window_Maximize(appname, windowtitle, false);
+  Sleep(1000);
+
+  Window_SetFocus(appname, windowtitle);
+
+  InpSim_Mouse_Click(posx, posy);
   Sleep(3000);
 
   /*
