@@ -162,18 +162,22 @@
 #include "APPAlerts.h"
 
 #ifdef WINDOWS
-  #include "MainProcWINDOWS.h" 
+
   #include "XWINDOWSAccessControlLists.h"
-  #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"  
+  #include "XWINDOWSDesktopManager.h"
+  #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"    
+  #include "MainProcWINDOWS.h" 
   #include "DevTestsConsole_WindowsPlatform.h"
 #endif
 
 
 #ifdef LINUX
+
   #include "DevTestsConsole_LinuxPlatform.h"
   #include "INPLINUXDeviceID.h"
   #include "DIOLINUXDBus.h"
   #include "DIOLINUXNetworkManager.h"
+
 #endif
 
 
@@ -905,14 +909,15 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
+                                                      { true   , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
-                                                      { true   , Test_Scheduler                  , __L("Test Scheduler")                  },
+                                                      { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       
                                                       #ifdef WINDOWS
-                                                      { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                              
+                                                      { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
+                                                      { false  , Test_WindowsDesktopManager      , __L("Test Windows Desktop Manager")    },                                              
                                                       #endif
 
                                                       #ifdef LINUX
@@ -4055,7 +4060,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = -1;
+	int                  indexnetinterface = 0;
 
 	diopcap = GEN_DIOFACTORY.CreatePCap();
   if(!diopcap)  return false;
@@ -4385,6 +4390,36 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
 
   return status;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_WindowsDesktopManager(DEVTESTSCONSOLE* tests)
+* @brief      Test_WindowsDesktopManager
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_WindowsDesktopManager(DEVTESTSCONSOLE* tests)
+{
+  XWINDOWSDESKTOPMANAGER desktopmanager;
+  bool                   status = false;
+
+  if(desktopmanager.GetDesktopMonitors())
+    {
+      RECT* rect = desktopmanager.GetDesktopMonitors()->GetCombinedRect();   
+      if(rect)
+        {
+          status = true;    
+        }
+    }
+
+  return status;
+}
+
 
 #endif
 
