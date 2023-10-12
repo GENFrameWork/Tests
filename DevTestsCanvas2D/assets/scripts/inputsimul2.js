@@ -22,7 +22,7 @@ function main()
   Window_Resize(appname, windowtitle, 700, 250);
   Window_SetFocus(appname, windowtitle);
 
-  Window_SetBmpFindCFG(2, 10);
+  Window_SetBmpFindCFG(0, 10);
 
   var posx = Window_GetPosX(appname, windowtitle, maskbitmapname, maskbitmapname2);
   var posy = Window_GetPosY(appname, windowtitle, maskbitmapname, maskbitmapname2);
