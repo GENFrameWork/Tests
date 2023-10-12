@@ -147,8 +147,8 @@
 
 
 #ifdef SND_ACTIVE
-#include "SNDFactory.h"
-#include "SNDElement.h"
+//#include "SNDFactory.h"
+//#include "SNDElement.h"
 #endif
 
 #include "INPFactory.h"
@@ -892,7 +892,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -909,7 +909,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { true   , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
+                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
@@ -3093,42 +3093,61 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 {
   bool status = false;
 
+
+  /*
   #ifdef SND_ACTIVE
   
-  /*
-  for(int c=0; c<100; c++)
+  for(int c=50; c<92; c++)
    {
      if(!GEN_XSYSTEM.Sound_SetLevel(c)) return false;
       
-     GEN_XSLEEP.Seconds(1);
+     GEN_XSLEEP.MilliSeconds(100);
    }
 
   GEN_SNDFACTORY.Beep(440, 1.5);
   GEN_SNDFACTORY.Beep(660, 0.5);
 
   status = true;
-  */
+  
 
-
-  SNDELEMENT* soundhdl = NULL;
   XPATH       xpath;
+  SNDELEMENT* soundhdl1 = NULL;  
+  SNDELEMENT* soundhdl2 = NULL;
+  
   
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
     
-  soundhdl = GEN_SNDFACTORY.Element_Add(xpath);
-  if(!soundhdl) return false;  
+  soundhdl1 = GEN_SNDFACTORY.Element_Add(xpath);
+  if(!soundhdl1) return false;  
 
-  SNDINSTANCE* sndinstance = GEN_SNDFACTORY.PlaySound(soundhdl);
-  status = sndinstance?true:false;
+  SNDINSTANCE* sndinstance1 = GEN_SNDFACTORY.PlaySound(soundhdl1);
+  status = sndinstance1?true:false;
   
-  GEN_XSLEEP.MilliSeconds((int)(soundhdl->GetDuration()*1000));
+  GEN_XSLEEP.MilliSeconds((int)(soundhdl1->GetDuration()*1000));
   
-  GEN_SNDFACTORY.Element_Del(soundhdl);
+  GEN_SNDFACTORY.Element_Del(soundhdl1);
    
 
+  
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
+  xpath.Slash_Add();
+  xpath.Add(__L("imperialmarch60.wav"));
+    
+  soundhdl2 = GEN_SNDFACTORY.Element_Add(xpath);
+  if(!soundhdl2) return false;  
+
+  SNDINSTANCE* sndinstance2 = GEN_SNDFACTORY.PlaySound(soundhdl2);
+  status = sndinstance2?true:false;
+  
+  GEN_XSLEEP.MilliSeconds((int)(soundhdl2->GetDuration()*1000));
+  
+  GEN_SNDFACTORY.Element_Del(soundhdl2);
+
+
   #endif
+  */
 
   return status;
 }
