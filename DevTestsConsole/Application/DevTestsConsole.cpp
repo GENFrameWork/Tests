@@ -147,9 +147,11 @@
 
 
 #ifdef SND_ACTIVE
-//#include "SNDFactory.h"
-//#include "SNDElement.h"
+
+  #include "SNDFactory.h"
+
 #endif
+
 
 #include "INPFactory.h"
 #include "INPSimulate.h"
@@ -168,6 +170,7 @@
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"    
   #include "MainProcWINDOWS.h" 
   #include "DevTestsConsole_WindowsPlatform.h"
+
 #endif
 
 
@@ -3092,29 +3095,27 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 {
   bool status = false;
-
-
-  /*
+  
   #ifdef SND_ACTIVE
   
-  for(int c=50; c<92; c++)
+  /*
+  for(int c=50; c<99; c++)
    {
      if(!GEN_XSYSTEM.Sound_SetLevel(c)) return false;
       
      GEN_XSLEEP.MilliSeconds(100);
    }
+  */
 
-  GEN_SNDFACTORY.Beep(440, 1.5);
-  GEN_SNDFACTORY.Beep(660, 0.5);
-
+  GEN_SNDFACTORY.Sound_Note(440, 1.5);
+  GEN_SNDFACTORY.Sound_Note(660, 0.5);
+  
   status = true;
   
-
   XPATH       xpath;
   SNDELEMENT* soundhdl1 = NULL;  
   SNDELEMENT* soundhdl2 = NULL;
-  
-  
+    
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
@@ -3122,7 +3123,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   soundhdl1 = GEN_SNDFACTORY.Element_Add(xpath);
   if(!soundhdl1) return false;  
 
-  SNDINSTANCE* sndinstance1 = GEN_SNDFACTORY.PlaySound(soundhdl1);
+  SNDINSTANCE* sndinstance1 = GEN_SNDFACTORY.Sound_Play(soundhdl1);
   status = sndinstance1?true:false;
   
   GEN_XSLEEP.MilliSeconds((int)(soundhdl1->GetDuration()*1000));
@@ -3130,7 +3131,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_SNDFACTORY.Element_Del(soundhdl1);
    
 
-  
+  /*
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("imperialmarch60.wav"));
@@ -3144,10 +3145,10 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.MilliSeconds((int)(soundhdl2->GetDuration()*1000));
   
   GEN_SNDFACTORY.Element_Del(soundhdl2);
-
+  */
 
   #endif
-  */
+  
 
   return status;
 }
