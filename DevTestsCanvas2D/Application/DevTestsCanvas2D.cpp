@@ -541,8 +541,7 @@ bool DEVTESTSCANVAS2D::UpdateInput()
                                                           }
                                                           break; 
 
-                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Start Script..."));
-                                                          Do_Tests();
+                    case DEVTESTSCANVAS2D_BUTTON_SPACE  : Do_Tests();
                                                           break;
                 }
             }
