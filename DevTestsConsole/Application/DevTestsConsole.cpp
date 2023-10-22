@@ -3098,15 +3098,14 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   
   #ifdef SND_ACTIVE
   
-  /*
+  
   for(int c=50; c<99; c++)
    {
      if(!GEN_XSYSTEM.Sound_SetLevel(c)) return false;
       
      GEN_XSLEEP.MilliSeconds(100);
    }
-  */
-
+  
   GEN_SNDFACTORY.Sound_Note(440, 1.5);
   GEN_SNDFACTORY.Sound_Note(660, 0.5);
   
