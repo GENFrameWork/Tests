@@ -158,7 +158,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
                                     DEVTESTSCONSOLE                     ();
     virtual                        ~DEVTESTSCONSOLE                     ();
 
-    bool                            InitFSMachine                       ();
+    bool                            IniFSMachine                        ();
 
     bool                            AppProc_PlatformIni                 ();
     bool                            AppProc_Ini                         ();
