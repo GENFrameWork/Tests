@@ -828,6 +828,64 @@ bool DEVTESTSCONSOLE::Show_AppStatus()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Show_PlaySound()
+* @brief      Show_PlaySound
+* @ingroup    APPLICATION
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Show_PlaySound()
+{
+  for(XDWORD c=0; c<GEN_SNDFACTORY.GetItems()->GetSize(); c++)
+    {
+      SNDITEM* item = GEN_SNDFACTORY.GetItems()->Get(c);
+      if(item)
+        {
+          XSTRING typestr;  
+          XSTRING statusstr;
+          XSTRING resorcestr;
+         
+          item->GetType(typestr);
+          item->GetStatus(statusstr);
+
+          switch(item->GetType())
+            {
+              case SNDITEM_TYPE_UNKNOWN : resorcestr.Format(__L("N/A"));    
+                                          break;
+
+              case SNDITEM_TYPE_FILE    : { SNDFILE* sndfile = item->GetSoundFile();
+                                            if(sndfile)
+                                              {    
+                                                XPATH path;
+                                                    
+                                                path = sndfile->GetPath()->Get();
+                                                path.GetNamefileExt(resorcestr);  
+                                              }
+                                          }
+                                          break;
+
+              case SNDITEM_TYPE_NOTE    : { SNDNOTE* sndnote = item->GetSoundNote();
+                                            if(sndnote)
+                                              {    
+                                                resorcestr.Format(__L("Frecuency: %d (Hz) Duration: %d (msec)"), sndnote->GetFrequency(), sndnote->GetDuration());    
+                                              }
+                                          }
+                                          break;
+            }
+                
+          console->Printf(__L("   %02d %-10s %-10s [%s]\n"), c+1, typestr.Get(), statusstr.Get(), resorcestr.Get());    
+        }       
+    }
+
+  console->Printf(__L("\n"));
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Show_AllStatus()
 * @brief      Show_AllStatus
@@ -3108,11 +3166,12 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
     
   status = true;
 
-
+  
   XPATH       xpath;
   SNDPLAYCFG  playCFG;
-  SNDITEM*    item = NULL;
-
+  SNDITEM*    item[] = { NULL, NULL, NULL };
+  
+  /*
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
@@ -3122,67 +3181,47 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
     {      
       GEN_SNDFACTORY.Sound_Play(item, &playCFG);    
     }
+  */
 
-  item = GEN_SNDFACTORY.CreateItem(1000, 3000);
-  if(item)
-    {    
-      GEN_SNDFACTORY.Sound_Play(item, &playCFG);      
-    }
-    
-   while(GEN_SNDFACTORY.Sound_IsAnyActive() && !tests->console->KBHit())
+  item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
+  item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
+  item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000);
+  
+
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG);      
+
+  while(GEN_SNDFACTORY.Sound_IsAnyActive())
     {
-      tests->Show_AllStatus();
+      GEN_XSLEEP.MilliSeconds(10);
+    }
 
-      for(XDWORD c=0; c<GEN_SNDFACTORY.GetItems()->GetSize(); c++)
+  for(XDWORD c=0; c<sizeof(item)/sizeof(SNDITEM*); c++)
+    {
+      GEN_SNDFACTORY.Sound_Play(item[c], &playCFG);      
+    }
+
+  bool isplay = true;
+     
+  do{ tests->Show_AllStatus();
+      tests->Show_PlaySound();
+
+      isplay = GEN_SNDFACTORY.Sound_IsAnyActive();
+      if(isplay)
         {
-          item = GEN_SNDFACTORY.GetItems()->Get(c);
-          if(item)
-            {
-              XSTRING typestr;  
-              XSTRING statusstr;
-              XSTRING resorcestr;
-         
-              item->GetType(typestr);
-              item->GetStatus(statusstr);
-
-              switch(item->GetType())
-                {
-                  case SNDITEM_TYPE_UNKNOWN : resorcestr.Format(__L("N/A"));    
-                                              break;
-
-                  case SNDITEM_TYPE_FILE    : { SNDFILE* sndfile = item->GetSoundFile();
-                                                if(sndfile)
-                                                  {    
-                                                    XPATH path;
-                                                    
-                                                    path = sndfile->GetPath()->Get();
-                                                    path.GetNamefileExt(resorcestr);  
-                                                  }
-                                              }
-                                              break;
-
-                  case SNDITEM_TYPE_NOTE    : { SNDNOTE* sndnote = item->GetSoundNote();
-                                                if(sndnote)
-                                                  {    
-                                                    resorcestr.Format(__L("Frecuency: %d (Hz) Duration: %d (msec)"), sndnote->GetFrequency(), sndnote->GetDuration());    
-                                                  }
-                                              }
-                                              break;
-                }
-                
-              tests->console->Printf(__L("   %02d %-10s %-10s [%s]\n"), c, typestr.Get(), statusstr.Get(), resorcestr.Get());    
-            }
+          GEN_XSLEEP.MilliSeconds(500);
         }
 
-      tests->console->Printf(__L("\n"));
+    } while(isplay);
 
-      GEN_XSLEEP.Seconds(1);     
-    }
+  tests->Show_AllStatus();
+  tests->Show_PlaySound();
 
   GEN_SNDFACTORY.DeleteAllItems();
- 
+  
   #endif
   
+
+  //GEN_SNDFACTORY.Sound_Note(640.0f, 3.0f);
 
   return status;
 }

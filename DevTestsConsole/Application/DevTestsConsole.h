@@ -172,6 +172,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     bool                            Show_Line                           (XSTRING& string, XSTRING& string2, int tab = 3, bool linefeed = true);
     bool                            Show_Header                         (bool separator);
     bool                            Show_AppStatus                      ();
+    bool                            Show_PlaySound                      ();
     bool                            Show_AllStatus                      ();
 
     bool                            Do_Tests                            ();
