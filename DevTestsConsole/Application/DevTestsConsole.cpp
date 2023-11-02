@@ -838,6 +838,13 @@ bool DEVTESTSCONSOLE::Show_AppStatus()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_PlaySound()
 {
+  XTIMER* timer = NULL;
+  timer = GEN_XFACTORY.CreateTimer();
+  if(!timer) 
+    {
+      return false;
+    }
+
   for(XDWORD c=0; c<GEN_SNDFACTORY.GetItems()->GetSize(); c++)
     {
       SNDITEM* item = GEN_SNDFACTORY.GetItems()->Get(c);
@@ -845,41 +852,35 @@ bool DEVTESTSCONSOLE::Show_PlaySound()
         {
           XSTRING typestr;  
           XSTRING statusstr;
+          XSTRING ntimesstr;
+          XSTRING measure;
           XSTRING resorcestr;
-         
+                        
           item->GetType(typestr);
           item->GetStatus(statusstr);
 
-          switch(item->GetType())
+          if(item->GetNTimesToPlay() != SNDFACTORY_INLOOP)
             {
-              case SNDITEM_TYPE_UNKNOWN : resorcestr.Format(__L("N/A"));    
-                                          break;
-
-              case SNDITEM_TYPE_FILE    : { SNDFILE* sndfile = item->GetSoundFile();
-                                            if(sndfile)
-                                              {    
-                                                XPATH path;
-                                                    
-                                                path = sndfile->GetPath()->Get();
-                                                path.GetNamefileExt(resorcestr);  
-                                              }
-                                          }
-                                          break;
-
-              case SNDITEM_TYPE_NOTE    : { SNDNOTE* sndnote = item->GetSoundNote();
-                                            if(sndnote)
-                                              {    
-                                                resorcestr.Format(__L("Frecuency: %d (Hz) Duration: %d (msec)"), sndnote->GetFrequency(), sndnote->GetDuration());    
-                                              }
-                                          }
-                                          break;
+              ntimesstr.Format(__L("ntimes [%d of %d]"), (item->GetNTimesToPlay() - item->GetCounterPlay()), item->GetNTimesToPlay());
             }
-                
-          console->Printf(__L("   %02d %-10s %-10s [%s]\n"), c+1, typestr.Get(), statusstr.Get(), resorcestr.Get());    
+           else
+            {
+              ntimesstr.Format(__L("ntimes [infinite]"));
+            }   
+
+          timer->Reset();
+          timer->AddMilliSeconds(item->GetPlayingTime());
+          timer->GetMeasureString(measure);
+
+          resorcestr = item->GetID()->Get();       
+
+          console->Printf(__L("   %02d %-10s %-10s %s %s [%s]\n"), c+1, typestr.Get(), statusstr.Get(), ntimesstr.Get(), measure.Get(), resorcestr.Get());                                       
         }       
     }
 
   console->Printf(__L("\n"));
+
+  GEN_XFACTORY.DeleteTimer(timer);
 
   return true;
 }
@@ -3165,13 +3166,13 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.MilliSeconds(100);
     
   status = true;
-
   
-  XPATH       xpath;
   SNDPLAYCFG  playCFG;
   SNDITEM*    item[] = { NULL, NULL, NULL };
   
   /*
+  XPATH xpath;
+
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
@@ -3185,43 +3186,37 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
   item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
-  item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000);
+  item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000); 
+
+  /*
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP);   
+  GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
+
+  GEN_SNDFACTORY.Sound_Pause(item[0]);
   
+  GEN_XSLEEP.Seconds(3); 
 
-  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG);      
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP); 
+  GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
 
-  while(GEN_SNDFACTORY.Sound_IsAnyActive())
-    {
-      GEN_XSLEEP.MilliSeconds(10);
-    }
-
+  GEN_SNDFACTORY.Sound_Stop(item[0]);
+  */
+  
+  /*
   for(XDWORD c=0; c<sizeof(item)/sizeof(SNDITEM*); c++)
     {
       GEN_SNDFACTORY.Sound_Play(item[c], &playCFG);      
     }
+  */
 
-  bool isplay = true;
-     
-  do{ tests->Show_AllStatus();
-      tests->Show_PlaySound();
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG); 
 
-      isplay = GEN_SNDFACTORY.Sound_IsAnyActive();
-      if(isplay)
-        {
-          GEN_XSLEEP.MilliSeconds(500);
-        }
-
-    } while(isplay);
-
-  tests->Show_AllStatus();
-  tests->Show_PlaySound();
-
+  GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
+    
   GEN_SNDFACTORY.DeleteAllItems();
   
   #endif
   
-
-  //GEN_SNDFACTORY.Sound_Note(640.0f, 3.0f);
 
   return status;
 }
@@ -4901,6 +4896,38 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
   console->Printf(__L("%-12s : %s\n"), leyend, result.Get());
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
+* @brief      Test_WaitSound
+* @ingroup    APPLICATION
+* 
+* @param[in]  item : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
+{
+  devtestsconsole->Show_AllStatus();
+  devtestsconsole->Show_PlaySound();
+
+  for(int c=0; c<10; c++)
+    {     
+      if(devtestsconsole->console->KBHit()) 
+        {
+          devtestsconsole->console->GetChar();
+
+          return false;
+        }
+
+      GEN_XSLEEP.MilliSeconds(5);
+    }
+
+   return true;
 }
 
 

@@ -147,6 +147,7 @@ class XSCHEDULER;
 class XSCHEDULER_XEVENT;
 class HASH;
 class DIOWEBCLIENT_XEVENT;
+class SNDITEM;
 class APPCHECKRESOURCESHARDWARE;
 class APPINTERNETSERVICES;
 class APPALERTS;
@@ -253,6 +254,8 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
   private:
 
     bool                            Test_Hash                           (HASH* HASH, XBUFFER& input, XCHAR* leyend);
+
+    static bool                     Test_WaitSound                      (SNDITEM* item);   
 
     void                            HandleEvent_Scheduler               (XSCHEDULER_XEVENT* event);
     void                            HandleEvent_WebClient               (DIOWEBCLIENT_XEVENT* event);
