@@ -122,13 +122,10 @@
 #include "DIOStreamWifiRemoteEnumDevices.h"
 #include "DIOWakeOnLAN.h"
 #include "DIONotificationsManager.h"
-
 #include "DIOWebClient_XEvent.h"
 #include "DIOWebClient.h"
-
 #include "DIOCheckTCPIPConnections.h"
 #include "DIOCheckInternetConnection.h"
-
 #include "DIOScraperWeb.h"
 #include "DIOScraperWebCache.h"
 #include "DIOScraperWebGeolocationIP.h"
@@ -145,18 +142,12 @@
 #include "DIOLedNeoPixelWS2812B.h"
 #include "DIOAlerts.h"
 
-
-#ifdef SND_ACTIVE
-
-  #include "SNDItem.h"
-  #include "SNDFactory.h"
-
-#endif
-
+#include "SNDFactory_XEvent.h"
+#include "SNDItem.h"
+#include "SNDFactory.h"
 
 #include "INPFactory.h"
 #include "INPSimulate.h"
-
 
 #include "APPLog.h"
 #include "APPCheckResourcesHardware_XEvent.h"
@@ -450,6 +441,15 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
   if(!status) return false;
 
   //--------------------------------------------------------------------------------------
+  
+  SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_INI   , &GEN_SNDFACTORY.GetInstance());
+  SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PLAY  , &GEN_SNDFACTORY.GetInstance());
+  SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PAUSE , &GEN_SNDFACTORY.GetInstance());
+  SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_STOP  , &GEN_SNDFACTORY.GetInstance());
+  SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_END   , &GEN_SNDFACTORY.GetInstance());
+
+  //--------------------------------------------------------------------------------------
+
 
   SetEvent(DEVTESTSCONSOLE_XFSMEVENT_INI);
 
@@ -573,6 +573,14 @@ bool DEVTESTSCONSOLE::AppProc_End()
   //--------------------------------------------------------------------------------------
 
   SetEvent(DEVTESTSCONSOLE_XFSMEVENT_END);
+
+  //--------------------------------------------------------------------------------------
+  
+  UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_INI   , &GEN_SNDFACTORY.GetInstance());
+  UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PLAY  , &GEN_SNDFACTORY.GetInstance());
+  UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PAUSE , &GEN_SNDFACTORY.GetInstance());
+  UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_STOP  , &GEN_SNDFACTORY.GetInstance());
+  UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_END   , &GEN_SNDFACTORY.GetInstance());
 
   //--------------------------------------------------------------------------------------
 
@@ -3155,8 +3163,6 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 {
   bool status = false;
-  
-  #ifdef SND_ACTIVE
    
   if(!GEN_XSYSTEM.Sound_SetLevel(90)) 
     {
@@ -3166,58 +3172,73 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.MilliSeconds(100);
     
   status = true;
-  
+ 
+  //-------------------------------------------------------------------------
+ 
   SNDPLAYCFG  playCFG;
-  SNDITEM*    item[] = { NULL, NULL, NULL };
-  
-  /*
-  XPATH xpath;
-
-  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
-  xpath.Slash_Add();
-  xpath.Add(__L("alarm.ogg"));
-
-  item = GEN_SNDFACTORY.CreateItem(xpath);
-  if(item)
-    {      
-      GEN_SNDFACTORY.Sound_Play(item, &playCFG);    
-    }
-  */
-
+  SNDITEM*    item[] = { NULL, NULL, NULL }; 
+   
   item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
   item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
   item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000); 
 
-  /*
+  
   GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP);   
   GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
 
   GEN_SNDFACTORY.Sound_Pause(item[0]);
-  
+
+  tests->Show_AllStatus();
+  tests->Show_PlaySound();  
+
   GEN_XSLEEP.Seconds(3); 
 
   GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP); 
   GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
 
   GEN_SNDFACTORY.Sound_Stop(item[0]);
-  */
   
-  /*
+  tests->Show_AllStatus();
+  tests->Show_PlaySound();  
+    
   for(XDWORD c=0; c<sizeof(item)/sizeof(SNDITEM*); c++)
     {
       GEN_SNDFACTORY.Sound_Play(item[c], &playCFG);      
     }
-  */
+
+  GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
+  
+  
+  GEN_SNDFACTORY.MasterVolume_Set(50);
+
+  playCFG.SetVolume(100);
 
   GEN_SNDFACTORY.Sound_Play(item[0], &playCFG); 
 
+  int volume = GEN_SNDFACTORY.Sound_GetVolume(item[0]);
+  
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
-    
+        
+  GEN_SNDFACTORY.DeleteAllItems();
+
+  //-------------------------------------------------------------------------
+  
+  XPATH xpath;
+
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
+  xpath.Slash_Add();
+  xpath.Add(__L("alarm.ogg"));
+
+  item[0] = GEN_SNDFACTORY.CreateItem(xpath);
+        
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, 3);    
+  
+  GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
+
   GEN_SNDFACTORY.DeleteAllItems();
   
-  #endif
+  //-------------------------------------------------------------------------
   
-
   return status;
 }
 
@@ -4914,19 +4935,25 @@ bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
   devtestsconsole->Show_AllStatus();
   devtestsconsole->Show_PlaySound();
-
+    
   for(int c=0; c<10; c++)
-    {     
-      if(devtestsconsole->console->KBHit()) 
-        {
-          devtestsconsole->console->GetChar();
+    { 
+      if(item)
+        {             
+          if(item->GetNTimesToPlay() == SNDFACTORY_UNDEFINED)
+            {
+              if(devtestsconsole->console->KBHit()) 
+                {
+                  devtestsconsole->console->GetChar();
 
-          return false;
+                  return false;
+                }
+            }
         }
 
       GEN_XSLEEP.MilliSeconds(5);
     }
-
+    
    return true;
 }
 
@@ -4954,6 +4981,43 @@ void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
                                           }
                                           break;
     } 
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
+* @brief      Handle Event for the observer manager of this class
+* @note       INTERNAL
+* @ingroup    APPLICATION
+* 
+* @param[in]  event : 
+* 
+* @return     void : does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
+{  
+  switch(event->GetEventType())
+    {
+      case SNDFACTORY_XEVENT_TYPE_SOUND_INI     : 
+      case SNDFACTORY_XEVENT_TYPE_SOUND_PLAY    : 
+      case SNDFACTORY_XEVENT_TYPE_SOUND_PAUSE   : 
+      case SNDFACTORY_XEVENT_TYPE_SOUND_STOP    : 
+      case SNDFACTORY_XEVENT_TYPE_SOUND_END     : { XSTRING  typestr;
+                                                    XSTRING  statusstr;
+                                                    XSTRING* ID;  
+                                                    
+                                                    event->GetItem()->GetType(typestr);
+                                                    event->GetItem()->GetStatus(statusstr);
+                                                    ID = event->GetItem()->GetID();      
+
+                                                    XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Sound] [%08X] %s (%s) -> %s"), event->GetItem(), typestr.Get(), ID->Get(), statusstr.Get());    
+                                                  } 
+                                                  break;
+    } 
+  
+
 }
 
 
@@ -5029,6 +5093,13 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
                                             if(!event) return;
 
                                             HandleEvent_Scheduler(event);
+                                          }
+                                          break;
+
+      case XEVENT_TYPE_SOUND           :  { SNDFACTORY_XEVENT* event = (SNDFACTORY_XEVENT*)xevent;
+                                            if(!event) return;
+
+                                            HandleEvent_Sound(event);
                                           }
                                           break;
 
