@@ -106,7 +106,7 @@ option(INP_SIMULATE_FEATURE                                "Inputs Simulate"    
 option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
 
 option(SND_FEATURE                                         "Sound"                                                     true )
-#option(SND_FILE_WAV_FEATURE                                "Sound WAV file"                                            true )
+option(SND_FILE_WAV_FEATURE                                "Sound WAV file"                                            true )
 option(SND_FILE_OGG_FEATURE                                "Sound OGG file"                                            true )
 
 option(APP_FEATURE                                         "Application modules"                                       true )

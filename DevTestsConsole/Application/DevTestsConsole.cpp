@@ -3161,8 +3161,11 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
-{
-  bool status = false;
+{  
+  SNDPLAYCFG  playCFG;
+  SNDITEM*    item[] = { NULL, NULL, NULL }; 
+  XPATH       xpath;
+  bool        status = false;
    
   if(!GEN_XSYSTEM.Sound_SetLevel(90)) 
     {
@@ -3172,12 +3175,9 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.MilliSeconds(100);
     
   status = true;
- 
+
   //-------------------------------------------------------------------------
- 
-  SNDPLAYCFG  playCFG;
-  SNDITEM*    item[] = { NULL, NULL, NULL }; 
-   
+       
   item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
   item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
   item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000); 
@@ -3220,11 +3220,10 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
         
   GEN_SNDFACTORY.DeleteAllItems();
-
+    
   //-------------------------------------------------------------------------
   
-  XPATH xpath;
-
+  
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
@@ -3239,6 +3238,22 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   
   //-------------------------------------------------------------------------
   
+  
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SOUNDS, xpath);
+  xpath.Slash_Add();
+  xpath.Add(__L("imperialmarch60.wav"));
+
+  item[0] = GEN_SNDFACTORY.CreateItem(xpath);
+        
+  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG);    
+  
+  GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
+
+  GEN_SNDFACTORY.DeleteAllItems();
+  
+
+  //-------------------------------------------------------------------------
+
   return status;
 }
 
