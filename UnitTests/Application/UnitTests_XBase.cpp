@@ -31,13 +31,13 @@
 
 #include "GEN_Defines.h"
 
-#include "UnitTests_XBase.h"
-
 #pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
+
+#include "UnitTests_XBase.h"
 
 #ifdef GOOGLETEST_ACTIVE      
 #include "gtest/gtest.h"
@@ -52,7 +52,6 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 #pragma region GENERAL_VARIABLE
-
 
 #pragma endregion
 

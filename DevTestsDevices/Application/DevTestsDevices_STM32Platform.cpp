@@ -1,38 +1,43 @@
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* 
 * @file       DevTestsDevices_STM32Platform.cpp
-*
-* @class      DevTestsDevices_STM32PLATFORM
-* @brief      Developed Tests Devices I/O  UART / USB / I2C / GPIO STM32 Platform functions
+* 
+* @class      DEVTESTSDEVICES_STM32PLATFORM
+* @brief      Developed Tests Devices I/O  UART / USB / I2C / GPIO  STM32 Platform functions
 * @ingroup    TESTS
-*
-* @copyright  GEN Group. All right reserved.
-*
+* 
+* @copyright  GEN Group. All rights reserved.
+* 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-*
+* 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-*
+* 
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 
-
-/*---- PRECOMPILATION CONTROL ----------------------------------------------------------------------------------------*/
+/*---- PRECOMPILATION INCLUDES ----------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_INCLUDES
 
 #include "GEN_Defines.h"
 
+#pragma endregion
+
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+#pragma region INCLUDES
+
+#include "DevTestsDevices_STM32Platform.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,16 +57,21 @@
 #include "main.h"
 #include "DevTestsDevices.h"
 
-#include "DevTestsDevices_STM32Platform.h"
-
 #include "XMemory_Control.h"
 
+#pragma endregion
+
+
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+#pragma region GENERAL_VARIABLE
 
 XSTM32_FATSD_SPI  FATSD_SPI;
 
-/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+#pragma endregion
 
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -122,12 +132,10 @@ int STM32_Platform_Ini(void)
   GEN_DIOGPIO.GPIOEntry_CreateByPin(DevTestsDevices_GPIOENTRYID_SPI_DISPLAY_DC         , GPIO_PIN_2  , DIOGPIO_PINSGROUP_A);
   GEN_DIOGPIO.GPIOEntry_CreateByPin(DevTestsDevices_GPIOENTRYID_SPI_DISPLAY_BACKLIGHT  , GPIO_PIN_3  , DIOGPIO_PINSGROUP_A);
   
-  //-------------------------------------------------------------------------------------------------------------------
-   
+  //-------------------------------------------------------------------------------------------------------------------  
   
   return 1;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -152,7 +160,6 @@ void STM32_Platform_NonPreemptiveDoTasks(void)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void* STM32_Platform_GetI2C1(void)
@@ -170,7 +177,6 @@ void* STM32_Platform_GetI2C1(void)
   if(!DIOSTM32STREAMI2C::ports[0]) return NULL; 
   return DIOSTM32STREAMI2C::ports[0]->GetHandleI2C();
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -192,7 +198,6 @@ void* STM32_Platform_GetI2C3(void)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void* STM32_Platform_GetSPI1(void)
@@ -210,7 +215,6 @@ void* STM32_Platform_GetSPI1(void)
   if(!DIOSTM32STREAMSPI::ports[0]) return NULL; 
   return DIOSTM32STREAMSPI::ports[0]->GetHandleSPI();
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -232,8 +236,6 @@ void* STM32_Platform_GetSPI2(void)
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         DSTATUS STM32_SD_Disk_Initialize(BYTE drive)
@@ -252,7 +254,6 @@ DSTATUS STM32_SD_Disk_Initialize(BYTE drive)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         DSTATUS SD_Disk_Status(BYTE drive)
@@ -269,7 +270,6 @@ DSTATUS STM32_SD_Disk_Status(BYTE drive)
 {
   return FATSD_SPI.Disk_Status((XBYTE)drive);
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -293,7 +293,6 @@ DRESULT STM32_SD_Disk_Read(BYTE pdrive, BYTE* buffer, DWORD sector, UINT count)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         DRESULT SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT count)
@@ -315,8 +314,6 @@ DRESULT STM32_SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT 
 }
 
 
-
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         DRESULT STM32_SD_Disk_IOTCL(BYTE drive, BYTE ctrl, void* buffer)
@@ -335,7 +332,6 @@ DRESULT STM32_SD_Disk_IOTCL(BYTE drive, BYTE ctrl, void* buffer)
 {
   return FATSD_SPI.Disk_IOTCL((XBYTE)drive, (XBYTE)ctrl, buffer);
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -369,7 +365,6 @@ void STM32_Platform_Trace(int iserror, const char* mask, ...)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void STM32_Heap_Usage()
@@ -394,7 +389,6 @@ void STM32_Heap_Usage()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int STM32_Platform_End(void)
@@ -411,7 +405,6 @@ int STM32_Platform_End(void)
 {
   return 1;
 }
-
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -437,6 +430,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin)
 }
 
 
-
+#pragma endregion
 
 

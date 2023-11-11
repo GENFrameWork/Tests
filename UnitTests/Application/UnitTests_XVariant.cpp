@@ -1,38 +1,43 @@
 ﻿/**-------------------------------------------------------------------------------------------------------------------
-*
-* @file       UnitTest_XVariant.cpp
-*
-* @class      
-* @brief      Unit Tests for XVariant class (GEN FrameWork)
+* 
+* @file       UnitTests_XVariant.cpp
+* 
+* @class      UNITTESTS_XVARIANT
+* @brief      Unit Tests for XVariant class
 * @ingroup    TESTS
-*
-* @copyright  GEN Group. All right reserved.
-*
+* 
+* @copyright  GEN Group. All rights reserved.
+* 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-*
+* 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-*
+* 
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 
-
-/*---- PRECOMPILATION CONTROL ----------------------------------------------------------------------------------------*/
+/*---- PRECOMPILATION INCLUDES ----------------------------------------------------------------------------------------*/
+#pragma region PRECOMPILATION_INCLUDES
 
 #include "GEN_Defines.h"
 
+#pragma endregion
+
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+#pragma region INCLUDES
+
+#include "UnitTests_XVariant.h"
 
 #include "string.h"
 
@@ -43,17 +48,13 @@
 #include "XBuffer.h"
 #include "XVariant.h"
 
-#include "UnitTests_XVariant.h"
-
 #include "XMemory_Control.h"
 
-
-#ifdef GOOGLETEST_ACTIVE      
-namespace TEST_XVARIANT
-{
+#pragma endregion
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+#pragma region GENERAL_VARIABLE
 
 #define UNITTEST_XVARIANT_CONSTRUCTOR(type, value)            { XVARIANT variant((type)value); \
                                                                 EXPECT_EQ((type)value, (type)variant); \
@@ -69,7 +70,17 @@ namespace TEST_XVARIANT
                                                                 EXPECT_EQ((type)value, (type)value2); \
                                                               }
 
+#pragma endregion
+
+
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+#pragma region CLASS_MEMBERS
+
+
+
+#ifdef GOOGLETEST_ACTIVE      
+namespace TEST_XVARIANT
+{
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -662,4 +673,10 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, StringConversionBuffer)
 }
 
 }
+
+
 #endif
+
+
+#pragma endregion
+
