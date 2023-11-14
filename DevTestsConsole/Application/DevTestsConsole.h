@@ -202,7 +202,8 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_WebClient                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_ScraperWeb                     (DEVTESTSCONSOLE* tests);
     static bool                     Test_MPSSE                          (DEVTESTSCONSOLE* tests);
-    static bool                     Test_DNSProtocol                    (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DNSResolver                    (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DNSProtocolMitMServer          (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOCheckTCPIPConnections       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WifiEnum                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);

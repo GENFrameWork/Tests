@@ -88,7 +88,8 @@ option(DIO_BUSPIRATE_FEATURE                               "Data Input/Output Bu
 option(DIO_LEDNEOPIXELWS2812B_FEATURE                      "Data Input/Output Led Neopixel WS2812B"                    true ) 
 option(DIO_PROTOCOL_CLI_BUS_FEATURE                        "Data Input/Output Protocol in CLI Bus"                     true )
 option(DIO_PCAP_FEATURE                                    "Data Input/Output Cap"                                     true )
-option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true )  
+option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true ) 
+option(DIO_DNSPROTOCOL_MITM_SERVER                         "DNS Protocol Man in the Middle Server"                     true )
 
 option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )  
 option(DIO_STREAMSPI_GPIO_MCP23S17_FEATURE                 "Data SPI GPIO MCP23S17"                                    true )
@@ -121,7 +122,7 @@ option(APP_CFG_LOG_FEATURE                                 "Application CFG LOG"
 option(APP_CFG_INTERNETSERVICES_FEATURE                    "Application CFG Internet services"                         true )      
 option(APP_CFG_DYNDNSMANAGER_FEATURE                       "Application CFG DynDNS Manager"                            true )
 option(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE              "Application CFG Check Resorces HW"                         true )  
-option(APP_CFG_DNSRESOLVED_FEATURE                         "Application CFG DNS Resolved"                              true )  
+option(APP_CFG_DNSRESOLVER_FEATURE                         "Application CFG DNS "                              true )  
 option(APP_CFG_ALERTS_FEATURE                              "Application CFG Alerts"                                    true )  
 
 

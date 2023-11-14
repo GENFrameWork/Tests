@@ -117,8 +117,9 @@
 #include "DIOStreamTLS.h"
 #include "DIOGPIO.h"
 #include "DIOMPSSE.h"
-#include "DIODNSProtocol.h"
-#include "DIODNSResolved.h"
+#include "DIODNSProtocol_Client.h"
+#include "DIODNSResolver.h"
+#include "DIODNSProtocol_MitM_Server.h"
 #include "DIOStreamWifiRemoteEnumDevices.h"
 #include "DIOWakeOnLAN.h"
 #include "DIONotificationsManager.h"
@@ -948,7 +949,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_WebClient                  , __L("Test WebClient")                  },
                                                       { false  , Test_ScraperWeb                 , __L("Test Scraper Web")                },
                                                       { false  , Test_MPSSE                      , __L("Test MPSSE")                      },
-                                                      { false  , Test_DNSProtocol                , __L("Test DNS Protocol")               },
+                                                      { false  , Test_DNSResolver                , __L("Test DNS Resolver")               },
+                                                      { true   , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
@@ -963,7 +965,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -2337,22 +2339,21 @@ bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DEVTESTSCONSOLE::Test_DNSProtocol(DEVTESTSCONSOLE* tests)
-* @brief      Test_DNSProtocol
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_DNSResolver(DEVTESTSCONSOLE* tests)
+* @brief      Test_DNSResolver
 * @ingroup    APPLICATION
-*
-* @param[in]  tests :
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_DNSProtocol(DEVTESTSCONSOLE* tests)
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_DNSResolver(DEVTESTSCONSOLE* tests)
 {
-  DIOURL          URL;
-  DIODNSPROTOCOL  dnsprotocol;
-  DIOIP           ipresolved;
-  bool            status      = false;
+  DIOURL  URL;
+  DIOIP   ipresolved;
+  bool    status      = false;
 
   //URL = __L("www.google.es");
 
@@ -2360,7 +2361,7 @@ bool DEVTESTSCONSOLE::Test_DNSProtocol(DEVTESTSCONSOLE* tests)
 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DNS Resolve %s] Ini ..."),  URL.Get());
 
-  status = GEN_DIODNSRESOLVED.ResolveURL(URL.Get(), ipresolved);
+  status = GEN_DIODNSRESOLVER.ResolveURL(URL.Get(), ipresolved);
   if(status)
     {
       XSTRING IPstring;
@@ -2376,6 +2377,50 @@ bool DEVTESTSCONSOLE::Test_DNSProtocol(DEVTESTSCONSOLE* tests)
     }
 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[DNS Resolve %s] End."), URL.Get());
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
+* @brief      Test_DNSProtocolMitMServer
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
+{
+  bool status = false;
+  
+  DIODNSPROTOCOL_MITM_SERVER* mitmserver = new DIODNSPROTOCOL_MITM_SERVER();
+  if(!mitmserver)
+    {
+      return status;
+    }
+
+  if(mitmserver->Ini())
+    {
+      tests->console->Printf(__L("  Activate DNS Protocol MitM Server...\n"));
+
+      while(!tests->console->KBHit())
+        {
+          GEN_XSLEEP.MilliSeconds(50);  
+        }
+
+      tests->console->Printf(__L("  Deactivate DNS Protocol MitM Server...\n"));    
+
+      mitmserver->End();
+
+      tests->console->GetChar();
+    }
+
+
+  delete mitmserver;  
 
   return status;
 }
@@ -3500,7 +3545,7 @@ bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 
   _aim = __L("xtracebizintek.dyndns.org"); 
  
-  GEN_DIODNSRESOLVED.ResolveURL(_aim.Get(), _IP);
+  GEN_DIODNSRESOLVER.ResolveURL(_aim.Get(), _IP);
 
   _IP.GetXString(_IPstring);
 
@@ -3509,7 +3554,7 @@ bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 
   //-------------------------------------------------------------------------
 
-  APP_CFG.SetAutomaticDNSResolved();
+  APP_CFG.SetAutomaticDNSResolver();
 
   */
 
@@ -3622,7 +3667,7 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 							            case    2 : if(dioatcmdgsm->GetIMEI(value)==DIOATCMD_ERROR_NONE)								  	string.Format(__L(" IMEI                  : %s"), value.Get());                           break;
 							            case    3 : if(dioatcmdgsm->GetVersion(value)==DIOATCMD_ERROR_NONE)								  string.Format(__L(" Version               : %s"), value.Get());                           break;	
 														
-                          case    4 : if(dioatcmdgsm->PIN_IsResolved(isPINresulto)==DIOATCMD_ERROR_NONE)      string.Format(__L(" SIM PIN resuelto      : %s"), isPINresulto?__L("Si"):__L("No"));       break;	 
+                          case    4 : if(dioatcmdgsm->PIN_Is(isPINresulto)==DIOATCMD_ERROR_NONE)      string.Format(__L(" SIM PIN resuelto      : %s"), isPINresulto?__L("Si"):__L("No"));       break;	 
 
                           case    5 : if(!isPINresulto)
                                         {
