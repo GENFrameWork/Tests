@@ -10,9 +10,8 @@ project(devtestsconsole)
 set(GEN_DIRECTORY "../../../../GENFrameWork") 
 
 
-# --------------------------------------------------------------------
-# Compile Selection
 
+# Compile Selection
 include("${GEN_DIRECTORY}/GEN/CMake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
 
 
@@ -34,8 +33,6 @@ option(XSERIALIZABLE_JSON_FEATURE                          "Serializable JSON"  
 option(XFILE_HEX_FEATURE                                   "XFile HEX format"                                          true )  
 option(XFILE_DFU_FEATURE                                   "XFile DFU format"                                          true )  
 option(XFILE_RIFF_FEATURE                                  "XFile RIFF format"                                         true ) 
-
-option(WINDOWS_XVIRTUALDESKTOPMANAGER_FEATURE              "Windows Virtual Desktop Manager"                           true )
 
 option(HASH_FEATURE                                        "Hash"                                                      true )
 option(HASH_CRC16_FEATURE                                  "Hash CRC16"                                                true )  
@@ -100,8 +97,6 @@ option(DIO_STREAMSPI_TFTDISPLAY_ILI9341_FEATURE            "Data SPI TFT Display
 option(DIO_STREAMSPI_TFTDISPLAY_ST7789_FEATURE             "Data SPI TFT Display ST7789"                               true )
 option(DIO_STREAMSPI_TOUCHSCREEN_STMPE610_FEATURE          "Data SPI Touch Screen STMPE610"                            true )
 
-#option(SND_FEATURE                                         "Sound"                                                     true )
-
 option(INP_FEATURE                                         "Inputs"                                                    true )
 option(INP_SIMULATE_FEATURE                                "Inputs Simulate"                                           true )
 option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
@@ -122,21 +117,22 @@ option(APP_CFG_LOG_FEATURE                                 "Application CFG LOG"
 option(APP_CFG_INTERNETSERVICES_FEATURE                    "Application CFG Internet services"                         true )      
 option(APP_CFG_DYNDNSMANAGER_FEATURE                       "Application CFG DynDNS Manager"                            true )
 option(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE              "Application CFG Check Resorces HW"                         true )  
-option(APP_CFG_DNSRESOLVER_FEATURE                         "Application CFG DNS "                              true )  
+option(APP_CFG_DNSRESOLVER_FEATURE                         "Application CFG DNS "                                      true )  
 option(APP_CFG_ALERTS_FEATURE                              "Application CFG Alerts"                                    true )  
 
 
 if(COMPILE_FOR_WINDOWS)
 
-  option(WINDOWS_XDESKTOPMANAGER_FEATURE                    "Windows Desktop Manager"                                   true )
+  option(WINDOWS_XDESKTOPMANAGER_FEATURE                   "Windows Desktop Manager"                                   true )
+  option(WINDOWS_XVIRTUALDESKTOPMANAGER_FEATURE            "Windows Virtual Desktop Manager"                           true )
   
 endif()
 
 
 if(COMPILE_FOR_LINUX)
 
-  option(DIO_LINUX_DBUS_FEATURE                             "Linux DBus"                                                true ) 
-  option(DIO_LINUX_NETWORKMANAGER_FEATURE                   "Linux Network Manager"                                     true )
+  option(DIO_LINUX_DBUS_FEATURE                             "Linux DBus"                                               true ) 
+  option(DIO_LINUX_NETWORKMANAGER_FEATURE                   "Linux Network Manager"                                    true )
 
 endif()
 

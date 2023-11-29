@@ -49,6 +49,25 @@
       "wslPath": "${defaultWSLPath}"
     },
     {
+      "name": "3 - Linux PC x64 (Samba)",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\Linux\\x64smb",
+      "installRoot": "${projectDir}\\Linux\\x64smb",
+      "cmakeExecutable": "cmake",
+      "cmakeCommandArgs": "-DTARGET=PC",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "variables": [],
+      "remoteMachineName": "${defaultRemoteMachineName}",
+      "remoteCMakeListsRoot": "/mnt/Projects/GENFrameWork/Tests/DevTestsConsole/Platforms/",
+      "remoteBuildRoot": "/mnt/Projects/GENFrameWork/Tests/DevTestsConsole/Platforms/Linux/x64smb/",
+      "remoteInstallRoot": "/mnt/Projects/GENFrameWork/Tests/DevTestsConsole/Platforms/Linux/x64smb/",
+      "remoteCopySources": false,
+      "remoteCopyBuildOutput": false
+    },
+    {
       "name": "5 - Linux ARM",
       "generator": "Ninja",
       "configurationType": "Debug",

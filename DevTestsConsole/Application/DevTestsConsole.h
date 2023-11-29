@@ -147,6 +147,7 @@ class XSCHEDULER;
 class XSCHEDULER_XEVENT;
 class HASH;
 class DIOWEBCLIENT_XEVENT;
+class DIODNSPROTOCOL_MITM_SERVER_XEVENT;
 class SNDITEM;
 class SNDFACTORY_XEVENT;
 class APPCHECKRESOURCESHARDWARE;
@@ -262,6 +263,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     void                            HandleEvent_Scheduler               (XSCHEDULER_XEVENT* event);
     void                            HandleEvent_Sound                   (SNDFACTORY_XEVENT* event);
     void                            HandleEvent_WebClient               (DIOWEBCLIENT_XEVENT* event);
+    void                            HandleEvent_DNSProtocol_MitM_Server (DIODNSPROTOCOL_MITM_SERVER_XEVENT* event);
     void                            HandleEvent                         (XEVENT* xevent);
 
     static void                     ThreadRunFunction                   (void* param);

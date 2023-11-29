@@ -44,7 +44,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "Version.h"
+#include "VersionFrameWork.h"
 
 #include "XFactory.h"
 #include "XPath.h"
@@ -119,6 +119,7 @@
 #include "DIOMPSSE.h"
 #include "DIODNSProtocol_Client.h"
 #include "DIODNSResolver.h"
+#include "DIODNSProtocol_MitM_Server_XEvent.h"
 #include "DIODNSProtocol_MitM_Server.h"
 #include "DIOStreamWifiRemoteEnumDevices.h"
 #include "DIOWakeOnLAN.h"
@@ -143,9 +144,11 @@
 #include "DIOLedNeoPixelWS2812B.h"
 #include "DIOAlerts.h"
 
+#ifdef SND_ACTIVE
 #include "SNDFactory_XEvent.h"
 #include "SNDItem.h"
 #include "SNDFactory.h"
+#endif
 
 #include "INPFactory.h"
 #include "INPSimulate.h"
@@ -160,7 +163,7 @@
 
   #include "XWINDOWSAccessControlLists.h"
   #include "XWINDOWSDesktopManager.h"
-  #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"    
+  #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"     
   #include "MainProcWINDOWS.h" 
   #include "DevTestsConsole_WindowsPlatform.h"
 
@@ -443,11 +446,15 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
   
+  #ifdef SND_ACTIVE
+
   SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_INI   , &GEN_SNDFACTORY.GetInstance());
   SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PLAY  , &GEN_SNDFACTORY.GetInstance());
   SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PAUSE , &GEN_SNDFACTORY.GetInstance());
   SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_STOP  , &GEN_SNDFACTORY.GetInstance());
   SubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_END   , &GEN_SNDFACTORY.GetInstance());
+
+  #endif
 
   //--------------------------------------------------------------------------------------
 
@@ -576,12 +583,15 @@ bool DEVTESTSCONSOLE::AppProc_End()
   SetEvent(DEVTESTSCONSOLE_XFSMEVENT_END);
 
   //--------------------------------------------------------------------------------------
-  
+  #ifdef SND_ACTIVE
+
   UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_INI   , &GEN_SNDFACTORY.GetInstance());
   UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PLAY  , &GEN_SNDFACTORY.GetInstance());
   UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_PAUSE , &GEN_SNDFACTORY.GetInstance());
   UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_STOP  , &GEN_SNDFACTORY.GetInstance());
   UnSubscribeEvent(SNDFACTORY_XEVENT_TYPE_SOUND_END   , &GEN_SNDFACTORY.GetInstance());
+
+  #endif
 
   //--------------------------------------------------------------------------------------
 
@@ -847,6 +857,8 @@ bool DEVTESTSCONSOLE::Show_AppStatus()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_PlaySound()
 {
+  #ifdef SND_ACTIVE
+
   XTIMER* timer = NULL;
   timer = GEN_XFACTORY.CreateTimer();
   if(!timer) 
@@ -890,6 +902,8 @@ bool DEVTESTSCONSOLE::Show_PlaySound()
   console->Printf(__L("\n"));
 
   GEN_XFACTORY.DeleteTimer(timer);
+
+  #endif
 
   return true;
 }
@@ -950,7 +964,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ScraperWeb                 , __L("Test Scraper Web")                },
                                                       { false  , Test_MPSSE                      , __L("Test MPSSE")                      },
                                                       { false  , Test_DNSResolver                , __L("Test DNS Resolver")               },
-                                                      { true   , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
+                                                      { false  , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
@@ -965,7 +979,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -2405,13 +2419,28 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
 
   if(mitmserver->Ini())
     {
-      tests->console->Printf(__L("  Activate DNS Protocol MitM Server...\n"));
+      tests->console->Printf(__L("  Activate DNS Protocol MitM Server..."));
 
-      while(!tests->console->KBHit())
+      tests->SubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS, mitmserver);
+  
+      if(mitmserver->Activate(true))
+        {        
+          status = true;
+
+          tests->console->Printf(__L("  [Ok]\n"));  
+
+          while(!tests->console->KBHit())
+            {
+              GEN_XSLEEP.MilliSeconds(50);  
+            }
+        }
+       else
         {
-          GEN_XSLEEP.MilliSeconds(50);  
+          tests->console->Printf(__L("  [Error!]\n"));  
         }
 
+      tests->UnSubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS, mitmserver);
+      
       tests->console->Printf(__L("  Deactivate DNS Protocol MitM Server...\n"));    
 
       mitmserver->End();
@@ -3207,10 +3236,14 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 {  
+  bool        status = false; 
+
+  #ifdef SND_ACTIVE
+
   SNDPLAYCFG  playCFG;
   SNDITEM*    item[] = { NULL, NULL, NULL }; 
   XPATH       xpath;
-  bool        status = false;
+ 
    
   if(!GEN_XSYSTEM.Sound_SetLevel(90)) 
     {
@@ -3298,6 +3331,8 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   
 
   //-------------------------------------------------------------------------
+
+  #endif
 
   return status;
 }
@@ -4993,6 +5028,7 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
+  #ifdef SND_ACTIVE
   devtestsconsole->Show_AllStatus();
   devtestsconsole->Show_PlaySound();
     
@@ -5013,7 +5049,7 @@ bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 
       GEN_XSLEEP.MilliSeconds(5);
     }
-    
+   #endif   
    return true;
 }
 
@@ -5058,6 +5094,7 @@ void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
 {  
+  #ifdef SND_ACTIVE
   switch(event->GetEventType())
     {
       case SNDFACTORY_XEVENT_TYPE_SOUND_INI     : 
@@ -5075,9 +5112,8 @@ void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
                                                     XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Sound] [%08X] %s (%s) -> %s"), event->GetItem(), typestr.Get(), ID->Get(), statusstr.Get());    
                                                   } 
                                                   break;
-    } 
-  
-
+    }  
+  #endif
 }
 
 
@@ -5133,6 +5169,34 @@ void DEVTESTSCONSOLE::HandleEvent_WebClient(DIOWEBCLIENT_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SERVER_XEVENT* event)
+* @brief      Handle Event for the observer manager of this class
+* @note       INTERNAL
+* @ingroup    APPLICATION
+* 
+* @param[in]  event : 
+* 
+* @return     void : does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SERVER_XEVENT* event)
+{
+  switch(event->GetEventType())
+    {
+      case DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS  : { XSTRING originIP;
+
+                                                              event->GetOriginIP()->GetXString(originIP);
+
+                                                              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Ask DNS Protocol] %s"), originIP.Get()); 
+                                                              XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*event->GetAskedBuffer())); 
+                                                            }
+                                                            break;
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCONSOLE::HandleEvent
 * @brief      Handle Events
@@ -5155,13 +5219,14 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
                                             HandleEvent_Scheduler(event);
                                           }
                                           break;
-
+      #ifdef SND_ACTIVE
       case XEVENT_TYPE_SOUND           :  { SNDFACTORY_XEVENT* event = (SNDFACTORY_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_Sound(event);
                                           }
                                           break;
+      #endif
 
       case XEVENT_TYPE_WEBCLIENT       :  { DIOWEBCLIENT_XEVENT* event = (DIOWEBCLIENT_XEVENT*)xevent;
                                             if(!event) return;
@@ -5169,6 +5234,14 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
                                             HandleEvent_WebClient(event);
                                           }
                                           break;
+
+      case XEVENT_TYPE_DIODNS          :  { DIODNSPROTOCOL_MITM_SERVER_XEVENT* event = (DIODNSPROTOCOL_MITM_SERVER_XEVENT*)xevent;
+                                            if(!event) return;
+
+                                            HandleEvent_DNSProtocol_MitM_Server(event);
+                                          }
+                                          break;
+
     }
 }
 
