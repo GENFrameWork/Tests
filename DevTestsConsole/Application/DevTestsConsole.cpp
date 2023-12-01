@@ -3241,7 +3241,8 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   #ifdef SND_ACTIVE
 
   SNDPLAYCFG  playCFG;
-  SNDITEM*    item[] = { NULL, NULL, NULL }; 
+  SNDITEM*    item[]   = { NULL, NULL, NULL }; 
+  SNDITEM*    itemfile = NULL; 
   XPATH       xpath;
  
    
@@ -3255,29 +3256,31 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   status = true;
 
   //-------------------------------------------------------------------------
-       
+
+  /*
   item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
   item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
   item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000); 
 
-  
+
   GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP);   
   GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
 
   GEN_SNDFACTORY.Sound_Pause(item[0]);
-
+ 
   tests->Show_AllStatus();
   tests->Show_PlaySound();  
 
   GEN_XSLEEP.Seconds(3); 
-
+  
   GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, SNDFACTORY_INLOOP); 
   GEN_SNDFACTORY.Sound_WaitToEnd(item[0], SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);  
 
   GEN_SNDFACTORY.Sound_Stop(item[0]);
   
   tests->Show_AllStatus();
-  tests->Show_PlaySound();  
+  tests->Show_PlaySound();   
+ 
     
   for(XDWORD c=0; c<sizeof(item)/sizeof(SNDITEM*); c++)
     {
@@ -3296,8 +3299,9 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   int volume = GEN_SNDFACTORY.Sound_GetVolume(item[0]);
   
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
-        
+          
   GEN_SNDFACTORY.DeleteAllItems();
+  */
     
   //-------------------------------------------------------------------------
   
@@ -3306,9 +3310,9 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   xpath.Slash_Add();
   xpath.Add(__L("alarm.ogg"));
 
-  item[0] = GEN_SNDFACTORY.CreateItem(xpath);
+  itemfile = GEN_SNDFACTORY.CreateItem(xpath);
         
-  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG, 3);    
+  GEN_SNDFACTORY.Sound_Play(itemfile, &playCFG, 3);    
   
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
 
@@ -3321,9 +3325,9 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   xpath.Slash_Add();
   xpath.Add(__L("imperialmarch60.wav"));
 
-  item[0] = GEN_SNDFACTORY.CreateItem(xpath);
+  itemfile = GEN_SNDFACTORY.CreateItem(xpath);
         
-  GEN_SNDFACTORY.Sound_Play(item[0], &playCFG);    
+  GEN_SNDFACTORY.Sound_Play(itemfile, &playCFG);    
   
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
 
