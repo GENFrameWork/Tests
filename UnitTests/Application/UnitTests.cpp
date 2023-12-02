@@ -39,8 +39,10 @@
 
 #include "UnitTests.h"
 
-#ifdef GOOGLETEST_ACTIVE      
+#ifdef GOOGLETEST_ACTIVE
+#undef new
 #include "gtest/gtest.h"
+#define new new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
 #endif
 
 #include "VersionFrameWork.h"
