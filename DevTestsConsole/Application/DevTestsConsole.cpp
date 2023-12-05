@@ -398,7 +398,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
       stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
       APP_LOG_ENTRY(((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
            
-      APP_LOG_ENTRY(((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APP_CFG_LOG_SECTIONID_INITIATION, false,  __L("Identificacion SO: %s"), SO_ID.Get());
+      APP_LOG_ENTRY(((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR), APP_CFG_LOG_SECTIONID_INITIATION, false,  __L("S.O. version: %s"), SO_ID.Get());
 
       XDWORD total = 0;
       XDWORD free  = 0;
@@ -3245,6 +3245,13 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   SNDITEM*    itemfile = NULL; 
   XPATH       xpath;
  
+
+  if(!GEN_SNDFACTORY.IsSoundActive())
+    {
+      tests->console->Printf(__L("   Sound system: no avaible (no active) !!!)\n"));
+
+      return status;
+    }
    
   if(!GEN_XSYSTEM.Sound_SetLevel(90)) 
     {
@@ -3257,7 +3264,6 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   //-------------------------------------------------------------------------
 
-  /*
   item[0] = GEN_SNDFACTORY.CreateItem(640 , 3000);
   item[1] = GEN_SNDFACTORY.CreateItem(1000, 3000);
   item[2] = GEN_SNDFACTORY.CreateItem(850 , 3000); 
@@ -3301,7 +3307,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
   GEN_SNDFACTORY.Sound_WaitAllToEnd(SNDFACTORY_MAXTIMEOUT_INFINITE, Test_WaitSound);
           
   GEN_SNDFACTORY.DeleteAllItems();
-  */
+  
     
   //-------------------------------------------------------------------------
   

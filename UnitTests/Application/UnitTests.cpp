@@ -40,9 +40,17 @@
 #include "UnitTests.h"
 
 #ifdef GOOGLETEST_ACTIVE
-#undef new
-#include "gtest/gtest.h"
-#define new new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
+
+  #ifdef XMEMORY_CONTROL_ACTIVE        
+    #undef new
+  #endif
+
+  #include "gtest/gtest.h"
+
+  #ifdef XMEMORY_CONTROL_ACTIVE        
+    #define new new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
+  #endif
+
 #endif
 
 #include "VersionFrameWork.h"
@@ -118,7 +126,11 @@ bool UNITTESTS::AppProc_Ini()
   XTRACE_CLEARSCREEN;
   XTRACE_CLEARMSGSSTATUS;
 
+  XSTRING SO_ID;
+  GEN_XSYSTEM.GetOperativeSystemID(SO_ID);
+
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Application ROOT path: %s"),  GEN_XPATHSMANAGER.GetPathSection(XPATHSMANAGERSECTIONTYPE_ROOT)->xpath->Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("S.O. version: %s"), SO_ID.Get()); 
 
   return true;
 }
