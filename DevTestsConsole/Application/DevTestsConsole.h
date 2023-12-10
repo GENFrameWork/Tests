@@ -146,6 +146,7 @@ class XDIR;
 class XSCHEDULER;
 class XSCHEDULER_XEVENT;
 class HASH;
+class CIPHER;
 class DIOWEBCLIENT_XEVENT;
 class DIODNSPROTOCOL_MITM_SERVER_XEVENT;
 class SNDITEM;
@@ -209,6 +210,8 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_WifiEnum                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_WakeOnLAN                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_Hash                           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_OneCipher_Simetric             (DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& result);
+    static bool                     Test_Cipher_Simetric                (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
     static bool							        Test_CipherRSA				   	          (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);

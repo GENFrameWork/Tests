@@ -116,8 +116,7 @@
       "rsyncCommandArgs": "-t --delete --delete-excluded",
       "remoteCopyBuildOutput": false,
       "remoteCopySourcesMethod": "rsync",
-      "addressSanitizerRuntimeFlags": "detect_leaks=0",
-      "wslPath": "${defaultWSLPath}"
+      "addressSanitizerRuntimeFlags": "detect_leaks=0"
     }
   ]
 }

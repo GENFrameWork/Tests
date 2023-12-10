@@ -84,6 +84,10 @@
 #include "HashSHA1.h"
 #include "HashSHA2.h"
 #include "HashWhirlpool.h"
+#include "CipherDES.h"
+#include "Cipher3DES.h"
+#include "CipherAES.h"
+#include "CipherBlowfish.h"
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
 #include "CipherRSA.h"
@@ -969,6 +973,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
                                                       { false  , Test_Hash                       , __L("Test Hash")                       },
+                                                      { true   , Test_Cipher_Simetric            , __L("Test Cipher Simetric")            }, 
                                                       { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
@@ -979,7 +984,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { true   , Test_Sound                      , __L("Test Sound")                      },       
+                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
                                                       { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
                                                       { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
@@ -1092,7 +1097,7 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
   XBUFFER charstr;
   
   string.ConvertToASCII(charstr);
-  printf(charstr.GetPtrChar());
+  printf("%s", charstr.GetPtrChar());
 
   substring.AdjustSize(32);
 
@@ -2422,6 +2427,8 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
       tests->console->Printf(__L("  Activate DNS Protocol MitM Server..."));
 
       tests->SubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS, mitmserver);
+      tests->SubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ANSWERDNS, mitmserver);
+    
   
       if(mitmserver->Activate(true))
         {        
@@ -2440,6 +2447,7 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
         }
 
       tests->UnSubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS, mitmserver);
+      tests->UnSubscribeEvent(DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ANSWERDNS, mitmserver);
       
       tests->console->Printf(__L("  Deactivate DNS Protocol MitM Server...\n"));    
 
@@ -2635,6 +2643,125 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_OneCipher_Simetric(DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& output)
+* @brief      Test_OneCipher_Simetric
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* @param[in]  operation : 
+* @param[in]  cipher : 
+* @param[in]  input : 
+* @param[in]  output : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_OneCipher_Simetric(DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& output)
+{
+	if(!cipher) return false;
+
+	bool status = operation?cipher->Cipher(input):cipher->Uncipher(input);
+	
+	if(!status)
+		{
+			tests->console->Printf(__L("Error!\n"));	
+			return false;
+		}
+
+  output.CopyFrom((*cipher->GetResult()));
+
+	for(int c=0;c<(int)(output.GetSize());c++)
+		{
+			tests->console->Printf(__L("%02X"), output.GetByte(c));
+		}
+		
+	tests->console->Printf(__L("\n"));
+
+	return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
+* @brief      Test_Cipher_Simetric
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
+{
+  XBUFFER								input;
+  XBUFFER								output;
+	XSTRING								leyend;
+	CIPHERKEYSYMMETRICAL  key;	  
+  bool                  status      = false;
+	
+	XBYTE									inivector[]	= { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+	XBYTE									inputdata[]	= { 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a };
+  XBYTE									keydata[]		= { 0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe, 0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81, 0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7, 0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4 }; // { 0x8e, 0x73, 0xb0, 0xf7, 0xda, 0x0e, 0x64, 0x52, 0xc8, 0x10, 0xf3, 0x2b, 0x80, 0x90, 0x79, 0xe5, 0x62, 0xf8, 0xea, 0xd2, 0x52, 0x2c, 0x6b, 0x7b }; // { 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c };  
+
+	
+	key.Set(keydata, sizeof(keydata));	
+
+  tests->console->Printf(__L("Plain text:  "));
+
+	for(int c=0; c<(int)(sizeof(inputdata)); c++)
+		{
+			tests->console->Printf(__L("%02X"), inputdata[c]);
+		}
+
+  tests->console->Printf(__L("\n\n"));
+
+ 
+	for(int c=0;c<5;c++)
+		{
+			CIPHER*		cipher = NULL;
+			switch(c)
+				{
+					case  0 :  cipher = new CIPHER();						leyend = __L("XOR (base)");	  break;
+					case  1 :  cipher = new CIPHERDES();				leyend = __L("DES");			    break;
+					case  2 :  cipher = new CIPHER3DES();				leyend = __L("3DES");			    break;										
+					case  3 :  cipher = new CIPHERAES();				leyend = __L("AES");			    break;	
+					case  4 :  cipher = new CIPHERBLOWFISH();		leyend = __L("Blowfish");	    break;						
+				}
+					
+			if(cipher) 
+				{
+					cipher->SetChainingMode(CIPHERCHAININGMODE_CBC);				
+					cipher->SetPaddingType(XBUFFER_PADDINGTYPE_ZEROS); 
+					cipher->SetInitVector(inivector,sizeof(inivector));			
+
+					cipher->SetKey(&key);
+
+          input.Empty();
+          input.Add((XBYTE*)inputdata, sizeof(inputdata));
+
+          tests->console->Printf(__L("[ %s ]\n"), leyend.Get());
+          tests->console->Printf(__L("  Cipher   : "));
+					status = Test_OneCipher_Simetric(tests, true, cipher, input, output);
+          if(!status) break;
+
+          input.Empty();
+
+          tests->console->Printf(__L("  Uncipher : "));
+          status = Test_OneCipher_Simetric(tests, false, cipher, output, input);        
+          tests->console->Printf(__L("\n"));
+
+          if(!status) break;
+
+					delete cipher;
+				}
+		}
+
+  return status;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -2663,9 +2790,6 @@ bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
 	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM(xpath);	
   if(filekeys) 
     {
-
-
-
       status = true;
     }
 
@@ -5194,14 +5318,25 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 {
   switch(event->GetEventType())
     {
-      case DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS  : { XSTRING originIP;
+      case DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ASKDNS      : { XSTRING originIP;
 
-                                                              event->GetOriginIP()->GetXString(originIP);
+                                                                  event->GetOriginIP()->GetXString(originIP);
 
-                                                              XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Ask DNS Protocol] %s"), originIP.Get()); 
-                                                              XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*event->GetAskedBuffer())); 
-                                                            }
-                                                            break;
+                                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Ask DNS Protocol] (%s)"), event->GetAskedURL()->Get()); 
+                                                                  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*event->GetAskedBuffer())); 
+                                                                }
+                                                                break;
+
+      case DIODNSPROTOCOL_MITM_SERVER_XEVENT_TYPE_ANSWERDNS   : { XSTRING originIP;
+
+                                                                  event->GetOriginIP()->GetXString(originIP);
+
+                                                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Answer DNS Protocol] (%s)"), event->GetAskedURL()->Get()); 
+                                                                  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*event->GetAnsweredBuffer())); 
+                                                                }
+                                                                break;
+    
+
     }
 }
 
