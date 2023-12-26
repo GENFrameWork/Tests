@@ -414,7 +414,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
     }
 
   //--------------------------------------------------------------------------------------
-
+  /*
   status = false;
 
   string.Format(APPCONSOLE_DEFAULTMESSAGEMASK, __L("Control de recursos hardware"));
@@ -447,7 +447,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
   APP_LOG_ENTRY((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR, APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
 
   if(!status) return false;
-
+  */
   //--------------------------------------------------------------------------------------
   
   #ifdef SND_ACTIVE
@@ -968,12 +968,12 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ScraperWeb                 , __L("Test Scraper Web")                },
                                                       { false  , Test_MPSSE                      , __L("Test MPSSE")                      },
                                                       { false  , Test_DNSResolver                , __L("Test DNS Resolver")               },
-                                                      { false  , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
+                                                      { true   , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
                                                       { false  , Test_Hash                       , __L("Test Hash")                       },
-                                                      { true   , Test_Cipher_Simetric            , __L("Test Cipher Simetric")            }, 
+                                                      { false  , Test_Cipher_Simetric            , __L("Test Cipher Simetric")            }, 
                                                       { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
