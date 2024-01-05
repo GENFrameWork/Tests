@@ -119,6 +119,7 @@
 #include "DIOSPI_Devices.h"
 #include "DIOStreamTLSConfig.h"
 #include "DIOStreamTLS.h"
+#include "DIONTP.h"
 #include "DIOGPIO.h"
 #include "DIOMPSSE.h"
 #include "DIODNSProtocol_Client.h"
@@ -431,9 +432,9 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   SubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_MEMFREELIMIT  , appcheckresourceshardware);
   SubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_CPUUSAGELIMIT , appcheckresourceshardware);
-
+   */
   //--------------------------------------------------------------------------------------
-
+  
   status = false;
 
   string.Format(APPCONSOLE_DEFAULTMESSAGEMASK, __L("Control Servicios Internet"));
@@ -447,7 +448,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
   APP_LOG_ENTRY((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR, APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
 
   if(!status) return false;
-  */
+  
   //--------------------------------------------------------------------------------------
   
   #ifdef SND_ACTIVE
@@ -968,7 +969,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ScraperWeb                 , __L("Test Scraper Web")                },
                                                       { false  , Test_MPSSE                      , __L("Test MPSSE")                      },
                                                       { false  , Test_DNSResolver                , __L("Test DNS Resolver")               },
-                                                      { true   , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
+                                                      { false  , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
                                                       { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
                                                       { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
                                                       { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
@@ -983,6 +984,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
+                                                      { true   , Test_NTP_Protocol               , __L("Test_NTP_Protocol")               },                                              
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
                                                       { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
@@ -3290,6 +3292,59 @@ bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
+* @brief      Test_NTP_Protocol
+* @ingroup    APPLICATION
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
+{
+  XDATETIME*  xdatetime_local = NULL;
+  DIONTP*     ntp             = NULL;
+  DIOURL      url;     
+  bool        status          = false;  
+  
+  ntp = new DIONTP();
+  if(!ntp)
+    {
+      return status;   
+    }
+
+  GEN_XFACTORY_CREATE(xdatetime_local, CreateDateTime())
+  if(xdatetime_local) 
+    {
+      xdatetime_local->Read();
+    }
+   else
+    {
+      delete ntp;
+      return status;
+    }
+
+  //__L("1.es.pool.ntp.org"); 
+  //__L("1.europe.pool.ntp.org"); 
+  //__L("3.europe.pool.ntp.org"); 
+
+  url = __L("1.es.pool.ntp.org");
+
+  xdatetime_local->Read();
+
+  status = ntp->GetTime(url, DIONTP_DEFAULTTIMEOUT, GEN_XSYSTEM.HardwareUseLittleEndian(), (*xdatetime_local));
+         
+  delete ntp;
+
+  GEN_XFACTORY.DeleteDateTime(xdatetime_local);
+   
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 * @brief      Test_NTP_InternetServices
@@ -3307,7 +3362,10 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
   XSTRING     datetimestr;
   bool        status      = false;
 
-  if(!tests->appinternetservices) return false;
+  if(!tests->appinternetservices) 
+    {
+      return false;
+    }
 
   //while(!tests->console->KBHit())
     {

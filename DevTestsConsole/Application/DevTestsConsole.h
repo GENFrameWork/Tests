@@ -221,6 +221,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_AppAlerts                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_BluetoothEnum                  (DEVTESTSCONSOLE* tests);
     static bool                     Test_BluetoothLEEnum                (DEVTESTSCONSOLE* tests);
+    static bool                     Test_NTP_Protocol                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_NTP_InternetServices           (DEVTESTSCONSOLE* tests);
     static bool                     Test_Sound                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_ProcessManager                 (DEVTESTSCONSOLE* tests);
