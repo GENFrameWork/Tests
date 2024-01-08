@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<scraperwebs>
+<webservices>
 
-	<scraperweb name="PUBLICIP">
-		
-    <web url="www.vermiip.es" method="GET" format="HTML" > 
+	<webservice name="PUBLICIP">
+    
+    <web url="ipecho.net" method="GET" format="HTML" > 
+	    <value name="IP" priority="1" start="<h1>Your IP is " end="</h1>" />      
+	  </web>    
+      
+    <web url="vermiip.es" method="GET" format="HTML" > 
 	    <value name="IP" priority="1" start="<h2>Tu IP p&uacute;blica es:" end="</h2>" />      
 	  </web>    
 	
@@ -12,11 +16,11 @@
 	    <value name="IP" priority="1" start="Your IP address is" end="</p>" /> 
 	  </web>  
 	  
-
-	</scraperweb>
+	
+	</webservice>
 	
 	
-	<scraperweb name="GEOLOCATIONIP">
+	<webservice name="GEOLOCATIONIP">
 		
 		<web url="http://whatismyipaddress.com/ip/%s"  method="GET" format="HTML"> 
 			<value name="COUNTRY" 			priority="1" 	start="<tr><th>Country:</th><td>" 							end="<img src="		  />
@@ -35,22 +39,29 @@
 			<value name="LATITUDE" 			priority="0"	start="latitud       : '"												end="'," />
 			<value name="LONGITUDE" 		priority="0"	start="longitud      : '"												end="'," />
 		</web> 
+		
+	  <web url="freegeoip.net/json/%s" method="GET" format="JSON" > 
+	 		<value name="COUNTRY" 			priority="1" 	namevalue="country_name" />
+			<value name="STATE"					priority="1"	namevalue="region_name"	 />
+			<value name="CITY"					priority="1"	namevalue="city"				 />
+			<value name="LATITUDE" 			priority="0"	namevalue="latitude"		 />
+			<value name="LONGITUDE" 		priority="0"	namevalue="longitude"		 />
+	  </web>    
 	
-	
-	</scraperweb>
+	</webservice>
 
 	
-	<scraperweb name="SEXNAME">
+	<webservice name="SEXNAME">
 	
 	  <web url="www.namepedia.org/en/firstname/%s/" method="GET" format="HTML">     	
 	    <value name="SEX" 		priority="1"	start="<img src=\x22/img/icon/" 		end="_big_1.gif" /> 
 	    <value name="NAME" 		priority="0"	start="First name: " 								end="<img src="  />
 	  </web>  
 	    
-	</scraperweb>
+	</webservice>
 	
 	
-	<scraperweb name="USERAGENTID">
+	<webservice name="USERAGENTID">
 		  	 
 	  
 	  <web url="http://id.furud.net/identify.php?uagent=%s" method="GET" format="HTML" >
@@ -58,10 +69,10 @@
 	    <value name="SO" 				priority="0"	start="</i>\x0A\x20\x20\x20\x20</td>\x0A\x20\x20\x20\x20<td>\x0A\x20\x20\x20\x20\x20\x20<i>" 		end="</i>" />
 	  </web>     
 	
-	</scraperweb>
+	</webservice>
 	
 	
-	<scraperweb name="TRANSLATION">
+	<webservice name="TRANSLATION">
 		  	  
 	  <web url="http://translate.google.com/translate_a/t?client=p&text=%s&hl=%s&sl=%s&tl=%s&ie=UTF-8&oe=UTF-8" method="GET" format="JSON" >
 	  	<value name="TRANSLATION" 		priority="1" namevalue="trans" 						/>	 
@@ -69,25 +80,15 @@
 	 		<value name="SPELL_HTML" 			priority="0" namevalue="spell_html_res" 	/>	 		
 	  </web>    
 	
-	</scraperweb>
+	</webservice>
 	
 	
-	<scraperweb name="MACMANUFACTURED">
+	<webservice name="MACMANUFACTURED">
 		  	  
 	  <web url="http://coffer.com/mac_find/?string=%s" method="GET" format="HTML" >
 	  	<value name="MANUFACTURED" 		priority="1"	start="http://www.google.com/search?q=" 					end="\x22>" /> 
 	  </web>    
 	
-	</scraperweb>
-	
-	
-	<scraperweb name="WEATHER">		  	  		
-	  <web url="http://api.openweathermap.org/data/2.5/weather?q=%s&appid=50ce24dcc127ad33a7ef6c07e23574db&%s" method="GET" format="JSON" >
-	  	<value name="CONDITION" 		  priority="1"	 namevalue="description" /> 			
-	  	<value name="TEMPERATURE" 		priority="1"	 namevalue="temp"  			 /> 
-	  	<value name="HUMIDITY" 				priority="1"	 namevalue="humidity" 	 /> 	  		
-	  </web>    
-	
-	</scraperweb>
+	</webservice>
 
-</scraperwebs>
+</webservices>
