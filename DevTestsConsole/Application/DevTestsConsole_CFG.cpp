@@ -171,41 +171,43 @@ bool DEVTESTSCONSOLE_CFG::DoDefault()
 
   //------------------------------------------------------------------------------
 
-  checkresourceshardware_memstatuscheckcadence    = 30;
-  checkresourceshardware_memstatuslimitpercent    = 5;
-  checkresourceshardware_cpuusagecheckcadence     = 20;
-  checkresourceshardware_cpuusagelimitpercent     = 70;  
-  checkresourceshardware_cpuusageprocessname      = APPLICATION_NAMEAPP; 
+  checkresourceshardware_memstatuscheckcadence          = 30;
+  checkresourceshardware_memstatuslimitpercent          = 5;
+  checkresourceshardware_totalcpuusagecheckcadence      = 20;
+  checkresourceshardware_totalcpuusagelimitpercent      = 90;  
+  checkresourceshardware_appcpuusagecheckcadence        = 20;
+  checkresourceshardware_appcpuusagelimitpercent        = 90;  
+  checkresourceshardware_appcpuusageprocessname         = APPLICATION_NAMEAPP; 
 
   //------------------------------------------------------------------------------
 
-  log_isactive                                    = true;
-  log_backupisactive                              = true;
-  log_backupmaxfiles                              = 10;
-  log_backupiscompress                            = true;
+  log_isactive                                          = true;
+  log_backupisactive                                    = true;
+  log_backupmaxfiles                                    = 10;
+  log_backupiscompress                                  = true;
 
   log_activesectionsID.Empty();
 
-  log_activesectionsID                           += APP_CFG_LOG_SECTIONID_INITIATION;
-  log_activesectionsID                           += __L(",");
-  log_activesectionsID                           += APP_CFG_LOG_SECTIONID_GENERIC;
-  log_activesectionsID                           += __L(",");
-  log_activesectionsID                           += APP_CFG_LOG_SECTIONID_STATUSAPP;
-  log_activesectionsID                           += __L(",");
-  log_activesectionsID                           += APP_CFG_LOG_SECTIONID_ENDING;
+  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_INITIATION;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_GENERIC;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_STATUSAPP;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_ENDING;
 
-  log_levelmask                                   = XLOGLEVEL_ALL;
-  log_maxsize                                     = 3000;
-  log_reductionpercent                            = 10;
+  log_levelmask                                         = XLOGLEVEL_ALL;
+  log_maxsize                                           = 3000;
+  log_reductionpercent                                  = 10;
 
   //------------------------------------------------------------------------------
 
-  db_URL                                          = __L("");
-  db_port                                         = 0;
-  db_databasename                                 = __L("");
-  db_user                                         = __L("");
-  db_password                                     = __L("");
-  db_timeoutconnection                            = 30;
+  db_URL                                                = __L("");
+  db_port                                               = 0;
+  db_databasename                                       = __L("");
+  db_user                                               = __L("");
+  db_password                                           = __L("");
+  db_timeoutconnection                                  = 30;
 
   //------------------------------------------------------------------------------
 

@@ -631,8 +631,9 @@ bool DEVTESTSCONSOLE::AppProc_End()
 
   if(appcheckresourceshardware)
     {
-      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_MEMFREELIMIT  , appcheckresourceshardware);
-      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_CPUUSAGELIMIT , appcheckresourceshardware);
+      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_MEMFREELIMIT       , appcheckresourceshardware);
+      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_TOTALCPUUSAGELIMIT , appcheckresourceshardware);
+      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_APPCPUUSAGELIMIT   , appcheckresourceshardware);
   
       string.Format(APPCONSOLE_DEFAULTMESSAGEMASK,__L("Desactivando control recursos HW"));
 

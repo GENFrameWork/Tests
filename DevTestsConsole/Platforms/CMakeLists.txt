@@ -119,6 +119,7 @@ option(APP_CFG_DYNDNSMANAGER_FEATURE                       "Application CFG DynD
 option(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE              "Application CFG Check Resorces HW"                         true )  
 option(APP_CFG_DNSRESOLVER_FEATURE                         "Application CFG DNS "                                      true )  
 option(APP_CFG_ALERTS_FEATURE                              "Application CFG Alerts"                                    true )  
+option(APP_CFG_LOCATION_FEATURE                            "Application CFG Location"                                  true )  
 
 
 if(COMPILE_FOR_WINDOWS)
