@@ -21,6 +21,7 @@ include("${GEN_DIRECTORY}/GEN/CMake/Main/GEN_CMakeLists_Main_Platform-Compiler.t
 option(DEBUG_FEATURE                                       "Debug mode"                                                true )
 option(XTRACE_FEATURE                                      "XTrace"                                                    true )
 option(XTRACE_NOINTERNET_FEATURE                           "No need for trace dependencies with the Internet"          true )                        
+option(XTHREADCOLLECTED_FEATURE                            "Thread Collected"                                          true )
 option(XMEMORY_CONTROL_FEATURE                             "XMemory Control"                                           true )
 
 option(XSHAREDMEMORYMANAGER_FEATURE                        "Shared Memory Manager"                                     true )
@@ -119,7 +120,7 @@ option(APP_CFG_DYNDNSMANAGER_FEATURE                       "Application CFG DynD
 option(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE              "Application CFG Check Resorces HW"                         true )  
 option(APP_CFG_DNSRESOLVER_FEATURE                         "Application CFG DNS "                                      true )  
 option(APP_CFG_ALERTS_FEATURE                              "Application CFG Alerts"                                    true )  
-option(APP_CFG_LOCATION_FEATURE                            "Application CFG Location"                                  true )  
+option(APP_CFG_DIOLOCATION_FEATURE                         "Application CFG Location"                                  true )  
 
 
 if(COMPILE_FOR_WINDOWS)
