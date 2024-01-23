@@ -16,7 +16,6 @@
  option(DEBUG_FEATURE                                       "Debug mode"                                                true )
  option(XTRACE_FEATURE                                      "XTrace"                                                    true )
  option(XTRACE_NOINTERNET_FEATURE                           "No need for trace dependencies with Internet"              true )
- option(XTHREADCOLLECTED_FEATURE                            "Thread Collected"                                          true )
  option(XMEMORY_CONTROL_FEATURE                             "XMemory Control"                                           true )
 
  option(LINUX_X11_FEATURE                                   "Linux X11"                                                 true )
@@ -34,6 +33,9 @@
  option(GRP_2D_FEATURE                                      "Graphics 2D"                                               true )
 
  option(INP_FEATURE                                         "Inputs"                                                    true )
+
+ option(DIO_CAMERA_FEATURE                                  "Camera API"                                                true )
+ option(DIO_LOCATION_FEATURE                                "Location API"                                              true ) 
 
  option(SCRIPT_FEATURE                                      "Scripts"                                                   true )
  option(SCRIPT_G_FEATURE                                    "Script G Language"                                         true )
@@ -65,14 +67,14 @@
 # Directorys of the Application
 
  set(APP_DIRECTORY_APPLICATION   "../Application")
- list(APPEND INCLUDES_DIR ${APP_DIRECTORY_APPLICATION})
+ list(APPEND INCLUDES_DIR_LIST ${APP_DIRECTORY_APPLICATION})
 
 
 # --------------------------------------------------------------------
 # Source code of the Application
 
- list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/DevTestsCanvas2D.cpp")
- list(APPEND SOURCES "${APP_DIRECTORY_APPLICATION}/DevTestsCanvas2D_CFG.cpp")
+ list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsCanvas2D.cpp")
+ list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsCanvas2D_CFG.cpp")
 
 
 # --------------------------------------------------------------------
