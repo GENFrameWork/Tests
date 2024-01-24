@@ -71,29 +71,29 @@ include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Main.txt")
 # Directorys of the Application
 
 set(APP_DIRECTORY_APPLICATION   "../Application")
-list(APPEND INCLUDES_DIR_LIST ${APP_DIRECTORY_APPLICATION})
+list(APPEND GEN_INCLUDES_DIR_LIST ${APP_DIRECTORY_APPLICATION})
 
 
 # --------------------------------------------------------------------
 # Source code of the Application
 
-list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices.cpp")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
-  list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_WindowsPlatform.cpp")
+  list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_WindowsPlatform.cpp")
 
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")  
 
-  list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_LinuxPlatform.cpp")
+  list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_LinuxPlatform.cpp")
 
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "STM32")
 
-  list(APPEND SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_STM32Platform.cpp")
+  list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsDevices_STM32Platform.cpp")
 
 endif()
 
