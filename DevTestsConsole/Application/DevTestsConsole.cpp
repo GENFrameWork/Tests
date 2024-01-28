@@ -985,7 +985,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
                                                       { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
-                                                      { true   , Test_NTP_Protocol               , __L("Test_NTP_Protocol")               },                                              
+                                                      { false  , Test_NTP_Protocol               , __L("Test_NTP_Protocol")               },                                              
                                                       { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
                                                       { false  , Test_Sound                      , __L("Test Sound")                      },       
                                                       { false  , Test_ProcessManager             , __L("Test Process Manager")            },
@@ -996,7 +996,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
                                                       { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
                                                       { false  , Test_SNMP                       , __L("Test SNMP ")                      },
-                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
+                                                      { true   , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
                                                       { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
                                                       { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
                                                       { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
@@ -4083,6 +4083,36 @@ bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
   fileJSON.GetAllInOneLine(jsonString);   
   
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, jsonString.Get());
+
+  XSTRING jsonstr;
+
+  jsonstr.Add(__L("{\"webinv\":\"0\",\"sshinv\":\"0\",\"webinvPort\":\"30089\",\"sshinvPort\":\"40089\",\"servertime\":1706297258,\"action\":\"counters\",\"numPrinters\":1,\"printers\":[\"192.168.1.156\"]}"));
+
+  fileJSON.DeleteAllLines();
+  fileJSON.DeleteAllObjects();
+
+  fileJSON.AddLine(jsonstr);
+  status = fileJSON.DecodeAllLines();
+
+  XFILEJSONVALUE* action_jsv       = fileJSON.GetValue(__L("action"));          
+  XFILEJSONVALUE* wevinv_jsv       = fileJSON.GetValue(__L("webinv"));                              
+  XFILEJSONVALUE* webinvport_jsv   = fileJSON.GetValue(__L("webinvPort"));
+  XFILEJSONVALUE* sshinv_jsv       = fileJSON.GetValue(__L("sshinv"));
+  XFILEJSONVALUE* sshinvport_jsv   = fileJSON.GetValue(__L("sshinvPort"));
+  XFILEJSONVALUE* servertime_jsv   = fileJSON.GetValue(__L("servertime"));          
+
+  XFILEJSONOBJECT* printerarray_jsv  = fileJSON.GetObject(__L("printers")); 
+  XFILEJSONVALUE*  nprinters_jsv     = fileJSON.GetValue(__L("numPrinters"));   
+
+  XDWORD nprinters = 0;
+
+  if(nprinters_jsv) nprinters = nprinters_jsv->GetValueInteger();  
+
+  if(printerarray_jsv)
+    {
+      if(nprinters < printerarray_jsv->GetValues()->GetSize())  nprinters = printerarray_jsv->GetValues()->GetSize();
+    }
+
 
 
   return status;
