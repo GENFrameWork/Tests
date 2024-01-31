@@ -88,6 +88,7 @@ option(DIO_PROTOCOL_CLI_BUS_FEATURE                        "Data Input/Output Pr
 option(DIO_PCAP_FEATURE                                    "Data Input/Output Cap"                                     true )
 option(DIO_IEC60870_5_FEATURE                              "IEC60870_5 Protocol"                                       true ) 
 option(DIO_DNSPROTOCOL_MITM_SERVER                         "DNS Protocol Man in the Middle Server"                     true )
+option(DIO_DYNDNS_FEATURE                                  "DynDNS"                                                    true )
 
 option(DIO_STREAMSPI_FEATURE                               "Data Input/Output Stream SPI"                              true )  
 option(DIO_STREAMSPI_GPIO_MCP23S17_FEATURE                 "Data SPI GPIO MCP23S17"                                    true )

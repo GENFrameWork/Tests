@@ -245,6 +245,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XSerializable                  (DEVTESTSCONSOLE* tests);
     static bool                     Test_InputSimulate                  (DEVTESTSCONSOLE* tests);
     static bool                     Test_Scheduler                      (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DynDNS                         (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);

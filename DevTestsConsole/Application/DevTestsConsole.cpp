@@ -148,6 +148,7 @@
 #include "DIOSNMP.h"
 #include "DIOLedNeoPixelWS2812B.h"
 #include "DIOAlerts.h"
+#include "DIODynDNS_Manager.h"
 
 #ifdef SND_ACTIVE
 #include "SNDFactory_XEvent.h"
@@ -996,7 +997,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
                                                       { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
                                                       { false  , Test_SNMP                       , __L("Test SNMP ")                      },
-                                                      { true   , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
+                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
                                                       { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
                                                       { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
                                                       { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
@@ -1009,6 +1010,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
+                                                      { true   , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
@@ -4784,6 +4786,46 @@ bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
   delete xscheduler;
    
   return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
+* @brief      Test_DynDNS
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
+{	
+  DIODYNDNS_MANAGER*  dyndnsmanager;
+  bool							  status = false;	
+
+  dyndnsmanager = new DIODYNDNS_MANAGER();
+  if(!dyndnsmanager)
+    {
+      return false; 
+    }
+
+  #ifdef APP_CFG_DYNDNSMANAGER_ACTIVE
+  for(XDWORD c=0; c<APP_CFG.DNSManager_GetURLs()->GetSize(); c++)
+    {
+      dyndnsmanager->AddDNS((*APP_CFG.DNSManager_GetURL(c)));
+    }         
+  #endif  
+
+  dyndnsmanager->GetLogin()->Set(__L(""));
+  dyndnsmanager->GetPassword()->Set(__L(""));
+	
+  status = dyndnsmanager->AssingAll();
+
+  delete dyndnsmanager;
+  
+	return status;
 }
 
 
