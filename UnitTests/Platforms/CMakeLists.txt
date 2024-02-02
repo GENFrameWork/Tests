@@ -34,7 +34,7 @@ option(GOOGLETEST_FEATURE                                  "Activate Google Test
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Main.txt") 
 
                      
 # --------------------------------------------------------------------
@@ -59,11 +59,11 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XDa
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_CreateProject.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_CreateProject.txt") 
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Libraries.txt") 
 

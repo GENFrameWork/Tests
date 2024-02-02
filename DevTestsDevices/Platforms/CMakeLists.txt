@@ -64,7 +64,7 @@ option(APP_FEATURE                                         "Application modules"
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Main.txt") 
 
                      
 # --------------------------------------------------------------------
@@ -101,11 +101,11 @@ endif()
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_CreateProject.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_CreateProject.txt") 
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/GEN/CMake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Libraries.txt") 
 
