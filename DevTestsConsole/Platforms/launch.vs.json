@@ -1,18 +1,18 @@
 {
-    "version": "0.7.0",
-    "defaults": {},
-    "configurations": [
-      {
-        "args": [],
-        "comment": "Learn how to configure WSL debugging. For more info, see http://aka.ms/vslinuxdebug",
-        "debuggerConfiguration": "gdb",
-        "env": {},
-        "name": "Remote ARM",
-        "project": "CMakeLists.txt",
-        "projectTarget": "homeserver",
-        "program": "/mnt/Projects/GENFrameWork/Tests/DevTestsConsole/Platforms/Linux/pi64/devtestsconsole",                   
-        "remoteMachineName": "192.168.0.18",
-        "type": "cppgdb"
-      }
-    ]
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "cppgdb",
+      "name": "Remote ARM",
+      "project": "CMakeLists.txt",
+      "projectTarget": "devtestsconsole",
+      "comment": "Learn how to configure WSL debugging. For more info, see http://aka.ms/vslinuxdebug",
+      "debuggerConfiguration": "gdb",
+      "args": [],
+      "env": {},
+      "targetArchitecture": "arm",
+      "remoteMachineName": "192.168.0.21"
+    }
+  ]
 }

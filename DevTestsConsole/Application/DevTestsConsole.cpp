@@ -1004,13 +1004,13 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XFileDFU                   , __L("Test XFile DFU")                  },
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
-                                                      { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
+                                                      { true   , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
-                                                      { true   , Test_DynDNS                     , __L("Test DynDNS")                     }, 
+                                                      { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
@@ -1934,14 +1934,23 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XSystem(DEVTESTSCONSOLE* tests)
 {
-  XSTRING plataform_name;
-  XSTRING OS_ID;
+  XSTRING   plataform_name;
+  XSTRING   OS_ID;
+  XSTRING*  BIOSserialnumber;
+  XSTRING*  CPUserialnumber;
 
   GEN_XSYSTEM.GetPlatform(&plataform_name);
   GEN_XSYSTEM.GetOperativeSystemID(OS_ID);
 
+  BIOSserialnumber = GEN_XSYSTEM.GetBIOSSerialNumber();
+  CPUserialnumber  = GEN_XSYSTEM.GetCPUSerialNumber();
+
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   Plataform                :  %s"), plataform_name.Get());
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   Operative System Version :  %s"), OS_ID.Get());
+
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   BIOS serial number       :  %s"), BIOSserialnumber->Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   CPU serial number        :  %s"), CPUserialnumber->Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("   CPU temperature          :  %3.2f Cº"), GEN_XSYSTEM.GetCPUTemperature());
 
   return true;
 }
@@ -4400,16 +4409,14 @@ bool DEVTESTSCONSOLE::Test_SystemBatteryLevel(DEVTESTSCONSOLE* tests)
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
-{
- 
+{ 
   DIOLEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_DIOFACTORY.CreateLedNeopixelWS2812B(); 
   if(!ledneopixelws2812b)  return false;
 
-  
-  // ledneopixelws2812b->SetDataGPIOEntryID(DEVTESTSCONSOLE_GPIOENTRYID_LED_NEOPIXEL);                                             
-   
-   
-  if(ledneopixelws2812b->Ini(8))
+  ledneopixelws2812b->SetDataGPIOEntryID(DEVTESTSCONSOLE_GPIOENTRYID_LED_NEOPIXEL);                                             
+      
+  /*
+  if(ledneopixelws2812b->Ini(7))
     {      
       for(int c=0; c<30; c++)
         {
@@ -4426,6 +4433,7 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
                           };
 
           ledneopixelws2812b->SendData(data1, sizeof(data1));
+
           GEN_XSLEEP.Seconds(1);
 
           
@@ -4440,6 +4448,7 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
                           };
 
           ledneopixelws2812b->SendData(data2, sizeof(data2));
+
           GEN_XSLEEP.Seconds(1);
           
           
@@ -4457,15 +4466,66 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
           ledneopixelws2812b->SendData(data3, sizeof(data3));
           GEN_XSLEEP.Seconds(1);
           
+        }
 
+      ledneopixelws2812b->End();
+    }
+  */
+
+  if(ledneopixelws2812b->Ini(7))
+    {      
+      XBYTE data1[] = { 0x00, 0xFF, 0x00,    
+                        0x00, 0xFF, 0x00,  
+                        0x00, 0xFF, 0x00,   
+                        0x00, 0xFF, 0x00,                            
+                                                    
+                        0x00, 0xFF, 0x00,  
+                        0x00, 0xFF, 0x00,
+                        0x00, 0xFF, 0x00,
+                        0x00, 0xFF, 0x00,                            
+                                                      
+                      };
+
+      
+      XBYTE data2[] = { 0xFF, 0x00, 0x00,    
+                        0xFF, 0x00, 0x00,  
+                        0xFF, 0x00, 0x00,   
+                        0xFF, 0x00, 0x00,                            
+                                                    
+                        0xFF, 0x00, 0x00,  
+                        0xFF, 0x00, 0x00,
+                        0xFF, 0x00, 0x00,
+                        0xFF, 0x00, 0x00,                            
+                                                      
+                      };
+
+      XBYTE data3[] = { 0x00, 0x00, 0xFF,     
+                        0x00, 0x00, 0xFF,   
+                        0x00, 0x00, 0xFF,    
+                        0x00, 0x00, 0xFF,                             
+                                                     
+                        0x00, 0x00, 0xFF,   
+                        0x00, 0x00, 0xFF, 
+                        0x00, 0x00, 0xFF, 
+                        0x00, 0x00, 0xFF,                                                                                   
+                      };
+
+      for(int c=0; c<10; c++)
+        {
+          ledneopixelws2812b->SendData(data1, sizeof(data1));
+          GEN_XSLEEP.Seconds(1);                  
+
+          ledneopixelws2812b->SendData(data2, sizeof(data2));
+          GEN_XSLEEP.Seconds(1);  
+
+          ledneopixelws2812b->SendData(data3, sizeof(data3));
+          GEN_XSLEEP.Seconds(1);  
         }
 
       ledneopixelws2812b->End();
     }
   
-
   GEN_DIOFACTORY.DeleteLedNeopixelWS2812B(ledneopixelws2812b);
-  
   
   return true;
 }

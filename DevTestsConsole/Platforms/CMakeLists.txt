@@ -10,6 +10,9 @@ project(devtestsconsole)
 set(GEN_DIRECTORY "../../../../GENFrameWork") 
 
 
+# Delete CMake Cache 
+include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeList_DeleteCache.txt") 
+
 
 # Compile Selection
 include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
@@ -103,9 +106,9 @@ option(INP_FEATURE                                         "Inputs"             
 option(INP_SIMULATE_FEATURE                                "Inputs Simulate"                                           true )
 option(INP_CAPTURE_FEATURE                                 "Inputs Capture"                                            true )
 
-option(SND_FEATURE                                         "Sound"                                                     true )
-option(SND_FILE_WAV_FEATURE                                "Sound WAV file"                                            true )
-option(SND_FILE_OGG_FEATURE                                "Sound OGG file"                                            true )
+#option(SND_FEATURE                                         "Sound"                                                     true )
+#option(SND_FILE_WAV_FEATURE                                "Sound WAV file"                                            true )
+#option(SND_FILE_OGG_FEATURE                                "Sound OGG file"                                            true )
 
 option(APP_FEATURE                                         "Application modules"                                       true )
 option(APP_CHECKRESOURCESHARDWARE_FEATURE                  "Application Check Resources Hardwar"                       true )
