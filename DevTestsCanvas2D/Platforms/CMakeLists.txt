@@ -29,7 +29,6 @@ option(APP_CFG_LOG_FEATURE                                    "Application CFG L
 option(APP_CFG_SCRIPTS_FEATURE                                "Application Scripts List"                                true )  
 
 option(GRP_FEATURE                                            "Graphics"                                                true )
-option(GRP_BITMAP_FILE_FEATURE                                "Graphics Bitmap Files"                                   true )
 option(GRP_BITMAP_FILE_BMP_FEATURE                            "Graphics Bitmap File BMP"                                true )
 option(GRP_BITMAP_FILE_JPG_FEATURE                            "Graphics Bitmap File JPG"                                true )
 option(GRP_BITMAP_FILE_PNG_FEATURE                            "Graphics Bitmap File PNG"                                true )

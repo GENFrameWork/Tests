@@ -10,10 +10,6 @@ project(devtestsconsole)
 set(GEN_DIRECTORY "../../../../GENFrameWork") 
 
 
-# Delete CMake Cache 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeList_DeleteCache.txt") 
-
-
 # Compile Selection
 include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
 
