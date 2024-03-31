@@ -165,24 +165,22 @@
 #include "APPInternetServices.h"
 #include "APPAlerts.h"
 
-#ifdef WINDOWS
+#include "ID_IBAN.h"
 
+#ifdef WINDOWS
   #include "XWINDOWSAccessControlLists.h"
   #include "XWINDOWSDesktopManager.h"
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"     
   #include "MainProcWINDOWS.h" 
   #include "DevTestsConsole_WindowsPlatform.h"
-
 #endif
 
 
 #ifdef LINUX
-
   #include "DevTestsConsole_LinuxPlatform.h"
   #include "INPLINUXDeviceID.h"
   #include "DIOLINUXDBus.h"
   #include "DIOLINUXNetworkManager.h"
-
 #endif
 
 
@@ -711,19 +709,19 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
+* 
+* @fn         bool DEVTESTSCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
 * @brief      Show_Line
-* @ingroup    APPLICATION
-*
-* @param[in]  string :
-* @param[in]  string2 :
-* @param[in]  tab :
-* @param[in]  linefeed :
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* @ingroup    TESTS
+* 
+* @param[in]  string : 
+* @param[in]  string2 : 
+* @param[in]  tab : 
+* @param[in]  linefeed : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
 {
   XSTRING line1;
@@ -748,16 +746,16 @@ bool DEVTESTSCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT::Show_Header(bool separator)
+* 
+* @fn         bool DEVTESTSCONSOLE::Show_Header(bool separator)
 * @brief      Show_Header
-* @ingroup    APPLICATION
-*
-* @param[in]  separator :
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* @ingroup    TESTS
+* 
+* @param[in]  separator : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_Header(bool separator)
 {
   XSTRING header;
@@ -773,14 +771,14 @@ bool DEVTESTSCONSOLE::Show_Header(bool separator)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool SCRIPT::Show_AppStatus()
+* 
+* @fn         bool DEVTESTSCONSOLE::Show_AppStatus()
 * @brief      Show_AppStatus
-* @ingroup    APPLICATION
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* @ingroup    TESTS
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_AppStatus()
 {
   XSTRING string;
@@ -1004,13 +1002,14 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XFileDFU                   , __L("Test XFile DFU")                  },
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
-                                                      { true   , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
+                                                      { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
+                                                      { true   , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
@@ -4887,6 +4886,70 @@ bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
   
 	return status;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
+* @brief      Test_ID_IBAN
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
+{
+  ID_IBAN IBAN;
+  bool    status = false;	
+
+  if(!tests->console) 
+    {
+      return false;
+    }
+
+  
+  status = IBAN.Set(__L("GB82 WEST 1234 5698 7654 32"));
+  if(status)
+    {
+
+    }
+  
+  status = IBAN.Set(__L("ES90 0024 6912 50 1234567891"));
+  if(status)
+    {
+
+    }
+
+  // 
+  
+  for(int c=0; c<10000; c++)
+    {
+      XSTRING IBANstr;
+      
+      // ES1000492352082414205416
+      IBANstr.AddFormat(__L("ES10 0049 2352 08 241420 %04d"), c);
+
+      status = IBAN.Set(IBANstr.Get());
+
+      if(status)
+        {
+          int a=0;
+          a++;
+        }
+
+      tests->console->Printf(__L("IBAN : %s  %20s    %c"), IBAN.Get()->Get(), status?__L("Ok!"):__L("Error!"), status?__C('\n'):__C('\r')); 
+      if(status)
+        {  
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("IBAN : %s"), IBAN.Get()->Get()); 
+        }
+    }
+
+  tests->console->Printf(__L("                                                                              \n")); 
+
+  return status;
+} 
 
 
 #ifdef WINDOWS
