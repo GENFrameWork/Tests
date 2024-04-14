@@ -188,6 +188,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_XRand                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XTrace                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_XLogs                          (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XTimer                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_XVector                        (DEVTESTSCONSOLE* tests);
   //static bool                     Test_XVectorSTL                     (DEVTESTSCONSOLE* tests);
     bool                            Test_XTree_AddChilds                (XTREE_NODE_TEST* node, int nchild);

@@ -956,6 +956,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XRand                      , __L("Test_XRand")                      },
                                                       { false  , Test_XTrace                     , __L("Test XTrace")                     },
                                                       { false  , Test_XLogs                      , __L("Test XLogs")                      },
+                                                      { true   , Test_XTimer                     , __L("Test XTimer")                     },
                                                       { false  , Test_XTree                      , __L("Test XTree")                      },
                                                       { false  , Test_XDir                       , __L("Test XDir")                       },
                                                       { false  , Test_XVariant                   , __L("Test XVariant")                   },
@@ -1009,7 +1010,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
-                                                      { true   , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
+                                                      { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
@@ -1484,6 +1485,43 @@ bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 
   GEN_XFACTORY.DeleteRand(xrand);
 
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_XTimer(DEVTESTSCONSOLE* tests)
+* @brief      Test_XTimer
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XTimer(DEVTESTSCONSOLE* tests)
+{
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  
+  XQWORD  timer_sec1 = 0;
+  XQWORD  timer_sec2 = 0;
+  XSTRING measure;
+
+  xtimer->AddSeconds(100000000L);  
+  timer_sec1 = xtimer->GetMeasureSeconds();
+
+  xtimer->AddSeconds(750000L);
+  timer_sec2 = xtimer->GetMeasureSeconds();
+
+  if(xtimer)
+    {   
+      xtimer->GetMeasureString(measure, true);
+    }
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+  xtimer = NULL;
+  
   return true;
 }
 
