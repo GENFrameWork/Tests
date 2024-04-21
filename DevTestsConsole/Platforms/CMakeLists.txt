@@ -19,7 +19,7 @@ include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compile
 
 option(DEBUG_FEATURE                                            "Debug mode"                                              true )
 option(XTRACE_FEATURE                                           "XTrace"                                                  true )
-option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        true )                        
+#option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        true )                        
 option(XTHREADCOLLECTED_FEATURE                                 "Thread Collected"                                        true )
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         true )
     
@@ -62,6 +62,7 @@ option(DIO_FEATURE                                              "Data Input/Outp
 option(DIO_STREAMUART_FEATURE                                   "Data Input/Output Stream UART"                           true )
 option(DIO_STREAMBLUETOOTH_FEATURE                              "Data Input/Output Stream Bluetooth"                      true )
 option(DIO_STREAMBLUETOOTHLE_FEATURE                            "Data Input/Output Stream Bluetooth LE"                   true )
+option(DIO_STREAMTCPIP_FEATURE                                  "Stream TCPIP"                                            true )
 option(DIO_STREAMWIFI_FEATURE                                   "Data Input/Output Stream Wifi"                           true )
 option(DIO_STREAMTLS_FEATURE                                    "Data Input/Output Stream TLS"                            true )
 option(DIO_CHECKCONNECTIONS_FEATURE                             "Check Connections"                                       true )
