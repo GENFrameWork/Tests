@@ -129,7 +129,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
                                       
                                       Class_Add<TESTSERIALIZABLE2>(&class_ser, __L("class_ser"));
                                       
-                                      XVector_Add<TESTSERIALIZABLE2>(&vector_ser, __L("vector_ser"));
+                                      XVectorClass_Add<TESTSERIALIZABLE2>(&vector_ser, __L("vector_ser"), __L(""));
 
                                       return true;
                                     }
@@ -142,7 +142,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
                                       
                                       Class_Extract<TESTSERIALIZABLE2>(&class_ser, __L("class_ser"));
                                       
-                                      XVector_Extract<TESTSERIALIZABLE2>(&vector_ser, __L("vector_ser"));
+                                      XVectorClass_Extract<TESTSERIALIZABLE2>(&vector_ser, __L("vector_ser"), __L(""));
 
                                       return true;
                                     }
