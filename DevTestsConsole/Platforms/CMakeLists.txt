@@ -22,6 +22,7 @@ option(XTRACE_FEATURE                                           "XTrace"        
 #option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        true )                        
 option(XTHREADCOLLECTED_FEATURE                                 "Thread Collected"                                        true )
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         true )
+option(ANONYMOUS_MODE_FEATURE                                   "Activate Anonymous mode"                                 true )
     
 option(XSHAREDMEMORYMANAGER_FEATURE                             "Shared Memory Manager"                                   true )
 option(XPROCESSMANAGER_FEATURE                                  "Process Manager"                                         true )

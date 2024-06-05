@@ -2973,7 +2973,10 @@ bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
           status = curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)?true:false;
 
           XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Shared  key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
-          if(status) XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), 32, 1, 32);         
+          if(status) 
+            {
+              XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), 32, 1, 32);         
+            }
 
           if(!status) break;
         }
@@ -4149,7 +4152,7 @@ bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
   XFILEJSONVALUE* sshinvport_jsv   = fileJSON.GetValue(__L("sshinvPort"));
   XFILEJSONVALUE* servertime_jsv   = fileJSON.GetValue(__L("servertime"));          
 
-  XFILEJSONOBJECT* printerarray_jsv  = fileJSON.GetObject(__L("printers")); 
+  XFILEJSONOBJECT* printerarray_jsv  = fileJSON.GetObj(__L("printers")); 
   XFILEJSONVALUE*  nprinters_jsv     = fileJSON.GetValue(__L("numPrinters"));   
 
   XDWORD nprinters = 0;
