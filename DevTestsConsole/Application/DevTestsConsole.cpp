@@ -90,6 +90,7 @@
 #include "CipherBlowfish.h"
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
+#include "CipherRootCertificates.h"
 #include "CipherRSA.h"
 #include "CipherCurve25519.h"
 
@@ -980,7 +981,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
                                                       { false  , Test_DIOStreamTCPIP             , __L("Test DIO Stream TCPIP")           },
-                                                      { false  , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
+                                                      { true   , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
                                                       { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
@@ -1006,7 +1007,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
@@ -2833,17 +2834,21 @@ bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
 	XPATH		 xpathgeneric;	
 
 	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, xpathgeneric);
-//xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
+  xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
 //xpath.Create(3 , xpathgeneric.Get(), __L("certificate"), CIPHERKEYSFILEKEY_EXT);	
 //xpath.Create(2 , xpathgeneric.Get(), __L("certificate.ca.crt"));	
-  xpath.Create(2 , xpathgeneric.Get(), __L("id_rsa"));
+//xpath.Create(2 , xpathgeneric.Get(), __L("id_rsa"));
 	
-	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM(xpath);	
+	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM();	
   if(filekeys) 
     {
       status = true;
     }
 
+  if(status)
+    {
+      filekeys->ReadDecodeAllFile(xpath);
+    }
 
   delete filekeys;
 
@@ -2876,11 +2881,11 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 	xpath.Create(3 , xpathgeneric.Get(), __L("keys"), CIPHERKEYSFILEGKF_EXT);	
 	
 	CIPHERKEYSFILEGKF*		filekeys   = new CIPHERKEYSFILEGKF(xpath);	
-	CIPHERKEYRSAPUBLIC*		publickey  = NULL;
-	CIPHERKEYRSAPRIVATE*	privatekey = NULL;		
+	CIPHERKEYPUBLICRSA*		publickey  = NULL;
+	CIPHERKEYPRIVATERSA*	privatekey = NULL;		
 		
-	publickey  = (CIPHERKEYRSAPUBLIC*)filekeys->GetKey(CIPHERKEYTYPE_PUBLIC);
-	privatekey = (CIPHERKEYRSAPRIVATE*)filekeys->GetKey(CIPHERKEYTYPE_PRIVATE);
+	publickey  = (CIPHERKEYPUBLICRSA*)filekeys->GetKey(CIPHERKEYTYPE_PUBLIC);
+	privatekey = (CIPHERKEYPRIVATERSA*)filekeys->GetKey(CIPHERKEYTYPE_PRIVATE);
 
 	if(!publickey || !privatekey)
 		{
@@ -3084,10 +3089,18 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
+  CIPHERKEYSFILEPEM   filekeys;
   DIOSTREAMTLSCONFIG  diostreamcfg;
   DIOSTREAMTLS*       diostream    = NULL;
   XSTRING             line;
   bool                status       = false;
+	XPATH		            xpathgeneric;	
+  XPATH	 	            xpath;
+
+	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, xpathgeneric);
+  xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
+
+  filekeys.DecodeCertificates(cipherrootcertificates, nlinescipherrootcertificates);
 
   diostreamcfg.GetRemoteURL()->Set(__L("www.google.es"));
   diostreamcfg.SetMode(DIOSTREAMMODE_CLIENT);
@@ -3127,7 +3140,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
     }
 
   delete diostream;
- 
+  
   return status;
 }
 
@@ -5274,7 +5287,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
               XSTRING* line = xfiletxtdevices->GetLine(c);
               if(line)
                 {
-                  int index = line->Find(__L("I:"), true);
+                  int index = line.Find(__L("I:"), true);
                   if(index == 0)
                     {
                       INPLINUXDEVICEID* deviceID = new INPLINUXDEVICEID();
@@ -5282,9 +5295,9 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                         {
                           do{ line = xfiletxtdevices->GetLine(c);
                               if(!line) break;
-                              if(line->GetSize() < 2) break;  
+                              if(line.GetSize() < 2) break;  
 
-                              char typeline = (char)line->Get()[0];  
+                              char typeline = (char)line.Get()[0];  
                               switch(typeline)
                                 {    
                                   case  'I' : break;                                    
@@ -5292,7 +5305,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                                   case  'N' : { XSTRING name;
 
                                                 name.AdjustSize(_MAXSTR);
-                                                line->UnFormat(__L("N: Name=\"%s\""), name.Get());
+                                                line.UnFormat(__L("N: Name=\"%s\""), name.Get());
                                                 name.AdjustSize();      
 
                                                 deviceID->GetName()->Set(name);
@@ -5307,7 +5320,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                                                 int     event_index = INPLINUXDEVICEID_INVALID;
 
                                                 handlers.AdjustSize(_MAXSTR);
-                                                line->UnFormat(__L("H: Handlers=%s"), handlers.Get());
+                                                line.UnFormat(__L("H: Handlers=%s"), handlers.Get());
                                                 handlers.AdjustSize();      
 
                                                 index = handlers.Find(__L("event"), true);
@@ -5333,7 +5346,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
 
                                                 for(int d=0; d< (sizeof(prefix) / sizeof(XCHAR*)); d++)   
                                                   {
-                                                    index = line->Find(prefix[d], true);
+                                                    index = line.Find(prefix[d], true);
                                                     if(index != XSTRING_NOTFOUND)
                                                       {
                                                         switch(d)
@@ -5343,7 +5356,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                                                             case 1  : { XSTRING ev_str;
 
                                                                         ev_str.AdjustSize(_MAXSTR);
-                                                                        line->Copy(index+3, ev_str);
+                                                                        line.Copy(index+3, ev_str);
                                                                         ev_str.AdjustSize();
 
                                                                         if(!ev_str.Compare(__L("120013"), true)) deviceID->SetType(INPDEVICE_TYPE_KEYBOARD);  
