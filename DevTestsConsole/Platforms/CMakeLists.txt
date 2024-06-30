@@ -67,7 +67,7 @@ option(DIO_STREAMTCPIP_FEATURE                                  "Stream TCPIP"  
 option(DIO_STREAMWIFI_FEATURE                                   "Data Input/Output Stream Wifi"                           true )
 option(DIO_STREAMTLS_FEATURE                                    "Data Input/Output Stream TLS"                            true )
 option(DIO_CHECKCONNECTIONS_FEATURE                             "Check Connections"                                       true )
-option(DIO_NETWORKTINEPROTOCOL_FEATURE                          "Network Time Protocol"                                   true )
+option(DIO_NETWORKTIMEPROTOCOL_FEATURE                          "Network Time Protocol"                                   true )
 option(DIO_DYNDNS_FEATURE                                       "DynDNS"                                                  true )
 option(DIO_SCRAPERWEB_FEATURE                                   "Scraper Web"                                             true )
 option(DIO_GPIO_FEATURE                                         "Data Input/Output GPIO"                                  true )
