@@ -4800,11 +4800,11 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
   serializationmethod = XSERIALIZABLE::CreateInstance(xfileJSON);
 
-  testserializable.InitSerialize(serializationmethod);
+  testserializable.DoSerialize(serializationmethod);
   //xfileJSON.EncodeAllLines(true);  
   xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
 
-  testserializable2.InitDeserialize(serializationmethod);
+  testserializable2.DoDeserialize(serializationmethod);
   delete serializationmethod;
 
   return true;
