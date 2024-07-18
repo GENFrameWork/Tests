@@ -75,7 +75,7 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
     bool                            Deserialize                        ()
                                     {   
                                       Primitive_Extract<int>(value2, __L("value2"));
-                                      Primitive_Extract<XSTRING*>(&string2, __L("string2"));
+                                      Primitive_Extract<XSTRING&>(string2, __L("string2"));
 
                                       return true;
                                     }
@@ -138,7 +138,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
     bool                            Deserialize                        ()
                                     {    
                                       Primitive_Extract<int>(value1, __L("value1"));
-                                      Primitive_Extract<XSTRING*>(&string1, __L("string1"));
+                                      Primitive_Extract<XSTRING&>(string1, __L("string1"));
                                       
                                       Class_Extract<TESTSERIALIZABLE2>(&class_ser, __L("class_ser"));
                                       
