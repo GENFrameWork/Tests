@@ -27,6 +27,8 @@ option(ANONYMOUS_MODE_FEATURE                                   "Activate Anonym
 option(XSHAREDMEMORYMANAGER_FEATURE                             "Shared Memory Manager"                                   ON )
 option(XPROCESSMANAGER_FEATURE                                  "Process Manager"                                         ON )
 option(XLICENSE_FEATURE                                         "License functions"                                       ON )
+
+option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
     
 option(XSERIALIZABLE_BINARY_FEATURE                             "Serializable Binary"                                     ON )
 option(XSERIALIZABLE_JSON_FEATURE                               "Serializable JSON"                                       ON )

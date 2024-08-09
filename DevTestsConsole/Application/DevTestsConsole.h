@@ -251,7 +251,6 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
-    static bool                     Test_WindowsDesktopManager          (DEVTESTSCONSOLE* tests);
     #endif
 
     #ifdef LINUX

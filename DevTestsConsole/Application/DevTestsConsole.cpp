@@ -170,7 +170,6 @@
 
 #ifdef WINDOWS
   #include "XWINDOWSAccessControlLists.h"
-  #include "XWINDOWSDesktopManager.h"
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"     
   #include "MainProcWINDOWS.h" 
   #include "DevTestsConsole_WindowsPlatform.h"
@@ -981,7 +980,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
                                                       { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
                                                       { false  , Test_DIOStreamTCPIP             , __L("Test DIO Stream TCPIP")           },
-                                                      { true   , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
+                                                      { false  , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
                                                       { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
                                                       { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
                                                       { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
@@ -1007,15 +1006,14 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
+                                                      { true   , Test_XSerializable              , __L("Test XSerializable")              },
                                                       { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       
                                                       #ifdef WINDOWS
-                                                      { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },
-                                                      { false  , Test_WindowsDesktopManager      , __L("Test Windows Desktop Manager")    },                                              
+                                                      { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
                                                       #endif
 
                                                       #ifdef LINUX
@@ -4789,6 +4787,7 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
+  XRAND*                xrand;
   XSERIALIZATIONMETHOD* serializationmethod;
   XBUFFER               buffer; 
   XFILEJSON             xfileJSON;      
@@ -4798,14 +4797,43 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
 //serializationmethod = XSERIALIZABLE::CreateInstance(buffer);
 
+  xrand = GEN_XFACTORY.CreateRand();
+  if(!xrand)
+    {
+      return false;
+    }
+
   serializationmethod = XSERIALIZABLE::CreateInstance(xfileJSON);
 
+
+  testserializable.SetValue1(xrand->Max(10000));
+  testserializable.GetString1()->Set(__L("hola radiola main"));
+
+  testserializable.GetClassSer()->SetValue2(xrand->Max(10000));
+  testserializable.GetClassSer()->GetString2()->Format(__L("Hola radiola class [%04X]"), xrand->Max(16384));
+
+  for(int c=0; c<testserializable.GetVectorSer()->GetSize(); c++)
+    {
+      TESTSERIALIZABLE2* test = testserializable.GetVectorSer()->Get(c);
+      if(test)
+        {
+          test->SetValue2(xrand->Max(10000)); 
+          test->GetString2()->Format(__L("hola radiola vector %d [%04X]"), c+1, xrand->Max(16384));      
+        }
+    }
+
+
   testserializable.DoSerialize(serializationmethod);
-  //xfileJSON.EncodeAllLines(true);  
+  xfileJSON.EncodeAllLines(true);  
   xfileJSON.ShowTraceJSON(XTRACE_COLOR_BLUE);
 
   testserializable2.DoDeserialize(serializationmethod);
+  xfileJSON.EncodeAllLines(true);  
+  xfileJSON.ShowTraceJSON(XTRACE_COLOR_GREEN);
+
   delete serializationmethod;
+
+  GEN_XFACTORY.DeleteRand(xrand);
 
   return true;
 }
@@ -5033,35 +5061,6 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.Seconds(2);
 
   status = ACList.SetFilePermissionForEveryone(namefile.Get());
-
-  return status;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Test_WindowsDesktopManager(DEVTESTSCONSOLE* tests)
-* @brief      Test_WindowsDesktopManager
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_WindowsDesktopManager(DEVTESTSCONSOLE* tests)
-{
-  XWINDOWSDESKTOPMANAGER desktopmanager;
-  bool                   status = false;
-
-  if(desktopmanager.GetDesktopMonitors())
-    {
-      RECT* rect = desktopmanager.GetDesktopMonitors()->GetCombinedRect();   
-      if(rect)
-        {
-          status = true;    
-        }
-    }
 
   return status;
 }

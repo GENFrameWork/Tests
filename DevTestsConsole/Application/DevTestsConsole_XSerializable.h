@@ -53,14 +53,27 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
   public:
                                     TESTSERIALIZABLE2                  ()
                                     {
-                                      Clean();
-
-                                      value2 = 12345;
+                                      Clean();                                                       
                                     }
 
     virtual                        ~TESTSERIALIZABLE2                  ()
                                     {
                                       Clean();                     
+                                    }
+
+    int                             GetValue2                          ()
+                                    {
+                                      return value2;
+                                    }    
+
+    void                            SetValue2                          (int value2)
+                                    {
+                                      this->value2 = value2;
+                                    }    
+
+    XSTRING*                        GetString2                         ()  
+                                    {
+                                      return &string2;    
                                     }
 
     bool                            Serialize                          ()
@@ -83,7 +96,8 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
 
     void                            Clean                              ()
                                     {
-                                      value2 = 0;
+                                      value2  = 0;                                  
+                                      string2 = __L("");
                                     } 
 
     int                             value2;
@@ -98,9 +112,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
   
                                     TESTSERIALIZABLE                   ()
                                     {
-                                      Clean();
-
-                                      value1 = 54321;
+                                      Clean();                                  
 
                                       for(int c=0; c<10; c++)
                                         {
@@ -121,6 +133,31 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
                                       Clean();                     
                                     }
 
+
+    int                             GetValue1                          ()
+                                    {
+                                      return value1;
+                                    }    
+
+    void                            SetValue1                          (int value1)
+                                    {
+                                      this->value1 = value1;
+                                    }    
+
+    XSTRING*                        GetString1                         ()  
+                                    {
+                                      return &string1;    
+                                    }
+
+    TESTSERIALIZABLE2*              GetClassSer                        ()
+                                    {
+                                      return &class_ser;
+                                    }
+
+    XVECTOR<TESTSERIALIZABLE2*>*    GetVectorSer                       ()
+                                    {
+                                      return &vector_ser;
+                                    }
     
     bool                            Serialize                          ()
                                     {
@@ -152,7 +189,8 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
 
     void                            Clean                              ()
                                     {
-                                       value1 = 0;
+                                      value1  = 0;
+                                      string1 = __L("");
                                     } 
 
     int                             value1;
