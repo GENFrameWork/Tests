@@ -6,9 +6,16 @@
 function main()
 {
   var scriptname      = "inputsimul.js";
-  var appname         = "wordpad.exe";
-  var apppath         = "C:\\Program Files (x86)\\Windows NT\\Accessories\\" + appname;
-  var windowtitle     = "WordPad";
+  //var appname         = "wordpad.exe";
+  //var apppath         = "C:\\Program Files (x86)\\Windows NT\\Accessories\\" + appname;
+  //var windowtitle     = "WordPad";
+
+
+  var appname         = "canvas2D.exe";  
+  var apppath         = "D:\\Projects\\GENFrameWork\\Examples\\Graphics\\Canvas2D\\Platforms\\Windows\\x64\\" + appname;
+  //var apppath         = "/mnt/d/Projects/GENFrameWork/Examples/Graphics/Canvas2D/Platforms/Linux/x64/" + appname;
+  //var appname         = "canvas2D";
+  var windowtitle     = "Canvas 2D";
   var maskbitmapname  = "inputsimul.png";
   var maskbitmapname2 = "inputsimul2.png";
 
@@ -18,9 +25,9 @@ function main()
 
   Log_AddEntry(1, "Script", "[script %s] Exec application: %s", scriptname, appname);
  
-  Window_SetPosition(appname, windowtitle, 10, 10);
-  Window_Resize(appname, windowtitle, 700, 250);
-  Window_SetFocus(appname, windowtitle);
+  //Window_SetPosition(appname, windowtitle, 10, 10);
+  //Window_Resize(appname, windowtitle, 700, 250);
+  //Window_SetFocus(appname, windowtitle);
 
   Window_SetBmpFindCFG(0, 10);
 

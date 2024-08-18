@@ -652,7 +652,7 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
 
   GetMainScreen()->CreateViewport(GRPVIEWPORT_ID_MAIN , 0.0f, 0.0f, (float)screen->GetWidth(), (float)screen->GetHeight(),  0,  0, (APP_CFG.Screen_GetMaxWidth()) , (APP_CFG.Screen_GetMaxHeight()));
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Main Screen: Width %d, height %d"),  screen->GetWidth(), screen->GetHeight());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Main Screen] Width %d, height %d"),  screen->GetWidth(), screen->GetHeight());
 
   return true;
 }
