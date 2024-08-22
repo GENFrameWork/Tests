@@ -394,9 +394,9 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
       XSTRING SO_ID;
       status = GEN_XSYSTEM.GetOperativeSystemID(SO_ID);
-
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Application ROOT path: %s"),  GEN_XPATHSMANAGER.GetPathSection(XPATHSMANAGERSECTIONTYPE_ROOT)->xpath->Get());
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%s"),  GEN_VERSION.GetAppVersion()->Get());   
+ 
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%s"),  GEN_VERSION.GetAppVersion()->Get()); 
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Application ROOT path: %s"),  GEN_XPATHSMANAGER.GetPathSection(XPATHSMANAGERSECTIONTYPE_ROOT)->xpath->Get()); 
       XTRACE_PRINTMSGSTATUS(__L("S.O. version"), SO_ID.Get()); 
 
       stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
@@ -410,7 +410,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
       GEN_XSYSTEM.GetMemoryInfo(total,free);
 
       APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_INITIATION, false, XT_L(XTRANSLATION_GEN_ID_APPLOG_TOTALMEMORY), total, free, GEN_XSYSTEM.GetFreeMemoryPercent());
-
+     
     }
 
   //--------------------------------------------------------------------------------------
