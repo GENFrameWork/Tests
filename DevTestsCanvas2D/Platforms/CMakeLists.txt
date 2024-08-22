@@ -21,6 +21,7 @@ option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
        
 option(APP_FEATURE                                              "Application modules"                                     ON )
+option(APP_EXTENDED_FEATURE                                     "Application Extended"                                    ON )
 option(APP_LOG_FEATURE                                          "Application Log"                                         ON )
 option(APP_GRAPHICS_FEATURE                                     "Application Graphics"                                    ON )
 
