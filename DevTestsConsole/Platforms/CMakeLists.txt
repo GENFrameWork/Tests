@@ -92,6 +92,7 @@ option(DIO_PCAP_FEATURE                                         "Data Input/Outp
 option(DIO_IEC60870_5_FEATURE                                   "IEC60870_5 Protocol"                                     ON ) 
 option(DIO_DNSPROTOCOL_MITM_SERVER                              "DNS Protocol Man in the Middle Server"                   ON )
 option(DIO_DYNDNS_FEATURE                                       "DynDNS"                                                  ON )
+option(DIO_WEBSERVER_RESOLVEENDPOINT_FEATURE                    "Web Server Resolved End Point"                           ON )
     
 option(DIO_STREAMSPI_FEATURE                                    "Data Input/Output Stream SPI"                            ON )  
 option(DIO_STREAMSPI_GPIO_MCP23S17_FEATURE                      "Data SPI GPIO MCP23S17"                                  ON )
@@ -112,6 +113,8 @@ option(SND_FILE_OGG_FEATURE                                     "Sound OGG file"
     
 option(APP_FEATURE                                              "Application modules"                                     ON )
 option(APP_EXTENDED_FEATURE                                     "Application Extended"                                    ON )  
+option(APP_EXTENDED_APPLICATIONHEADER_FEATURE                   "Application Extended Aplication Header"                  ON )  
+option(APP_EXTENDED_APPLICATIONSTATUS_FEATURE                   "Application Extended Aplication Status"                  ON )  
 option(APP_CHECKRESOURCESHARDWARE_FEATURE                       "Application Check Resources Hardwar"                     ON )
 option(APP_CONSOLE_FEATURE                                      "Application Console"                                     ON )
 option(APP_INTERNETSERVICES_FEATURE                             "Application Internet Services"                           ON )

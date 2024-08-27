@@ -166,6 +166,7 @@
 #include "APPInternetServices.h"
 #include "APPAlerts.h"
 #include "APPExtended.h"
+#include "APPExtended_ApplicationStatus.h"
 
 #include "ID_IBAN.h"
 
@@ -384,25 +385,6 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
   APP_EXTENDED.APPStart(&APP_CFG, console);
 
   //--------------------------------------------------------------------------------------
-  /*
-  status = false;
-
-  string.Format(APPCONSOLE_DEFAULTMESSAGEMASK, __L("Control de recursos hardware"));
-
-  appcheckresourceshardware = new APPCHECKRESOURCESHARDWARE();
-  status = (appcheckresourceshardware)?true:false;
-  if(status) status = appcheckresourceshardware->Ini(&APP_CFG);
-
-  stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
-
-  APP_LOG_ENTRY((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR, APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
-
-  if(!status) return false;
-
-  SubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_MEMFREELIMIT  , appcheckresourceshardware);
-  SubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_CPUUSAGELIMIT , appcheckresourceshardware);
-   */
-  //--------------------------------------------------------------------------------------
   
   status = false;
 
@@ -492,7 +474,8 @@ bool DEVTESTSCONSOLE::AppProc_Update()
                                                               {
                                                                 if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
                                                                   {
-                                                                    Show_AllStatus();
+                                                                    APP_EXTENDED.ShowAll(console);
+
                                                                     xtimerupdateconsole->Reset();
                                                                   }
                                                     
@@ -598,23 +581,6 @@ bool DEVTESTSCONSOLE::AppProc_End()
 
   //--------------------------------------------------------------------------------------
 
-  if(appcheckresourceshardware)
-    {
-      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_MEMFREELIMIT       , appcheckresourceshardware);
-      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_TOTALCPUUSAGELIMIT , appcheckresourceshardware);
-      UnSubscribeEvent(APPCHECKRESOURCESHARDWARE_XEVENT_TYPE_APPCPUUSAGELIMIT   , appcheckresourceshardware);
-  
-      string.Format(APPCONSOLE_DEFAULTMESSAGEMASK,__L("Desactivando control recursos HW"));
-
-      delete appcheckresourceshardware;
-      appcheckresourceshardware = NULL;
-
-      stringresult = __L("Ok.");
-      APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_ENDING, false, __L("%s: %s")  , string.Get(), stringresult.Get());
-    }
-
-  //--------------------------------------------------------------------------------------
-
   APP_EXTENDED.APPEnd(&APP_CFG, console);
   APP_EXTENDED.DelInstance();  
   APP_CFG.DelInstance();
@@ -678,149 +644,6 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
-* @brief      Show_Line
-* @ingroup    TESTS
-* 
-* @param[in]  string : 
-* @param[in]  string2 : 
-* @param[in]  tab : 
-* @param[in]  linefeed : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Show_Line(XSTRING& string, XSTRING& string2, int tab, bool linefeed)
-{
-  XSTRING line1;
-  XSTRING line2;
-
-  console->Format_Message(string.Get(), tab , false, false, line1);
-  if(tab)
-    {
-      int _tab = tab;
-
-      if(_tab<37) _tab = 37;
-      line1.AdjustSize(_tab, false, __L(" "));
-    }
-
-  console->Format_Message(string2.Get(), 0 , false, linefeed, line2);
-
-  console->Print(line1.Get());
-  console->Print(line2.Get());
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Show_Header(bool separator)
-* @brief      Show_Header
-* @ingroup    TESTS
-* 
-* @param[in]  separator : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Show_Header(bool separator)
-{
-  XSTRING header;
-
-  header = GEN_VERSION.GetAppTitle()->Get();
-  
-  console->Printf(__L(" %s"),header.Get());
-  console->Printf(__L("\n"));
-  if(separator) console->Printf(__L("\n"));
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Show_AppStatus()
-* @brief      Show_AppStatus
-* @ingroup    TESTS
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Show_AppStatus()
-{
-  XSTRING string;
-  XSTRING string2;
-
-  //-------------------------------------------------------------------------------
-  // Platforms
-
-  XSTRING           platformstr;
-  XSYSTEM_PLATFORM  platform;
-  
-  platform = GEN_XSYSTEM.GetPlatform(&platformstr);
-
-  string  = __L("Plataforma");
-  string2.Format(__L("%s"), platformstr.Get());
-  Show_Line(string, string2);
-
-  //-------------------------------------------------------------------------------
-  // Memory status
-
-  XDWORD  total;
-  XDWORD  free;
-  
-  GEN_XSYSTEM.GetMemoryInfo(total,free);
-
-  string  = __L("Memoria total");
-  string2.Format(__L("%d Kb, libre %d Kb (el %d%%)"), total, free, GEN_XSYSTEM.GetFreeMemoryPercent());
-  Show_Line(string, string2);
-
-
-  //-------------------------------------------------------------------------------
-  // CPU usage status
-  /*
-  XSTRING nameapp =  APPLICATION_NAMEFILE;
-
-  #ifdef WINDOWS
-  nameapp.Add(__L(".exe"));
-  #endif
-
-  string  = __L("Uso de CPU");
-  string2.Format(__L("Total %d%% , [%s] aplicacion  %d%%"), GEN_XSYSTEM.GetCPUUsageTotal(), APPLICATION_NAMEAPP, GEN_XSYSTEM.GetCPUUsageForProcessName(nameapp.Get()));
-  Show_Line(string, string2);
-  */
-  //-------------------------------------------------------------------------------
-  // Date time
-
-  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
-  if(datetime)
-    {
-      datetime->Read();
-
-      string  = __L("Fecha ");
-      datetime->GetDateTimeToString(XDATETIME_FORMAT_STANDARD | XDATETIME_FORMAT_TEXTMONTH | XDATETIME_FORMAT_ADDDAYOFWEEK, string2);
-      Show_Line(string, string2);
-
-      GEN_XFACTORY.DeleteDateTime(datetime);
-    }
-
-  //-------------------------------------------------------------------------------
-  // Time Working
-
-  if(xtimerglobal)
-    {
-      string  = __L("Tiempo de funcionamiento");
-      xtimerglobal->GetMeasureString(string2, true);
-      Show_Line(string, string2);
-    }
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         bool DEVTESTSCONSOLE::Show_PlaySound()
 * @brief      Show_PlaySound
 * @ingroup    APPLICATION
@@ -877,30 +700,6 @@ bool DEVTESTSCONSOLE::Show_PlaySound()
   GEN_XFACTORY.DeleteTimer(timer);
 
   #endif
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         bool DEVTESTSCONSOLE::Show_AllStatus()
-* @brief      Show_AllStatus
-* @ingroup    APPLICATION
-*
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Show_AllStatus()
-{
-  console->Clear();
-
-  if(xmutexshowallstatus) xmutexshowallstatus->Lock();
-
-  if(Show_Header(false))      console->PrintMessage(__L(""),0, false, true);
-  if(Show_AppStatus())        console->PrintMessage(__L(""),0, false, true);
-
-  if(xmutexshowallstatus) xmutexshowallstatus->UnLock();
 
   return true;
 }
@@ -3487,7 +3286,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Pause(item[0]);
  
-  tests->Show_AllStatus();
+  APP_EXTENDED.ShowAll(tests->console);
   tests->Show_PlaySound();  
 
   GEN_XSLEEP.Seconds(3); 
@@ -3497,7 +3296,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Stop(item[0]);
   
-  tests->Show_AllStatus();
+  APP_EXTENDED.ShowAll(tests->console);
   tests->Show_PlaySound();   
  
     
@@ -5438,7 +5237,7 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
   #ifdef SND_ACTIVE
-  devtestsconsole->Show_AllStatus();
+  APP_EXTENDED.ShowAll(devtestsconsole->console);
   devtestsconsole->Show_PlaySound();
     
   for(int c=0; c<10; c++)
