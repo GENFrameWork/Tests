@@ -272,14 +272,9 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
 
     void                            Clean                               ();
     
-    APPCHECKRESOURCESHARDWARE*      appcheckresourceshardware;
-    APPINTERNETSERVICES*            appinternetservices;
-
-    XTIMER*                         xtimerupdateconsole;
-    XMUTEX*                         xmutexshowallstatus;
-
+   
+    XTIMER*                         xtimerupdateconsole;    
     XMUTEX*                         xmutexthread;    
-
 };
 
 

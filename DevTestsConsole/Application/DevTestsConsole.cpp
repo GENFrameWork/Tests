@@ -167,6 +167,7 @@
 #include "APPAlerts.h"
 #include "APPExtended.h"
 #include "APPExtended_ApplicationStatus.h"
+#include "APPExtended_InternetStatus.h"
 
 #include "ID_IBAN.h"
 
@@ -377,29 +378,8 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
 
-  console->Clear();
-  Show_Header(true);
+  APP_EXTENDED.APPStart(&APP_CFG, this);
 
-  //--------------------------------------------------------------------------------------
-
-  APP_EXTENDED.APPStart(&APP_CFG, console);
-
-  //--------------------------------------------------------------------------------------
-  
-  status = false;
-
-  string.Format(APPCONSOLE_DEFAULTMESSAGEMASK, __L("Control Servicios Internet"));
-
-  appinternetservices = new APPINTERNETSERVICES();
-  status = (appinternetservices)?true:false;
-  if(status) status = appinternetservices->Ini(&APP_CFG);
-
-  stringresult.Format((status)?__L("Ok."):__L("ERROR!"));
-
-  APP_LOG_ENTRY((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR, APP_CFG_LOG_SECTIONID_INITIATION, false, __L("%s: %s") , string.Get(), stringresult.Get());
-
-  if(!status) return false;
-  
   //--------------------------------------------------------------------------------------
   
   #ifdef SND_ACTIVE
@@ -432,11 +412,6 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 {
-  //--------------------------------------------------------------------------------------
-
-  xmutexshowallstatus = GEN_XFACTORY.Create_Mutex();
-  if(!xmutexshowallstatus) return false;
-
   //--------------------------------------------------------------------------------------
 
   GEN_XFACTORY_CREATE(xtimerupdateconsole,CreateTimer())
@@ -474,7 +449,7 @@ bool DEVTESTSCONSOLE::AppProc_Update()
                                                               {
                                                                 if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
                                                                   {
-                                                                    APP_EXTENDED.ShowAll(console);
+                                                                    APP_EXTENDED.ShowAll();
 
                                                                     xtimerupdateconsole->Reset();
                                                                   }
@@ -550,13 +525,6 @@ bool DEVTESTSCONSOLE::AppProc_End()
 
   #endif
 
-  //--------------------------------------------------------------------------------------
-
-  if(xmutexshowallstatus)
-    {
-      GEN_XFACTORY.Delete_Mutex(xmutexshowallstatus);
-      xmutexshowallstatus = NULL;
-    }
 
   //--------------------------------------------------------------------------------------
 
@@ -568,20 +536,7 @@ bool DEVTESTSCONSOLE::AppProc_End()
 
   //--------------------------------------------------------------------------------------
 
-  if(appinternetservices)
-    {
-      string.Format(APPCONSOLE_DEFAULTMESSAGEMASK,__L("Desactivando servicios Internet"));
-
-      delete appinternetservices;
-      appinternetservices = NULL;
-
-      stringresult = __L("Ok.");
-      APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_ENDING, false, __L("%s: %s")  , string.Get(), stringresult.Get());
-    }
-
-  //--------------------------------------------------------------------------------------
-
-  APP_EXTENDED.APPEnd(&APP_CFG, console);
+  APP_EXTENDED.APPEnd();
   APP_EXTENDED.DelInstance();  
   APP_CFG.DelInstance();
 
@@ -3187,12 +3142,18 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 {
-  XDATETIME*  datetime1;
-  XDATETIME*  datetime2;
-  XSTRING     datetimestr;
-  bool        status      = false;
+  XDATETIME*            datetime1;
+  XDATETIME*            datetime2;
+  XSTRING               datetimestr;
+  APPINTERNETSERVICES*  appinternetservices = NULL;
+  bool                  status      = false;
 
-  if(!tests->appinternetservices) 
+  if(APP_EXTENDED.GetInternetStatus())
+    {
+      appinternetservices = APP_EXTENDED.GetInternetStatus()->GetAPPInternetServices();
+    }
+
+  if(appinternetservices) 
     {
       return false;
     }
@@ -3201,7 +3162,7 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
     {
       int hours = 0;
 
-      datetime1 = tests->appinternetservices->DateTime_GetLocal();
+      datetime1 = appinternetservices->DateTime_GetLocal();
       if(datetime1)
         {    
           datetime1->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr);
@@ -3213,7 +3174,7 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
           status = true;
         }
 
-      datetime2 = tests->appinternetservices->DateTime_GetUTC();
+      datetime2 = appinternetservices->DateTime_GetUTC();
       if(datetime2)
         {    
           datetime2->GetDateTimeToString(XDATETIME_FORMAT_STANDARD, datetimestr);
@@ -3286,7 +3247,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Pause(item[0]);
  
-  APP_EXTENDED.ShowAll(tests->console);
+  APP_EXTENDED.ShowAll();
   tests->Show_PlaySound();  
 
   GEN_XSLEEP.Seconds(3); 
@@ -3296,7 +3257,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Stop(item[0]);
   
-  APP_EXTENDED.ShowAll(tests->console);
+  APP_EXTENDED.ShowAll();
   tests->Show_PlaySound();   
  
     
@@ -5237,7 +5198,7 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
   #ifdef SND_ACTIVE
-  APP_EXTENDED.ShowAll(devtestsconsole->console);
+  APP_EXTENDED.ShowAll();
   devtestsconsole->Show_PlaySound();
     
   for(int c=0; c<10; c++)
@@ -5512,12 +5473,8 @@ void DEVTESTSCONSOLE::ThreadRunFunction(void* param)
 *
 *---------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::Clean()
-{
-  appcheckresourceshardware   = NULL;
-  appinternetservices         = NULL;
-
+{  
   xtimerupdateconsole         = NULL;
-  xmutexshowallstatus         = NULL;
 
   xmutexthread                = NULL;
 }
