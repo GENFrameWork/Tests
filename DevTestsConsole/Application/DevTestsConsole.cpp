@@ -4196,7 +4196,7 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
      
   if(ledneopixelws2812b->Ini(7))
     {       
-      XBYTE data2[] = { 0xFF, 0x00, 0x00,    
+      XBYTE data1[] = { 0xFF, 0x00, 0x00,    
                         0xFF, 0x00, 0x00,  
                         0xFF, 0x00, 0x00,   
                         0xFF, 0x00, 0x00,                            
@@ -4207,7 +4207,7 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
                         0xFF, 0x00, 0x00,                                                                                  
                       };
 
-      XBYTE data1[] = { 0x00, 0xFF, 0x00,    
+      XBYTE data2[] = { 0x00, 0xFF, 0x00,    
                         0x00, 0xFF, 0x00,  
                         0x00, 0xFF, 0x00,   
                         0x00, 0xFF, 0x00,                            
@@ -4284,10 +4284,10 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
         } 
 
 
-      //ledneopixelws2812b->SetBrightnessLevel(128);          
-      //ledneopixelws2812b->SendData(data5, sizeof(data5));
+      ledneopixelws2812b->SetBrightnessLevel(128);          
+      ledneopixelws2812b->SendData(data5, sizeof(data5));
 
-      //GEN_XSLEEP.Seconds(4);
+      GEN_XSLEEP.Seconds(4);
       
       ledneopixelws2812b->End();
     }
