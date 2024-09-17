@@ -86,6 +86,9 @@
 #include "DIOScraperWebGeolocationIP.h"
 #include "DIOScraperWebUserAgentID.h"
 
+#include "GRPVectorFile_XEvent.h"
+#include "GRPVectorFile.h"
+
 #include "GRPCanvas.h"
 #include "GRPScreen.h"
 #include "GRPViewport.h"
@@ -711,7 +714,8 @@ bool DEVTESTSCANVAS2D::DrawFrame()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Do_Tests()
 {
-  DEVTESTSCANVAS2D_LIST_FUNCTION listfunctions[] =  {   { true  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    }                                                     
+  DEVTESTSCANVAS2D_LIST_FUNCTION listfunctions[] =  {   { false  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    },
+                                                        { true   , Test_LoadVectorFileDXF           , __L("Test Load Vector File DXF")                          }                                                     
                                                     };
 
   for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTSCANVAS2D_LIST_FUNCTION)); c++)
@@ -740,6 +744,46 @@ bool DEVTESTSCANVAS2D::Do_Tests()
 bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
 {
   SCRIPT::LoadScriptAndRun(APP_CFG.Scripts_GetAll(), DEVTESTSCANVAS2D::AdjustLibraries);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
+* @brief      Test_LoadVectorFileDXF
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
+{
+  XPATH                 pathfile;
+  GRPVECTORFILERESULT   result  = GRPVECTORFILERESULT_ERRORUNKNOWN;
+
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS, pathfile);  
+  pathfile.Slash_Add();
+  pathfile.Add(__L("diamond.dxf"));    
+
+  GRPVECTORFILE* vectorfile = GRPVECTORFILE::CreateInstance(pathfile);
+  if(vectorfile)
+    {  
+      tests->SubscribeEvent(GRPVECTORFILE_XEVENTTYPE_PARTUNKNOWN, vectorfile);   
+
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Vector File Load] File [%s] "), pathfile.Get()); 
+                
+      result = vectorfile->Load(); 
+      if(result != GRPVECTORFILERESULT_OK)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Vector File Load] Error %d "), result);
+        }
+
+      delete vectorfile;
+    }
 
   return true;
 }
@@ -796,6 +840,30 @@ void DEVTESTSCANVAS2D::HandleEvent_Script(SCRIPT_XEVENT* event)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         void DEVTESTSCANVAS2D::HandleEvent_VectorFile(GRPVECTORFILE_XEVENT* event)
+* @brief      Handle Event for the observer manager of this class
+* @note       INTERNAL
+* @ingroup    TESTS
+* 
+* @param[in]  event : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTSCANVAS2D::HandleEvent_VectorFile(GRPVECTORFILE_XEVENT* event)
+{
+   switch(event->GetEventType())
+   {
+      case GRPVECTORFILE_XEVENTTYPE_UNKNOWN         :  break;
+
+      case GRPVECTORFILE_XEVENTTYPE_PARTUNKNOWN     :  XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[Vector File] Type %s \"%s\" -> [%s]")  , GRPVECTORFILE::GetTypeText(event->GetType())
+                                                                                                                                            , event->GetMsg()->Get()
+                                                                                                                                            , event->GetPath()->Get());    
+                                                       break;                                                                                
+   }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void DEVTESTSCANVAS2D::HandleEvent_Graphics(GRPXEVENT* event)
 * @brief      Handle Event for the observer manager of this class
 * @note       INTERNAL
@@ -844,6 +912,18 @@ void DEVTESTSCANVAS2D::HandleEvent(XEVENT* xevent)
                                           HandleEvent_Graphics(event);
                                         }
                                         break;
+
+      case XEVENT_TYPE_VECTORFILE   :  {  GRPVECTORFILE_XEVENT* event = (GRPVECTORFILE_XEVENT*)xevent;
+                                          if(!event) 
+                                            {
+                                              return;
+                                            }
+
+                                          HandleEvent_VectorFile(event);                                                    
+                                       }
+                                       break;
+
+
     }
 }
 

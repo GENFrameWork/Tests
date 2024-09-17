@@ -141,6 +141,7 @@ class GRPBITMAPSECUENCE;
 class INPBUTTON;
 class INPCURSOR;
 class UI_XEVENT;
+class GRPVECTORFILE_XEVENT;
 class GRPXEVENT;
 class GRPBITMAP;
 class GRPBITMAPSEQUENCE;
@@ -171,12 +172,12 @@ class DEVTESTSCANVAS2D : public APPGRAPHICS, public XFSMACHINE
     bool                            Do_Tests                                (); 
 
     static bool                     Test_ScriptLibInputSimulated            (DEVTESTSCANVAS2D* tests);
-
-    static bool                     LoadScriptAndRun                        (XVECTOR<XSTRING*>* listscripts);
-
+    static bool                     Test_LoadVectorFileDXF                  (DEVTESTSCANVAS2D* tests);
+   
     static void                     AdjustLibraries                         (SCRIPT* script);
 
     void                            HandleEvent_Script                      (SCRIPT_XEVENT* event);
+    void                            HandleEvent_VectorFile                  (GRPVECTORFILE_XEVENT* event);
     void                            HandleEvent_Graphics                    (GRPXEVENT* event);
     void                            HandleEvent                             (XEVENT* xevent);
 
