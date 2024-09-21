@@ -244,6 +244,8 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
     static bool                     Test_Scheduler                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_DynDNS                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_ID_IBAN                        (DEVTESTSCONSOLE* tests);
+    static bool                     Test_CoreProtocol_Header            (DEVTESTSCONSOLE* tests);
+    static bool                     Test_CoreProtocol_Send              (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);

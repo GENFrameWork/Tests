@@ -95,6 +95,8 @@
 #include "CipherCurve25519.h"
 
 #include "DIOFactory.h"
+#include "DIOStreamConfig.h"
+#include "DIOStream.h"
 #include "DIOStreamDeviceIP.h"
 #include "DIOStreamDeviceWifi.h"
 #include "DIOStreamDeviceBluetooth.h"
@@ -150,6 +152,7 @@
 #include "DIOLedNeoPixelWS2812B.h"
 #include "DIOAlerts.h"
 #include "DIODynDNS_Manager.h"
+#include "DIOCoreProtocol.h"
 
 #ifdef SND_ACTIVE
 #include "SNDFactory_XEvent.h"
@@ -725,7 +728,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_XFileDFU                   , __L("Test XFile DFU")                  },
                                                       { false  , Test_SystemHostFile             , __L("Test System Host File")           },
                                                       { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
-                                                      { true   , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
+                                                      { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
                                                       { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
                                                       { false  , Test_XLicense                   , __L("Test XLicense")                   },
                                                       { false  , Test_XSerializable              , __L("Test XSerializable")              },
@@ -733,6 +736,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
+                                                      { true   , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
+                                                      { false  , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
@@ -4748,6 +4753,200 @@ bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
 
   return status;
 } 
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
+* @brief      Test_CoreProtocol_Header
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
+{  
+  XUUID                   IDmachine;    
+  XUUID                   IDconnection;  
+  DIOCOREPROTOCOLHEADER*  coreprotocolheader;    
+  DIOCOREPROTOCOL*        coreprotocol;
+  XFILEJSON*              xfileJSONheader = NULL;
+  XBUFFER                 xbuffer; 
+  XSTRING                 xstring;
+  XFILEJSON               xfileJSONcontent;    
+  bool                    status          = false;
+ 
+  coreprotocol = new DIOCOREPROTOCOL();
+  if(!coreprotocol)
+    {
+      return false;
+    }
+
+  for(int c=0; c<3; c++)
+    {
+      switch(c)
+        {
+          case 0  : xbuffer.Add((XBYTE)0xFF);
+                    xbuffer.Add((XBYTE)0x55);
+                    xbuffer.Add((XBYTE)0xAA);
+                    xbuffer.Add((XBYTE)0xCA);
+                    xbuffer.Add((XBYTE)0xFE);
+                    xbuffer.Add((XBYTE)0xFF);  
+                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xbuffer);
+                    break;
+
+          case 1  : xstring = __L("Example of content String");
+                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xstring);
+                    break;
+
+          case 2  : { XFILEJSONOBJECT* root;
+                    
+                      root = xfileJSONcontent.GetRoot();
+                      if(!root)
+                        {
+                          root = new XFILEJSONOBJECT();
+                          if(!root) 
+                            {
+                              return false;
+                            }
+
+                          xfileJSONcontent.SetRoot(root);
+                        }
+
+                      XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
+                      if(first_obj)
+                        {
+                          XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
+                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba"));
+                        }
+  
+                      root->Add(__L("first_obj"), first_obj);
+                      
+                      coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xfileJSONcontent);
+                    }
+                    break;
+
+        }
+ 
+      if(coreprotocolheader)
+        {
+          xfileJSONheader = coreprotocolheader->GetSerializationXFileJSON();
+          if(!xfileJSONheader)
+            {
+              return false;
+            }
+
+          status = coreprotocolheader->DoSerialize();
+
+          xfileJSONheader->EncodeAllLines(true);  
+          xfileJSONheader->ShowTraceJSON(XTRACE_COLOR_BLUE);
+
+          switch(c)
+            {
+              case 0  : XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, xbuffer);
+                        break;
+
+              case 1  : XTRACE_PRINTCOLOR(XTRACE_COLOR_GREEN, xstring.Get());
+                        break;
+
+              case 2  : xfileJSONcontent.EncodeAllLines(true);  
+                        xfileJSONcontent.ShowTraceJSON(XTRACE_COLOR_GREEN);
+                        break;
+            }
+
+          delete coreprotocolheader;
+          coreprotocolheader = NULL;
+        }
+    }
+
+  delete coreprotocol;
+  coreprotocol = NULL;
+  
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
+* @brief      Test_CoreProtocol_Send
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
+{  
+  XUUID                   IDmachine;    
+  XUUID                   IDconnection;  
+  DIOCOREPROTOCOL*        coreprotocol;
+  XBUFFER                 xbuffer; 
+  XSTRING                 xstring;
+  XFILEJSON               xfileJSONcontent;    
+  bool                    status          = false;
+ 
+  coreprotocol = new DIOCOREPROTOCOL();
+  if(!coreprotocol)
+    {
+      return false;
+    }
+
+  for(int c=0; c<3; c++)
+    {
+      switch(c)
+        {
+          case 0  : xbuffer.Add((XBYTE)0xFF);
+                    xbuffer.Add((XBYTE)0x55);
+                    xbuffer.Add((XBYTE)0xAA);
+                    xbuffer.Add((XBYTE)0xCA);
+                    xbuffer.Add((XBYTE)0xFE);
+                    xbuffer.Add((XBYTE)0xFF);  
+                    status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xbuffer);
+                    break;
+
+          case 1  : xstring = __L("Example of content String");
+                    status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xstring);
+                    break;
+
+          case 2  : { XFILEJSONOBJECT* root;
+                    
+                      root = xfileJSONcontent.GetRoot();
+                      if(!root)
+                        {
+                          root = new XFILEJSONOBJECT();
+                          if(!root) 
+                            {
+                              return false;
+                            }
+
+                          xfileJSONcontent.SetRoot(root);
+                        }
+
+                      XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
+                      if(first_obj)
+                        {
+                          XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
+                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba"));
+                        }
+  
+                      root->Add(__L("first_obj"), first_obj);
+                      
+                      status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xfileJSONcontent);
+                    }
+                    break;
+        }     
+    }
+
+  delete coreprotocol;
+  coreprotocol = NULL;
+  
+  return status;
+}
+
 
 
 #ifdef WINDOWS

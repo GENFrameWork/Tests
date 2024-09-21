@@ -93,6 +93,7 @@ option(DIO_IEC60870_5_FEATURE                                   "IEC60870_5 Prot
 option(DIO_DNSPROTOCOL_MITM_SERVER                              "DNS Protocol Man in the Middle Server"                   ON )
 option(DIO_DYNDNS_FEATURE                                       "DynDNS"                                                  ON )
 option(DIO_WEBSERVER_RESOLVEENDPOINT_FEATURE                    "Web Server Resolved End Point"                           ON )
+option(DIO_COREPROTOCOL_FEATURE                                 "Core Protocol"                                           ON )
     
 option(DIO_STREAMSPI_FEATURE                                    "Data Input/Output Stream SPI"                            ON )  
 option(DIO_STREAMSPI_GPIO_MCP23S17_FEATURE                      "Data SPI GPIO MCP23S17"                                  ON )
