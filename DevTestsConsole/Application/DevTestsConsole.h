@@ -156,7 +156,7 @@ class APPINTERNETSERVICES;
 class APPALERTS;
 
 
-class DEVTESTSCONSOLE : public APPCONSOLE, public XFSMACHINE
+class DEVTESTSCONSOLE : public APPCONSOLE, public XOBSERVER, public XFSMACHINE
 {
   public:
                                     DEVTESTSCONSOLE                     ();

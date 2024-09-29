@@ -587,7 +587,7 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
 
   switch(key)
     {
-      case 'Q'  : // ESC Exit application
+      case 0x1B : // ESC Exit application
                   SetExitType(APPBASE_EXITTYPE_BY_USER);
                   break;
 
@@ -737,7 +737,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       { true   , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
-                                                      { false  , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
+                                                      { true   , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
@@ -3583,11 +3583,13 @@ bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 
   for(int c=0; c<5; c++)
     {
-      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Is Connected: %s"), (wifimanagermode->IsDisconnected()?__L("no"):__L("yes")));
+      XSTRING string;
+      string.ConvertFromBoolean(wifimanagermode->IsDisconnected(), XSTRINGBOOLEANMODE_HUMAN);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Is Connected: %s"), string.Get());
       GEN_XSLEEP.Seconds(1);
     }
 
-  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Des-Connexion."));
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Disconnexion."));
   wifimanagermode->Disconnect();
 
   GEN_DIOFACTORY.DeleteWifiManagerMode(wifimanagermode);
@@ -4172,7 +4174,10 @@ bool DEVTESTSCONSOLE::Test_SystemBatteryLevel(DEVTESTSCONSOLE* tests)
   status = GEN_XSYSTEM.GetBatteryLevel(isincharge, batterylevel);  
   if(status)
     {
-      tests->console->Printf(__L("\n   Is in charge  : %s.\n"), (isincharge?__L("yes"):__L("No")));	
+      XSTRING string;
+      string.ConvertFromBoolean(isincharge, XSTRINGBOOLEANMODE_HUMAN);
+      
+      tests->console->Printf(__L("\n   Is in charge  : %s.\n"), string.Get());	
       tests->console->Printf(__L("   Battery level : %d%%.\n"), batterylevel);	
     }
 
