@@ -656,40 +656,15 @@ bool DEVTESTSCANVAS2D::DrawFrame()
 
   //canvas->ReleaseDrawFramerate();  
 
-  rect = canvas->GetScreenZone();
-  if(rect)
-    {
-      if(makeaction.Compare(__L("WALK NORTH"), true))   { rect->y1++; rect->y2++; }
-      if(makeaction.Compare(__L("WALK WEST" ), true))   { rect->x1++; rect->x2++; }
-      if(makeaction.Compare(__L("WALK EAST" ), true))   { rect->x1--; rect->x2--; }
-      if(makeaction.Compare(__L("WALK SOUTH"), true))   { rect->y1--; rect->y2--; }
-    }
+  int poscanvas_x = (int)viewport->GetCanvasPositionX();
+  int poscanvas_y = (int)viewport->GetCanvasPositionX();
 
-  if(rect->x1 < 0)
-    {
-      rect->x1 = 0;
-      rect->x2 = width;
-      makeaction.Empty();
-    }
-
-  if(rect->y1 < 0)
-    {
-      rect->y1 = 0;
-      rect->y2 = height;
-      makeaction.Empty();
-    }
-
-  if((rect->x1 + width) > (int)canvas->GetWidth())
-    {
-      rect->x2 = canvas->GetWidth();
-      rect->x1 = rect->x2 - width;
-    }
-
-  if((rect->y1 + height) > (int)canvas->GetHeight())
-    {
-      rect->y2 = canvas->GetHeight();
-      rect->y1 = rect->y2 - height;
-    }
+  if(makeaction.Compare(__L("WALK NORTH"), true))   { poscanvas_y++;  }
+  if(makeaction.Compare(__L("WALK WEST" ), true))   { poscanvas_x++;  }
+  if(makeaction.Compare(__L("WALK EAST" ), true))   { poscanvas_x--;  }
+  if(makeaction.Compare(__L("WALK SOUTH"), true))   { poscanvas_y--;  }
+  
+  viewport->SetCanvasPosition((float)poscanvas_x, (float)poscanvas_y);
 
   //canvas->Clear(&colorwhite);  
 
