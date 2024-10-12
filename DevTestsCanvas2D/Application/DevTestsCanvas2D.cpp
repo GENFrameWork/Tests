@@ -671,7 +671,7 @@ bool DEVTESTSCANVAS2D::DrawFrame()
   canvas->RebuildAllAreas();
   canvas->DeleteAllRebuildAreas();
 
-  //canvas->DrawFramerate(2,20, GetMainScreen());
+  //canvas->DrawFramerate(GetMainScreen(), 2, 20);
 
 
   return true;
