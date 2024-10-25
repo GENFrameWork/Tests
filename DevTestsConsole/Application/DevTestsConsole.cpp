@@ -64,6 +64,7 @@
 #include "XFileXML.h"
 #include "XFileRIFF.h"
 #include "XFileDFU.h"
+#include "XFileZIP.h"
 #include "XVariant.h"
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
@@ -93,6 +94,8 @@
 #include "CipherRootCertificates.h"
 #include "CipherRSA.h"
 #include "CipherCurve25519.h"
+
+#include "CompressManager.h"
 
 #include "DIOFactory.h"
 #include "DIOStreamConfig.h"
@@ -152,6 +155,8 @@
 #include "DIOLedNeoPixelWS2812B.h"
 #include "DIOAlerts.h"
 #include "DIODynDNS_Manager.h"
+#include "DIOCoreProtocol_CFG.h"
+#include "DIOCoreProtocol_Header.h"
 #include "DIOCoreProtocol.h"
 
 #ifdef SND_ACTIVE
@@ -326,9 +331,10 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //-------------------------------------------------------------------------------------------------
 
-  GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
+  GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
 
   GetApplicationName()->Set(APPLICATION_NAMEAPP);
+  GetApplicationExecutable()->Set(APPLICATION_NAMEFILE);
 
   //--------------------------------------------------------------------------------------------------
 
@@ -736,6 +742,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
+                                                      { false  , Test_Compress                   , __L("Test Compress")                   }, 
                                                       { true   , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
                                                       { true   , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
                                                       
@@ -4762,6 +4769,112 @@ bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
+* @brief      Test_Compress
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
+{
+  #define NAMEFILECMPINZIP __L("testcmp.txt")
+
+  COMPRESSMANAGER*	manager     = NULL;
+  COMPRESSBASE*			compressor  = NULL;    	
+  XPATH             xpathcmpfile;
+  XPATH             xpathcmpinzip;
+  XPATH             xpathzipfile;  
+	bool              status      = false;
+
+ 	manager = new COMPRESSMANAGER();
+  if(manager)
+    {
+	    compressor = manager->Create(COMPRESSBASE_TYPE_ZIP);
+      if(!compressor)
+        {
+          delete manager;
+          return status;
+        }    
+    }
+
+	XFILE* xfiletxt = XFACTORY::GetInstance().Create_File();
+	if(!xfiletxt)
+    { 
+      delete(compressor);
+	    delete(manager);
+
+	    return status;
+    }
+
+  tests->console->Printf(__L("\nAdd file in Zip file: "));	
+
+	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathcmpfile);
+	xpathcmpfile.Add(NAMEFILECMPINZIP);
+	
+	xpathcmpinzip.Add(NAMEFILECMPINZIP);
+
+	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathzipfile);
+	xpathzipfile.Slash_Add();
+	xpathzipfile.Add(__L("test.zip"));
+
+								
+	XFILEZIP* zipfile = new XFILEZIP();		
+	if(zipfile) 
+    {
+	    status = zipfile->Open(xpathzipfile);
+	    if(status)
+		    {
+			    zipfile->AddFile(xpathcmpfile, xpathcmpinzip);
+			    zipfile->Close();
+		    }
+    }
+	
+	delete(zipfile);    	
+
+  tests->console->Printf(__L("%s\n"), status?__L("Ok."): __L("Error!"));					 							
+
+  tests->console->Printf(__L("Compress and decompress buffer: "));	
+
+  XSTRING sentence;
+  XBUFFER buffer;
+  XBUFFER cmpbuffer;
+  XBUFFER decmpbuffer;
+
+  sentence = __L("I've seen things you people wouldn't believe."
+                 "Attack ships on fire off (the) shoulder of Orion."
+                 "I watched C-beams glitter in the dark near the Tannhäuser Gate."
+                 "All those moments will be lost in time, like tears in rain."
+                 "Time to die.");
+
+  sentence.ConvertToUTF8(buffer, false);
+
+  decmpbuffer.Resize(buffer.GetSize());
+  
+  status = compressor->Compress(buffer.Get(), buffer.GetSize(), &cmpbuffer);
+  if(status)
+    {
+      XSTRING finalsentence;
+      status = compressor->Decompress(cmpbuffer.Get(), cmpbuffer.GetSize(), &decmpbuffer);
+
+      finalsentence.ConvertFromUTF8(decmpbuffer);
+
+      status = !finalsentence.Compare(sentence, false)?true:false;
+    }
+
+  tests->console->Printf(__L("%s\n"), status?__L("Ok."): __L("Error!"));				
+
+	delete(compressor);
+	delete(manager);
+
+	return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
 * @brief      Test_CoreProtocol_Header
 * @ingroup    TESTS
@@ -4773,22 +4886,29 @@ bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
 {  
+
+  /*
   XUUID                   IDmachine;    
   XUUID                   IDconnection;  
-  DIOCOREPROTOCOLHEADER*  coreprotocolheader;    
+  DIOCOREPROTOCOL_HEADER*  coreprotocolheader  = NULL;;    
+  DIOCOREPROTOCOLCFG      coreprotocolCFG;
   DIOCOREPROTOCOL*        coreprotocol;
-  XFILEJSON*              xfileJSONheader = NULL;
-  XBUFFER                 xbuffer; 
+  XFILEJSON*              xfileJSONheader     = NULL;
+  XBUFFER                 xbuffer;   
   XSTRING                 xstring;
-  XFILEJSON               xfileJSONcontent;    
-  bool                    status          = false;
+  XFILEJSON               xfileJSONcontent;
+  XBUFFER                 xbufferresult;    
+  */
+  bool                    status              = false;
  
-  coreprotocol = new DIOCOREPROTOCOL();
+  /*
+  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG);
   if(!coreprotocol)
     {
       return false;
     }
 
+  
   for(int c=0; c<3; c++)
     {
       switch(c)
@@ -4799,11 +4919,11 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
                     xbuffer.Add((XBYTE)0xCA);
                     xbuffer.Add((XBYTE)0xFE);
                     xbuffer.Add((XBYTE)0xFF);  
-                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xbuffer);
+                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xbuffer, xbufferresult);
                     break;
 
           case 1  : xstring = __L("Example of content String");
-                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xstring);
+                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xstring, xbufferresult);
                     break;
 
           case 2  : { XFILEJSONOBJECT* root;
@@ -4829,7 +4949,7 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
   
                       root->Add(__L("first_obj"), first_obj);
                       
-                      coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xfileJSONcontent);
+                      coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xfileJSONcontent, xbufferresult);
                     }
                     break;
 
@@ -4865,10 +4985,12 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
           coreprotocolheader = NULL;
         }
     }
+  
 
   delete coreprotocol;
   coreprotocol = NULL;
-  
+  */
+
   return status;
 }
 
@@ -4887,14 +5009,18 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
 bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
 {  
   XUUID                   IDmachine;    
-  XUUID                   IDconnection;  
+  XUUID                   IDconnection; 
+  DIOCOREPROTOCOL_CFG     coreprotocolCFG; 
   DIOCOREPROTOCOL*        coreprotocol;
   XBUFFER                 xbuffer; 
   XSTRING                 xstring;
   XFILEJSON               xfileJSONcontent;    
   bool                    status          = false;
- 
-  coreprotocol = new DIOCOREPROTOCOL();
+
+  coreprotocolCFG.SetCompressHeader(true);
+  coreprotocolCFG.SetCompressContent(true);
+  
+  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG);
   if(!coreprotocol)
     {
       return false;
@@ -4935,15 +5061,66 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
                       if(first_obj)
                         {
                           XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
-                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("number2"), (int)20);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number3"), (int)30);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number4"), (int)40);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number5"), (int)50);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number6"), (int)60);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number7"), (int)70);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number8"), (int)80);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number9"), (int)90);
+                          XFILEJSON_ADDVALUE(first_obj, __L("number0"), (int)00);
+                          
+                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba1"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("string2"), (XCHAR*)__L("prueba2"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("string3"), (XCHAR*)__L("prueba3"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("string4"), (XCHAR*)__L("prueba4"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("string5"), (XCHAR*)__L("prueba5"));
+                          XFILEJSON_ADDVALUE(first_obj, __L("string6"), (XCHAR*)__L("prueba6"));
                         }
   
                       root->Add(__L("first_obj"), first_obj);
                       
-                      status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xfileJSONcontent);
+                      status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xfileJSONcontent);                      
                     }
                     break;
-        }     
+        } 
+
+      if(!status)
+        { 
+          DIOCOREPROTOCOL_HEADER  header;
+          XBUFFER                content;
+
+          coreprotocol->ReceivedMsg(header, content);
+         
+          header.GetSerializationXFileJSON()->ShowTraceJSON(XTRACE_COLOR_BLUE);
+          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, content);
+
+          switch(header.GetContentType())
+            {
+              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_UNKNOWN   : break;
+
+              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_BINARY    : XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, content);
+                                                                  break; 
+
+              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_TEXT      : { XSTRING string;
+
+                                                                    string.ConvertFromUTF8(content);
+                                                                    XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, string.Get());
+                                                                  }
+                                                                  break;
+
+              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_JSON      : { xfileJSONcontent.AddBufferLines(XFILETXTFORMATCHAR_UTF8, content);
+                                                                    xfileJSONcontent.DecodeAllLines();
+                                                                    xfileJSONcontent.ShowTraceJSON(XTRACE_COLOR_BLUE);                                                                  
+                                                                  }
+                                                                  break;
+            }
+
+
+
+        }
+    
     }
 
   delete coreprotocol;

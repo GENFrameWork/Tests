@@ -36,6 +36,7 @@ option(XSERIALIZABLE_JSON_FEATURE                               "Serializable JS
 option(XFILE_HEX_FEATURE                                        "XFile HEX format"                                        ON )  
 option(XFILE_DFU_FEATURE                                        "XFile DFU format"                                        ON )  
 option(XFILE_RIFF_FEATURE                                       "XFile RIFF format"                                       ON ) 
+option(XFILE_ZIP_FEATURE                                        "XFile Zip format"                                        ON )
     
 option(HASH_FEATURE                                             "Hash"                                                    ON )
 option(HASH_CRC16_FEATURE                                       "Hash CRC16"                                              ON )  
@@ -55,12 +56,7 @@ option(CIPHER_ASYMMETRIC_FILEKEY_GFK                            "Cipher Asymetri
 option(CIPHER_ASYMMETRIC_FILEKEY_PEM                            "Cipher Asymetric File Key (.PEM)"                        ON ) 
 option(CIPHER_ASYMMETRIC_RSA_FEATURE                            "Cipher ASymetric RSA"                                    ON ) 
 option(CIPHER_ASYMMETRIC_CURVE25519_FEATURE                     "Cipher ASymetric Curve25519"                             ON ) 
-    
-option(COMPRESS_GZ_FEATURE                                      "Compres GZ"                                              ON )  
-option(COMPRESS_LZRW1KH_FEATURE                                 "Compres LZRW1KH"                                         ON )  
-option(COMPRESS_LZW_FEATURE                                     "Compres LZW"                                             ON )  
-option(COMPRESS_ZIP_FEATURE                                     "Compres ZIP"                                             ON )  
-    
+        
 option(DIO_FEATURE                                              "Data Input/Output"                                       ON ) 
 option(DIO_STREAMUART_FEATURE                                   "Data Input/Output Stream UART"                           ON )
 option(DIO_STREAMBLUETOOTH_FEATURE                              "Data Input/Output Stream Bluetooth"                      ON )
