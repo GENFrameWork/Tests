@@ -743,8 +743,9 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       { false  , Test_Compress                   , __L("Test Compress")                   }, 
-                                                      { true   , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
-                                                      { true   , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
+                                                      { true   , Test_DIOStreamTCPIPServer       , __L("Test DIO Stream TCPIP Server")    },  
+                                                      { false  , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
+                                                      { false  , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
@@ -1666,7 +1667,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
 
               tests->console->Printf(__L("\r\nConexion %d estado: %s"), c, status?__L("Connected.       "):__L("Waiting...    "));
 
-              while(diostream->GetConnectStatus()==DIOSTREAMSTATUS_CONNECTED)
+              while(diostream->GetStatus()==DIOSTREAMSTATUS_CONNECTED)
                 {
                   tests->console->Printf    (__L("\r\n    Sending packet(%d)"), c++);
 
@@ -1674,7 +1675,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
                   diostream->WaitToFlushOutXBuffer();
                 }
 
-              if(diostream->GetConnectStatus() !=  DIOSTREAMSTATUS_GETTINGCONNECTION) tests->console->Printf(__L("\r\nConexion %d estado: Disconnected"), c);
+              if(diostream->GetStatus() !=  DIOSTREAMSTATUS_GETTINGCONNECTION) tests->console->Printf(__L("\r\nConexion %d estado: Disconnected"), c);
 
               diostream->Close();
               c=0;
@@ -4080,7 +4081,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamUSBConnection(DEVTESTSCONSOLE* tests)
 
           tests->console->Printf(__L("\r\nConexion USB estado: %s"), status?__L("Connected!"):__L("Error!"));
 
-          while(diostream->GetConnectStatus()==DIOSTREAMSTATUS_CONNECTED)
+          while(diostream->GetStatus()==DIOSTREAMSTATUS_CONNECTED)
             {
               /*                                                  
               tests->console->Printf    (__L("\r\n    Sending packet(%d)"), c++);
@@ -4870,6 +4871,90 @@ bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
 	delete(manager);
 
 	return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
+* @brief      Test_DIOStreamTCPIPServer
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
+{  
+  if(!tests->console) 
+    {
+      return false;
+    }
+
+  DIOSTREAMTCPIPCONFIG  diostreamcfg;
+  DIOSTREAM*            diostream    = NULL;
+  XSTRING               line;
+  bool                  status       = false;
+
+  diostreamcfg.GetRemoteURL()->Set(__L("127.0.0.1"));
+  diostreamcfg.SetMode(DIOSTREAMMODE_SERVERMULTISOCKET);
+  diostreamcfg.SetRemotePort(1200);
+
+  line.Format(__L("Server [%s]: %d"), diostreamcfg.GetRemoteURL()->Get(), diostreamcfg.GetRemotePort());
+  tests->console->Printf(__L("   %s\n"), line.Get());
+  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, line.Get());
+
+  diostream = GEN_DIOFACTORY.CreateStreamIO(&diostreamcfg);
+  if(!diostream) 
+    {
+      return false;
+    }
+  
+  if(diostream->Open())
+    {
+      while(!tests->console->KBHit())
+        {
+
+          GEN_XSLEEP.MilliSeconds(50);
+        }
+      /*
+      status = diostream->WaitToConnected(5);
+
+      line.Format(__L("Connection status: %s"), status?__L("Connected."):__L("No connected."));  
+      tests->console->Printf(__L("   %s\n"), line.Get());
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());            
+      
+
+      //if(status)
+        {       
+          XBUFFER buffer;
+          XDWORD  size = 0;
+        
+          buffer.Resize(100);
+
+          status = diostream->WaitToFilledReadingBuffer(30, 5);
+          if(status)
+            {
+              size = diostream->Read(buffer);
+            }
+
+          line.Format(__L("Read: %d bytes"), size);  
+          tests->console->Printf(__L("   %s\n"), line.Get());
+          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());             
+        }
+      */
+
+      status = diostream->Close();
+
+      line.Format(__L("Close connection: %s"), status?__L("Ok."):__L("Error!"));  
+      tests->console->Printf(__L("   %s\n\n"), line.Get());
+      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
+    }
+
+  GEN_DIOFACTORY.DeleteStreamIO(diostream);
+  
+  return status;
 }
 
 
