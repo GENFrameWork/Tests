@@ -149,6 +149,7 @@ class HASH;
 class CIPHER;
 class DIOWEBCLIENT_XEVENT;
 class DIODNSPROTOCOL_MITM_SERVER_XEVENT;
+class DIOSTREAMXEVENT;
 class SNDITEM;
 class SNDFACTORY_XEVENT;
 class APPCHECKRESOURCESHARDWARE;
@@ -270,6 +271,7 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XOBSERVER, public XFSMACHINE
     void                            HandleEvent_Sound                   (SNDFACTORY_XEVENT* event);
     void                            HandleEvent_WebClient               (DIOWEBCLIENT_XEVENT* event);
     void                            HandleEvent_DNSProtocol_MitM_Server (DIODNSPROTOCOL_MITM_SERVER_XEVENT* event);
+    void                            HandleEvent_DIOStream               (DIOSTREAMXEVENT* event);
     void                            HandleEvent                         (XEVENT* xevent);
 
     static void                     ThreadRunFunction                   (void* param);

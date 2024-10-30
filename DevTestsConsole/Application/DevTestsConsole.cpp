@@ -100,6 +100,7 @@
 #include "DIOFactory.h"
 #include "DIOStreamConfig.h"
 #include "DIOStream.h"
+#include "DIOStreamXEvent.h"
 #include "DIOStreamDeviceIP.h"
 #include "DIOStreamDeviceWifi.h"
 #include "DIOStreamDeviceBluetooth.h"
@@ -114,6 +115,7 @@
 #include "DIOStreamIPLocalEnumDevices.h"
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamTCPIP.h"
+#include "DIOStreamTCPIPServer.h"
 #include "DIOStreamBluetoothLocalEnumDevices.h"
 #include "DIOStreamBluetoothRemoteEnumDevices.h"
 #include "DIOStreamBluetoothLERemoteEnumDevices.h"
@@ -4893,7 +4895,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
     }
 
   DIOSTREAMTCPIPCONFIG  diostreamcfg;
-  DIOSTREAM*            diostream    = NULL;
+  DIOSTREAMTCPIPSERVER* diostream    = NULL;
   XSTRING               line;
   bool                  status       = false;
 
@@ -4905,45 +4907,27 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("   %s\n"), line.Get());
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, line.Get());
 
-  diostream = GEN_DIOFACTORY.CreateStreamIO(&diostreamcfg);
+  diostream =  (DIOSTREAMTCPIPSERVER*)GEN_DIOFACTORY.CreateStreamIO(&diostreamcfg);
   if(!diostream) 
     {
       return false;
     }
+
+  tests->SubscribeEvent(DIOSTREAMXEVENT_TYPE_CONNECTED    , diostream);
+  tests->SubscribeEvent(DIOSTREAMXEVENT_TYPE_DISCONNECTED , diostream);
   
   if(diostream->Open())
     {
       while(!tests->console->KBHit())
         {
+          line.Format(__L("N Connections: %d  [ %d / %d ] "), diostream->GetNumConnectedMultiSocketStreams()
+                                                            , diostream->GetNBytesRead()
+                                                            , diostream->GetNBytesWrite());  
+
+          tests->console->Printf(__L("    %s\r"), line.Get());
 
           GEN_XSLEEP.MilliSeconds(50);
         }
-      /*
-      status = diostream->WaitToConnected(5);
-
-      line.Format(__L("Connection status: %s"), status?__L("Connected."):__L("No connected."));  
-      tests->console->Printf(__L("   %s\n"), line.Get());
-      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());            
-      
-
-      //if(status)
-        {       
-          XBUFFER buffer;
-          XDWORD  size = 0;
-        
-          buffer.Resize(100);
-
-          status = diostream->WaitToFilledReadingBuffer(30, 5);
-          if(status)
-            {
-              size = diostream->Read(buffer);
-            }
-
-          line.Format(__L("Read: %d bytes"), size);  
-          tests->console->Printf(__L("   %s\n"), line.Get());
-          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());             
-        }
-      */
 
       status = diostream->Close();
 
@@ -4951,6 +4935,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
       tests->console->Printf(__L("   %s\n\n"), line.Get());
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
     }
+
+  tests->UnSubscribeEvent(DIOSTREAMXEVENT_TYPE_CONNECTED    , diostream);
+  tests->UnSubscribeEvent(DIOSTREAMXEVENT_TYPE_DISCONNECTED , diostream);
 
   GEN_DIOFACTORY.DeleteStreamIO(diostream);
   
@@ -5831,6 +5818,41 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAMXEVENT* event)
+* @brief      Handle Event for the observer manager of this class
+* @note       INTERNAL
+* @ingroup    TESTS
+* 
+* @param[in]  event : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAMXEVENT* event)
+{
+  if(!event) 
+    {
+      return;
+    }
+
+  switch(event->GetEventType())
+    {
+      case DIOSTREAMXEVENT_TYPE_CONNECTED     : { 
+                                                  int a=0;
+                                                  a++;               
+                                                }
+                                                break;
+
+      case DIOSTREAMXEVENT_TYPE_DISCONNECTED  : { 
+                                                  int a=0;
+                                                  a++;               
+                                                }
+                                                break;
+    }
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCONSOLE::HandleEvent
 * @brief      Handle Events
@@ -5843,18 +5865,21 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 *---------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
 {
-  if(!xevent) return;
+  if(!xevent) 
+    {
+      return;
+    }
 
   switch(xevent->GetEventFamily())
     {
-      case XEVENT_TYPE_SCHEDULER       :  { XSCHEDULER_XEVENT* event = (XSCHEDULER_XEVENT*)xevent;
+      case XEVENT_TYPE_SCHEDULER        : { XSCHEDULER_XEVENT* event = (XSCHEDULER_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_Scheduler(event);
                                           }
                                           break;
       #ifdef SND_ACTIVE
-      case XEVENT_TYPE_SOUND           :  { SNDFACTORY_XEVENT* event = (SNDFACTORY_XEVENT*)xevent;
+      case XEVENT_TYPE_SOUND            : { SNDFACTORY_XEVENT* event = (SNDFACTORY_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_Sound(event);
@@ -5862,20 +5887,26 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
                                           break;
       #endif
 
-      case XEVENT_TYPE_WEBCLIENT       :  { DIOWEBCLIENT_XEVENT* event = (DIOWEBCLIENT_XEVENT*)xevent;
+      case XEVENT_TYPE_WEBCLIENT        : { DIOWEBCLIENT_XEVENT* event = (DIOWEBCLIENT_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_WebClient(event);
                                           }
                                           break;
 
-      case XEVENT_TYPE_DIODNS          :  { DIODNSPROTOCOL_MITM_SERVER_XEVENT* event = (DIODNSPROTOCOL_MITM_SERVER_XEVENT*)xevent;
+      case XEVENT_TYPE_DIODNS           : { DIODNSPROTOCOL_MITM_SERVER_XEVENT* event = (DIODNSPROTOCOL_MITM_SERVER_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_DNSProtocol_MitM_Server(event);
                                           }
                                           break;
 
+      case XEVENT_TYPE_DIOSTREAM        : { DIOSTREAMXEVENT* event = (DIOSTREAMXEVENT*)xevent;
+                                            if(!event) return;
+
+                                            HandleEvent_DIOStream(event);
+                                          }
+                                          break;
     }
 }
 
