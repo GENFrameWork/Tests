@@ -100,7 +100,7 @@
 #include "DIOFactory.h"
 #include "DIOStreamConfig.h"
 #include "DIOStream.h"
-#include "DIOStreamXEvent.h"
+#include "DIOStream_XEvent.h"
 #include "DIOStreamDeviceIP.h"
 #include "DIOStreamDeviceWifi.h"
 #include "DIOStreamDeviceBluetooth.h"
@@ -4913,8 +4913,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
       return false;
     }
 
-  tests->SubscribeEvent(DIOSTREAMXEVENT_TYPE_CONNECTED    , diostream);
-  tests->SubscribeEvent(DIOSTREAMXEVENT_TYPE_DISCONNECTED , diostream);
+  tests->SubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , diostream);
+  tests->SubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , diostream);
   
   if(diostream->Open())
     {
@@ -4936,8 +4936,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
     }
 
-  tests->UnSubscribeEvent(DIOSTREAMXEVENT_TYPE_CONNECTED    , diostream);
-  tests->UnSubscribeEvent(DIOSTREAMXEVENT_TYPE_DISCONNECTED , diostream);
+  tests->UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , diostream);
+  tests->UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , diostream);
 
   GEN_DIOFACTORY.DeleteStreamIO(diostream);
   
@@ -5819,7 +5819,7 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAMXEVENT* event)
+* @fn         void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 * @brief      Handle Event for the observer manager of this class
 * @note       INTERNAL
 * @ingroup    TESTS
@@ -5827,7 +5827,7 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 * @param[in]  event : 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAMXEVENT* event)
+void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 {
   if(!event) 
     {
@@ -5836,13 +5836,13 @@ void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAMXEVENT* event)
 
   switch(event->GetEventType())
     {
-      case DIOSTREAMXEVENT_TYPE_CONNECTED     : { 
+      case DIOSTREAM_XEVENT_TYPE_CONNECTED     : { 
                                                   int a=0;
                                                   a++;               
                                                 }
                                                 break;
 
-      case DIOSTREAMXEVENT_TYPE_DISCONNECTED  : { 
+      case DIOSTREAM_XEVENT_TYPE_DISCONNECTED  : { 
                                                   int a=0;
                                                   a++;               
                                                 }
@@ -5901,7 +5901,7 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
                                           }
                                           break;
 
-      case XEVENT_TYPE_DIOSTREAM        : { DIOSTREAMXEVENT* event = (DIOSTREAMXEVENT*)xevent;
+      case XEVENT_TYPE_DIOSTREAM        : { DIOSTREAM_XEVENT* event = (DIOSTREAM_XEVENT*)xevent;
                                             if(!event) return;
 
                                             HandleEvent_DIOStream(event);
