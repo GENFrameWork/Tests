@@ -745,9 +745,9 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
                                                       { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
                                                       { false  , Test_Compress                   , __L("Test Compress")                   }, 
-                                                      { true   , Test_DIOStreamTCPIPServer       , __L("Test DIO Stream TCPIP Server")    },  
+                                                      { false  , Test_DIOStreamTCPIPServer       , __L("Test DIO Stream TCPIP Server")    },  
                                                       { false  , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
-                                                      { false  , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
+                                                      { true   , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
