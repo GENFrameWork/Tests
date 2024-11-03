@@ -5080,8 +5080,7 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
 {  
-  XUUID                   IDmachine;    
-  XUUID                   IDconnection; 
+  XUUID                   ID_machine;    
   DIOCOREPROTOCOL_CFG     coreprotocolCFG; 
   DIOCOREPROTOCOL*        coreprotocol;
   XBUFFER                 xbuffer; 
@@ -5092,7 +5091,7 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
   coreprotocolCFG.SetCompressHeader(true);
   coreprotocolCFG.SetCompressContent(true);
   
-  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG);
+  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG, NULL, &ID_machine);
   if(!coreprotocol)
     {
       return false;
@@ -5108,11 +5107,11 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
                     xbuffer.Add((XBYTE)0xCA);
                     xbuffer.Add((XBYTE)0xFE);
                     xbuffer.Add((XBYTE)0xFF);  
-                    status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xbuffer);
+                    status = coreprotocol->SendMsg(xbuffer);
                     break;
 
           case 1  : xstring = __L("Example of content String");
-                    status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xstring);
+                    status = coreprotocol->SendMsg(xstring);
                     break;
 
           case 2  : { XFILEJSONOBJECT* root;
@@ -5153,12 +5152,12 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
   
                       root->Add(__L("first_obj"), first_obj);
                       
-                      status = coreprotocol->SendMsg(&IDmachine, &IDconnection, xfileJSONcontent);                      
+                      status = coreprotocol->SendMsg(xfileJSONcontent);                      
                     }
                     break;
         } 
 
-      if(!status)
+      if(status)
         { 
           DIOCOREPROTOCOL_HEADER  header;
           XBUFFER                content;
