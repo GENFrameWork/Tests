@@ -160,6 +160,7 @@
 #include "DIOCoreProtocol_CFG.h"
 #include "DIOCoreProtocol_Header.h"
 #include "DIOCoreProtocol.h"
+#include "DIOCoreProtocol_ConnectionsManager.h"
 
 #ifdef SND_ACTIVE
 #include "SNDFactory_XEvent.h"
@@ -682,72 +683,71 @@ bool DEVTESTSCONSOLE::Show_PlaySound()
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Do_Tests()
 {
-  DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                    , __L("Test XString")                    },
-                                                      { false  , Test_XBuffer                    , __L("Test XBuffer")                    },
-                                                      { false  , Test_XVector                    , __L("Test XVector")                    },
-                                                    //{ false  , Test_XVectorSTL                 , __L("Test XVector STL")                },
-                                                      { false  , Test_XRand                      , __L("Test_XRand")                      },
-                                                      { false  , Test_XTrace                     , __L("Test XTrace")                     },
-                                                      { false  , Test_XLogs                      , __L("Test XLogs")                      },
-                                                      { false  , Test_XTimer                     , __L("Test XTimer")                     },
-                                                      { false  , Test_XTree                      , __L("Test XTree")                      },
-                                                      { false  , Test_XDir                       , __L("Test XDir")                       },
-                                                      { false  , Test_XVariant                   , __L("Test XVariant")                   },
-                                                      { false  , Test_Threads                    , __L("Test_Threads")                    },
-                                                      { false  , Test_DateTime                   , __L("Test_DateTime")                   },                                                      
-                                                      { false  , Test_DIOStreamTCPIPConnection   , __L("Test DIOStreamTCPIPConnection")   },
-                                                      { false  , Test_XSystem                    , __L("Test System")                     },                                          
-                                                      { false  , Test_SharedMemory               , __L("Test SharedMemory")               },
-                                                      { false  , Test_GPIO                       , __L("Test GPIO")                       },
-                                                      { false  , Test_WebClient                  , __L("Test WebClient")                  },
-                                                      { false  , Test_ScraperWeb                 , __L("Test Scraper Web")                },
-                                                      { false  , Test_MPSSE                      , __L("Test MPSSE")                      },
-                                                      { false  , Test_DNSResolver                , __L("Test DNS Resolver")               },
-                                                      { false  , Test_DNSProtocolMitMServer      , __L("Test DNS Protocol MitM Server")   },
-                                                      { false  , Test_DIOCheckTCPIPConnections   , __L("Test DIOCheckTCPIPConnections")   },
-                                                      { false  , Test_WifiEnum                   , __L("Test Wifi Enum")                  },                                          
-                                                      { false  , Test_WakeOnLAN                  , __L("Test Wake On LAN")                }, 
-                                                      { false  , Test_Hash                       , __L("Test Hash")                       },
-                                                      { false  , Test_Cipher_Simetric            , __L("Test Cipher Simetric")            }, 
-                                                      { false  , Test_CipherFileKeys             , __L("Test Cipher File Keys")           },         
-                                                      { false  , Test_CipherRSA                  , __L("Test Cipher RSA")                 },         
-                                                      { false  , Test_CipherCurve25519           , __L("Test Cipher Curve 25519")         },         
-                                                      { false  , Test_DIOStreamTCPIP             , __L("Test DIO Stream TCPIP")           },
-                                                      { false  , Test_DIOStreamTLS               , __L("Test DIO Stream TLS")             },        
-                                                      { false  , Test_SystemCPUUsage             , __L("Test System CPU Usage")           },         
-                                                      { false  , Test_AppAlerts                  , __L("Test App Alerts")                 },  
-                                                      { false  , Test_BluetoothEnum              , __L("Test Bluetooth Enum")             },                                          
-                                                      { false  , Test_BluetoothLEEnum            , __L("Test Bluetooth LE Enum")          },                                          
-                                                      { false  , Test_NTP_Protocol               , __L("Test_NTP_Protocol")               },                                              
-                                                      { false  , Test_NTP_InternetServices       , __L("Test_NTP_InternetServices")       },                                              
-                                                      { false  , Test_Sound                      , __L("Test Sound")                      },       
-                                                      { false  , Test_ProcessManager             , __L("Test Process Manager")            },
-                                                      { false  , Test_GetUserAndDomain           , __L("Test Get User And Domain")        },
-                                                      { false  , Test_I2C_GPIO_MCP2317           , __L("Test I2C GPIO MCP2317")           },
-                                                      { false  , Test_SPI_GPIO_MCP2317           , __L("Test SPI GPIO MCP2317")           },
-                                                      { false  , Test_WifiManagerMode            , __L("Test Wifi Manager Mode")          }, 
-                                                      { false  , Test_NotificationsManager       , __L("Test Notifications Manager")      }, 
-                                                      { false  , Test_ATCommandGSM               , __L("Test AT Command GSM ")            }, 
-                                                      { false  , Test_SNMP                       , __L("Test SNMP ")                      },
-                                                      { false  , Test_XFileJSON                  , __L("Test XFile JSON")                 },  
-                                                      { false  , Test_XFileXML                   , __L("Test XFile XML")                  },  
-                                                      { false  , Test_XFileRIFF                  , __L("Test XFile RIFF")                 },
-                                                      { false  , Test_DIOStreamUSBConnection     , __L("Test DIOStreamConnection")        },
-                                                      { false  , Test_XFileDFU                   , __L("Test XFile DFU")                  },
-                                                      { false  , Test_SystemHostFile             , __L("Test System Host File")           },
-                                                      { false  , Test_SystemBatteryLevel         , __L("Test System Battery Level")       },
-                                                      { false  , Test_LedNeoPixelWS2812B         , __L("Test Led NeoPixel WS2812B")       }, 
-                                                      { false  , Test_DIOPCap                    , __L("Test DIO PCap")                   },                                                      
-                                                      { false  , Test_XLicense                   , __L("Test XLicense")                   },
-                                                      { false  , Test_XSerializable              , __L("Test XSerializable")              },
-                                                      { false  , Test_InputSimulate              , __L("Test Input Simulate")             },
-                                                      { false  , Test_Scheduler                  , __L("Test Scheduler")                  },
-                                                      { false  , Test_DynDNS                     , __L("Test DynDNS")                     }, 
-                                                      { false  , Test_ID_IBAN                    , __L("Test ID IBAN")                    }, 
-                                                      { false  , Test_Compress                   , __L("Test Compress")                   }, 
-                                                      { false  , Test_DIOStreamTCPIPServer       , __L("Test DIO Stream TCPIP Server")    },  
-                                                      { false  , Test_CoreProtocol_Header        , __L("Test Core Protocol Header")       }, 
-                                                      { true   , Test_CoreProtocol_Send          , __L("Test Core Protocol Send")         },  
+  DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                       , __L("Test XString")                         },
+                                                      { false  , Test_XBuffer                       , __L("Test XBuffer")                         },
+                                                      { false  , Test_XVector                       , __L("Test XVector")                         },
+                                                    //{ false  , Test_XVectorSTL                    , __L("Test XVector STL")                     },
+                                                      { false  , Test_XRand                         , __L("Test_XRand")                           },
+                                                      { false  , Test_XTrace                        , __L("Test XTrace")                          },
+                                                      { false  , Test_XLogs                         , __L("Test XLogs")                           },
+                                                      { false  , Test_XTimer                        , __L("Test XTimer")                          },
+                                                      { false  , Test_XTree                         , __L("Test XTree")                           },
+                                                      { false  , Test_XDir                          , __L("Test XDir")                            },
+                                                      { false  , Test_XVariant                      , __L("Test XVariant")                        },
+                                                      { false  , Test_Threads                       , __L("Test_Threads")                         },
+                                                      { false  , Test_DateTime                      , __L("Test_DateTime")                        },                                                      
+                                                      { false  , Test_DIOStreamTCPIPConnection      , __L("Test DIOStreamTCPIPConnection")        },
+                                                      { false  , Test_XSystem                       , __L("Test System")                          },                                          
+                                                      { false  , Test_SharedMemory                  , __L("Test SharedMemory")                    },
+                                                      { false  , Test_GPIO                          , __L("Test GPIO")                            },
+                                                      { false  , Test_WebClient                     , __L("Test WebClient")                       },
+                                                      { false  , Test_ScraperWeb                    , __L("Test Scraper Web")                     },
+                                                      { false  , Test_MPSSE                         , __L("Test MPSSE")                           },
+                                                      { false  , Test_DNSResolver                   , __L("Test DNS Resolver")                    },
+                                                      { false  , Test_DNSProtocolMitMServer         , __L("Test DNS Protocol MitM Server")        },
+                                                      { false  , Test_DIOCheckTCPIPConnections      , __L("Test DIOCheckTCPIPConnections")        },
+                                                      { false  , Test_WifiEnum                      , __L("Test Wifi Enum")                       },                                          
+                                                      { false  , Test_WakeOnLAN                     , __L("Test Wake On LAN")                     }, 
+                                                      { false  , Test_Hash                          , __L("Test Hash")                            },
+                                                      { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
+                                                      { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
+                                                      { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
+                                                      { false  , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
+                                                      { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
+                                                      { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
+                                                      { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
+                                                      { false  , Test_AppAlerts                     , __L("Test App Alerts")                      },  
+                                                      { false  , Test_BluetoothEnum                 , __L("Test Bluetooth Enum")                  },                                          
+                                                      { false  , Test_BluetoothLEEnum               , __L("Test Bluetooth LE Enum")               },                                          
+                                                      { false  , Test_NTP_Protocol                  , __L("Test_NTP_Protocol")                    },                                              
+                                                      { false  , Test_NTP_InternetServices          , __L("Test_NTP_InternetServices")            },                                              
+                                                      { false  , Test_Sound                         , __L("Test Sound")                           },       
+                                                      { false  , Test_ProcessManager                , __L("Test Process Manager")                 },
+                                                      { false  , Test_GetUserAndDomain              , __L("Test Get User And Domain")             },
+                                                      { false  , Test_I2C_GPIO_MCP2317              , __L("Test I2C GPIO MCP2317")                },
+                                                      { false  , Test_SPI_GPIO_MCP2317              , __L("Test SPI GPIO MCP2317")                },
+                                                      { false  , Test_WifiManagerMode               , __L("Test Wifi Manager Mode")               }, 
+                                                      { false  , Test_NotificationsManager          , __L("Test Notifications Manager")           }, 
+                                                      { false  , Test_ATCommandGSM                  , __L("Test AT Command GSM ")                 }, 
+                                                      { false  , Test_SNMP                          , __L("Test SNMP ")                           },
+                                                      { false  , Test_XFileJSON                     , __L("Test XFile JSON")                      },  
+                                                      { false  , Test_XFileXML                      , __L("Test XFile XML")                       },  
+                                                      { false  , Test_XFileRIFF                     , __L("Test XFile RIFF")                      },
+                                                      { false  , Test_DIOStreamUSBConnection        , __L("Test DIOStreamConnection")             },
+                                                      { false  , Test_XFileDFU                      , __L("Test XFile DFU")                       },
+                                                      { false  , Test_SystemHostFile                , __L("Test System Host File")                },
+                                                      { false  , Test_SystemBatteryLevel            , __L("Test System Battery Level")            },
+                                                      { false  , Test_LedNeoPixelWS2812B            , __L("Test Led NeoPixel WS2812B")            }, 
+                                                      { false  , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
+                                                      { false  , Test_XLicense                      , __L("Test XLicense")                        },
+                                                      { false  , Test_XSerializable                 , __L("Test XSerializable")                   },
+                                                      { false  , Test_InputSimulate                 , __L("Test Input Simulate")                  },
+                                                      { false  , Test_Scheduler                     , __L("Test Scheduler")                       },
+                                                      { false  , Test_DynDNS                        , __L("Test DynDNS")                          }, 
+                                                      { false  , Test_ID_IBAN                       , __L("Test ID IBAN")                         }, 
+                                                      { false  , Test_Compress                      , __L("Test Compress")                        }, 
+                                                      { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
+                                                      { true   , Test_CoreProtocol_GenerateHeader   , __L("Test Core Protocol Generate Header")   },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
@@ -4947,8 +4947,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
-* @brief      Test_CoreProtocol_Header
+* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_GenerateHeader(DEVTESTSCONSOLE* tests)
+* @brief      Test_CoreProtocol_GenerateHeader
 * @ingroup    TESTS
 * 
 * @param[in]  tests : 
@@ -4956,140 +4956,22 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_CoreProtocol_Header(DEVTESTSCONSOLE* tests)
+bool DEVTESTSCONSOLE::Test_CoreProtocol_GenerateHeader(DEVTESTSCONSOLE* tests)
 {  
-
-  /*
-  XUUID                   IDmachine;    
-  XUUID                   IDconnection;  
-  DIOCOREPROTOCOL_HEADER*  coreprotocolheader  = NULL;;    
-  DIOCOREPROTOCOLCFG      coreprotocolCFG;
-  DIOCOREPROTOCOL*        coreprotocol;
-  XFILEJSON*              xfileJSONheader     = NULL;
-  XBUFFER                 xbuffer;   
-  XSTRING                 xstring;
-  XFILEJSON               xfileJSONcontent;
-  XBUFFER                 xbufferresult;    
-  */
-  bool                    status              = false;
- 
-  /*
-  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG);
-  if(!coreprotocol)
-    {
-      return false;
-    }
-
-  
-  for(int c=0; c<3; c++)
-    {
-      switch(c)
-        {
-          case 0  : xbuffer.Add((XBYTE)0xFF);
-                    xbuffer.Add((XBYTE)0x55);
-                    xbuffer.Add((XBYTE)0xAA);
-                    xbuffer.Add((XBYTE)0xCA);
-                    xbuffer.Add((XBYTE)0xFE);
-                    xbuffer.Add((XBYTE)0xFF);  
-                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xbuffer, xbufferresult);
-                    break;
-
-          case 1  : xstring = __L("Example of content String");
-                    coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xstring, xbufferresult);
-                    break;
-
-          case 2  : { XFILEJSONOBJECT* root;
-                    
-                      root = xfileJSONcontent.GetRoot();
-                      if(!root)
-                        {
-                          root = new XFILEJSONOBJECT();
-                          if(!root) 
-                            {
-                              return false;
-                            }
-
-                          xfileJSONcontent.SetRoot(root);
-                        }
-
-                      XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
-                      if(first_obj)
-                        {
-                          XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
-                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba"));
-                        }
-  
-                      root->Add(__L("first_obj"), first_obj);
-                      
-                      coreprotocolheader = coreprotocol->CreateHeader(&IDmachine, &IDconnection, xfileJSONcontent, xbufferresult);
-                    }
-                    break;
-
-        }
- 
-      if(coreprotocolheader)
-        {
-          xfileJSONheader = coreprotocolheader->GetSerializationXFileJSON();
-          if(!xfileJSONheader)
-            {
-              return false;
-            }
-
-          status = coreprotocolheader->DoSerialize();
-
-          xfileJSONheader->EncodeAllLines(true);  
-          xfileJSONheader->ShowTraceJSON(XTRACE_COLOR_BLUE);
-
-          switch(c)
-            {
-              case 0  : XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_GREEN, xbuffer);
-                        break;
-
-              case 1  : XTRACE_PRINTCOLOR(XTRACE_COLOR_GREEN, xstring.Get());
-                        break;
-
-              case 2  : xfileJSONcontent.EncodeAllLines(true);  
-                        xfileJSONcontent.ShowTraceJSON(XTRACE_COLOR_GREEN);
-                        break;
-            }
-
-          delete coreprotocolheader;
-          coreprotocolheader = NULL;
-        }
-    }
-  
-
-  delete coreprotocol;
-  coreprotocol = NULL;
-  */
-
-  return status;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
-* @brief      Test_CoreProtocol_Send
-* @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
-{  
-  XUUID                   ID_machine;    
-  DIOCOREPROTOCOL_CFG     coreprotocolCFG; 
-  DIOCOREPROTOCOL*        coreprotocol;
-  XBUFFER                 xbuffer; 
-  XSTRING                 xstring;
-  XFILEJSON               xfileJSONcontent;    
-  bool                    status          = false;
+  XUUID                     ID_machine;    
+  DIOCOREPROTOCOL_CFG       coreprotocolCFG; 
+  DIOCOREPROTOCOL*          coreprotocol;
+  DIOCOREPROTOCOL_HEADER*   headercoreprotocol = NULL;
+  XBUFFER                   xbuffer; 
+  XSTRING                   xstring;
+  XFILEJSON                 xfileJSON;    
+  XBUFFER                   content; 
+  bool                      status          = false;
 
   coreprotocolCFG.SetCompressHeader(true);
   coreprotocolCFG.SetCompressContent(true);
+
+  DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(ID_machine);
   
   coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG, NULL, &ID_machine);
   if(!coreprotocol)
@@ -5107,16 +4989,24 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
                     xbuffer.Add((XBYTE)0xCA);
                     xbuffer.Add((XBYTE)0xFE);
                     xbuffer.Add((XBYTE)0xFF);  
-                    status = coreprotocol->SendMsg(xbuffer);
+                    headercoreprotocol = coreprotocol->CreateHeader(NULL, 1, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xbuffer, content);  
+                    if(headercoreprotocol)
+                      {
+                        status = true;
+                      }
                     break;
 
           case 1  : xstring = __L("Example of content String");
-                    status = coreprotocol->SendMsg(xstring);
+                    headercoreprotocol = coreprotocol->CreateHeader(NULL, 2, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xstring, content);
+                    if(headercoreprotocol)
+                      {
+                        status = true;
+                      }
                     break;
 
           case 2  : { XFILEJSONOBJECT* root;
                     
-                      root = xfileJSONcontent.GetRoot();
+                      root = xfileJSON.GetRoot();
                       if(!root)
                         {
                           root = new XFILEJSONOBJECT();
@@ -5125,7 +5015,7 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
                               return false;
                             }
 
-                          xfileJSONcontent.SetRoot(root);
+                          xfileJSON.SetRoot(root);
                         }
 
                       XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
@@ -5152,44 +5042,21 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_Send(DEVTESTSCONSOLE* tests)
   
                       root->Add(__L("first_obj"), first_obj);
                       
-                      status = coreprotocol->SendMsg(xfileJSONcontent);                      
+                      headercoreprotocol = coreprotocol->CreateHeader(NULL, 1, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xfileJSON, content);                      
+                      if(headercoreprotocol)
+                        {
+                          status = true;
+                        }
                     }
                     break;
         } 
 
       if(status)
         { 
-          DIOCOREPROTOCOL_HEADER  header;
-          XBUFFER                content;
+          coreprotocol->ShowDebug(headercoreprotocol, content);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(" "));
 
-          coreprotocol->ReceivedMsg(header, content);
-         
-          header.GetSerializationXFileJSON()->ShowTraceJSON(XTRACE_COLOR_BLUE);
-          //XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, content);
-
-          switch(header.GetContentType())
-            {
-              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_UNKNOWN   : break;
-
-              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_BINARY    : XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, content);
-                                                                  break; 
-
-              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_TEXT      : { XSTRING string;
-
-                                                                    string.ConvertFromUTF8(content);
-                                                                    XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, string.Get());
-                                                                  }
-                                                                  break;
-
-              case DIOCOREPROTOCOL_HEADER_CONTENTTYPE_JSON      : { xfileJSONcontent.AddBufferLines(XFILETXTFORMATCHAR_UTF8, content);
-                                                                    xfileJSONcontent.DecodeAllLines();
-                                                                    xfileJSONcontent.ShowTraceJSON(XTRACE_COLOR_BLUE);                                                                  
-                                                                  }
-                                                                  break;
-            }
-
-
-
+          delete headercoreprotocol;
         }
     
     }

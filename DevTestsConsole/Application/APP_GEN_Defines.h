@@ -40,6 +40,7 @@
 #pragma region DEFINES_ENUMS
 
 //#define DEVTESTSCONSOLE_NOKEY
+#define DIOCOREPROTOCOL_DEBUG_BUFFER
 
 #pragma endregion
 
