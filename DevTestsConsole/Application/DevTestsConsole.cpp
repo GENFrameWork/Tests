@@ -712,7 +712,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
                                                       { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
-                                                      { false  , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
+                                                      { true   , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
                                                       { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
@@ -5053,7 +5053,7 @@ bool DEVTESTSCONSOLE::Test_CoreProtocol_GenerateHeader(DEVTESTSCONSOLE* tests)
 
       if(status)
         { 
-          coreprotocol->ShowDebug(headercoreprotocol, content);
+          coreprotocol->ShowDebug(true, headercoreprotocol, content);
           XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(" "));
 
           delete headercoreprotocol;
