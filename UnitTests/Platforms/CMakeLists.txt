@@ -13,21 +13,22 @@ set(GEN_DIRECTORY "../../../../GENFrameWork")
 # --------------------------------------------------------------------
 # Activate features/Defines
 
-option(DEBUG_FEATURE                                          "Activate Debug mode"                                     ON )
-option(XTRACE_FEATURE                                         "Activate XTrace"                                         ON )
-option(XTRACE_NOINTERNET_FEATURE                              "No need for trace dependencies with Internet"            ON )
+option(DEBUG_FEATURE                                            "Activate Debug mode"                                     ON )
+option(XTRACE_FEATURE                                           "Activate XTrace"                                         ON )
+option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )
     
-option(XMEMORY_CONTROL_FEATURE                                "Activate XMemory Control"                                ON )
+option(XMEMORY_CONTROL_FEATURE                                  "Activate XMemory Control"                                ON )
     
-option(XSLEEP_FEATURE                                         "Activate XSleep"                                         ON )
+option(XSLEEP_FEATURE                                           "Activate XSleep"                                         ON )
+option(XUUID_FEATURE                                            "UUID functions"                                          ON )    
     
-#option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                     "Activate Linux CodePage Editor Visual Studio CP1252"     ON )   
-option(LINUX_VISUALSTUDIOUTF8_FEATURE                         "Activate Linux CodePage Editor UTF8"                     ON )   
+#option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                       "Activate Linux CodePage Editor Visual Studio CP1252"     ON )   
+option(LINUX_VISUALSTUDIOUTF8_FEATURE                           "Activate Linux CodePage Editor UTF8"                     ON )   
                                 
-option(APP_FEATURE                                            "Activate Application modules"                            ON )
+option(APP_FEATURE                                              "Activate Application modules"                            ON )
     
-option(GOOGLETEST_FEATURE                                     "Activate Google Test functionality"                      ON )
-#option(GOOGLETEST_EXECFORDISCOVER_FEATURE                     "Activate Google Test Execution for discovery"            ON )
+option(GOOGLETEST_FEATURE                                       "Activate Google Test functionality"                      ON )
+#option(GOOGLETEST_EXECFORDISCOVER_FEATURE                       "Activate Google Test Execution for discovery"            ON )
 
 
 
@@ -55,6 +56,7 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XSl
 list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XString.cpp")
 list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XTimer.cpp")
 list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XVariant.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XUUID.cpp")
 
 
 
