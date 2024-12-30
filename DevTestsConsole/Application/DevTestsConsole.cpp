@@ -747,7 +747,6 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ID_IBAN                       , __L("Test ID IBAN")                         }, 
                                                       { false  , Test_Compress                      , __L("Test Compress")                        }, 
                                                       { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
-                                                      { true   , Test_CoreProtocol_GenerateHeader   , __L("Test Core Protocol Generate Header")   },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
@@ -4943,130 +4942,6 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
   
   return status;
 }
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Test_CoreProtocol_GenerateHeader(DEVTESTSCONSOLE* tests)
-* @brief      Test_CoreProtocol_GenerateHeader
-* @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_CoreProtocol_GenerateHeader(DEVTESTSCONSOLE* tests)
-{  
-  XUUID                     ID_machine;    
-  DIOCOREPROTOCOL_CFG       coreprotocolCFG; 
-  DIOCOREPROTOCOL*          coreprotocol;
-  DIOCOREPROTOCOL_HEADER*   headercoreprotocol = NULL;
-  XBUFFER                   xbuffer; 
-  XSTRING                   xstring;
-  XFILEJSON                 xfileJSON;    
-  XBUFFER                   content; 
-  bool                      status          = false;
-
-  coreprotocolCFG.SetCompressHeader(true);
-  coreprotocolCFG.SetCompressContent(true);
-
-  DIOCOREPROTOCOL_CONNECTIONSMANAGER::CreateIDMachine(ID_machine);
-  
-  coreprotocol = new DIOCOREPROTOCOL(&coreprotocolCFG, NULL, &ID_machine);
-  if(!coreprotocol)
-    {
-      return false;
-    }
-
-  for(int c=0; c<3; c++)
-    {
-      switch(c)
-        {
-          case 0  : xbuffer.Add((XBYTE)0xFF);
-                    xbuffer.Add((XBYTE)0x55);
-                    xbuffer.Add((XBYTE)0xAA);
-                    xbuffer.Add((XBYTE)0xCA);
-                    xbuffer.Add((XBYTE)0xFE);
-                    xbuffer.Add((XBYTE)0xFF);  
-                    headercoreprotocol = coreprotocol->CreateHeader(NULL, 1, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xbuffer, content);  
-                    if(headercoreprotocol)
-                      {
-                        status = true;
-                      }
-                    break;
-
-          case 1  : xstring = __L("Example of content String");
-                    headercoreprotocol = coreprotocol->CreateHeader(NULL, 2, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xstring, content);
-                    if(headercoreprotocol)
-                      {
-                        status = true;
-                      }
-                    break;
-
-          case 2  : { XFILEJSONOBJECT* root;
-                    
-                      root = xfileJSON.GetRoot();
-                      if(!root)
-                        {
-                          root = new XFILEJSONOBJECT();
-                          if(!root) 
-                            {
-                              return false;
-                            }
-
-                          xfileJSON.SetRoot(root);
-                        }
-
-                      XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
-                      if(first_obj)
-                        {
-                          XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number2"), (int)20);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number3"), (int)30);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number4"), (int)40);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number5"), (int)50);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number6"), (int)60);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number7"), (int)70);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number8"), (int)80);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number9"), (int)90);
-                          XFILEJSON_ADDVALUE(first_obj, __L("number0"), (int)00);
-                          
-                          XFILEJSON_ADDVALUE(first_obj, __L("string1"), (XCHAR*)__L("prueba1"));
-                          XFILEJSON_ADDVALUE(first_obj, __L("string2"), (XCHAR*)__L("prueba2"));
-                          XFILEJSON_ADDVALUE(first_obj, __L("string3"), (XCHAR*)__L("prueba3"));
-                          XFILEJSON_ADDVALUE(first_obj, __L("string4"), (XCHAR*)__L("prueba4"));
-                          XFILEJSON_ADDVALUE(first_obj, __L("string5"), (XCHAR*)__L("prueba5"));
-                          XFILEJSON_ADDVALUE(first_obj, __L("string6"), (XCHAR*)__L("prueba6"));
-                        }
-  
-                      root->Add(__L("first_obj"), first_obj);
-                      
-                      headercoreprotocol = coreprotocol->CreateHeader(NULL, 1, DIOCOREPROTOCOL_HEADER_OPERATION_COMMAND, __L(""), xfileJSON, content);                      
-                      if(headercoreprotocol)
-                        {
-                          status = true;
-                        }
-                    }
-                    break;
-        } 
-
-      if(status)
-        { 
-          coreprotocol->ShowDebug(true, headercoreprotocol, content);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L(" "));
-
-          delete headercoreprotocol;
-        }
-    
-    }
-
-  delete coreprotocol;
-  coreprotocol = NULL;
-  
-  return status;
-}
-
 
 
 #ifdef WINDOWS

@@ -247,7 +247,6 @@ class DEVTESTSCONSOLE : public APPCONSOLE, public XOBSERVER, public XFSMACHINE
     static bool                     Test_ID_IBAN                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_Compress                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTCPIPServer           (DEVTESTSCONSOLE* tests);
-    static bool                     Test_CoreProtocol_GenerateHeader    (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
