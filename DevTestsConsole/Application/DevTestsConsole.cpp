@@ -749,14 +749,14 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
                                                       
                                                       #ifdef WINDOWS
-                                                      { false  , Test_WindowsACL                 , __L("Test Windows ACL")                },                                                      
+                                                      { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },                                                      
                                                       #endif
 
                                                       #ifdef LINUX
-                                                      { false  , Test_DBUS                       , __L("Test DBUS")                       },
-                                                      { false  , Test_NetWorkManager             , __L("Test Network Manager")            },
-                                                      { false  , Test_DeviceBusInputFile         , __L("Test Device Bus Input File")      },
-                                                      #endif                                       
+                                                      { false  , Test_DBUS                          , __L("Test DBUS")                            },
+                                                      { false  , Test_NetWorkManager                , __L("Test Network Manager")                 },
+                                                      { false  , Test_DeviceBusInputFile            , __L("Test Device Bus Input File")           },
+                                                      #endif                                          
                                                   };
 
   for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTSCONSOLE_LIST_FUNCTION)); c++)
