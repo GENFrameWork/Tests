@@ -33,7 +33,7 @@
 #pragma region INCLUDES
 
 #include "XBuffer.h"
-#include "APPBase.h"
+#include "APPFlowBase.h"
 
 #include "DIOGPIO.h"
 
@@ -93,7 +93,7 @@ enum DEVTESTSDEVICES_GPIOENTRYID
 class DIOSTREAM;
 class MAIN;
 
-class DEVTESTSDEVICES : public APPBASE
+class DEVTESTSDEVICES : public APPFLOWBASE
 {
   public:
                         DEVTESTSDEVICES                     ();

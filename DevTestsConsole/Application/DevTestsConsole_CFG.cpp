@@ -133,7 +133,7 @@ bool DEVTESTSCONSOLE_CFG::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
 {
-  if(!APPCFG::DoVariableMapping())
+  if(!APPFLOWCFG::DoVariableMapping())
     {
       return false;
     }
@@ -144,9 +144,9 @@ bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
   AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("-------------------------------------------------------"), 0, 1);
   AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, __L("Database config")                                        , 0, 2);
   
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_URL                , &db_URL);                       AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_URL          ,  __L("URL for database")  , APP_CFG_DEFAULT_REMARK_COLUMN, 0);
-  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PORT               , &db_port);                      AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_PORT         ,  __L("Port for database") , APP_CFG_DEFAULT_REMARK_COLUMN, 0);
-  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME       , &db_databasename);              AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME ,  __L("Database Name")     , APP_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_URL                , &db_URL);                       AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_URL          ,  __L("URL for database")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PORT               , &db_port);                      AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_PORT         ,  __L("Port for database") , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME       , &db_databasename);              AddRemark(DEVTESTSCONSOLE_CFG_SECTION_DATABASE, DEVTESTSCONSOLE_CFG_DATABASE_DATABASENAME ,  __L("Database Name")     , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
   AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_USER               , &db_user);
   AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_PASSWORD           , &db_password);
   AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTSCONSOLE_CFG_SECTION_DATABASE      , DEVTESTSCONSOLE_CFG_DATABASE_TIMEOUTCONNECTION  , &db_timeoutconnection);
@@ -166,7 +166,7 @@ bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::DoDefault()
 {
-  if(!APPCFG::DoDefault()) 
+  if(!APPFLOWCFG::DoDefault()) 
     {
       return false;
     }
@@ -195,13 +195,13 @@ bool DEVTESTSCONSOLE_CFG::DoDefault()
 
   log_activesectionsID.Empty();
 
-  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_INITIATION;
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_INITIATION;
   log_activesectionsID                                 += __L(",");
-  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_GENERIC;
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_GENERIC;
   log_activesectionsID                                 += __L(",");
-  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_STATUSAPP;
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_STATUSAPP;
   log_activesectionsID                                 += __L(",");
-  log_activesectionsID                                 += APP_CFG_LOG_SECTIONID_ENDING;
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_ENDING;
 
   log_levelmask                                         = XLOGLEVEL_ALL;
   log_maxsize                                           = 3000;
@@ -323,7 +323,7 @@ int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
 * @return     Does not return anything.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPCFG(namefile)
+DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 {
   Clean();
 

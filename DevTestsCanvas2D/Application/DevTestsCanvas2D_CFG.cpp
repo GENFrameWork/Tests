@@ -133,7 +133,7 @@ bool DEVTESTSCANVAS2D_CFG::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::DoVariableMapping()
 {
-  if(!APPCFG::DoVariableMapping())
+  if(!APPFLOWCFG::DoVariableMapping())
     {
       return false;
     }
@@ -165,7 +165,7 @@ bool DEVTESTSCANVAS2D_CFG::DoVariableMapping()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::DoDefault()
 {
-  if(!APPCFG::DoDefault()) 
+  if(!APPFLOWCFG::DoDefault()) 
     {
       return false;
     }
@@ -192,13 +192,13 @@ bool DEVTESTSCANVAS2D_CFG::DoDefault()
 
   log_activesectionsID.Empty();
 
-  log_activesectionsID                  += APP_CFG_LOG_SECTIONID_INITIATION;
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_INITIATION;
   log_activesectionsID                  += __L(",");
-  log_activesectionsID                  += APP_CFG_LOG_SECTIONID_GENERIC;
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_GENERIC;
   log_activesectionsID                  += __L(",");
-  log_activesectionsID                  += APP_CFG_LOG_SECTIONID_STATUSAPP;
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_STATUSAPP;
   log_activesectionsID                  += __L(",");
-  log_activesectionsID                  += APP_CFG_LOG_SECTIONID_ENDING;
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_ENDING;
 
   log_levelmask                         = XLOGLEVEL_ALL;
   log_maxsize                           = 3000;
@@ -345,7 +345,7 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetMaxHeight()
 * @return     Does not return anything.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile) : APPCFG(namefile)
+DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 {
   Clean();
 

@@ -108,25 +108,25 @@ option(SND_FEATURE                                              "Sound"         
 option(SND_FILE_WAV_FEATURE                                     "Sound WAV file"                                          ON )
 option(SND_FILE_OGG_FEATURE                                     "Sound OGG file"                                          ON )
     
-option(APP_FEATURE                                              "Application modules"                                     ON )
-option(APP_EXTENDED_FEATURE                                     "Application Extended"                                    ON )  
-option(APP_EXTENDED_APPLICATIONHEADER_FEATURE                   "Application Extended Aplication Header"                  ON )
-option(APP_EXTENDED_APPLICATIONSTATUS_FEATURE                   "Application Extended Aplication Status"                  ON )  
-option(APP_EXTENDED_INTERNETSTATUS_FEATURE                      "Application Extended Internet Status"                    ON )  
-option(APP_CHECKRESOURCESHARDWARE_FEATURE                       "Application Check Resources Hardwar"                     ON )
-option(APP_CONSOLE_FEATURE                                      "Application Console"                                     ON )
-option(APP_INTERNETSERVICES_FEATURE                             "Application Internet Services"                           ON )
-option(APP_LOG_FEATURE                                          "Application Log"                                         ON )
-option(APP_ALERTS_FEATURE                                       "Application Alerts"                                      ON )
-    
-option(APP_CFG_GENERAL_FEATURE                                  "Application CFG General"                                 ON )  
-option(APP_CFG_LOG_FEATURE                                      "Application CFG LOG"                                     ON )
-option(APP_CFG_INTERNETSERVICES_FEATURE                         "Application CFG Internet services"                       ON )      
-option(APP_CFG_DYNDNSMANAGER_FEATURE                            "Application CFG DynDNS Manager"                          ON )
-option(APP_CFG_CHECKRESOURCESHARDWARE_FEATURE                   "Application CFG Check Resorces HW"                       ON )  
-option(APP_CFG_DNSRESOLVER_FEATURE                              "Application CFG DNS "                                    ON )  
-option(APP_CFG_ALERTS_FEATURE                                   "Application CFG Alerts"                                  ON )  
-option(APP_CFG_DIOLOCATION_FEATURE                              "Application CFG Location"                                ON )  
+option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
+option(APPFLOW_EXTENDED_FEATURE                                 "Application Flow Extended"                               ON )  
+option(APPFLOW_EXTENDED_APPLICATIONHEADER_FEATURE               "Application Flow Extended Aplication Header"             ON )
+option(APPFLOW_EXTENDED_APPLICATIONSTATUS_FEATURE               "Application Flow Extended Aplication Status"             ON )  
+option(APPFLOW_EXTENDED_INTERNETSTATUS_FEATURE                  "Application Flow Extended Internet Status"               ON )  
+option(APPFLOW_CHECKRESOURCESHARDWARE_FEATURE                   "Application Flow Check Resources Hardwar"                ON )
+option(APPFLOW_CONSOLE_FEATURE                                  "Application Flow Console"                                ON )
+option(APPFLOW_INTERNETSERVICES_FEATURE                         "Application Flow Internet Services"                      ON )
+option(APPFLOW_LOG_FEATURE                                      "Application Flow Log"                                    ON )
+option(APPFLOW_ALERTS_FEATURE                                   "Application Flow Alerts"                                 ON )
+                                                                             
+option(APPFLOW_CFG_GENERAL_FEATURE                              "Application Flow CFG General"                            ON )  
+option(APPFLOW_CFG_LOG_FEATURE                                  "Application Flow CFG LOG"                                ON )
+option(APPFLOW_CFG_INTERNETSERVICES_FEATURE                     "Application Flow CFG Internet services"                  ON )      
+option(APPFLOW_CFG_DYNDNSMANAGER_FEATURE                        "Application Flow CFG DynDNS Manager"                     ON )
+option(APPFLOW_CFG_CHECKRESOURCESHARDWARE_FEATURE               "Application Flow CFG Check Resorces HW"                  ON )  
+option(APPFLOW_CFG_DNSRESOLVER_FEATURE                          "Application Flow CFG DNS "                               ON )  
+option(APPFLOW_CFG_ALERTS_FEATURE                               "Application Flow CFG Alerts"                             ON )  
+option(APPFLOW_CFG_DIOLOCATION_FEATURE                          "Application Flow CFG Location"                           ON )  
 
 option(IDENTIFICATION_FEATURE                                   "Identification"                                          ON )
      
@@ -149,7 +149,7 @@ endif()
 # --------------------------------------------------------------------
 # Config Application Macro
 
-set(APP_CFG_DEVTESTSCONSOLE "-DAPP_CFG=DEVTESTSCONSOLE_CFG::GetInstance()")
+set(APP_CFG_DEVTESTSCONSOLE "-DAPPFLOW_CFG=DEVTESTSCONSOLE_CFG::GetInstance()")
 add_definitions(${APP_CFG_DEVTESTSCONSOLE})
 
 

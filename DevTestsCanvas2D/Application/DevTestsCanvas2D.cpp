@@ -97,8 +97,8 @@
 
 #include "INPManager.h"
 
-#include "APPLog.h"
-#include "APPExtended.h"
+#include "APPFlowLog.h"
+#include "APPFlowExtended.h"
 
 #ifdef SCRIPT_LIB_WINDOW_ACTIVE  
 #include "Script_Lib_Window.h"
@@ -226,26 +226,26 @@ bool DEVTESTSCANVAS2D::AppProc_Ini()
 
   GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
 
-  GetApplicationName()->Set(APPLICATION_NAMEAPP);
+  Application_GetName()->Set(APPLICATION_NAMEAPP);
 
-  SetInitOptions( APPGRAPHICS_INIOPTION_CREATEMAINSCREEN    |
-                  APPGRAPHICS_INIOPTION_SHOWMAINSCREEN      |
-                  APPGRAPHICS_INIOPTION_INPUT);
+  SetInitOptions( APPFLOWGRAPHICS_INIOPTION_CREATEMAINSCREEN    |
+                  APPFLOWGRAPHICS_INIOPTION_SHOWMAINSCREEN      |
+                  APPFLOWGRAPHICS_INIOPTION_INPUT);
 
   //--------------------------------------------------------------------------------------------------
 
-  XTRACE_SETAPPLICATIONNAME((*GetApplicationName()));
+  XTRACE_SETAPPLICATIONNAME((*Application_GetName()));
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
   XTRACE_SETAPPLICATIONID(string);
 
   //--------------------------------------------------------------------------------------------------
 
-  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPDEFAULT_DIRECTORY_ROOT);
+  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPFLOW_DEFAULT_DIRECTORY_ROOT);
 
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS      , APPDEFAULT_DIRECTORY_GRAPHICS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FONTS         , APPDEFAULT_DIRECTORY_FONTS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS    , APPDEFAULT_DIRECTORY_UI_LAYOUTS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS       , APPDEFAULT_DIRECTORY_SCRIPTS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS      , APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FONTS         , APPFLOW_DEFAULT_DIRECTORY_FONTS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS    , APPFLOW_DEFAULT_DIRECTORY_UI_LAYOUTS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS       , APPFLOW_DEFAULT_DIRECTORY_SCRIPTS);
 
 
   GEN_XPATHSMANAGER.CreateAllPathSectionOnDisk();
@@ -275,11 +275,11 @@ bool DEVTESTSCANVAS2D::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
 
-  APP_CFG_SETAUTOMATICTRACETARGETS
+  APPFLOW_CFG_SETAUTOMATICTRACETARGETS
 
   //--------------------------------------------------------------------------------------
 
-  APP_EXTENDED.APPStart(&APP_CFG);
+  APPFLOW_EXTENDED.APPStart(&APPFLOW_CFG);
 
   //--------------------------------------------------------------------------------------
 
@@ -444,9 +444,9 @@ bool DEVTESTSCANVAS2D::AppProc_End()
 
   //--------------------------------------------------------------------------------------
 
-  APP_EXTENDED.APPEnd();
-  APP_EXTENDED.DelInstance();  
-  APP_CFG.DelInstance();
+  APPFLOW_EXTENDED.APPEnd();
+  APPFLOW_EXTENDED.DelInstance();  
+  APPFLOW_CFG.DelInstance();
 
 
   //--------------------------------------------------------------------------------------
@@ -513,12 +513,12 @@ bool DEVTESTSCANVAS2D::UpdateInput()
 
                                                             GetMainScreen()->Get_Position(x, y);
 
-                                                            APP_CFG.Screen_SetPosX(x);
-                                                            APP_CFG.Screen_SetPosY(y);
+                                                            APPFLOW_CFG.Screen_SetPosX(x);
+                                                            APPFLOW_CFG.Screen_SetPosY(y);
 
-                                                            APP_CFG.Save();
+                                                            APPFLOW_CFG.Save();
 
-                                                            SetExitType(APPBASE_EXITTYPE_BY_USER);
+                                                            SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
                                                           }
                                                           break; 
 
@@ -627,11 +627,11 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
   delete bitmapfile;
   
 
-  screen->SetPosition(APP_CFG.Screen_GetPosX(), APP_CFG.Screen_GetPosY());
-  screen->SetWidth(APP_CFG.Screen_GetWidth());
-  screen->SetHeight(APP_CFG.Screen_GetHeight());
+  screen->SetPosition(APPFLOW_CFG.Screen_GetPosX(), APPFLOW_CFG.Screen_GetPosY());
+  screen->SetWidth(APPFLOW_CFG.Screen_GetWidth());
+  screen->SetHeight(APPFLOW_CFG.Screen_GetHeight());
 
-  GetMainScreen()->CreateViewport(GRPVIEWPORT_ID_MAIN , 0.0f, 0.0f, (float)screen->GetWidth(), (float)screen->GetHeight(),  0,  0, (APP_CFG.Screen_GetMaxWidth()) , (APP_CFG.Screen_GetMaxHeight()));
+  GetMainScreen()->CreateViewport(GRPVIEWPORT_ID_MAIN , 0.0f, 0.0f, (float)screen->GetWidth(), (float)screen->GetHeight(),  0,  0, (APPFLOW_CFG.Screen_GetMaxWidth()) , (APPFLOW_CFG.Screen_GetMaxHeight()));
 
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Main Screen] Width %d, height %d"),  screen->GetWidth(), screen->GetHeight());
 
@@ -725,7 +725,7 @@ bool DEVTESTSCANVAS2D::Do_Tests()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
 {
-  SCRIPT::LoadScriptAndRun(APP_CFG.Scripts_GetAll(), DEVTESTSCANVAS2D::AdjustLibraries);
+  SCRIPT::LoadScriptAndRun(APPFLOW_CFG.Scripts_GetAll(), DEVTESTSCANVAS2D::AdjustLibraries);
 
   return true;
 }
@@ -785,11 +785,11 @@ bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
 void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
 {
   #ifdef SCRIPT_LIB_CFG_ACTIVE  
-  SCRIPT_SET_LIB_CFG(script, APP_CFG);
+  SCRIPT_SET_LIB_CFG(script, APPFLOW_CFG);
   #endif
 
   #ifdef SCRIPT_LIB_WINDOWS_DEBUG  
-  SCRIPT_SET_LIB_APPGRAPHICS(script, devtestscanvas2d)
+  SCRIPT_SET_LIB_APPFLOWGRAPHICS(script, devtestscanvas2d)
   #endif
 }
 

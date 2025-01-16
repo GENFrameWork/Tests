@@ -53,7 +53,7 @@
   #define DIOLEDNEOPIXELWS2812B_ACTIVE
 
 
-  #define APP_ACTIVE
+  #define APPFLOW_ACTIVE
  
 
 #endif

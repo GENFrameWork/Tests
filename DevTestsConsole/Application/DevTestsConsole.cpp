@@ -171,14 +171,14 @@
 #include "INPFactory.h"
 #include "INPSimulate.h"
 
-#include "APPLog.h"
-#include "APPCheckResourcesHardware_XEvent.h"
-#include "APPCheckResourcesHardware.h"
-#include "APPInternetServices.h"
-#include "APPAlerts.h"
-#include "APPExtended.h"
-#include "APPExtended_ApplicationStatus.h"
-#include "APPExtended_InternetStatus.h"
+#include "APPFlowLog.h"
+#include "APPFlowCheckResourcesHardware_XEvent.h"
+#include "APPFlowCheckResourcesHardware.h"
+#include "APPFlowInternetServices.h"
+#include "APPFlowAlerts.h"
+#include "APPFlowExtended.h"
+#include "APPFlowExtended_ApplicationStatus.h"
+#include "APPFlowExtended_InternetStatus.h"
 
 #include "ID_IBAN.h"
 
@@ -343,8 +343,8 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
 
-  GetApplicationName()->Set(APPLICATION_NAMEAPP);
-  GetApplicationExecutable()->Set(APPLICATION_NAMEFILE);
+  Application_GetName()->Set(APPLICATION_NAMEAPP);
+  Application_GetExecutable()->Set(APPLICATION_NAMEFILE);
 
   //--------------------------------------------------------------------------------------------------
 
@@ -354,14 +354,14 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------------------
 
-  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPDEFAULT_DIRECTORY_ROOT);
+  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPFLOW_DEFAULT_DIRECTORY_ROOT);
 
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS      , APPDEFAULT_DIRECTORY_GRAPHICS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_SOUNDS        , APPDEFAULT_DIRECTORY_SOUNDS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_DATABASES     , APPDEFAULT_DIRECTORY_DATABASES);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_WEB           , APPDEFAULT_DIRECTORY_WEB);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FIRMWARE      , APPDEFAULT_DIRECTORY_FIRMWARE);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES  , APPDEFAULT_DIRECTORY_CERTIFICATES);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS      , APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_SOUNDS        , APPFLOW_DEFAULT_DIRECTORY_SOUNDS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_DATABASES     , APPFLOW_DEFAULT_DIRECTORY_DATABASES);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_WEB           , APPFLOW_DEFAULT_DIRECTORY_WEB);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FIRMWARE      , APPFLOW_DEFAULT_DIRECTORY_FIRMWARE);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES  , APPFLOW_DEFAULT_DIRECTORY_CERTIFICATES);
 
   GEN_XPATHSMANAGER.CreateAllPathSectionOnDisk();
 
@@ -373,12 +373,12 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //Test_DIOWifiManagerMode(this);
 
-  XTRACE_SETAPPLICATIONNAME((*GetApplicationName()));
+  XTRACE_SETAPPLICATIONNAME((*Application_GetName()));
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
   XTRACE_SETAPPLICATIONID(string);
   //XTRACE_SETLOCALIPFILTER(172);
 
-  APP_CFG_SETAUTOMATICTRACETARGETS
+  APPFLOW_CFG_SETAUTOMATICTRACETARGETS
 
   //--------------------------------------------------------------------------------------
 
@@ -397,7 +397,7 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------
 
-  APP_EXTENDED.APPStart(&APP_CFG, this);
+  APPFLOW_EXTENDED.APPStart(&APPFLOW_CFG, this);
 
   //--------------------------------------------------------------------------------------
   
@@ -462,13 +462,13 @@ bool DEVTESTSCONSOLE::AppProc_Update()
           case DEVTESTSCONSOLE_XFSMSTATE_INI          : SetEvent(DEVTESTSCONSOLE_XFSMEVENT_UPDATE);
                                                         break;
 
-          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE       : if(GetExitType() == APPBASE_EXITTYPE_UNKNOWN)
+          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE       : if(GetExitType() == APPFLOWBASE_EXITTYPE_UNKNOWN)
                                                           {
                                                             if(xtimerupdateconsole)
                                                               {
                                                                 if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
                                                                   {
-                                                                    APP_EXTENDED.ShowAll();
+                                                                    APPFLOW_EXTENDED.ShowAll();
 
                                                                     xtimerupdateconsole->Reset();
                                                                   }
@@ -555,9 +555,9 @@ bool DEVTESTSCONSOLE::AppProc_End()
 
   //--------------------------------------------------------------------------------------
 
-  APP_EXTENDED.APPEnd();
-  APP_EXTENDED.DelInstance();  
-  APP_CFG.DelInstance();
+  APPFLOW_EXTENDED.APPEnd();
+  APPFLOW_EXTENDED.DelInstance();  
+  APPFLOW_CFG.DelInstance();
 
   //--------------------------------------------------------------------------------------
 
@@ -596,7 +596,7 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
   XCHAR character = (XCHAR)key;
 
   if((character<32) || (character>127)) character = __C('?');
-  APP_LOG_ENTRY(XLOGLEVEL_WARNING, APP_CFG_LOG_SECTIONID_STATUSAPP, false, __L("Key pressed: 0x%02X [%c]"), key, character);
+  APPFLOW_LOG_ENTRY(XLOGLEVEL_WARNING, APPFLOW_CFG_LOG_SECTIONID_STATUSAPP, false, __L("Key pressed: 0x%02X [%c]"), key, character);
 
   console->Printf(__L("\r    \r"));
   console->Printf(__L("\n"));
@@ -604,7 +604,7 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
   switch(key)
     {
       case 0x1B : // ESC Exit application
-                  SetExitType(APPBASE_EXITTYPE_BY_USER);
+                  SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
                   break;
 
       case 'T'  : Do_Tests();
@@ -1194,7 +1194,10 @@ bool DEVTESTSCONSOLE::Test_XTrace(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 {
-  if(!APP_CFG.Log_IsActive()) return false;
+  if(!APPFLOW_CFG.Log_IsActive()) 
+    {
+      return false;
+    }
 
   XBUFFER  xbuffer;
   XRAND*   xrand = GEN_XFACTORY.CreateRand();
@@ -1218,8 +1221,8 @@ bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
               xbuffer.Add((XBYTE)xrand->Max(255));
             }       
 
-          APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_GENERIC, false, __L("%08d %s"), index, __L("Entrada en memoria del LOG"));          
-          APP_LOG_ENTRY(XLOGLEVEL_INFO, APP_CFG_LOG_SECTIONID_GENERIC, false, xbuffer);
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_GENERIC, false, __L("%08d %s"), index, __L("Entrada en memoria del LOG"));          
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_GENERIC, false, xbuffer);
 
           index++;
         }     
@@ -2951,25 +2954,25 @@ bool DEVTESTSCONSOLE::Test_SystemCPUUsage(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_AppAlerts(DEVTESTSCONSOLE* tests)
 {
-  int status[APP_ALERT_TYPE_MAX];
+  int status[APPFLOW_ALERT_TYPE_MAX];
   int result = false;
 
-  if(GEN_APPALERTS.Ini(&APP_CFG.GetInstance() , APPLICATION_NAMEAPP 
-                                              , APPLICATION_VERSION
-                                              , APPLICATION_SUBVERSION
-                                              , APPLICATION_SUBVERSIONERR
-                                              , status
-                                              , NULL))
+  if(GEN_APPFLOWALERTS.Ini(&APPFLOW_CFG.GetInstance() , APPLICATION_NAMEAPP 
+                                                      , APPLICATION_VERSION
+                                                      , APPLICATION_SUBVERSION
+                                                      , APPLICATION_SUBVERSIONERR
+                                                      , status
+                                                      , NULL))
     {
       int result;
       
-      result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta."));
-      if(result) result = GEN_APPALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta 2."));
+      result = GEN_APPFLOWALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta."));
+      if(result) result = GEN_APPFLOWALERTS.Send((DIOALERTSSENDER_SMPT | DIOALERTSSENDER_WEB), DIOALERTS_CONDITIONS_ID_GENINTERN_TEST,  DIOALERTLEVEL_SERIOUS, __L("Aterta TEST"), __L("Esto es una prueba de Alerta 2."));
   
-      GEN_APPALERTS.End();
+      GEN_APPFLOWALERTS.End();
     }
 
-  GEN_APPALERTS.DelInstance();
+  GEN_APPFLOWALERTS.DelInstance();
 
   return result;
 }
@@ -3163,15 +3166,15 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 {
-  XDATETIME*            datetime1;
-  XDATETIME*            datetime2;
-  XSTRING               datetimestr;
-  APPINTERNETSERVICES*  appinternetservices = NULL;
-  bool                  status      = false;
+  XDATETIME*                datetime1;
+  XDATETIME*                datetime2;
+  XSTRING                   datetimestr;
+  APPFLOWINTERNETSERVICES*  appinternetservices = NULL;
+  bool                      status      = false;
 
-  if(APP_EXTENDED.GetInternetStatus())
+  if(APPFLOW_EXTENDED.GetInternetStatus())
     {
-      appinternetservices = APP_EXTENDED.GetInternetStatus()->GetAPPInternetServices();
+      appinternetservices = APPFLOW_EXTENDED.GetInternetStatus()->GetInternetServices();
     }
 
   if(appinternetservices) 
@@ -3268,7 +3271,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Pause(item[0]);
  
-  APP_EXTENDED.ShowAll();
+  APPFLOW_EXTENDED.ShowAll();
   tests->Show_PlaySound();  
 
   GEN_XSLEEP.Seconds(3); 
@@ -3278,7 +3281,7 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 
   GEN_SNDFACTORY.Sound_Stop(item[0]);
   
-  APP_EXTENDED.ShowAll();
+  APPFLOW_EXTENDED.ShowAll();
   tests->Show_PlaySound();   
  
     
@@ -3593,7 +3596,7 @@ bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 
   //-------------------------------------------------------------------------
 
-  APP_CFG.SetAutomaticDNSResolver();
+  APPFLOW_CFG.SetAutomaticDNSResolver();
 
   */
 
@@ -3648,7 +3651,7 @@ bool DEVTESTSCONSOLE::Test_NotificationsManager(DEVTESTSCONSOLE* tests)
   notification.Get_Title()->Set(APPLICATION_NAMEAPP);
   notification.Get_Message()->Set(msgfinal);
 
-  notification.SetApplicationHandle(tests->GetApplicationHandle());
+  notification.Application_SetHandle(tests->Application_GetHandle());
   notificationmanager->Do(notification);
 
   notificationmanager->End();
@@ -4477,7 +4480,7 @@ bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 			xlicenseID.GetXString(string);
 			tests->console->Printf(__L("   ID licencia : %s \n"), string.Get()); 
 			
-			xlicense.GetApplicationID()->Set(__L("GEN  Copyright (C).  All right reserved."));		
+			xlicense.Application_GetID()->Set(__L("GEN  Copyright (C).  All right reserved."));		
 			xlicense.Generate(xlicenseID);
 			xlicense.Get(string);
 			tests->console->Printf(__L("   Licencia    : %s \n"), string.Get()); 	
@@ -4498,7 +4501,7 @@ bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 	
 			if(xlicense.CheckMasterCreation(xpath, xlicenseID, applicationID, 10)) return false;
 
-			if(!xlicense.LoadFromFile(xpath, (*xlicense.GetApplicationID()),  &license)) return false;
+			if(!xlicense.LoadFromFile(xpath, (*xlicense.Application_GetID()),  &license)) return false;
 					
 			//xlicense.LoadFromURL(url, 10, NULL, &license);
 
@@ -4694,10 +4697,10 @@ bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
       return false; 
     }
 
-  #ifdef APP_CFG_DYNDNSMANAGER_ACTIVE
-  for(XDWORD c=0; c<APP_CFG.DNSManager_GetURLs()->GetSize(); c++)
+  #ifdef APPFLOW_CFG_DYNDNSMANAGER_ACTIVE
+  for(XDWORD c=0; c<APPFLOW_CFG.DNSManager_GetURLs()->GetSize(); c++)
     {
-      dyndnsmanager->AddDNS((*APP_CFG.DNSManager_GetURL(c)));
+      dyndnsmanager->AddDNS((*APPFLOW_CFG.DNSManager_GetURL(c)));
     }         
   #endif  
 
@@ -5387,7 +5390,7 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
   #ifdef SND_ACTIVE
-  APP_EXTENDED.ShowAll();
+  APPFLOW_EXTENDED.ShowAll();
   devtestsconsole->Show_PlaySound();
     
   for(int c=0; c<10; c++)

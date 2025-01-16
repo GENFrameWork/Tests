@@ -32,7 +32,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "APPCFG.h"
+#include "APPFlowCFG.h"
 
 #pragma endregion
 
@@ -54,7 +54,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class DEVTESTSCANVAS2D_CFG : public APPCFG
+class DEVTESTSCANVAS2D_CFG : public APPFLOWCFG
 {
   public:
 

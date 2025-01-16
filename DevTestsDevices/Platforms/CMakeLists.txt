@@ -58,7 +58,7 @@ option(DIO_LEDNEOPIXELWS2812B_FEATURE                         "Data Input/Output
                                                                                                                         
 option(XEEPROMMEMORYMANAGER_FEATURE                           "EEPROM Memory Manager"                                   ON )
                                                                                                                         
-option(APP_FEATURE                                            "Application modules"                                     ON )
+option(APPFLOW_FEATURE                                        "Application Flow modules"                                ON )
 
 
 # --------------------------------------------------------------------

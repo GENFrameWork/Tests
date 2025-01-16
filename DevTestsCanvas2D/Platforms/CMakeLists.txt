@@ -20,14 +20,14 @@ option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control
 
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
        
-option(APP_FEATURE                                              "Application modules"                                     ON )
-option(APP_EXTENDED_FEATURE                                     "Application Extended"                                    ON )
-option(APP_LOG_FEATURE                                          "Application Log"                                         ON )
-option(APP_GRAPHICS_FEATURE                                     "Application Graphics"                                    ON )
-
-option(APP_CFG_GENERAL_FEATURE                                  "Application CFG General"                                 ON )  
-option(APP_CFG_LOG_FEATURE                                      "Application CFG LOG"                                     ON )
-option(APP_CFG_SCRIPTS_FEATURE                                  "Application Scripts List"                                ON )  
+option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
+option(APPFLOW_EXTENDED_FEATURE                                 "Application Flow Extended"                               ON )
+option(APPFLOW_LOG_FEATURE                                      "Application Flow Log"                                    ON )
+option(APPFLOW_GRAPHICS_FEATURE                                 "Application Flow Graphics"                               ON )
+                                                                             
+option(APPFLOW_CFG_GENERAL_FEATURE                              "Application Flow CFG General"                            ON )  
+option(APPFLOW_CFG_LOG_FEATURE                                  "Application Flow CFG LOG"                                ON )
+option(APPFLOW_CFG_SCRIPTS_FEATURE                              "Application Flow Scripts List"                           ON )  
 
 option(GRP_FEATURE                                              "Graphics"                                                ON )
 option(GRP_BITMAP_FILE_BMP_FEATURE                              "Graphics Bitmap File BMP"                                ON )
@@ -59,7 +59,7 @@ option(SCRIPT_LIB_INPUTSIMULATE_FEATURE                         "Script Lib Inpu
 # --------------------------------------------------------------------
 # Config Application Macro
 
-set(APP_CFG_DEVTESTSCANVAS2D "-DAPP_CFG=DEVTESTSCANVAS2D_CFG::GetInstance()")
+set(APP_CFG_DEVTESTSCANVAS2D "-DAPPFLOW_CFG=DEVTESTSCANVAS2D_CFG::GetInstance()")
 add_definitions(${APP_CFG_DEVTESTSCANVAS2D})
 
 

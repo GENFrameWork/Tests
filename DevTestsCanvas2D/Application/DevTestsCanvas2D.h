@@ -42,7 +42,7 @@
 
 #include "Script_XEvent.h"
 
-#include "APPGraphics.h"
+#include "APPFlowGraphics.h"
 
 #pragma endregion
 
@@ -149,7 +149,7 @@ class SCRIPT;
 class DEVTESTSCANVAS2D_CFG;
 
 
-class DEVTESTSCANVAS2D : public APPGRAPHICS, public XFSMACHINE
+class DEVTESTSCANVAS2D : public APPFLOWGRAPHICS, public XFSMACHINE
 {
   public:
                                     DEVTESTSCANVAS2D                        ();

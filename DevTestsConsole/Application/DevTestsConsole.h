@@ -45,7 +45,7 @@
 #include "DIOURL.h"
 #include "DIOGPIO.h"
 
-#include "APPConsole.h"
+#include "APPFlowConsole.h"
 
 #include "DevTestsConsole_XSerializable.h"
 
@@ -152,12 +152,12 @@ class DIODNSPROTOCOL_MITM_SERVER_XEVENT;
 class DIOSTREAM_XEVENT;
 class SNDITEM;
 class SNDFACTORY_XEVENT;
-class APPCHECKRESOURCESHARDWARE;
-class APPINTERNETSERVICES;
-class APPALERTS;
+class APPFLOWCHECKRESOURCESHARDWARE;
+class APPFLOWINTERNETSERVICES;
+class APPFLOWALERTS;
 
 
-class DEVTESTSCONSOLE : public APPCONSOLE, public XOBSERVER, public XFSMACHINE
+class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHINE
 {
   public:
                                     DEVTESTSCONSOLE                     ();
