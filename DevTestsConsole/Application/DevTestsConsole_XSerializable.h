@@ -78,9 +78,9 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
 
     bool                            Serialize                          ()
                                     {
-                                      Primitive_Add<int>(value2, __L("value2"));
-                                      Primitive_Add<bool>(value3, __L("value3"));
-                                      Primitive_Add<XSTRING*>(&string2, __L("string2"));
+                                      Primitive_Add<int>(value2           , __L("value2"));
+                                      Primitive_Add<bool>(value3          , __L("value3"));
+                                      Primitive_Add<XSTRING*>(&string2    , __L("string2"));
 
                                       return true;
                                     }
@@ -88,9 +88,9 @@ class TESTSERIALIZABLE2 : public XSERIALIZABLE
 
     bool                            Deserialize                        ()
                                     {   
-                                      Primitive_Extract<int>(value2, __L("value2"));
-                                      Primitive_Extract<bool>(value3, __L("value3"));
-                                      Primitive_Extract<XSTRING&>(string2, __L("string2"));
+                                      Primitive_Extract<int>(value2      , __L("value2"));
+                                      Primitive_Extract<bool>(value3     , __L("value3"));
+                                      Primitive_Extract<XSTRING>(string2 , __L("string2"));
 
                                       return true;
                                     }
