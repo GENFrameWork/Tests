@@ -137,7 +137,6 @@ typedef XTREE<XSTRING*>                           XTREE_TEST;
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class XTIME;
 class XTIMER;
 class XRAND;
 class XMUTEX;

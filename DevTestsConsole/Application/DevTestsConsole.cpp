@@ -68,7 +68,6 @@
 #include "XVariant.h"
 #include "XTranslation.h"
 #include "XTranslation_GEN.h"
-#include "XTranslation.h"
 #include "XLanguage_ISO_639_3.h"
 #include "XScheduler.h"
 #include "XScheduler_XEvent.h"
@@ -719,7 +718,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
                                                       { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
-                                                      { true   , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
+                                                      { false  , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
                                                       { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
@@ -746,7 +745,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemBatteryLevel            , __L("Test System Battery Level")            },
                                                       { false  , Test_LedNeoPixelWS2812B            , __L("Test Led NeoPixel WS2812B")            }, 
                                                       { false  , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
-                                                      { false  , Test_XLicense                      , __L("Test XLicense")                        },
+                                                      { true   , Test_XLicense                      , __L("Test XLicense")                        },
                                                       { false  , Test_XSerializable                 , __L("Test XSerializable")                   },
                                                       { false  , Test_InputSimulate                 , __L("Test Input Simulate")                  },
                                                       { false  , Test_Scheduler                     , __L("Test Scheduler")                       },
@@ -4469,51 +4468,50 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 {
-	XLICENSE		xlicense;
+	XLICENSE* 	xlicense  = NULL;
 	XLICENSEID  xlicenseID;	
 	XBUFFER			licensefile;
 	XBUFFER			license;
 	XSTRING			string;
-		
-	if(xlicense.GenerateMachineID(xlicenseID))
+  bool        status = false;
+
+
+  xlicense = new XLICENSE();
+  if(!xlicense)		
+    {
+      return false;
+    }
+
+	if(xlicense->GenerateMachineID(xlicenseID))
 		{
-			xlicenseID.GetXString(string);
+			xlicenseID.GetID()->GetToString(string);
 			tests->console->Printf(__L("   ID licencia : %s \n"), string.Get()); 
 			
-			xlicense.Application_GetID()->Set(__L("GEN  Copyright (C).  All right reserved."));		
-			xlicense.Generate(xlicenseID);
-			xlicense.Get(string);
+			xlicense->Application_GetID()->Set(__L("GEN  Copyright (C).  All right reserved."));		
+			xlicense->Generate(xlicenseID);
+			xlicense->Get(string);
 			tests->console->Printf(__L("   Licencia    : %s \n"), string.Get()); 	
 
 			XPATH		  xpathgeneric;
 			XPATH		  xpath;
 			DIOURL	  url;
       XSTRING   applicationID;
+      XSTRING   expireddate;
 
-      url           = __L("http://genframework.com/license");
       applicationID = __L("TEST Application");
 
       GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
       xpath.Slash_Add();
       xpath.Add("test.lic");
       			
-			url = __L("http://genframework.com/license");
-	
-			if(xlicense.CheckMasterCreation(xpath, xlicenseID, applicationID, 10)) return false;
+      CREATEMASTERLICENSE(xlicense, xpath, xlicenseID, applicationID, 10)
 
-			if(!xlicense.LoadFromFile(xpath, (*xlicense.Application_GetID()),  &license)) return false;
-					
-			//xlicense.LoadFromURL(url, 10, NULL, &license);
-
-			tests->console->Printf(__L("Check       : ")); 	
-			if(license.Compare(xlicense.Get()))
-						tests->console->Printf(__L("Ok!\n")); 	
-			 else tests->console->Printf(__L("Error!\n")); 	
-
-		  //CHECKLICENSEFULLLOCAL(xpath)		
+      CHECKLICENSEFULLLOCAL(xlicense, xpath, applicationID, status)   
+			
+      CHECKLICENSEFULLLOCALEXPIRE(xlicense, xpath, applicationID, status)   
 		}
 
-	return true;
+	return status;
 }
 
 

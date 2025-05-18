@@ -41,6 +41,8 @@
 
 #define UNITTEST_XUUID_CLASSNAME  TEST_XUUID
 
+#define UNITTEST_XUUID_NTESTS     1000
+
 #pragma endregion
 
 

@@ -148,6 +148,31 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber2)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByBuffer)
+* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByBuffer
+* @ingroup    UNIT TEST
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XUUID_CLASSNAME, AssignByBuffer) 
+{
+  XUUID     ID[2]; 
+  XBUFFER   IDbuffer[2];
+
+  for(XDWORD c=0; c<UNITTEST_XUUID_NTESTS; c++)
+    {
+      ID[0].GenerateRandom();
+      ID[0].GetToBuffer(IDbuffer[0]);
+
+      ID[1].SetFromBuffer(IDbuffer[0]);
+      ID[1].GetToBuffer(IDbuffer[1]);
+
+      EXPECT_EQ(true, IDbuffer[0].Compare(IDbuffer[1]));
+    }  
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByString)
 * @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByString
 * @ingroup    UNIT TEST
@@ -158,7 +183,7 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByString)
   XUUID     ID[2]; 
   XSTRING   IDstr[2];
 
-  for(XDWORD c=0; c<5000; c++)
+  for(XDWORD c=0; c<UNITTEST_XUUID_NTESTS; c++)
     {
       ID[0].GenerateRandom();
       ID[0].GetToString(IDstr[0]);
@@ -169,6 +194,8 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByString)
       EXPECT_EQ(0, IDstr[0].Compare(IDstr[1], false));
     }  
 }
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -183,7 +210,7 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyTo)
   XUUID     ID[2]; 
   XSTRING   IDstr[2];
   
-  for(XDWORD c=0; c<5000; c++)
+  for(XDWORD c=0; c<UNITTEST_XUUID_NTESTS; c++)
     {
       ID[0].GenerateRandom();
       ID[0].CopyTo(ID[1]);
@@ -208,7 +235,7 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyFrom)
   XUUID     ID[2]; 
   XSTRING   IDstr[2];
   
-  for(XDWORD c=0; c<5000; c++)
+  for(XDWORD c=0; c<UNITTEST_XUUID_NTESTS; c++)
     {
       ID[0].GenerateRandom();
       ID[1].CopyFrom(ID[0]);
