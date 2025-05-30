@@ -744,8 +744,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile                , __L("Test System Host File")                },
                                                       { false  , Test_SystemBatteryLevel            , __L("Test System Battery Level")            },
                                                       { false  , Test_LedNeoPixelWS2812B            , __L("Test Led NeoPixel WS2812B")            }, 
-                                                      { false  , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
-                                                      { true   , Test_XLicense                      , __L("Test XLicense")                        },
+                                                      { true   , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
+                                                      { false  , Test_XLicense                      , __L("Test XLicense")                        },
                                                       { false  , Test_XSerializable                 , __L("Test XSerializable")                   },
                                                       { false  , Test_InputSimulate                 , __L("Test Input Simulate")                  },
                                                       { false  , Test_Scheduler                     , __L("Test Scheduler")                       },
@@ -4344,7 +4344,7 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 	DIOPCAP*						 diopcap					 = NULL; 
 	DIOPCAPNETINTERFACE* netinterface			 = NULL;  
-	int                  indexnetinterface = 0;
+	int                  indexnetinterface = 8;
 
 	diopcap = GEN_DIOFACTORY.CreatePCap();
   if(!diopcap)  return false;
