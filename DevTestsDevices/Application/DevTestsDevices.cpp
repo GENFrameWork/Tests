@@ -950,7 +950,7 @@ bool DEVTESTSDEVICES::I2CTest_EEprom24XXX(DEVTESTSDEVICES* tests, int port, int 
 
 					    status = eeprom24xxx->Read(c, 128, dataread);
               XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("EEPROM 24XXX Read: %s"), (status?__L("Ok."):__L("Error!")));    								 
-					    XTRACE_PRINTDATABLOCK(XTRACE_COLOR_BLUE, dataread);
+					    XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, dataread);
 			    	}						
 	
 		    }

@@ -916,76 +916,76 @@ bool DEVTESTSCONSOLE::Test_XBuffer(DEVTESTSCONSOLE* tests)
   buffer.Set((XWORD)0x0203, 1);
   buffer.Set((XDWORD)0x55AA55AA, 3);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   buffer.SetWithMask(__L("D"), 3, 0xAAAAAAAA);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   buffer.InsertWithMask(__L("W"), 3, 0xCAFE);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   valueword = 0;
   buffer.GetWithMask(__L("W"), 3, &valueword);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   valueword  = 0;
   valuedword = 0;
   buffer.ExtractWithMask(__L("WD"), 3, &valueword, &valuedword);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   XBYTE array[8] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
   buffer.InsertWithMask(__L("A8"), 3, array);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   memset(array, 0, sizeof(array));
   buffer.InsertWithMask(__L("AX"), 3, array, sizeof(array));
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   memset(array, 0, sizeof(array));
   buffer.ExtractWithMask(__L("AX"), 3, array, sizeof(array));
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   variant = (XDWORD)10;
   buffer.InsertWithMask(__L("V"), 3, &variant);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   variant = (XDWORD)00;
   buffer.ExtractWithMask(__L("V"), 3, &variant);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   string = __L("hola radiola");
   buffer.InsertWithMask(__L("S"), 3, &string);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   string.Empty();
   buffer.ExtractWithMask(__L("S"), 3, &string);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
   
   /*
   buffer.Bit_SetNBits(31);
 
   buffer.Bit_AddData(0xFFFFFFFF);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   buffer.Bit_AddData(0xFFFFFFFF);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   buffer.Bit_AddData(0xFFFFFFFF);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
 
   XDWORD data = buffer.Bit_GetData(0);
 
@@ -995,7 +995,7 @@ bool DEVTESTSCONSOLE::Test_XBuffer(DEVTESTSCONSOLE* tests)
 
   buffer.Bit_SetData(data, 0);
 
-  XTRACE_PRINTDATABLOCK(1, buffer, 1, 16);
+  XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, buffer, 1, 16);
   */
 
   return true;
@@ -1876,7 +1876,7 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
   XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client %s: %s"), url.Get(), status?__L("Ok!"):__L("Error!"));
   if(status)
     {
-      XTRACE_PRINTDATABLOCK(1, webpage);
+      XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, webpage);
     }
 
   tests->UnSubscribeEvent(DIOWEBCLIENT_XEVENT_TYPE_OPENWEB         , &webclient);
