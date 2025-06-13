@@ -246,9 +246,11 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_ID_IBAN                        (DEVTESTSCONSOLE* tests);
     static bool                     Test_Compress                       (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTCPIPServer           (DEVTESTSCONSOLE* tests);
+    static bool                     Test_XPath                          (DEVTESTSCONSOLE* tests);
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
+    static bool                     Test_Registry                       (DEVTESTSCONSOLE* tests);
     #endif
 
     #ifdef LINUX

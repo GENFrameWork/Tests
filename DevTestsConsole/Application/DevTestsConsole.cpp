@@ -183,9 +183,10 @@
 
 #ifdef WINDOWS
   #include "XWINDOWSAccessControlLists.h"
+  #include "XWINDOWSRegistryManager.h"
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"     
+  #include "DevTestsConsole_WindowsPlatform.h"  
   #include "MainProcWINDOWS.h" 
-  #include "DevTestsConsole_WindowsPlatform.h"
 #endif
 
 
@@ -744,7 +745,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_SystemHostFile                , __L("Test System Host File")                },
                                                       { false  , Test_SystemBatteryLevel            , __L("Test System Battery Level")            },
                                                       { false  , Test_LedNeoPixelWS2812B            , __L("Test Led NeoPixel WS2812B")            }, 
-                                                      { true   , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
+                                                      { false  , Test_DIOPCap                       , __L("Test DIO PCap")                        },                                                      
                                                       { false  , Test_XLicense                      , __L("Test XLicense")                        },
                                                       { false  , Test_XSerializable                 , __L("Test XSerializable")                   },
                                                       { false  , Test_InputSimulate                 , __L("Test Input Simulate")                  },
@@ -753,9 +754,11 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ID_IBAN                       , __L("Test ID IBAN")                         }, 
                                                       { false  , Test_Compress                      , __L("Test Compress")                        }, 
                                                       { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
+                                                      { false  , Test_XPath                         , __L("Test eXtended Path")                   },  
                                                       
                                                       #ifdef WINDOWS
-                                                      { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },                                                      
+                                                      { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },
+                                                      { true   , Test_Registry                      , __L("Test Registry")                        },                                                              
                                                       #endif
 
                                                       #ifdef LINUX
@@ -4952,6 +4955,34 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_XPath(DEVTESTSCONSOLE* tests)
+* @brief      test  Xpath
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_XPath(DEVTESTSCONSOLE* tests)
+{
+  XPATH             xpath;
+  XSTRING           drive;
+  XVECTOR<XSTRING*> subpaths;
+  XSTRING           name;
+  XSTRING           ext;
+  bool              status = false;
+
+  xpath = __L("SOFTWARE\\Policies\\Microsoft\\Edge");
+
+  status = xpath.Split(&drive, subpaths, NULL, NULL);
+
+  return status;
+}
+
+
 #ifdef WINDOWS
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -4969,7 +5000,7 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
   XWINDOWSACCESSCONTROLLISTS  ACList;
   XPATH                       xpathsection;
   XPATH                       namefile;
-  bool                        status = true;
+  bool                        status = false;
 
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
   namefile.Create(3 , xpathsection.Get(), __L("scraperweb"), __L(".xml"));
@@ -4979,6 +5010,39 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
   GEN_XSLEEP.Seconds(2);
 
   status = ACList.SetFilePermissionForEveryone(namefile.Get());
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
+* @brief      test  registry
+* @ingroup    TESTS
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
+{
+  XWINDOWSREGISTRYMANAGER registrymanager;
+  XWINDOWSREGISTRYKEY     registrykey;
+  bool                    status = false;
+
+  // Property_Add(CTRLAGENT_PROPERTYRESTRICTOR_HKEY_LOCAL_MACHINE, __L("SOFTWARE\\Policies\\Microsoft\\Edge"), __L("HubsSidebarEnabled"), __L("Edge Hubs Sidebar"), 1);  
+
+
+  status = registrymanager.CreateKey(HKEY_LOCAL_MACHINE, __L("SOFTWARE\\Policies\\Microsoft\\Edge\\prueba\\prueba2"), registrykey);
+  if(status)
+    {
+
+
+     
+      registrymanager.CloseKey(registrykey);
+    }
 
   return status;
 }
