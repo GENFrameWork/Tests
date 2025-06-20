@@ -220,6 +220,36 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacter)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME: CompareOneCharacter
+* @ingroup    UNIT_TEST
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacter) 
+{
+  XSTRING string = "0";
+
+  EXPECT_EQ(-1, string.Compare(__L("1"), false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME: CompareOneCharacterIgnoreCase
+* @ingroup    UNIT_TEST
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase) 
+{
+  XSTRING string = "A";
+
+  EXPECT_EQ(0, string.Compare(__L("a"), true));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
 * @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertASCII
 * @ingroup    UNIT TEST
