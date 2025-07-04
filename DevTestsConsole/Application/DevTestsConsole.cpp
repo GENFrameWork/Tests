@@ -52,7 +52,6 @@
 #include "XTimer.h"
 #include "XDir.h"
 #include "XRand.h"
-#include "XDir.h"
 #include "XVector.h"
 //#include "XVectorSTL.h"
 #include "XString.h"
@@ -90,7 +89,7 @@
 #include "CipherBlowfish.h"
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
-#include "CipherRootCertificates.h"
+#include "CipherTrustedRootCertificatesX509.h"
 #include "CipherRSA.h"
 #include "CipherCurve25519.h"
 
@@ -717,7 +716,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_WakeOnLAN                     , __L("Test Wake On LAN")                     }, 
                                                       { false  , Test_Hash                          , __L("Test Hash")                            },
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
-                                                      { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
+                                                      { true   , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
                                                       { false  , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
@@ -758,7 +757,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },
-                                                      { true   , Test_Registry                      , __L("Test Registry")                        },                                                              
+                                                      { false  , Test_Registry                      , __L("Test Registry")                        },                                                              
                                                       #endif
 
                                                       #ifdef LINUX
@@ -2574,17 +2573,24 @@ bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
 {
-  bool status = false;
-
-	XPATH	 	 xpath;
-	XPATH		 xpathgeneric;	
-
+  CIPHERTRUSTEDROOTCERTIFICATESX509 trustedrootcertificates; 
+  XPATH		                          xpathgeneric;	
+	XPATH	 	                          xpath;
+  XPATH	 	                          xpathtarget;
+  bool                              status = false;
+	
 	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, xpathgeneric);
-  xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
+//xpath.Create(3 , xpathgeneric.Get(), __L("root")    , CIPHERKEYSFILEPEM_EXT);	
+  xpath.Create(3 , xpathgeneric.Get(), __L("cacert")  , CIPHERKEYSFILEPEM_EXT);	 
 //xpath.Create(3 , xpathgeneric.Get(), __L("certificate"), CIPHERKEYSFILEKEY_EXT);	
 //xpath.Create(2 , xpathgeneric.Get(), __L("certificate.ca.crt"));	
 //xpath.Create(2 , xpathgeneric.Get(), __L("id_rsa"));
-	
+ 
+
+xpathtarget.Create(3 , xpathgeneric.Get(), __L("cacert")  , __L(".h"));	
+
+//status = trustedrootcertificates.GenerateEmbeddedHeadere(&xpath, &xpathtarget);
+
 	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM();	
   if(filekeys) 
     {
@@ -2592,8 +2598,11 @@ bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
     }
 
   if(status)
-    {
-      filekeys->ReadDecodeAllFile(xpath);
+    {     
+      //if(trustedrootcertificates.ReadFromFile(&xpath))
+        {
+          filekeys->DecodeCertificates(trustedrootcertificates.GetLines());
+        }
     }
 
   delete filekeys;
@@ -2835,18 +2844,19 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
-  CIPHERKEYSFILEPEM   filekeys;
-  DIOSTREAMTLSCONFIG  diostreamcfg;
-  DIOSTREAMTLS*       diostream    = NULL;
-  XSTRING             line;
-  bool                status       = false;
-	XPATH		            xpathgeneric;	
-  XPATH	 	            xpath;
+  CIPHERTRUSTEDROOTCERTIFICATESX509 trustedrootcertificates;
+  CIPHERKEYSFILEPEM                 filekeys;
+  DIOSTREAMTLSCONFIG                diostreamcfg;
+  DIOSTREAMTLS*                     diostream    = NULL;
+  XSTRING                           line;
+  bool                              status       = false;
+	XPATH		                          xpathgeneric;	
+  XPATH	 	                          xpath;
 
 	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, xpathgeneric);
   xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
 
-  filekeys.DecodeCertificates(cipherrootcertificates, nlinescipherrootcertificates);
+  filekeys.DecodeCertificates(trustedrootcertificates.GetLines());
 
   diostreamcfg.GetRemoteURL()->Set(__L("www.google.es"));
   diostreamcfg.SetMode(DIOSTREAMMODE_CLIENT);

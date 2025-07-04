@@ -3,7 +3,7 @@
 # GEN FrameWork.
 # --------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.14.0)
+cmake_minimum_required(VERSION 3.16.0)
 project(devtestsconsole)
 
 
@@ -20,6 +20,10 @@ include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compile
 option(DEBUG_FEATURE                                            "Debug mode"                                              ON )
 option(XTRACE_FEATURE                                           "XTrace"                                                  ON )
 #option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        ON )                        
+option(XFEEDBACK_CONTROL_FEATURE                                "XFeedback Control"                                       ON )  
+
+option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
+
 option(XTHREADCOLLECTED_FEATURE                                 "Thread Collected"                                        ON )
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
 option(ANONYMOUS_MODE_FEATURE                                   "Activate Anonymous mode"                                 false )
@@ -27,8 +31,6 @@ option(ANONYMOUS_MODE_FEATURE                                   "Activate Anonym
 option(XSHAREDMEMORYMANAGER_FEATURE                             "Shared Memory Manager"                                   ON )
 option(XPROCESSMANAGER_FEATURE                                  "Process Manager"                                         ON )
 option(XLICENSE_FEATURE                                         "License functions"                                       ON )
-
-option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
     
 option(XSERIALIZABLE_BINARY_FEATURE                             "Serializable Binary"                                     ON )
 option(XSERIALIZABLE_JSON_FEATURE                               "Serializable JSON"                                       ON )
@@ -37,6 +39,7 @@ option(XFILE_HEX_FEATURE                                        "XFile HEX forma
 option(XFILE_DFU_FEATURE                                        "XFile DFU format"                                        ON )  
 option(XFILE_RIFF_FEATURE                                       "XFile RIFF format"                                       ON ) 
 option(XFILE_ZIP_FEATURE                                        "XFile Zip format"                                        ON )
+
     
 option(HASH_FEATURE                                             "Hash"                                                    ON )
 option(HASH_CRC16_FEATURE                                       "Hash CRC16"                                              ON )  
