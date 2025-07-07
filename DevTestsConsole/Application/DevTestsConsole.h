@@ -211,7 +211,7 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_Cipher_Simetric                (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
     static bool							        Test_CipherRSA				   	          (DEVTESTSCONSOLE* tests);
-    static bool                     Test_CipherCurve25519               (DEVTESTSCONSOLE* tests);
+    static bool                     Test_CipherECDSAX25519               (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTCPIP                 (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);

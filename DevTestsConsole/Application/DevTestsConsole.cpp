@@ -87,11 +87,12 @@
 #include "Cipher3DES.h"
 #include "CipherAES.h"
 #include "CipherBlowfish.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
 #include "CipherTrustedRootCertificatesX509.h"
 #include "CipherRSA.h"
-#include "CipherCurve25519.h"
+#include "CipherECDSAX25519.h"
 
 #include "CompressManager.h"
 
@@ -718,7 +719,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
                                                       { true   , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
-                                                      { false  , Test_CipherCurve25519              , __L("Test Cipher Curve 25519")              },         
+                                                      { false  , Test_CipherECDSAX25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
                                                       { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
@@ -2639,8 +2640,8 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 	CIPHERKEYPUBLICRSA*		publickey  = NULL;
 	CIPHERKEYPRIVATERSA*	privatekey = NULL;		
 		
-	publickey  = (CIPHERKEYPUBLICRSA*)filekeys->GetKey(CIPHERKEYTYPE_PUBLIC);
-	privatekey = (CIPHERKEYPRIVATERSA*)filekeys->GetKey(CIPHERKEYTYPE_PRIVATE);
+	publickey  = (CIPHERKEYPUBLICRSA*)filekeys->GetKey(CIPHERKEYTYPE_RSA_PUBLIC);
+	privatekey = (CIPHERKEYPRIVATERSA*)filekeys->GetKey(CIPHERKEYTYPE_RSA_PRIVATE);
 
 	if(!publickey || !privatekey)
 		{
@@ -2667,12 +2668,12 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 		    {
 			    if(cipher->SetKey(privatekey)) 
 				    {					
-					    if(cipher->Cipher(input, CIPHERKEYTYPE_PRIVATE))
+					    if(cipher->Cipher(input, CIPHERKEYTYPE_RSA_PRIVATE))
 						    {
                   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Data cipher:"));	
                   XTRACE_PRINTDATABLOCKCOLOR(XTRACE_COLOR_BLUE, (*cipher->GetResult()));
 
-							    cipher->Uncipher((*cipher->GetResult()), CIPHERKEYTYPE_PUBLIC); 
+							    cipher->Uncipher((*cipher->GetResult()), CIPHERKEYTYPE_RSA_PUBLIC); 
 						    }
 
 					    status = input.Compare(cipher->GetResult());						  
@@ -2692,8 +2693,8 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
-* @brief      Test_CipherCurve25519
+* @fn         bool DEVTESTSCONSOLE::Test_CipherECDSAX25519(DEVTESTSCONSOLE* tests)
+* @brief      Test_CipherECDSAX25519
 * @ingroup    APPLICATION
 * 
 * @param[in]  tests : 
@@ -2701,9 +2702,9 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
+bool DEVTESTSCONSOLE::Test_CipherECDSAX25519(DEVTESTSCONSOLE* tests)
 {
-  CIPHERCURVE25519  curve25519[2];
+  CIPHERECDSAX25519  curve25519[2];
   bool              status           = false; 
 
   for(int c=0; c<2; c++)
@@ -2711,31 +2712,31 @@ bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
       status = curve25519[c].GenerateRandomPrivateKey();
       
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Private key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
-      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_PRIVATE), 32, 1, 32); 
+      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERECDSAX25519_TYPEKEY_PRIVATE), 32, 1, 32); 
 
       if(!status) break;
 
       status = curve25519[c].CreatePublicKey();
 
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Public  key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
-      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC), 32, 1, 32);    
+      XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC), 32, 1, 32);    
 
       if(!status) break;     
     }
 
   if(status)
     {   
-      curve25519[0].CreateSharedKey(curve25519[1].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC));
-      curve25519[1].CreateSharedKey(curve25519[0].GetKey(CIPHERCURVE25519_TYPEKEY_PUBLIC));
+      curve25519[0].CreateSharedKey(curve25519[1].GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC));
+      curve25519[1].CreateSharedKey(curve25519[0].GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC));
 
       for(int c=0; c<2; c++)
         {    
-          status = curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)?true:false;
+          status = curve25519[c].GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED)?true:false;
 
           XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Shared  key %d: %s" ), c+1,  status?__L("Ok"):__L("Error!")); 
           if(status) 
             {
-              XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED), 32, 1, 32);         
+              XTRACE_PRINTDATABLOCKCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), curve25519[c].GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), 32, 1, 32);         
             }
 
           if(!status) break;
@@ -2743,9 +2744,9 @@ bool DEVTESTSCONSOLE::Test_CipherCurve25519(DEVTESTSCONSOLE* tests)
      
       if(status)
         {      
-          for(int c=0; c<CIPHERCURVE25519_MAXKEY; c++)
+          for(int c=0; c<CIPHERECDSAX25519_MAXKEY; c++)
             {
-              if(curve25519[0].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)[c] != curve25519[1].GetKey(CIPHERCURVE25519_TYPEKEY_SHARED)[c]) status = false;
+              if(curve25519[0].GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED)[c] != curve25519[1].GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED)[c]) status = false;
             }
 
           XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Curve 25519 Shared  Key are equal : %s"), status?__L("Ok"):__L("Error!")); 

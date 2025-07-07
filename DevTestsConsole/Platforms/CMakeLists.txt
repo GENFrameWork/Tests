@@ -18,6 +18,8 @@ include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compile
 # Activate features/Defines
 
 option(DEBUG_FEATURE                                            "Debug mode"                                              ON )
+option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
+
 option(XTRACE_FEATURE                                           "XTrace"                                                  ON )
 #option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        ON )                        
 option(XFEEDBACK_CONTROL_FEATURE                                "XFeedback Control"                                       ON )  
@@ -25,7 +27,7 @@ option(XFEEDBACK_CONTROL_FEATURE                                "XFeedback Contr
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
 
 option(XTHREADCOLLECTED_FEATURE                                 "Thread Collected"                                        ON )
-option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
+
 option(ANONYMOUS_MODE_FEATURE                                   "Activate Anonymous mode"                                 false )
     
 option(XSHAREDMEMORYMANAGER_FEATURE                             "Shared Memory Manager"                                   ON )
@@ -57,8 +59,8 @@ option(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                        "Cipher Symetric
 option(CIPHER_ASYMMETRIC_FEATURE                                "Cipher Asymetric"                                        ON ) 
 option(CIPHER_ASYMMETRIC_FILEKEY_GFK                            "Cipher Asymetric File Key (.Gen Key File)"               ON ) 
 option(CIPHER_ASYMMETRIC_FILEKEY_PEM                            "Cipher Asymetric File Key (.PEM)"                        ON ) 
-option(CIPHER_ASYMMETRIC_RSA_FEATURE                            "Cipher ASymetric RSA"                                    ON ) 
-option(CIPHER_ASYMMETRIC_CURVE25519_FEATURE                     "Cipher ASymetric Curve25519"                             ON ) 
+option(CIPHER_ASYMMETRIC_RSA_FEATURE                            "Cipher Asymetric RSA"                                    ON ) 
+option(CIPHER_ASYMMETRIC_X25519_FEATURE                         "Cipher Asimetric ECDSA X25519"                           ON ) 
         
 option(DIO_FEATURE                                              "Data Input/Output"                                       ON ) 
 option(DIO_STREAMUART_FEATURE                                   "Data Input/Output Stream UART"                           ON )
