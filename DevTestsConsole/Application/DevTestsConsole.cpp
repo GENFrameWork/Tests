@@ -717,11 +717,11 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_WakeOnLAN                     , __L("Test Wake On LAN")                     }, 
                                                       { false  , Test_Hash                          , __L("Test Hash")                            },
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
-                                                      { true   , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
+                                                      { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
                                                       { false  , Test_CipherECDSAX25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
-                                                      { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
+                                                      { true   , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
                                                       { false  , Test_AppAlerts                     , __L("Test App Alerts")                      },  
                                                       { false  , Test_BluetoothEnum                 , __L("Test Bluetooth Enum")                  },                                          
@@ -2857,7 +2857,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, xpathgeneric);
   xpath.Create(3 , xpathgeneric.Get(), __L("root"), CIPHERKEYSFILEPEM_EXT);	
 
-  filekeys.DecodeCertificates(trustedrootcertificates.GetLines());
+  //filekeys.DecodeCertificates(trustedrootcertificates.GetLines());
 
   diostreamcfg.GetRemoteURL()->Set(__L("www.google.es"));
   diostreamcfg.SetMode(DIOSTREAMMODE_CLIENT);
@@ -2868,7 +2868,10 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, line.Get());
 
   diostream = new DIOSTREAMTLS(&diostreamcfg);
-  if(!diostream) return false;
+  if(!diostream) 
+    {
+      return false;
+    }
   
   if(diostream->Open())
     {
