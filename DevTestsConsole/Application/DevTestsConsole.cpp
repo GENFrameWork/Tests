@@ -105,7 +105,6 @@
 #include "DIOStreamDeviceBluetooth.h"
 #include "DIOStreamDeviceBluetoothLE.h"
 #include "DIOStreamDeviceUSB.h"
-#include "DIOStreamConfig.h"
 #include "DIOStreamUARTConfig.h"
 #include "DIOStreamUART.h"
 #include "DIOStreamUSBLocalEnumDevices.h"
@@ -2880,24 +2879,14 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
       line.Format(__L("Connection status: %s"), status?__L("Connected."):__L("No connected."));  
       tests->console->Printf(__L("   %s\n"), line.Get());
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());            
-
-      if(status)
-        {             
-          diostream->WriteStr (__L("Hello Jello!\r\n"));
-          status = diostream->WaitToFlushOutXBuffer();
-
-          line.Format(__L("Write: %s"), status?__L("Ok."):__L("Error!"));  
-          tests->console->Printf(__L("   %s\n"), line.Get());
-
-          XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());             
-        }
-              
-      status = diostream->Close();
-
-      line.Format(__L("Close connection: %s"), status?__L("Ok."):__L("Error!"));  
-      tests->console->Printf(__L("   %s\n\n"), line.Get());
-      XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
     }
+              
+  status = diostream->Close();
+
+  line.Format(__L("Close connection: %s"), status?__L("Ok."):__L("Error!"));  
+  tests->console->Printf(__L("   %s\n\n"), line.Get());
+  XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
+    
 
   delete diostream;
   
