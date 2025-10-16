@@ -461,30 +461,37 @@ bool DEVTESTSCONSOLE::AppProc_Update()
           case DEVTESTSCONSOLE_XFSMSTATE_INI          : SetEvent(DEVTESTSCONSOLE_XFSMEVENT_UPDATE);
                                                         break;
 
-          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE       : if(GetExitType() == APPFLOWBASE_EXITTYPE_UNKNOWN)
-                                                          {
-                                                            if(xtimerupdateconsole)
-                                                              {
-                                                                if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
-                                                                  {
-                                                                    APPFLOW_EXTENDED.ShowAll();
+          case DEVTESTSCONSOLE_XFSMSTATE_UPDATE       : switch(GetExitType())
+                                                          { 
+                                                            case APPFLOWBASE_EXITTYPE_BY_USER : SetEvent(DEVTESTSCONSOLE_XFSMEVENT_END);
+                                                                                                APPFLOW_EXTENDED.ShowAll();
+                                                                                                break;
 
-                                                                    xtimerupdateconsole->Reset();
-                                                                  }
+                                                            case APPFLOWBASE_EXITTYPE_UNKNOWN : if(xtimerupdateconsole)
+                                                                                                  {
+                                                                                                    if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
+                                                                                                      {
+                                                                                                        APPFLOW_EXTENDED.ShowAll();
+
+                                                                                                        xtimerupdateconsole->Reset();
+                                                                                                      }
                                                     
-                                                                #ifndef DEVTESTSCONSOLE_NOKEY
-                                                                if(console->KBHit())
-                                                                  {
-                                                                    //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[press key]"));
+                                                                                                    if(console->KBHit())
+                                                                                                      {
+                                                                                                        //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[press key]"));
 
-                                                                    int key = console->GetChar();
-                                                                    KeyValidSecuences(key);
-                                                                  }
-                                                                #else                                                    
-                                                                Do_Tests(); 
-                                                                #endif
-                  
-                                                              }
+                                                                                                        int key = console->GetChar();
+                                                                                                        KeyValidSecuences(key);
+                                                                                                      }
+                                                                       
+                                                                                                    #ifdef DEVTESTSCONSOLE_NOKEY                                                    
+                                                                                                    Do_Tests(); 
+                                                                                                    #endif                  
+                                                                                                  }                                                          
+                                                                                                break;
+                                                            
+                                                              
+                                                            
                                                           }
                                                         break;
 
@@ -501,8 +508,12 @@ bool DEVTESTSCONSOLE::AppProc_Update()
           switch(GetCurrentState())
             {
               case DEVTESTSCONSOLE_XFSMSTATE_NONE     : break;
+              
               case DEVTESTSCONSOLE_XFSMSTATE_INI      : break;
-              case DEVTESTSCONSOLE_XFSMSTATE_UPDATE   : break;
+              
+              case DEVTESTSCONSOLE_XFSMSTATE_UPDATE   : APPFLOW_EXTENDED.ShowAll();
+                                                        break;
+                                                        
               case DEVTESTSCONSOLE_XFSMSTATE_END      : break;
             }
         }
@@ -606,8 +617,11 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
                   SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
                   break;
 
+      #ifndef DEVTESTSCONSOLE_NOKEY
+      
       case 'T'  : Do_Tests();
                   break;
+      #endif                       
     }
 
 
@@ -767,11 +781,13 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       #endif                                          
                                                   };
 
+  bool status = false;
+  
   for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTSCONSOLE_LIST_FUNCTION)); c++)
     {
        if(listfunctions[c].active)
          {
-           bool status = listfunctions[c].function(this);
+           status = listfunctions[c].function(this);
 
            devtestsconsole->console->Printf(__L("\n"));
            devtestsconsole->console->Printf(__L("   [%02d] Test %-32s : %s \n"), c, listfunctions[c].namefunction, (status?__L("Ok."):__L("Error!")));
@@ -781,8 +797,16 @@ bool DEVTESTSCONSOLE::Do_Tests()
   //--------------------------------------------------------------------------------------------------
 
   console->PrintMessage(__L(" "), 0, false, true);
-  console->WaitKey(__L("  Pulsa una tecla para continuar... (%d)"), 1, false, 5);
 
+  #ifndef DEVTESTSCONSOLE_NOKEY
+  console->WaitKey(__L("  Pulsa una tecla para continuar... (%d)"), 1, false, 5);
+  #else
+  if(!status)
+    {
+      SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+    }
+  #endif
+  
   //--------------------------------------------------------------------------------------------------
 
   return true;
@@ -1763,6 +1787,7 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
   XBYTE*    pointer = NULL;
   XDWORD    size    = 0;
   XDWORD*   data    = 0;
+  bool      status  = true;
   bool      exit    = false;
 
   if(modeserver)
@@ -1770,7 +1795,10 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
       size = 32;
       pointer = GEN_XSHAREDMEMORYMANAGER.Create(SHAREDMEMORYID, size);
     }
-   else pointer = GEN_XSHAREDMEMORYMANAGER.Open(SHAREDMEMORYID, size);
+   else 
+    {
+      pointer = GEN_XSHAREDMEMORYMANAGER.Open(SHAREDMEMORYID, size);
+    }
 
   tests->console->Printf(__L("   Create Shared Memory %d bytes: %s\n"), size, pointer?__L("Ok"):__L("Error!"));
 
@@ -1781,13 +1809,22 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
     {
       if(pointer)
         {
+          status = true;  
+          
           do{
               if(tests->console->KBHit())
                 {
                   switch(tests->console->GetChar())
                     {
-                      case ' '  : (*data) = (XDWORD)xrand->Max(100000000);   break;
-                        default : exit = true;                               break;
+                     case 0x1B : 
+                                  #ifdef DEVTESTSCONSOLE_NOKEY
+                                  tests->SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);     
+                                  #endif
+                                  exit = true;
+                                  break;
+
+                        default : (*data) = (XDWORD)xrand->Max(100000000);              
+                                  break;
                     }
                 }
 
@@ -1797,6 +1834,10 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
 
           GEN_XSHAREDMEMORYMANAGER.Close();
         }
+       else 
+        { 
+          status = false;
+        }
 
       GEN_XFACTORY.DeleteRand(xrand);
     }
@@ -1804,7 +1845,7 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
   
   tests->console->Printf(__L("\n   Delete Shared Memory: Ok\n"));
 
-  return true;
+  return status;
 }
 
 
