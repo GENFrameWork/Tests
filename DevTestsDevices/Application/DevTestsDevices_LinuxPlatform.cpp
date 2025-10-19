@@ -82,7 +82,7 @@ int Linux_Platform_Ini(void)
 
   // -----------------------------------------------------------------------
 
-  #ifdef HW_PC
+  #ifdef HW_INTEL
 
   GEN_DIOGPIO.GPIOEntry_CreateByPin(DEVTESTSDEVICES_GPIOENTRYID_LED_RED                , 1);
   GEN_DIOGPIO.GPIOEntry_CreateByPin(DEVTESTSDEVICES_GPIOENTRYID_LED_BLUE               , 2);
