@@ -3053,6 +3053,8 @@ bool DEVTESTSCONSOLE::Test_AppAlerts(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
 {
+  #ifdef DIO_STREAMBLUETOOTH_ACTIVE
+
   DIOSTREAMENUMDEVICES* enumdevicesremote = NULL;
 
   enumdevicesremote = GEN_DIOFACTORY.CreateStreamEnumDevices(DIOSTREAMENUMTYPE_BLUETOOTH_REMOTE);
@@ -3094,6 +3096,8 @@ bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
 
   GEN_DIOFACTORY.DeleteStreamEnumDevices(enumdevicesremote);			
 
+  #endif
+
   return true;
 }
 
@@ -3111,6 +3115,8 @@ bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
 {
+  #ifdef DIO_STREAMBLUETOOTHLE_ACTIVE
+
   DIOSTREAMENUMDEVICES* enumdevicesremote = NULL;
 
   enumdevicesremote = GEN_DIOFACTORY.CreateStreamEnumDevices(DIOSTREAMENUMTYPE_BLUETOOTHLE_REMOTE);
@@ -3157,6 +3163,8 @@ bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
     }
 
   GEN_DIOFACTORY.DeleteStreamEnumDevices(enumdevicesremote);			
+
+  #endif
 
   return true;
 }
@@ -4665,6 +4673,8 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 {
+  #ifdef INP_ACTIVE
+
   INPSIMULATE* inpsimulated = GEN_INPFACTORY.CreateSimulator();
   if(!inpsimulated)
     {
@@ -4672,6 +4682,8 @@ bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
     }
 
   inpsimulated->Key_Click(0x41);
+
+  #endif
 
   return true;
 }
@@ -5132,9 +5144,13 @@ bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 {
+  bool                  status = false;
+
+  #ifdef DIO_LINUX_DBUS_ACTIVE
+
   DIOLINUXDBUS_MESSAGE  message;  
   DIOLINUXDBUS_MESSAGE  reply;  
-  bool                  status = false;
+  
 
   DIOLINUXDBUS* dbus = new DIOLINUXDBUS();
   if(dbus)
@@ -5224,6 +5240,8 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
       delete dbus;
     }
 
+  #endif 
+
   return status;
 }
 
@@ -5242,6 +5260,8 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
 {
+  #ifdef DIO_LINUX_NETWORKMANAGER_ACTIVE
+
   DIOLINUXNETWORKMANAGER networkmanager;
   
   if(networkmanager.Ini()) 
@@ -5289,6 +5309,8 @@ bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
 
       networkmanager.End();
     }
+
+  #endif
 
   return true;
 }
