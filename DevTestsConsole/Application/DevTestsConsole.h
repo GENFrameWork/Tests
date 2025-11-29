@@ -250,7 +250,8 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     
     #ifdef WINDOWS
     static bool                     Test_WindowsACL                     (DEVTESTSCONSOLE* tests);
-    static bool                     Test_Registry                       (DEVTESTSCONSOLE* tests);
+    static bool                     Test_WindowsRegistry                (DEVTESTSCONSOLE* tests);
+    static bool                     Test_WindowsWinget                  (DEVTESTSCONSOLE* tests);
     #endif
 
     #ifdef LINUX

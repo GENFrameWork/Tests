@@ -183,6 +183,7 @@
 #ifdef WINDOWS
   #include "XWINDOWSAccessControlLists.h"
   #include "XWINDOWSRegistryManager.h"
+  #include "XWINDOWSWinget.h"
   #include "DIOWINDOWSStreamWifiRemoteEnumDevices.h"     
   #include "DevTestsConsole_WindowsPlatform.h"  
   #include "MainProcWINDOWS.h" 
@@ -734,7 +735,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
                                                       { false  , Test_CipherECDSAX25519              , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
-                                                      { true   , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
+                                                      { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
                                                       { false  , Test_AppAlerts                     , __L("Test App Alerts")                      },  
                                                       { false  , Test_BluetoothEnum                 , __L("Test Bluetooth Enum")                  },                                          
@@ -771,7 +772,8 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },
-                                                      { false  , Test_Registry                      , __L("Test Registry")                        },                                                              
+                                                      { false  , Test_WindowsRegistry               , __L("Test Windows Registry")                },                                                              
+                                                      { true   , Test_WindowsWinget                 , __L("Test Windows WinGet")                  },                                                              
                                                       #endif
 
                                                       #ifdef LINUX
@@ -5096,7 +5098,7 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
+* @fn         bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 * @brief      test  registry
 * @ingroup    TESTS
 * 
@@ -5105,7 +5107,7 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
 * @return     bool : true if is succesful. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
+bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 {
   XWINDOWSREGISTRYMANAGER registrymanager;
   XWINDOWSREGISTRYKEY     registrykey;
@@ -5117,11 +5119,43 @@ bool DEVTESTSCONSOLE::Test_Registry(DEVTESTSCONSOLE* tests)
   status = registrymanager.CreateKey(HKEY_LOCAL_MACHINE, __L("SOFTWARE\\Policies\\Microsoft\\Edge\\prueba\\prueba2"), registrykey);
   if(status)
     {
-
-
      
       registrymanager.CloseKey(registrykey);
     }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
+* @brief      test  windows winget
+* @ingroup    
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
+{
+  XWINDOWSWINGET          winget;  
+  XWINDOWSWINGET_TABLE*   output;
+  bool                    status = false;
+
+  //output = (XWINDOWSWINGET_TABLE*)malloc(sizeof(XWINDOWSWINGET_TABLE));
+
+  output = new XWINDOWSWINGET_TABLE();
+  if(!output) 
+    {
+      return false;
+    }
+
+  status = winget.List(NULL, output);
+
+
+  delete output;
 
   return status;
 }

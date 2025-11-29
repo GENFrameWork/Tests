@@ -116,11 +116,11 @@ option(APPFLOW_FEATURE                                          "Application Flo
 option(APPFLOW_EXTENDED_FEATURE                                 "Application Flow Extended"                               ON )  
 option(APPFLOW_EXTENDED_APPLICATIONHEADER_FEATURE               "Application Flow Extended Aplication Header"             ON )
 option(APPFLOW_EXTENDED_APPLICATIONSTATUS_FEATURE               "Application Flow Extended Aplication Status"             ON )  
+option(APPFLOW_CONSOLE_FEATURE                                  "Application Flow Console"                                ON )
+option(APPFLOW_LOG_FEATURE                                      "Application Flow Log"                                    ON )
+option(APPFLOW_INTERNETSERVICES_FEATURE                         "Application Flow Internet Services"                      ON )
 option(APPFLOW_EXTENDED_INTERNETSTATUS_FEATURE                  "Application Flow Extended Internet Status"               ON )  
 option(APPFLOW_CHECKRESOURCESHARDWARE_FEATURE                   "Application Flow Check Resources Hardwar"                ON )
-option(APPFLOW_CONSOLE_FEATURE                                  "Application Flow Console"                                ON )
-option(APPFLOW_INTERNETSERVICES_FEATURE                         "Application Flow Internet Services"                      ON )
-option(APPFLOW_LOG_FEATURE                                      "Application Flow Log"                                    ON )
 option(APPFLOW_ALERTS_FEATURE                                   "Application Flow Alerts"                                 ON )
                                                                              
 option(APPFLOW_CFG_GENERAL_FEATURE                              "Application Flow CFG General"                            ON )  
@@ -136,16 +136,16 @@ option(IDENTIFICATION_FEATURE                                   "Identification"
      
 if(COMPILE_FOR_WINDOWS)   
     
-  option(WINDOWS_XDESKTOPMANAGER_FEATURE                        "Windows Desktop Manager"                                 ON )
   option(WINDOWS_XVIRTUALDESKTOPMANAGER_FEATURE                 "Windows Virtual Desktop Manager"                         ON )
+  option(WINDOWS_XWINGET_FEATURE                                "Windows Winget API"                                      ON )
       
 endif()   
     
     
 if(COMPILE_FOR_LINUX)   
     
-  #option(DIO_LINUX_DBUS_FEATURE                                 "Linux DBus"                                              ON ) 
-  #option(DIO_LINUX_NETWORKMANAGER_FEATURE                       "Linux Network Manager"                                   ON )
+  option(LINUX_DIO_DBUS_FEATURE                                 "Linux DBus"                                              ON ) 
+  option(LINUX_DIO_NETWORKMANAGER_FEATURE                       "Linux Network Manager"                                   ON )
     
 endif()
 
