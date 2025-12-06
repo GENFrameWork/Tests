@@ -6,7 +6,7 @@
 * @brief      Developed Tests console class
 * @ingroup    TESTS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -5115,7 +5115,6 @@ bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 
   // Property_Add(CTRLAGENT_PROPERTYRESTRICTOR_HKEY_LOCAL_MACHINE, __L("SOFTWARE\\Policies\\Microsoft\\Edge"), __L("HubsSidebarEnabled"), __L("Edge Hubs Sidebar"), 1);  
 
-
   status = registrymanager.CreateKey(HKEY_LOCAL_MACHINE, __L("SOFTWARE\\Policies\\Microsoft\\Edge\\prueba\\prueba2"), registrykey);
   if(status)
     {
@@ -5141,21 +5140,10 @@ bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
 {
   XWINDOWSWINGET          winget;  
-  XWINDOWSWINGET_TABLE*   output;
+  XWINDOWSWINGET_RESULT   result;
   bool                    status = false;
-
-  //output = (XWINDOWSWINGET_TABLE*)malloc(sizeof(XWINDOWSWINGET_TABLE));
-
-  output = new XWINDOWSWINGET_TABLE();
-  if(!output) 
-    {
-      return false;
-    }
-
-  status = winget.List(NULL, output);
-
-
-  delete output;
+ 
+  status = winget.List(result);
 
   return status;
 }

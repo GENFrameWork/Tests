@@ -6,7 +6,7 @@
 * @brief      Dev Tests Console class
 * @ingroup    TESTS
 * 
-* @copyright  GEN Group. All rights reserved.
+* @copyright  EndoraSoft. All rights reserved.
 * 
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -94,7 +94,7 @@ enum DEVTESTSCONSOLE_GPIOENTRYID
 #define APPLICATION_NAMEAPP                       __L("Developed Tests Console")
 #define APPLICATION_NAMEFILE                      __L("devtestsconsole")
 
-#define APPLICATION_OWNER                         __L("GEN Group")
+#define APPLICATION_OWNER                         __L("EndoraSoft")
 
 #define APPLICATION_YEAROFCREATION                2022
 
