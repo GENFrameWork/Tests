@@ -5138,12 +5138,18 @@ bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
-{
-  XWINDOWSWINGET          winget;  
-  XWINDOWSWINGET_RESULT   result;
-  bool                    status = false;
- 
-  status = winget.List(result);
+{  
+  XWINDOWSWINGET  winget;  
+  XSTRING         jsonresult;
+  bool            status = false;
+
+  // status = winget.List(false, jsonresult);
+
+  // status = winget.Find(__L("Xbox"), jsonresult);
+
+
+  status = winget.ApplicationOperation(XWINDOWSWINGET_APPLICATIONOPERATION_UPDATEVERSION, __L("Microsoft.DotNet.DesktopRuntime.8"), true);
+
 
   return status;
 }
