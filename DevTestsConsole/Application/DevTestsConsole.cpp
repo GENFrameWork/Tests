@@ -768,12 +768,12 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ID_IBAN                       , __L("Test ID IBAN")                         }, 
                                                       { false  , Test_Compress                      , __L("Test Compress")                        }, 
                                                       { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
-                                                      { false  , Test_XPath                         , __L("Test eXtended Path")                   },  
+                                                      { true   , Test_XPath                         , __L("Test eXtended Path")                   },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },
                                                       { false  , Test_WindowsRegistry               , __L("Test Windows Registry")                },                                                              
-                                                      { true   , Test_WindowsWinget                 , __L("Test Windows WinGet")                  },                                                              
+                                                      { false  , Test_WindowsWinget                 , __L("Test Windows WinGet")                  },                                                              
                                                       #endif
 
                                                       #ifdef LINUX
