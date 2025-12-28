@@ -5173,7 +5173,7 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 {
   bool                  status = false;
 
-  #ifdef DIO_LINUX_DBUS_ACTIVE
+  #ifdef LINUX_DIO_DBUS_ACTIVE
 
   DIOLINUXDBUS_MESSAGE  message;  
   DIOLINUXDBUS_MESSAGE  reply;  
@@ -5287,7 +5287,7 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 * ---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
 {
-  #ifdef DIO_LINUX_NETWORKMANAGER_ACTIVE
+  #ifdef LINUX_DIO_NETWORKMANAGER_ACTIVE
 
   DIOLINUXNETWORKMANAGER networkmanager;
   

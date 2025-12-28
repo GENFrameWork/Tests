@@ -144,7 +144,7 @@ endif()
     
 if(COMPILE_FOR_LINUX)   
     
-  option(LINUX_DIO_DBUS_FEATURE                                 "Linux DBus"                                              ON ) 
+  #option(LINUX_DIO_DBUS_FEATURE                                 "Linux DBus"                                              ON ) 
   option(LINUX_DIO_NETWORKMANAGER_FEATURE                       "Linux Network Manager"                                   ON )
     
 endif()
