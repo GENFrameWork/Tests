@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XTimer.h
+* @file       XUtils_UnitTests.h
 * 
-* @class      UNITTESTS_XTIMER
-* @brief      Unit Tests for XBuffer class
+* @class      XUTILS_UNITTESTS
+* @brief      XUtils Unit Tests for GEN FrameWork
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,12 +26,13 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XTIMER_H_
-#define _UNITTESTS_XTIMER_H_
+#ifndef _XUTILS_UNITTESTS_H_
+#define _XUTILS_UNITTESTS_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
+#include "APPFlowBase.h"
 
 #pragma endregion
 
@@ -39,7 +40,22 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define UNITTEST_XTIMER_CLASSNAME  TEST_XTIMER
+#define APPLICATION_VERSION                       0
+#define APPLICATION_SUBVERSION                    0
+#define APPLICATION_SUBVERSIONERR                 1
+
+#define APPLICATION_NAMEAPP                       __L("XUtils Unit Tests")
+#define APPLICATION_NAMEFILE                      __L("xutils_unittests")
+
+#define APPLICATION_OWNER                         __L("GEN Framework")
+
+#define APPLICATION_YEAROFCREATION                2022
+
+#define APPLICATION_CFG_NAMEFILE                  APPLICATION_NAMEFILE
+#define APPLICATION_LNG_NAMEFILE                  APPLICATION_NAMEFILE
+#define APPLICATION_LOG_NAMEFILE                  APPLICATION_NAMEFILE
+
+#define APPLICATION_DIRECTORYMAIN                 __L("assets")
 
 #pragma endregion
 
@@ -47,6 +63,22 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
+class XUTILS_UNITTESTS: public APPFLOWBASE
+{
+  public:
+                        XUTILS_UNITTESTS                    ();
+    virtual            ~XUTILS_UNITTESTS                    ();
+
+    bool                AppProc_Ini                         ();
+    bool                AppProc_FirstUpdate                 ();
+    bool                AppProc_Update                      ();
+    bool                AppProc_LastUpdate                  ();  
+    bool                AppProc_End                         ();
+   
+  private:
+
+    void                Clean                               ();
+};
 
 #pragma endregion
 
@@ -59,5 +91,4 @@
 
 
 #endif
-
 

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XUUID.h
+* @file       XUtils_UnitTests_XBuffer.h
 * 
-* @class      UNITTESTS_XUUID
-* @brief      Unit Tests for XUUID class
+* @class      XUTILS_UNITTESTS_XBUFFER
+* @brief      XUtils Unit Tests for XBuffer class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XUUID_H_
-#define _UNITTESTS_XUUID_H_
+#ifndef _XUTILS_UNITTESTS_XBUFFER_H_
+#define _XUTILS_UNITTESTS_XBUFFER_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -39,15 +39,14 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define UNITTEST_XUUID_CLASSNAME  TEST_XUUID
-
-#define UNITTEST_XUUID_NTESTS     1000
+#define UNITTEST_XBUFFER_CLASSNAME  TEST_XBUFFER
 
 #pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
+
 
 #pragma endregion
 

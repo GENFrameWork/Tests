@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests.h
+* @file       XUtils UnitTests_XString.h
 * 
-* @class      UNITTESTS
-* @brief      Unit Tests for GEN FrameWork
+* @class      XUTILS_UNITTESTS_XSTRING
+* @brief      XUtils Unit Tests for XString class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,13 +26,12 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_H_
-#define _UNITTESTS_H_
+#ifndef _XUTILS_UNITTESTS_XSTRING_H_
+#define _XUTILS_UNITTESTS_XSTRING_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "APPFlowBase.h"
 
 #pragma endregion
 
@@ -40,16 +39,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define APPLICATION_VERSION                   0
-#define APPLICATION_SUBVERSION                0
-#define APPLICATION_SUBVERSIONERR             1
-
-#define APPLICATION_NAMEAPP                   __L("Unit Test")
-#define APPLICATION_NAMEFILE                  __L("unittest")
-
-#define APPLICATION_OWNER                     __L("GEN Framework")
-
-#define APPLICATION_YEAROFCREATION            2022
+#define UNITTEST_XSTRING_CLASSNAME  TEST_XSTRING
 
 #pragma endregion
 
@@ -57,22 +47,6 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
 
-class UNITTESTS: public APPFLOWBASE
-{
-  public:
-                        UNITTESTS                           ();
-    virtual            ~UNITTESTS                           ();
-
-    bool                AppProc_Ini                         ();
-    bool                AppProc_FirstUpdate                 ();
-    bool                AppProc_Update                      ();
-    bool                AppProc_LastUpdate                  ();  
-    bool                AppProc_End                         ();
-   
-  private:
-
-    void                Clean                               ();
-};
 
 #pragma endregion
 

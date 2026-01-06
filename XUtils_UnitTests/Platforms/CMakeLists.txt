@@ -1,10 +1,10 @@
 # --------------------------------------------------------------------
-# unittests : Unit Tests (Google Test console mode)
+# xutils_unittests : XUtils Unit Tests (Google Test console mode)
 # GEN FrameWork
 # --------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.16.0)
-project(unittests)
+project(xutils_unittests)
 
 
 set(GEN_DIRECTORY "../../../../GEN_FrameWork") 
@@ -48,15 +48,15 @@ list(APPEND GEN_INCLUDES_DIR_LIST ${APP_DIRECTORY_APPLICATION})
 # --------------------------------------------------------------------
 # Source code of the Application
 
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XBase.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XBuffer.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XDateTime.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XSleep.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XString.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XTimer.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XVariant.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/UnitTests_XUUID.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XBase.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XBuffer.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XDateTime.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XSleep.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XString.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XTimer.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XVariant.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XUUID.cpp")
 
 
 

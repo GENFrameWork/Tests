@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests.cpp
+* @file       XUtils_UnitTests.cpp
 * 
-* @class      UNITTESTS
+* @class      XUTILS_UNITTESTS
 * @brief      Unit Tests for GEN FrameWork
 * @ingroup    TESTS
 * 
@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "UnitTests.h"
+#include "XUtils_UnitTests.h"
 
 #ifdef GOOGLETEST_ACTIVE
 
@@ -55,6 +55,9 @@
 
 #include "VersionFrameWork.h"
 
+#include "XTranslation_GEN.h"
+#include "XTranslation.h"
+
 
 #pragma endregion
 
@@ -71,7 +74,7 @@
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 #pragma region GENERAL_VARIABLE
 
-APPLICATIONCREATEINSTANCE(UNITTESTS, unittests)
+APPLICATIONCREATEINSTANCE(XUTILS_UNITTESTS, unittests)
 
 #pragma endregion
 
@@ -82,14 +85,14 @@ APPLICATIONCREATEINSTANCE(UNITTESTS, unittests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         UNITTESTS::UNITTESTS()
+* @fn         XUTILS_UNITTESTS::XUTILS_UNITTESTS()
 * @brief      Constructor
 * @ingroup    DATAIO
 *
 * @return     Does not return anything.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-UNITTESTS::UNITTESTS()
+XUTILS_UNITTESTS::XUTILS_UNITTESTS()
 {
   Clean();
 }
@@ -97,7 +100,7 @@ UNITTESTS::UNITTESTS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         UNITTESTS::~UNITTESTS()
+* @fn         XUTILS_UNITTESTS::~XUTILS_UNITTESTS()
 * @brief      Destructor
 * @note       VIRTUAL
 * @ingroup    DATAIO
@@ -105,7 +108,7 @@ UNITTESTS::UNITTESTS()
 * @return     Does not return anything.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-UNITTESTS::~UNITTESTS()
+XUTILS_UNITTESTS::~XUTILS_UNITTESTS()
 {
   Clean();
 }
@@ -113,19 +116,28 @@ UNITTESTS::~UNITTESTS()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UNITTESTS::AppProc_Ini()
+* @fn         bool XUTILS_UNITTESTS::AppProc_Ini()
 * @brief      AppProc_Ini
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool UNITTESTS::AppProc_Ini()
+bool XUTILS_UNITTESTS::AppProc_Ini()
 {
   GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
 
   XTRACE_SETAPPLICATIONNAME(APPLICATION_NAMEAPP);
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
+  
+  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPLICATION_DIRECTORYMAIN);
+
+  //GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS    , APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
+  //GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FONTS       , APPFLOW_DEFAULT_DIRECTORY_FONTS);
+  //GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS  , APPFLOW_DEFAULT_DIRECTORY_UI_LAYOUTS);
+  //GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_WEB         , APPLICATION_DIRECTORYWEB);
+  
+  GEN_XPATHSMANAGER.CreateAllPathSectionOnDisk();
 
   XTRACE_ADDTARGET(XTRACE_TYPE_NET, GEN_XTRACE_NET_DEFAULT_01);  
   XTRACE_ADDTARGET(XTRACE_TYPE_NET, __L("*:10001"));  
@@ -139,13 +151,26 @@ bool UNITTESTS::AppProc_Ini()
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Application ROOT path: %s"),  GEN_XPATHSMANAGER.GetPathSection(XPATHSMANAGERSECTIONTYPE_ROOT)->xpath->Get());
   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("S.O. version: %s"), SO_ID.Get()); 
 
+  { XPATH xpathsection;
+    XPATH xpath;  
+    GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
+    xpath.Create(3 , xpathsection.Get(),  APPLICATION_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
+
+    if(!GEN_XTRANSLATION.Ini(xpath))
+      {
+        return false;
+      }
+
+    GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_ENG); 
+  }
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UNITTESTS::AppProc_FirstUpdate()
+* @fn         bool XUTILS_UNITTESTS::AppProc_FirstUpdate()
 * @brief      AppProc_FirstUpdate
 * @ingroup    
 * 
@@ -153,7 +178,7 @@ bool UNITTESTS::AppProc_Ini()
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UNITTESTS::AppProc_FirstUpdate()
+bool XUTILS_UNITTESTS::AppProc_FirstUpdate()
 {
   return true;
 }
@@ -161,14 +186,14 @@ bool UNITTESTS::AppProc_FirstUpdate()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UNITTESTS::AppProc_Update()
+* @fn         bool XUTILS_UNITTESTS::AppProc_Update()
 * @brief      AppProc_Update
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool UNITTESTS::AppProc_Update()
+bool XUTILS_UNITTESTS::AppProc_Update()
 {
   return false;
 }
@@ -176,7 +201,7 @@ bool UNITTESTS::AppProc_Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool UNITTESTS::AppProc_LastUpdate()
+* @fn         bool XUTILS_UNITTESTS::AppProc_LastUpdate()
 * @brief      AppProc_LastUpdate
 * @ingroup    DATAIO
 * 
@@ -184,7 +209,7 @@ bool UNITTESTS::AppProc_Update()
 * @return     bool : true if is succesful. 
 * 
 * ---------------------------------------------------------------------------------------------------------------------*/
-bool UNITTESTS::AppProc_LastUpdate()
+bool XUTILS_UNITTESTS::AppProc_LastUpdate()
 {
   return false;
 }
@@ -193,14 +218,14 @@ bool UNITTESTS::AppProc_LastUpdate()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UNITTESTS::AppProc_End()
+* @fn         bool XUTILS_UNITTESTS::AppProc_End()
 * @brief      AppProc_End
 * @ingroup    DATAIO
 *
 * @return     bool : true if is succesful.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool UNITTESTS::AppProc_End()
+bool XUTILS_UNITTESTS::AppProc_End()
 {
   return true;
 }
@@ -208,7 +233,7 @@ bool UNITTESTS::AppProc_End()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void UNITTESTS::Clean()
+* @fn         void XUTILS_UNITTESTS::Clean()
 * @brief      Clean the attributes of the class: Default initialice
 * @note       INTERNAL
 * @ingroup    TEST
@@ -216,7 +241,7 @@ bool UNITTESTS::AppProc_End()
 * @return     void : does not return anything.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void UNITTESTS::Clean()
+void XUTILS_UNITTESTS::Clean()
 {
 
 }

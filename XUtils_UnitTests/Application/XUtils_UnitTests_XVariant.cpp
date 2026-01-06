@@ -1,9 +1,9 @@
 ﻿/**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XVariant.cpp
+* @file       XUtils UnitTests_XVariant.cpp
 * 
-* @class      UNITTESTS_XVARIANT
-* @brief      Unit Tests for XVariant class
+* @class      XUTILS_UNITTESTS_XVARIANT
+* @brief      XUtils Unit Tests for XVariant class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "UnitTests_XVariant.h"
+#include "XUtils_UnitTests_XVariant.h"
 
 #include "string.h"
 
@@ -266,11 +266,12 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssignXChar)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XVARIANT_CLASSNAME, ConstructorAssignCharPtr) 
 {   
-  char*       value  = (char*)"Hello Word!";
-  XVARIANT    variant(value);
-  char*       value2 = value;
+  const char* value  = (const char*)"Hello Word!";
+  XVARIANT    variant((char*)value);
+  XSTRING     value2 = variant;
 
-  EXPECT_EQ(strcmp(value, value2), 0);
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_STRING);
+  EXPECT_EQ(value2.Compare(value, true), 0);
 }
 
 
@@ -677,6 +678,223 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, StringConversionBuffer)
   value2 = variant2;
  
   EXPECT_EQ(value2.Compare(value), true);            
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, DefaultConstructor)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  DefaultConstructor
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, DefaultConstructor) 
+{ 
+  XVARIANT  variant;
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_NULL);
+  EXPECT_EQ(variant.IsNull(), true);
+  EXPECT_EQ(variant.GetSize(), (XDWORD)0);
+  EXPECT_EQ(variant.GetData(), (void*)NULL);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, GetTypeStringSupported)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  GetTypeStringSupported
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetTypeStringSupported) 
+{
+  XVARIANT  variant((int)1);
+  XSTRING   typestr;
+
+  EXPECT_EQ(variant.GetType(typestr), true);
+  EXPECT_EQ(typestr.Compare(__L("integer"), true), 0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, GetTypeStringUnsupported)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  GetTypeStringUnsupported
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetTypeStringUnsupported) 
+{
+  void*     ptr = (void*)0x1234;
+  XVARIANT  variant(ptr);
+  XSTRING   typestr;
+
+  EXPECT_EQ(variant.GetType(typestr), false);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, CopyConstructorNumeric)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  CopyConstructorNumeric
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, CopyConstructorNumeric) 
+{
+  XVARIANT  variant((int)123);
+  XVARIANT  variant2(variant);
+
+  variant = (int)5;
+
+  EXPECT_EQ(variant2.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)variant2, 123);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, DeepCopyStringFromXString)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  DeepCopyStringFromXString
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, DeepCopyStringFromXString) 
+{
+  XSTRING   value  = __L("Hello Word!");
+  XVARIANT  variant(value);
+
+  value = __L("Bye!");
+
+  XSTRING value2 = variant;
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_STRING);
+  EXPECT_EQ(value2.Compare(__L("Hello Word!"), true), 0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, DeepCopyBufferFromXBuffer)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  DeepCopyBufferFromXBuffer
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, DeepCopyBufferFromXBuffer) 
+{
+  XBUFFER value;
+  value.Add((XBYTE)0xAA);
+  value.Add((XBYTE)0x55);
+  value.Add((XBYTE)0xCA);
+
+  XVARIANT variant(value);
+
+  value.Add((XBYTE)0xFE);
+
+  XBUFFER value2 = variant;
+  XBUFFER value3;
+
+  value3.Add((XBYTE)0xAA);
+  value3.Add((XBYTE)0x55);
+  value3.Add((XBYTE)0xCA);
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_BUFFER);
+  EXPECT_EQ(value2.Compare(value3), true);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, OperatorAssignSelf)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  OperatorAssignSelf
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, OperatorAssignSelf) 
+{
+  XVARIANT variant((int)123);
+
+  variant = variant;
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)variant, 123);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, DestroySetsNullState)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  DestroySetsNullState
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, DestroySetsNullState) 
+{
+  XVARIANT variant((int)123);
+
+  variant.Destroy();
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_NULL);
+  EXPECT_EQ(variant.IsNull(), true);
+  EXPECT_EQ(variant.GetSize(), (XDWORD)0);
+  EXPECT_EQ(variant.GetData(), (void*)NULL);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, ToStringNull)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  ToStringNull
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, ToStringNull) 
+{
+  XVARIANT  variant;
+  XSTRING   string;
+
+  variant.ToString(string);
+
+  EXPECT_EQ(string.Compare(__L("NULL"), true), 0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XVARIANT_CLASSNAME, FromStringEmptyDoesNotModify)
+* @brief      Unit test of UNITTEST_XVARIANT_CLASSNAME:  FromStringEmptyDoesNotModify
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XVARIANT_CLASSNAME, FromStringEmptyDoesNotModify) 
+{
+  XVARIANT  variant((int)123);
+  XSTRING   string;
+
+  variant.FromString(string, XVARIANT_TYPE_INTEGER);
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)variant, 123);
 }
 
 }

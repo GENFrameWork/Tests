@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XSleep.h
+* @file       XUtils UnitTests_XUUID.h
 * 
-* @class      UNITTESTS_XSLEEP
-* @brief      Unit Tests for XSleep class
+* @class      XUTILS_UNITTESTS_XUUID
+* @brief      XUtils Unit Tests for XUUID class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XSLEEP_H_
-#define _UNITTESTS_XSLEEP_H_
+#ifndef _XUTILS_UNITTESTS_XUUID_H_
+#define _XUTILS_UNITTESTS_XUUID_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -39,14 +39,15 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define UNITTEST_XSLEEP_CLASSNAME  TEST_XSLEEP
+#define UNITTEST_XUUID_CLASSNAME  TEST_XUUID
+
+#define UNITTEST_XUUID_NTESTS     1000
 
 #pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
-
 
 #pragma endregion
 
@@ -59,4 +60,5 @@
 
 
 #endif
+
 

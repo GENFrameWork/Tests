@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XBase.cpp
+* @file       XUtils_UnitTests_XBase.cpp
 * 
-* @class      UNITTESTS_XBASE
+* @class      XUTILS_UNITTESTS_XBASE
 * @brief      Unit Tests for XBase functions and defines
 * @ingroup    TESTS
 * 
@@ -37,7 +37,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "UnitTests_XBase.h"
+#include "XUtils_UnitTests_XBase.h"
 
 #ifdef GOOGLETEST_ACTIVE      
 #include "gtest/gtest.h"

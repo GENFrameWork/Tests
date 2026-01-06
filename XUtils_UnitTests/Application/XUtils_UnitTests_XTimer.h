@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XVariant.h
+* @file       XUtils_UnitTests_XTimer.h
 * 
-* @class      UNITTESTS_XVARIANT
-* @brief      Unit Tests for XVariant class
+* @class      XUTILS_UNITTESTS_XTIMER
+* @brief      XUtils Unit Tests for XBuffer class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XVARIANT_H_
-#define _UNITTESTS_XVARIANT_H_
+#ifndef _XUTILS_UNITTESTS_XTIMER_H_
+#define _XUTILS_UNITTESTS_XTIMER_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -39,13 +39,14 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define UNITTEST_XVARIANT_CLASSNAME  TEST_XVARIANT
+#define UNITTEST_XTIMER_CLASSNAME  TEST_XTIMER
 
 #pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 #pragma region CLASS
+
 
 #pragma endregion
 

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XString.h
+* @file       UnitTests_XSleep.h
 * 
-* @class      UNITTESTS_XSTRING
-* @brief      Unit Tests for XString class
+* @class      XUTILS_UNITTESTS_XSLEEP
+* @brief      Unit Tests for XSleep class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XSTRING_H_
-#define _UNITTESTS_XSTRING_H_
+#ifndef _XUTILS_UNITTESTS_XSLEEP_H_
+#define _XUTILS_UNITTESTS_XSLEEP_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -39,7 +39,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 #pragma region DEFINES_ENUMS
 
-#define UNITTEST_XSTRING_CLASSNAME  TEST_XSTRING
+#define UNITTEST_XSLEEP_CLASSNAME  TEST_XSLEEP
 
 #pragma endregion
 

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XTimer.cpp
+* @file       UnitTests_XSleep.cpp
 * 
-* @class      UNITTESTS_XTIMER
-* @brief      Unit Tests for XTimer class
+* @class      XUTILS_UNITTESTS_XSLEEP
+* @brief      Unit Tests for XSleep class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -37,17 +37,15 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
 
-#include "UnitTests_XTimer.h"
+#include "XUtils_UnitTests_XSleep.h"
 
 #ifdef GOOGLETEST_ACTIVE      
 #include "gtest/gtest.h"
 #endif
 
 #include "XFactory.h"
-#include "XString.h"
-#include "XTimer.h"
 #include "XSleep.h"
-#include "XDateTime.h"
+#include "XTimer.h"
 
 #pragma endregion
 
@@ -71,201 +69,233 @@
 #pragma region CLASS_MEMBERS
 
 
-#pragma endregion
-
-
 #ifdef GOOGLETEST_ACTIVE      
-namespace TEST_XTIMER
+namespace TEST_XSLEEP
 {
 
+       
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void EnsureXSleepInstance()
+* @brief      Ensure XSleep instance
+* @ingroup    UNIT TEST
+*
+* @return     Does not return anything. 
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void EnsureXSleepInstance()
+{
+  if(!XSLEEP::GetIsInstanced())
+    {
+      XSLEEP* instance = new XSLEEP();
+      XSLEEP::SetInstance(instance);
+    }
+}
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         TEST(UNITTEST_XTimer_CLASSNAME, ConstructorSize)
-* @brief      Unit test of UNITTEST_XTimer_CLASSNAME:  ConstructorSize
+* @fn  
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Seconds
 * @ingroup    UNIT TEST
 * 
 * @return     Does not return anything. 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, ConstructorSize) 
+TEST(UNITTEST_XSLEEP_CLASSNAME, Seconds)
 {
+  EnsureXSleepInstance();
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
+  EXPECT_NE(xtimer, nullptr);
   
+  GEN_XSLEEP.Seconds(2);                                
+
+  EXPECT_GE(xtimer->GetMeasureSeconds(), 2);
+
   GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);
+ }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Miliseconds)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Miliseconds
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSLEEP_CLASSNAME, Miliseconds)
+{
+  EnsureXSleepInstance();
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_NE(xtimer, nullptr);
+
+  GEN_XSLEEP.MilliSeconds(2000);
+
+  EXPECT_GE(xtimer->GetMeasureMilliSeconds(),2000);
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, Reset)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  Reset
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Microseconds)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Microseconds
 * @ingroup    UNIT TEST
 * 
+* @return     Does not return anything. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, Reset)
+TEST(UNITTEST_XSLEEP_CLASSNAME, Microseconds)
 {
+  EnsureXSleepInstance();
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
+  EXPECT_NE(xtimer, nullptr);
 
-  if(xtimer)
+  GEN_XSLEEP.MicroSeconds(100000);  // 100 ms
+
+  EXPECT_GE(xtimer->GetMeasureMilliSeconds(),100);
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Nanoseconds
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+/*
+TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
+{
+  EnsureXSleepInstance();
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_NE(xtimer, nullptr);
+
+  GEN_XSLEEP.NanoSeconds(100000000);  // 100 ms
+
+  EXPECT_GE(xtimer->GetMeasureMilliSeconds(),100);
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+}
+*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, SetInstanceNull)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  SetInstanceNull
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSLEEP_CLASSNAME, SetInstanceNull)
+{
+  EXPECT_FALSE(XSLEEP::SetInstance(NULL));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  InstanceLifecycle
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
+{
+  XSLEEP* originalinstance = NULL;
+  if(XSLEEP::GetIsInstanced()) originalinstance = &XSLEEP::GetInstance();
+
+  XSLEEP* testinstance = new XSLEEP();
+  EXPECT_NE(testinstance, nullptr);
+
+  EXPECT_TRUE(XSLEEP::SetInstance(testinstance));
+  EXPECT_TRUE(XSLEEP::GetIsInstanced());
+  EXPECT_EQ(&XSLEEP::GetInstance(), testinstance);
+
+  if(originalinstance)
     {
-      xtimer->Reset();
-      EXPECT_NEAR(0, (double)xtimer->GetMeasureMilliSeconds(), 50);
+      EXPECT_TRUE(XSLEEP::SetInstance(originalinstance));
+      delete testinstance;
     }
-
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureMilliSeconds)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureMilliSeconds
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureMilliSeconds)
-{
-  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
-
-  if(xtimer)
+  else
     {
-      xtimer->Reset();  
-      GEN_XSLEEP.MilliSeconds(50);
-      EXPECT_NEAR(0, (double)xtimer->GetMeasureMilliSeconds(), 65);
+      EXPECT_TRUE(XSLEEP::DelInstance());
+      EnsureXSleepInstance();
     }
-
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureSeconds)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureSeconds
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, SleepAPIAcceptsZero)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  SleepAPIAcceptsZero
 * @ingroup    UNIT TEST
 * 
+* @return     Does not return anything. 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureSeconds)
-
+TEST(UNITTEST_XSLEEP_CLASSNAME, SleepAPIAcceptsZero)
 {
-  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
+  EnsureXSleepInstance();
 
-  if(xtimer)
+  // The API should be robust to edge-case values.
+  // We only validate that the calls are safe.
+  GEN_XSLEEP.Seconds(0);
+  GEN_XSLEEP.MilliSeconds(0);
+  GEN_XSLEEP.MicroSeconds(0);
+  GEN_XSLEEP.NanoSeconds(0);
+
+  SUCCEED();
+}
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, DelInstanceTwice)
+* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  DelInstanceTwice
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSLEEP_CLASSNAME, DelInstanceTwice)
+{
+  XSLEEP* originalinstance = NULL;
+  if(XSLEEP::GetIsInstanced()) originalinstance = &XSLEEP::GetInstance();
+
+  XSLEEP* testinstance = new XSLEEP();
+  EXPECT_NE(testinstance, nullptr);
+
+  EXPECT_TRUE(XSLEEP::SetInstance(testinstance));
+
+  EXPECT_TRUE(XSLEEP::DelInstance());
+  EXPECT_FALSE(XSLEEP::DelInstance());
+
+  if(originalinstance)
     {
-      xtimer->Reset();  
-      GEN_XSLEEP.Seconds(1);
-      EXPECT_NEAR(0, (double)xtimer->GetMeasureSeconds(), 2);
+      EXPECT_TRUE(XSLEEP::SetInstance(originalinstance));
+    }
+  else
+    {
+      EnsureXSleepInstance();
     }
 
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureToDate)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureToDate
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureToDate)
-{
-  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
-
-  XDATETIME datetime;
-
-  xtimer->AddSeconds(1000000000000L);
-  
-  if(xtimer)
-    {   
-      xtimer->GetMeasureToDate(&datetime);
-      EXPECT_EQ(datetime.GetYear()        , 26976);
-      EXPECT_EQ(datetime.GetMonth()       , 2);
-      EXPECT_EQ(datetime.GetDay()         , 2);
-      EXPECT_EQ(datetime.GetHours()       , 1);
-      EXPECT_EQ(datetime.GetMinutes()     , 46);
-      EXPECT_EQ(datetime.GetSeconds()     , 40);
-      EXPECT_EQ(datetime.GetMilliSeconds(), 0);
-
-    }
-
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureString)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureString
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureString)
-{
-  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
-
-  XSTRING measure;
-
-  xtimer->AddSeconds(100000L);
-  xtimer->AddSeconds(750000L);
-
-  if(xtimer)
-    {   
-      xtimer->GetMeasureString(measure, true);
-      EXPECT_STREQ(measure.Get(), __L("9 dias, 20 horas, 6 minutos, 40 segundos"));
-    }
-
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMicroSecondsTickCounter
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
-{
-  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
-  EXPECT_TRUE(xtimer != NULL);
-
-  if(xtimer)
-    {        
-      EXPECT_TRUE(xtimer->GetMicroSecondsTickCounter());
-    }
-
-  GEN_XFACTORY.DeleteTimer(xtimer);
-  xtimer = NULL;
-  EXPECT_TRUE(xtimer == NULL);  
 }
 
 
 }
-
-
 #endif
 
 
 #pragma endregion
-

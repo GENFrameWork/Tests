@@ -1,9 +1,10 @@
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XBuffer.h
+* @file       XUtils_UnitTests_XDateTime.h
 * 
-* @class      UNITTESTS_XBUFFER
-* @brief      Unit Tests for XBuffer class
+* @class      XUTILS_UNITTESTS_XDATETIME
+* @brief      XUtils Unit Tests for date time class
 * @ingroup    TESTS
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -26,38 +27,24 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XBUFFER_H_
-#define _UNITTESTS_XBUFFER_H_
+
+#ifndef _XUTILS_UNITTESTS_XDATETIME_H_
+#define _XUTILS_UNITTESTS_XDATETIME_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
-
-
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
-#define UNITTEST_XBUFFER_CLASSNAME  TEST_XBUFFER
-
-#pragma endregion
-
+#define UNITTEST_XDATETIME_CLASSNAME  TEST_XDATETIME
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 
-#pragma endregion
-
-
-/*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
-
-
-#pragma endregion
+/*---- INLINE FUNCTIONS ----------------------------------------------------------------------------------------------*/
 
 
 #endif
+
 
 

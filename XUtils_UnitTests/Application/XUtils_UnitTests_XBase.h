@@ -1,8 +1,8 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       UnitTests_XBase.h
+* @file       XUtils_UnitTests_XBase.h
 * 
-* @class      UNITTESTS_XBASE
+* @class      XUTILS_UNITTESTS_XBASE
 * @brief      Unit Tests for XBase functions and defines
 * @ingroup    TESTS
 * 
@@ -26,8 +26,8 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _UNITTESTS_XBASE_H_
-#define _UNITTESTS_XBASE_H_
+#ifndef _XUTILS_UNITTESTS_XBASE_H_
+#define _XUTILS_UNITTESTS_XBASE_H_
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
