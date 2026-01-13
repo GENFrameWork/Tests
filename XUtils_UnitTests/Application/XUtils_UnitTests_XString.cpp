@@ -258,7 +258,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII) 
-
 {
   XSTRING string1 = __L("Hello world!");
   XSTRING string2;
@@ -266,6 +265,259 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
 
   string1.ConvertToASCII(buffer);
   string2.ConvertFromASCII(buffer);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437)
+* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertASCII_codepage437
+* @ingroup    UNIT TEST
+* 
+* @return     Does not return anything. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437) 
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_CODEPAGE_437);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_CODEPAGE_437);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_codepage850 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850) 
+
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_CODEPAGE_850);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_CODEPAGE_850);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_ISO_8859_1 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1) 
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_ISO_8859_1);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_ISO_8859_1);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_ISO_8859_2 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2) 
+{
+  XSTRING string1 = __L("Hello world! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_ISO_8859_2);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_ISO_8859_2);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_ISO_8859_3 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3) 
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_ISO_8859_3);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_ISO_8859_3);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_ISO_8859_4 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4) 
+{
+  XSTRING string1 = __L("Hello world! Āā Ēē Ģģ Īī Ķķ Ļļ Ņņ Šš Ūū Žž");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_ISO_8859_4);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_ISO_8859_4);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_WINDOWS_1250 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250) 
+{
+  XSTRING string1 = __L("Hello world! Ąą Čč Ďď Ęę Ěě Łł Ňň Řř Šš Ťť Ůů Žž");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_WINDOWS_1250);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_WINDOWS_1250);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_WINDOWS_1251 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251) 
+{
+  XSTRING string1 = __L("Hello world! Привет мир! Ёё Жж Йй Яя Юю");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_WINDOWS_1251);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_WINDOWS_1251);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_WINDOWS_1252 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252) 
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ ÁÉÍÓÚ üç € “ ” ‘ ’ — …");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_WINDOWS_1252);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_WINDOWS_1252);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_WINDOWS_1253 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253) 
+{
+  XSTRING string1 = __L("Hello world! Γειά σου κόσμε! Αα Ββ Γγ Δδ Εε Ζζ Ηη Θθ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_WINDOWS_1253);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_WINDOWS_1253);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_WINDOWS_1254 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254) 
+{
+  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_WINDOWS_1254);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_WINDOWS_1254);
 
   EXPECT_EQ(0, string1.Compare(string2, false));
 }

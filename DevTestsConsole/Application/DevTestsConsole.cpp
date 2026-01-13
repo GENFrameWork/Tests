@@ -743,7 +743,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NTP_Protocol                  , __L("Test_NTP_Protocol")                    },                                              
                                                       { false  , Test_NTP_InternetServices          , __L("Test_NTP_InternetServices")            },                                              
                                                       { false  , Test_Sound                         , __L("Test Sound")                           },       
-                                                      { false  , Test_ProcessManager                , __L("Test Process Manager")                 },
+                                                      { true   , Test_ProcessManager                , __L("Test Process Manager")                 },
                                                       { false  , Test_GetUserAndDomain              , __L("Test Get User And Domain")             },
                                                       { false  , Test_I2C_GPIO_MCP2317              , __L("Test I2C GPIO MCP2317")                },
                                                       { false  , Test_SPI_GPIO_MCP2317              , __L("Test SPI GPIO MCP2317")                },
@@ -768,7 +768,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_ID_IBAN                       , __L("Test ID IBAN")                         }, 
                                                       { false  , Test_Compress                      , __L("Test Compress")                        }, 
                                                       { false  , Test_DIOStreamTCPIPServer          , __L("Test DIO Stream TCPIP Server")         },  
-                                                      { true   , Test_XPath                         , __L("Test eXtended Path")                   },  
+                                                      { false  , Test_XPath                         , __L("Test eXtended Path")                   },  
                                                       
                                                       #ifdef WINDOWS
                                                       { false  , Test_WindowsACL                    , __L("Test Windows ACL")                     },
@@ -894,7 +894,7 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
 
   XBUFFER xbuffer;
 
-  string.ConvertToASCII(xbuffer);
+  string.ConvertToASCII(xbuffer, XSTRINGASCIICODE_CODEPAGE_437);
   substring.Empty();
   substring.ConvertFromASCII(xbuffer);
 
@@ -3441,7 +3441,7 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
   XSTRING             params; 
   XSTRING             in;
   XSTRING             out;
-//int                 returncode;
+  int                 returncode;
   XVECTOR<XPROCESS*>  applist;
   
   /*
@@ -3453,16 +3453,18 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
 
   */
 
-  /*
-  command = __L("D:\\depen dencies\\net-tools\\bin\\snmpwalk");
+  
+  command = __L("C:\\Program Files\\Notepad++\\notepad++.exe");
   params  = __L("");
   
-  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, &out, &returncode);
+  // bool status = GEN_XPROCESSMANAGER.Application_ExecuteElevated(command.Get(), params.Get(), &in, &out, &returncode);
 
+  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &returncode);
 
   XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
-  */
+  
 
+  /*
   bool status = GEN_XPROCESSMANAGER.Application_GetRunningList(applist);
 
   if(status)
@@ -3483,6 +3485,7 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
     
   applist.DeleteContents();
   applist.DeleteAll();
+  */
 
   return status;
 }
