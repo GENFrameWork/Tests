@@ -733,7 +733,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
                                                       { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
-                                                      { false  , Test_CipherECDSAX25519              , __L("Test Cipher Curve 25519")              },         
+                                                      { false  , Test_CipherECDSAX25519             , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
                                                       { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
@@ -3443,26 +3443,28 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
   XSTRING             out;
   int                 returncode;
   XVECTOR<XPROCESS*>  applist;
+    
+  //command = __L("C:\\Program Files\\Notepad++\\notepad++.exe");
+  command = __L("C:\\Program Files\\CMake\\bin\\cmake.exe");
+  params  = __L("--version áñ");
   
+  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, &out, &returncode);
+
+  XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
+
+
+
   /*
   command = __L("/usr/bin/festival");
   params  = __L("--language spanish --tts");
   in      = __L("Hola radiola");
  
   bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, NULL, &returncode);
+  
+  XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
 
   */
 
-  
-  command = __L("C:\\Program Files\\Notepad++\\notepad++.exe");
-  params  = __L("");
-  
-  // bool status = GEN_XPROCESSMANAGER.Application_ExecuteElevated(command.Get(), params.Get(), &in, &out, &returncode);
-
-  bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &returncode);
-
-  XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
-  
 
   /*
   bool status = GEN_XPROCESSMANAGER.Application_GetRunningList(applist);

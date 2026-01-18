@@ -281,7 +281,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437) 
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string1 = __L("Hello 437! ÇüéâäàåçêëèïîìÄÅÉÖÜñÑ");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -303,14 +303,59 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850) 
-
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string1 = __L("Hello 850! áéíóú üñÑ çÇ ß Øø Åå");
   XSTRING string2;
   XBUFFER buffer;
 
   string1.ConvertToASCII(buffer, XSTRINGASCIICODE_CODEPAGE_850);
   string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_CODEPAGE_850);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage852)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_codepage852 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage852) 
+{
+  XSTRING string1 = __L("Hello 852! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_CODEPAGE_852);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_CODEPAGE_852);
+
+  EXPECT_EQ(0, string1.Compare(string2, false));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage866)
+* @brief      Constructor of class
+* @ingroup    
+* 
+* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
+* @param[in]  ConvertASCII_codepage866 : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage866) 
+{
+  XSTRING string1 = __L("Hello 866! Привет мир! Ёё Жж Йй Яя Юю");
+  XSTRING string2;
+  XBUFFER buffer;
+
+  string1.ConvertToASCII(buffer, XSTRINGASCIICODE_CODEPAGE_866);
+  string2.ConvertFromASCII(buffer, XSTRINGASCIICODE_CODEPAGE_866);
 
   EXPECT_EQ(0, string1.Compare(string2, false));
 }
@@ -328,7 +373,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1) 
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string1 = __L("Hello 8859-1! àèìòù Ññ ÁÉÍÓÚ üç ß");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -351,7 +396,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2) 
 {
-  XSTRING string1 = __L("Hello world! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
+  XSTRING string1 = __L("Hello 8859-2! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -374,7 +419,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3) 
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string1 = __L("Hello 8859-3! Ħħ Ġġ Ċċ Żż àèìòù");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -397,7 +442,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4) 
 {
-  XSTRING string1 = __L("Hello world! Āā Ēē Ģģ Īī Ķķ Ļļ Ņņ Šš Ūū Žž");
+  XSTRING string1 = __L("Hello 8859-4! Āā Ēē Ģģ Īī Ķķ Ļļ Ņņ Šš Ūū Žž");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -420,7 +465,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250) 
 {
-  XSTRING string1 = __L("Hello world! Ąą Čč Ďď Ęę Ěě Łł Ňň Řř Šš Ťť Ůů Žž");
+  XSTRING string1 = __L("Hello 1250! Ąą Čč Ďď Ęę Ěě Łł Ňň Řř Šš Ťť Ůů Žž");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -443,7 +488,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251) 
 {
-  XSTRING string1 = __L("Hello world! Привет мир! Ёё Жж Йй Яя Юю");
+  XSTRING string1 = __L("Hello 1251! Привет мир! Ёё Жж Йй Яя Юю");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -466,7 +511,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252) 
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ ÁÉÍÓÚ üç € “ ” ‘ ’ — …");
+  XSTRING string1 = __L("Hello 1252! àèìòù Ññ ÁÉÍÓÚ üç € “ ” ‘ ’ — …");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -489,7 +534,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253) 
 {
-  XSTRING string1 = __L("Hello world! Γειά σου κόσμε! Αα Ββ Γγ Δδ Εε Ζζ Ηη Θθ");
+  XSTRING string1 = __L("Hello 1253! Γειά σου κόσμε! Αα Ββ Γγ Δδ Εε Ζζ Ηη Θθ");
   XSTRING string2;
   XBUFFER buffer;
 
@@ -512,7 +557,7 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254) 
 {
-  XSTRING string1 = __L("Hello world! àèìòù Ññ");
+  XSTRING string1 = __L("Hello 1254! Türkçe: Ğğ İı Şş Çç Öö Üü");
   XSTRING string2;
   XBUFFER buffer;
 
