@@ -7,11 +7,11 @@ cmake_minimum_required(VERSION 3.16.0)
 project(devtestsconsole)
 
 
-set(GEN_DIRECTORY "../../../../GEN_FrameWork") 
+set(GEN_DIRECTORY "../../..") 
 
 
 # Compile Selection
-include("${GEN_DIRECTORY}/Common/CMake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
 
 
 # --------------------------------------------------------------------
@@ -160,7 +160,7 @@ add_definitions(${APP_CFG_DEVTESTSCONSOLE})
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Main.txt") 
 
                         
 # --------------------------------------------------------------------
@@ -198,11 +198,11 @@ endif()
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_CreateProject.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_CreateProject.txt") 
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Libraries.txt") 
 

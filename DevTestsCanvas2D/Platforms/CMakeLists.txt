@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16.0)
 project(devtestscanvas2D)
 
 
-set(GEN_DIRECTORY "../../../") 
+set(GEN_DIRECTORY "../../..") 
 
 
 # --------------------------------------------------------------------
@@ -66,7 +66,7 @@ add_definitions(${APP_CFG_DEVTESTSCANVAS2D})
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Main.txt") 
                    
                    
 # --------------------------------------------------------------------
@@ -86,11 +86,11 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsCanva
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_CreateProject.txt")
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_CreateProject.txt")
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/Common/CMake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Libraries.txt") 
 
