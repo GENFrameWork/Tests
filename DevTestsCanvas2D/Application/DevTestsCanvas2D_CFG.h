@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "APPFlowCFG.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DEVTESTSCANVAS2DCFG_SECTIONGENERAL              __L("general")
 #define DEVTESTSCANVAS2DCFG_GENERAL_SCREEN_POSX         __L("screen_posx")  
@@ -47,11 +44,9 @@
 #define DEVTESTSCANVAS2DCFG_GENERAL_SCREEN_MAXWIDTH     __L("screen_maxwidth")  
 #define DEVTESTSCANVAS2DCFG_GENERAL_SCREEN_MAXHEIGHT    __L("screen_maxheight")  
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DEVTESTSCANVAS2D_CFG : public APPFLOWCFG
 {
@@ -96,14 +91,11 @@ class DEVTESTSCANVAS2D_CFG : public APPFLOWCFG
     int                             screen_maxheight;    
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

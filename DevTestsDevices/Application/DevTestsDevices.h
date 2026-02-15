@@ -29,18 +29,15 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XBuffer.h"
 #include "APPFlowBase.h"
 
 #include "DIOGPIO.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DEVTESTSDEVICES_VERSION            0
 #define DEVTESTSDEVICES_SUBVERSION         1
@@ -83,11 +80,9 @@ enum DEVTESTSDEVICES_GPIOENTRYID
   DEVTESTSDEVICES_GPIOENTRYID_SPI_DISPLAY_BACKLIGHT                  
 };
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DIOSTREAM;
 class MAIN;
@@ -153,14 +148,11 @@ class DEVTESTSDEVICES : public APPFLOWBASE
 
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

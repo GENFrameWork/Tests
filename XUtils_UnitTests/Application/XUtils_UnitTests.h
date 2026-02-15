@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "APPFlowBase.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define APPLICATION_VERSION                       0
 #define APPLICATION_SUBVERSION                    0
@@ -56,11 +53,9 @@
 
 #define APPLICATION_DIRECTORYMAIN                 __L("assets")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XUTILS_UNITTESTS: public APPFLOWBASE
 {
@@ -79,14 +74,11 @@ class XUTILS_UNITTESTS: public APPFLOWBASE
     void                Clean                               ();
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

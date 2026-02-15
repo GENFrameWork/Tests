@@ -29,7 +29,6 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XDateTime.h"
 #include "XFSMachine.h"
@@ -43,11 +42,9 @@
 
 #include "APPFlowGraphics.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 
 enum DEVTESTSCANVAS2DXFSMEVENTS
@@ -117,11 +114,9 @@ typedef struct
 
 #define APPLICATION_YEAROFCREATION                2023
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class XTIME;
 class XTIMER;
@@ -192,13 +187,10 @@ class DEVTESTSCANVAS2D : public APPFLOWGRAPHICS, public XFSMACHINE
     GRPBITMAP*                      backgroundbmp;  
 };
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 

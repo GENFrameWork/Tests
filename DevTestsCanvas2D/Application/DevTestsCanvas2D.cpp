@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "DevTestsCanvas2D.h"
 
@@ -110,20 +107,16 @@
 
 #include "DevTestsCanvas2D_CFG.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 APPLICATIONCREATEINSTANCE(DEVTESTSCANVAS2D, devtestscanvas2d)
 
@@ -134,11 +127,9 @@ GRP2DCOLOR_RGBA8  colorgreen(0, 255, 0);
 GRP2DCOLOR_RGBA8  colorblue(0, 0, 255);
 GRP2DCOLOR_RGBA8  colorgray(10, 10, 10, 150);
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -935,4 +926,3 @@ void DEVTESTSCANVAS2D::Clean()
 }
 
 
-#pragma endregion

@@ -29,15 +29,12 @@
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "APPFlowCFG.h"
 
-#pragma endregion
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
-#pragma region DEFINES_ENUMS
 
 #define DEVTESTSCONSOLE_CFG_SECTION_DATABASE                         __L("database")
 #define DEVTESTSCONSOLE_CFG_DATABASE_URL                             __L("url")
@@ -47,11 +44,9 @@
 #define DEVTESTSCONSOLE_CFG_DATABASE_PASSWORD                        __L("password")
 #define DEVTESTSCONSOLE_CFG_DATABASE_TIMEOUTCONNECTION               __L("timeoutconnection")
 
-#pragma endregion
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
-#pragma region CLASS
 
 class DEVTESTSCONSOLE_CFG : public APPFLOWCFG
 {
@@ -94,14 +89,11 @@ class DEVTESTSCONSOLE_CFG : public APPFLOWCFG
 
 
 
-#pragma endregion
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-#pragma region FUNCTIONS_PROTOTYPES
 
 
-#pragma endregion
 
 
 

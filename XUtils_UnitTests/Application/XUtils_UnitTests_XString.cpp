@@ -27,15 +27,12 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_DEFINES_INCLUDE
 
 #include "GEN_Defines.h"
 
-#pragma endregion
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
-#pragma region INCLUDES
 
 #include "XUtils_UnitTests_XString.h"
 
@@ -46,29 +43,23 @@
 #include "XBuffer.h"
 #include "XString.h"
 
-#pragma endregion
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
-#pragma region PRECOMPILATION_CONTROL_INCLUDE
 
 #include "GEN_Control.h"
 
-#pragma endregion
 
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-#pragma region GENERAL_VARIABLE
 
 char*  unittest_hellostringOEM = (char*)("Hello, world!");
 XCHAR* unittest_hellostring    = __L("Hello, world!");
 
-#pragma endregion
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-#pragma region CLASS_MEMBERS
 
 
 #ifdef GOOGLETEST_ACTIVE      
@@ -1061,4 +1052,3 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeAutoTrim)
 #endif
 
 
-#pragma endregion
