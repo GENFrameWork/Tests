@@ -1,5 +1,4 @@
-#ifndef _TYPE_ABBREV_H_
-#define _TYPE_ABBREV_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Macros and Defines */
@@ -34,4 +33,3 @@
 #define TYPE_SUFFIX_q15_t q15
 #define TYPE_SUFFIX_q7_t q7
 
-#endif /* _TYPE_ABBREV_H_ */

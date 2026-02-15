@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCONSOLE_XSERIALIZABLE_H_
-#define _DEVTESTSCONSOLE_XSERIALIZABLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -218,4 +217,3 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
 #pragma endregion
 
 
-#endif

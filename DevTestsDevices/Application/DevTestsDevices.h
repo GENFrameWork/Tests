@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSDEVICES_H_
-#define _DEVTESTSDEVICES_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -164,5 +163,4 @@ class DEVTESTSDEVICES : public APPFLOWBASE
 #pragma endregion
 
 
-#endif
 

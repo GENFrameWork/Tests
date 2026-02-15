@@ -28,8 +28,7 @@
 *    Misra-C changes done
 * -------------------------------------------------------------------- */
 
-#ifndef MATH_HELPER_H
-#define MATH_HELPER_H
+#pragma once
 
 #include "arm_math.h"
 
@@ -48,4 +47,3 @@ void arm_apply_guard_bits (float32_t * pIn, uint32_t numSamples, uint32_t guard_
 uint32_t arm_compare_fixed_q15(q15_t *pIn, q15_t * pOut, uint32_t numSamples);
 uint32_t arm_compare_fixed_q31(q31_t *pIn, q31_t *pOut, uint32_t numSamples);
 uint32_t arm_calc_2pow(uint32_t guard_bits);
-#endif

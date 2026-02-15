@@ -1,5 +1,4 @@
-#ifndef _FAST_MATH_TEMPLATES_H_
-#define _FAST_MATH_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -99,4 +98,3 @@
             return JTEST_TEST_PASSED;                                   \
         }
 
-#endif /* _FAST_MATH_TEMPLATES_H_ */

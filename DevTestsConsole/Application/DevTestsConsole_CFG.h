@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCONSOLE_CFG_H_
-#define _DEVTESTSCONSOLE_CFG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -105,5 +104,4 @@ class DEVTESTSCONSOLE_CFG : public APPFLOWCFG
 #pragma endregion
 
 
-#endif
 

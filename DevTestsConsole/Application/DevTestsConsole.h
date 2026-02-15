@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCONSOLE_H_
-#define _DEVTESTSCONSOLE_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -294,5 +293,4 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
 #pragma endregion
 
 
-#endif
 

@@ -1,5 +1,4 @@
-#ifndef _BASIC_MATH_TEMPLATES_H_
-#define _BASIC_MATH_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -264,4 +263,3 @@
             BASIC_MATH_COMPARE_INTERFACE);                          \
     }
 
-#endif /* _BASIC_MATH_TEMPLATES_H_ */

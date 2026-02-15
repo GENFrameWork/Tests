@@ -24,8 +24,7 @@
  * limitations under the License.
  */
 
-#ifndef __SYSTEM_ARMCA5_H
-#define __SYSTEM_ARMCA5_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,4 +60,3 @@ extern void MMU_CreateTranslationTable(void);
 }
 #endif
 
-#endif /* __SYSTEM_ARMCA5_H */

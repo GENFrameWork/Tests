@@ -27,8 +27,7 @@
  * Target Processor:  Cortex-M cores
  * -------------------------------------------------------------------- */
 
-#ifndef _ARM_NNSUPPORTFUNCTIONS_H_
-#define _ARM_NNSUPPORTFUNCTIONS_H_
+#pragma once
 
 #include "arm_math.h"
 #include "arm_common_tables.h"
@@ -266,4 +265,3 @@ __STATIC_FORCEINLINE q31_t arm_nn_divide_by_power_of_two(const q31_t dividend, c
 }
 #endif
 
-#endif

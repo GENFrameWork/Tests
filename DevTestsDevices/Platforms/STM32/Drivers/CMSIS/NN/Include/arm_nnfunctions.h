@@ -89,8 +89,7 @@
  * These functions perform basic operations for neural network layers.
  */
 
-#ifndef _ARM_NNFUNCTIONS_H
-#define _ARM_NNFUNCTIONS_H
+#pragma once
 
 #include "arm_nnsupportfunctions.h"
 #include "arm_nn_tables.h"
@@ -1072,4 +1071,3 @@ extern    "C"
 }
 #endif
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef _FAST_MATH_TEST_DATA_H_
-#define _FAST_MATH_TEST_DATA_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -26,4 +25,3 @@ extern const float32_t fast_math_f32_inputs[FAST_MATH_MAX_LEN];
 extern const q31_t fast_math_q31_inputs[FAST_MATH_MAX_LEN];
 extern const q15_t * fast_math_q15_inputs;
 
-#endif /* _FAST_MATH_TEST_DATA_H_ */

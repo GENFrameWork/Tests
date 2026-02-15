@@ -1,5 +1,4 @@
-#ifndef _TEST_TEMPLATES_H_
-#define _TEST_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -463,4 +462,3 @@
             return JTEST_TEST_PASSED;                               \
         } while (0)
 
-#endif /* _TEST_TEMPLATES_H_ */

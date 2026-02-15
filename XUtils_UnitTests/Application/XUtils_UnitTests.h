@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _XUTILS_UNITTESTS_H_
-#define _XUTILS_UNITTESTS_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -90,5 +89,4 @@ class XUTILS_UNITTESTS: public APPFLOWBASE
 #pragma endregion
 
 
-#endif
 

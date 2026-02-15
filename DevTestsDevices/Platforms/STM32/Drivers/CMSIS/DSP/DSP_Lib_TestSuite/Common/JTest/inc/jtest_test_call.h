@@ -1,5 +1,4 @@
-#ifndef _JTEST_TEST_CALL_H_
-#define _JTEST_TEST_CALL_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -118,4 +117,3 @@
         }                                                               \
     } while (0)
 
-#endif /* _JTEST_TEST_CALL_H_ */

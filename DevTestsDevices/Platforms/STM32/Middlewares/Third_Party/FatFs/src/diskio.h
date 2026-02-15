@@ -2,8 +2,7 @@
 /  Low level disk interface modlue include file   (C)ChaN, 2014          /
 /-----------------------------------------------------------------------*/
 
-#ifndef _DISKIO_DEFINED
-#define _DISKIO_DEFINED
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,4 +76,3 @@ DWORD get_fattime (void);
 }
 #endif
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef _FILTERING_TEMPLATES_H_
-#define _FILTERING_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -88,4 +87,3 @@
 
 
 
-#endif /* _FILTERING_TEMPLATES_H_ */

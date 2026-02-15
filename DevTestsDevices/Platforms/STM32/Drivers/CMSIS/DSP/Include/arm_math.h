@@ -275,8 +275,7 @@
  */
 
 
-#ifndef _ARM_MATH_H
-#define _ARM_MATH_H
+#pragma once
 
 /* Compiler specific diagnostic adjustment */
 #if   defined ( __CC_ARM )
@@ -7352,7 +7351,6 @@ arm_status arm_sqrt_q15(
   #error Unknown compiler
 #endif
 
-#endif /* _ARM_MATH_H */
 
 /**
  *

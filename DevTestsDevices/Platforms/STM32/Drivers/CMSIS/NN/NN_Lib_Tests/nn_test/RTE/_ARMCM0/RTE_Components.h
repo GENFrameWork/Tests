@@ -7,8 +7,7 @@
  * Target:  'ARMCM0' 
  */
 
-#ifndef RTE_COMPONENTS_H
-#define RTE_COMPONENTS_H
+#pragma once
 
 
 /*
@@ -17,4 +16,3 @@
 #define CMSIS_device_header "ARMCM0.h"
 
 
-#endif /* RTE_COMPONENTS_H */

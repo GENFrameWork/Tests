@@ -1,5 +1,4 @@
-#ifndef _FILTERING_TESTS_H_
-#define _FILTERING_TESTS_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Test/Group Declarations */
@@ -12,4 +11,3 @@ JTEST_DECLARE_GROUP(fir_tests);
 JTEST_DECLARE_GROUP(iir_tests);
 JTEST_DECLARE_GROUP(lms_tests);
 
-#endif /* _FILTERING_TESTS_H_ */

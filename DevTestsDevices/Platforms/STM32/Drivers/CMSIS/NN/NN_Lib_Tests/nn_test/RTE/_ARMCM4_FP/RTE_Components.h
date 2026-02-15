@@ -7,8 +7,7 @@
  * Target:  'ARMCM4_FP' 
  */
 
-#ifndef RTE_COMPONENTS_H
-#define RTE_COMPONENTS_H
+#pragma once
 
 
 /*
@@ -23,4 +22,3 @@
 #define RTE_Compiler_IO_TTY             /* Compiler I/O: TTY */
           #define RTE_Compiler_IO_TTY_ITM         /* Compiler I/O: TTY ITM */
 
-#endif /* RTE_COMPONENTS_H */

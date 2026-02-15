@@ -1,5 +1,4 @@
-#ifndef _MAIN_H_
-#define _MAIN_H_
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,4 +74,3 @@ void verify_results_q15(q15_t * ref, q15_t * opt, int length)
 
 }
 
-#endif

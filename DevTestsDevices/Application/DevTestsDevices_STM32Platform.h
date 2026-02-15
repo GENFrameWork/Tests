@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSDEVICES_STM32PLATFORM_H_
-#define _DEVTESTSDEVICES_STM32PLATFORM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -93,5 +92,4 @@ extern "C"
 #pragma endregion
 
 
-#endif
 

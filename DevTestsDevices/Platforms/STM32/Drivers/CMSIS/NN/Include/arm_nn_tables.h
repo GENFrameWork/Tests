@@ -26,8 +26,7 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_NN_TABLES_H
-#define _ARM_NN_TABLES_H
+#pragma once
 
 #include "arm_math.h"
 
@@ -53,4 +52,3 @@ extern const q15_t tanhTable_q15[256];
 extern const q15_t sigmoidHTable_q15[192];
 extern const q15_t sigmoidLTable_q15[128];
 
-#endif                          /*  ARM_NN_TABLES_H */

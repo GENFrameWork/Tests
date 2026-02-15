@@ -1,5 +1,4 @@
-#ifndef _CONTROLLER_TEST_DATA_H_
-#define _CONTROLLER_TEST_DATA_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -30,4 +29,3 @@ extern const float32_t controller_f32_coeffs[CONTROLLER_MAX_COEFFS_LEN];
 extern const q31_t controller_q31_coeffs[CONTROLLER_MAX_COEFFS_LEN];
 extern const q15_t controller_q15_coeffs[CONTROLLER_MAX_COEFFS_LEN];
 
-#endif /* _CONTROLLER_TEST_DATA_H_ */

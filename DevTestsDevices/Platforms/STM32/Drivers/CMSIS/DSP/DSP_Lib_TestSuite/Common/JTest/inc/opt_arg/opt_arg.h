@@ -1,5 +1,4 @@
-#ifndef _OPT_ARG_H_
-#define _OPT_ARG_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -12,4 +11,3 @@
    example. If you are not Joseph, but possess his code, study the examples. If
    you have no examples, turn back contact Joseph. */
 
-#endif /* _OPT_ARG_H_ */

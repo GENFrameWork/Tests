@@ -7,8 +7,7 @@
  * Target:  'ARMCM0' 
  */
 
-#ifndef RTE_COMPONENTS_H
-#define RTE_COMPONENTS_H
+#pragma once
 
 
 /*
@@ -21,4 +20,3 @@
 #define RTE_Compiler_IO_STDOUT          /* Compiler I/O: STDOUT */
           #define RTE_Compiler_IO_STDOUT_EVR      /* Compiler I/O: STDOUT EVR */
 
-#endif /* RTE_COMPONENTS_H */

@@ -2,8 +2,7 @@
 /* Integer type definitions for FatFs module */
 /*-------------------------------------------*/
 
-#ifndef _FF_INTEGER
-#define _FF_INTEGER
+#pragma once
 
 #ifdef _WIN32	/* FatFs development platform */
 
@@ -35,4 +34,3 @@ typedef unsigned long long QWORD;
 
 #endif
 
-#endif

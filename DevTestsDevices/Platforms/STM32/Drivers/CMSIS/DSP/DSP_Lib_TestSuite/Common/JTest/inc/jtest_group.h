@@ -1,5 +1,4 @@
-#ifndef _JTEST_GROUP_H_
-#define _JTEST_GROUP_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -63,4 +62,3 @@ typedef struct JTEST_GROUP_struct
         JTEST_PF_RESET_FAILED(group_ptr);       \
     } while (0)
 
-#endif /* _JTEST_GROUP_H_ */

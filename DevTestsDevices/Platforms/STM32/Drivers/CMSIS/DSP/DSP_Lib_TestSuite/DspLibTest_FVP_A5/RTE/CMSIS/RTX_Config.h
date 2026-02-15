@@ -25,8 +25,7 @@
  * -----------------------------------------------------------------------------
  */
  
-#ifndef RTX_CONFIG_H_
-#define RTX_CONFIG_H_
+#pragma once
  
 #ifdef   _RTE_
 #include "RTE_Components.h"
@@ -575,4 +574,3 @@
  
 //------------- <<< end of configuration section >>> ---------------------------
  
-#endif  // RTX_CONFIG_H_

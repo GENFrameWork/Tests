@@ -1,5 +1,4 @@
-#ifndef _TRANSFORM_TESTS_H_
-#define _TRANSFORM_TESTS_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Test/Group Declarations */
@@ -10,4 +9,3 @@ JTEST_DECLARE_GROUP(dct4_tests);
 JTEST_DECLARE_GROUP(rfft_tests);
 JTEST_DECLARE_GROUP(rfft_fast_tests);
 
-#endif /* _TRANSFORM_TESTS_H_ */

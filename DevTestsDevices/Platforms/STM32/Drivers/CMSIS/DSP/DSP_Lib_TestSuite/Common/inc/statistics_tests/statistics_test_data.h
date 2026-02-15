@@ -1,5 +1,4 @@
-#ifndef _STATISTICS_TEST_DATA_H_
-#define _STATISTICS_TEST_DATA_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -41,4 +40,3 @@ ARR_DESC_DECLARE(statistics_f_15);
 ARR_DESC_DECLARE(statistics_f_32);
 ARR_DESC_DECLARE(statistics_f_all);
 
-#endif /* _STATISTICS_TEST_DATA_H_ */

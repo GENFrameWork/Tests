@@ -1,5 +1,4 @@
-#ifndef _TRANSFORM_TEMPLATES_H_
-#define _TRANSFORM_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -178,4 +177,3 @@
     } while (0)
 
 
-#endif /* _TRANSFORM_TEMPLATES_H_ */

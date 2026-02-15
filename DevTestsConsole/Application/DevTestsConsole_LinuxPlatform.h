@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCONSOLE_LINUXPLATFORM_H_
-#define _DEVTESTSCONSOLE_LINUXPLATFORM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -58,5 +57,4 @@ int       Linux_Platform_Ini        (void);
 #pragma endregion
 
 
-#endif
 

@@ -1,5 +1,4 @@
-#ifndef _INTRINSICS_TEMPLATES_H_
-#define _INTRINSICS_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -163,4 +162,3 @@
       return JTEST_TEST_PASSED;                                            \
    }
 
-#endif /* _INTRINSICS_TEMPLATES_H_ */

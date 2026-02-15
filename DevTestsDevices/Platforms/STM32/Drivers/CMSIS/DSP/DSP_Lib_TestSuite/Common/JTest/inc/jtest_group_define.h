@@ -1,5 +1,4 @@
-#ifndef _JTEST_GROUP_DEFINE_H_
-#define _JTEST_GROUP_DEFINE_H_
+#pragma once
 
 
 /*--------------------------------------------------------------------------------*/
@@ -84,4 +83,3 @@
     JTEST_GROUP_FN_PROTOTYPE(group_fn);      \
     JTEST_GROUP_DECLARE_STRUCT(group_fn) /* Note the lacking semicolon */
 
-#endif /* _JTEST_GROUP_DEFINE_H_ */

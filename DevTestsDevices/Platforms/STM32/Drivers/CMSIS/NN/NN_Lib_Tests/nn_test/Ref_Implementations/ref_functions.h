@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
-#ifndef _REF_FUNCTIONS_H_
-#define _REF_FUNCTIONS_H_
+#pragma once
 
 #include "arm_math.h"
 #include "arm_nnfunctions.h"
@@ -247,4 +246,3 @@ extern    "C"
 }
 #endif
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef _CONTROLLER_TEMPLATES_H_
-#define _CONTROLLER_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -43,4 +42,3 @@
 /* TEST Templates */
 /*--------------------------------------------------------------------------------*/
 
-#endif /* _CONTROLLER_TEMPLATES_H_ */

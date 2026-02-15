@@ -1,5 +1,4 @@
-#ifndef _JTEST_H_
-#define _JTEST_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -14,4 +13,3 @@
 #include "jtest_group_call.h"
 #include "jtest_cycle.h"
 
-#endif /* _JTEST_H_ */

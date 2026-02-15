@@ -1,5 +1,4 @@
-#ifndef _JTEST_SYSTICK_H_
-#define _JTEST_SYSTICK_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes                                                                       */
@@ -91,4 +90,3 @@
 #define JTEST_SYSTICK_VALUE(systick_ptr)                    \
     ((systick_ptr)->VAL)
            
-#endif /* _JTEST_SYSTICK_H_ */

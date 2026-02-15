@@ -1,5 +1,4 @@
-#ifndef _PP_NARG_H_
-#define _PP_NARG_H_
+#pragma once
 
 #define PP_NARG(...)                                      \
     PP_NARG_(__VA_ARGS__,PP_RSEQ_N())
@@ -22,4 +21,3 @@
         19,18,17,16,15,14,13,12,11,10,                    \
         9,8,7,6,5,4,3,2,1,0
 
-#endif /* _PP_NARG_H_ */

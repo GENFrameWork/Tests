@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCONSOLE_WINDOWSPLATFORM_H_
-#define _DEVTESTSCONSOLE_WINDOWSPLATFORM_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -59,5 +58,4 @@ int       Windows_Platform_Ini         (void);
 #pragma endregion
 
 
-#endif
 

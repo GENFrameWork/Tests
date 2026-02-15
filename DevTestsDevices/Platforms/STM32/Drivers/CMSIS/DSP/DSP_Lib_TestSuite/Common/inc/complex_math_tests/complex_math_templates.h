@@ -1,5 +1,4 @@
-#ifndef _COMPLEX_MATH_TEMPLATES_H_
-#define _COMPLEX_MATH_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -219,4 +218,3 @@
             comparison_interface);                                  \
     }
 
-#endif /* _COMPLEX_MATH_TEMPLATES_H_ */

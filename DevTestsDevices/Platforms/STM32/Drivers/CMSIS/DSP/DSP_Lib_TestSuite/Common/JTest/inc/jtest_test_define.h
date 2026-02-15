@@ -1,5 +1,4 @@
-#ifndef _JTEST_TEST_DEFINE_H_
-#define _JTEST_TEST_DEFINE_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -130,4 +129,3 @@
         _3                                                 \
         )
 
-#endif /* _JTEST_TEST_DEFINE_H_ */

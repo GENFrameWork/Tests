@@ -1,6 +1,5 @@
 
-#ifndef _REF_H
-#define _REF_H
+#pragma once
 
 #include <math.h>
 #include <stdint.h>
@@ -1398,4 +1397,3 @@ q31_t ref__SXTB16(q31_t x);
 }
 #endif
 
-#endif

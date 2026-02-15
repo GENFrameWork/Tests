@@ -1,5 +1,4 @@
-#ifndef _BASIC_MATH_TESTS_H_
-#define _BASIC_MATH_TESTS_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Test/Group Declarations */
@@ -14,4 +13,3 @@ JTEST_DECLARE_GROUP(scale_tests);
 JTEST_DECLARE_GROUP(shift_tests);
 JTEST_DECLARE_GROUP(sub_tests);
 
-#endif /* _BASIC_MATH_TESTS_H_ */

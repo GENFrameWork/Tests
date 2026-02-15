@@ -1,5 +1,3 @@
-#ifndef RTE_COMPONENTS_H
-#define RTE_COMPONENTS_H
+#pragma once
 
 
-#endif /* RTE_COMPONENTS_H */

@@ -17,8 +17,7 @@
   */
 /* USER CODE END Header */
 
-#ifndef _FFCONF
-#define _FFCONF 68300	/* Revision ID */
+#pragma once
 
 /*-----------------------------------------------------------------------------/
 / Additional user header to be used
@@ -265,4 +264,3 @@
 #define ff_free  free
 #endif
 
-#endif /* _FFCONF */

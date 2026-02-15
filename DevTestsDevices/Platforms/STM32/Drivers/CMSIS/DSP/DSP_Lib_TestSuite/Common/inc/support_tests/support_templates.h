@@ -1,5 +1,4 @@
-#ifndef _SUPPORT_TEMPLATES_H_
-#define _SUPPORT_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -117,4 +116,3 @@
             comparison_interface);                                  \
     }
 
-#endif /* _SUPPORT_TEMPLATES_H_ */

@@ -131,8 +131,7 @@
  *    - osThreadGetId
  *---------------------------------------------------------------------------*/
  
-#ifndef CMSIS_OS_H_
-#define CMSIS_OS_H_
+#pragma once
  
 /// \b osCMSIS identifies the CMSIS-RTOS API version.
 #define osCMSIS             0x20001U    ///< API version (main[31:16].sub[15:0])
@@ -919,4 +918,3 @@ osStatus osMailFree (osMailQId queue_id, void *mail);
 }
 #endif
  
-#endif  // CMSIS_OS_H_

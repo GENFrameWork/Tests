@@ -1,5 +1,4 @@
-#ifndef _STATISTICS_TEMPLATES_H_
-#define _STATISTICS_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -154,4 +153,3 @@
     }
 
 
-#endif /* _STATISTICS_TEMPLATES_H_ */

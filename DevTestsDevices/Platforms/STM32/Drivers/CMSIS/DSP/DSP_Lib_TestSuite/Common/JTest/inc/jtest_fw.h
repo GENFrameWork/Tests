@@ -1,5 +1,4 @@
-#ifndef _JTEST_FW_H_
-#define _JTEST_FW_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -279,4 +278,3 @@ void dump_data   (void);
 void exit_fw     (void);
 
 
-#endif /* _JTEST_FW_H_ */

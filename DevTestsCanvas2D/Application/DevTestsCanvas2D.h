@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCANVAS2D_H_
-#define _DEVTESTSCANVAS2D_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -203,4 +202,3 @@ class DEVTESTSCANVAS2D : public APPFLOWGRAPHICS, public XFSMACHINE
 #pragma endregion
 
 
-#endif

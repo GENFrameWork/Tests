@@ -1,5 +1,4 @@
-#ifndef _JTEST_DEFINE_H_
-#define _JTEST_DEFINE_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Macros and Defines */
@@ -34,4 +33,3 @@
         init_values                                             \
     }
 
-#endif /* _JTEST_DEFINE_H_ */

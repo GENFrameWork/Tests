@@ -1,5 +1,4 @@
-#ifndef _ARR_DESC_H_
-#define _ARR_DESC_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -217,4 +216,3 @@ typedef struct ARR_DESC_struct
                                        arr_desc_ptr,    \
                                        idx)))
 
-#endif /* _ARR_DESC_H_ */

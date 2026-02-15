@@ -1,5 +1,4 @@
-#ifndef _JTEST_GROUP_CALL_H_
-#define _JTEST_GROUP_CALL_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -123,4 +122,3 @@
             JTEST_SET_CURRENT_GROUP(__jtest_temp_group_ptr);            \
         } while (0)
 
-#endif /* _JTEST_GROUP_CALL_H_ */

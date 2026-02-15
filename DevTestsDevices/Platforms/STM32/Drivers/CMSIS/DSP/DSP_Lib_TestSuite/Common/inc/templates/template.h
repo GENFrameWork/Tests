@@ -1,5 +1,4 @@
-#ifndef _TEMPLATE_H_
-#define _TEMPLATE_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Looping and Iteration */
@@ -85,4 +84,3 @@
 #define TEMPLATE_CALL_FN(fn, fn_args)           \
         fn fn_args
 
-#endif /* _TEMPLATE_H_ */

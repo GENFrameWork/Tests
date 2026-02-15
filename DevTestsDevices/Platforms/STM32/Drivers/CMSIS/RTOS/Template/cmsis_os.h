@@ -42,8 +42,7 @@
  *---------------------------------------------------------------------------*/
  
  
-#ifndef _CMSIS_OS_H
-#define _CMSIS_OS_H
+#pragma once
  
 /// \note MUST REMAIN UNCHANGED: \b osCMSIS identifies the CMSIS-RTOS API version.
 #define osCMSIS           0x10002      ///< API version (main [31:16] .sub [15:0])
@@ -695,4 +694,3 @@ osStatus osMailFree (osMailQId queue_id, void *mail);
 }
 #endif
  
-#endif  // _CMSIS_OS_H

@@ -44,8 +44,7 @@
  *    Initial Release
  *---------------------------------------------------------------------------*/
  
-#ifndef CMSIS_OS2_H_
-#define CMSIS_OS2_H_
+#pragma once
  
 #ifndef __NO_RETURN
 #if   defined(__CC_ARM)
@@ -753,4 +752,3 @@ osStatus_t osMessageQueueDelete (osMessageQueueId_t mq_id);
 }
 #endif
  
-#endif  // CMSIS_OS2_H_

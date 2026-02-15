@@ -1,5 +1,4 @@
-#ifndef _STATISTICS_TESTS_H_
-#define _STATISTICS_TESTS_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Test/Group Declarations */
@@ -12,4 +11,3 @@ JTEST_DECLARE_GROUP(rms_tests);
 JTEST_DECLARE_GROUP(std_tests);
 JTEST_DECLARE_GROUP(var_tests);
 
-#endif /* _STATISTICS_TESTS_H_ */

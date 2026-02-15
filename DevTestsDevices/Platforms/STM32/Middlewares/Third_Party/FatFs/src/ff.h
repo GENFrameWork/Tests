@@ -18,8 +18,7 @@
 /----------------------------------------------------------------------------*/
 
 
-#ifndef _FATFS
-#define _FATFS	68300	/* Revision ID */
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -358,4 +357,3 @@ int ff_del_syncobj (_SYNC_t sobj);				/* Delete a sync object */
 }
 #endif
 
-#endif /* _FATFS */

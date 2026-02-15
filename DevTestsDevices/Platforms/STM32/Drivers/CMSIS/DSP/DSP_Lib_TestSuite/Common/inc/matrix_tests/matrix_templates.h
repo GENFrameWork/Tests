@@ -1,5 +1,4 @@
-#ifndef _MATRIX_TEMPLATES_H_
-#define _MATRIX_TEMPLATES_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -367,4 +366,3 @@
         }                                                           \
 
 
-#endif /* _MATRIX_TEMPLATES_H_ */

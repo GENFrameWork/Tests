@@ -1,5 +1,4 @@
-#ifndef _JTEST_UTIL_H_
-#define _JTEST_UTIL_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -24,4 +23,3 @@
         (struct_ptr)->attribute = (value);                          \
     } while (0)
 
-#endif /* _JTEST_UTIL_H_ */

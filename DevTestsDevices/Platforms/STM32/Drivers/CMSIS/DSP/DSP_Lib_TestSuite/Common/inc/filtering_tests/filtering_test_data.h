@@ -1,5 +1,4 @@
-#ifndef FILTERING_TEST_DATA_H
-#define FILTERING_TEST_DATA_H
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -78,4 +77,3 @@ extern const int32_t filtering_tap_delay[FILTERING_MAX_NUMTAPS];
 
 /* Float Inputs */
 
-#endif

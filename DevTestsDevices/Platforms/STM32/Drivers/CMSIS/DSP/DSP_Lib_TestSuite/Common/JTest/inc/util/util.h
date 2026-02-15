@@ -1,5 +1,4 @@
-#ifndef _UTIL_H_
-#define _UTIL_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Macros and Defines */
@@ -49,4 +48,3 @@
 #define BOUND(low, high, value)                 \
     MAX(MIN(high, value), low)
 
-#endif /* _UTIL_H_ */

@@ -1,5 +1,4 @@
-#ifndef _MATRIX_TESTS_H_
-#define _MATRIX_TESTS_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Test/Group Declarations */
@@ -14,4 +13,3 @@ JTEST_DECLARE_GROUP(mat_sub_tests);
 JTEST_DECLARE_GROUP(mat_trans_tests);
 JTEST_DECLARE_GROUP(mat_scale_tests);
 
-#endif /* _MATRIX_TESTS_H_ */

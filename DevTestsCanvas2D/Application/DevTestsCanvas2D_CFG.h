@@ -26,8 +26,7 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 
-#ifndef _DEVTESTSCANVAS2D_CFG_H_
-#define _DEVTESTSCANVAS2D_CFG_H_
+#pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 #pragma region INCLUDES
@@ -107,5 +106,4 @@ class DEVTESTSCANVAS2D_CFG : public APPFLOWCFG
 #pragma endregion
 
 
-#endif
 

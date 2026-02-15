@@ -1,5 +1,4 @@
-#ifndef _JTEST_TEST_H_
-#define _JTEST_TEST_H_
+#pragma once
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -97,4 +96,3 @@ typedef struct JTEST_TEST_struct
 #define JTEST_TEST_IS_ENABLED(jtest_test_ptr)                           \
     (JTEST_TEST_FLAG(jtest_test_ptr, enabled) == JTEST_TEST_FLAG_SET)
 
-#endif /* _JTEST_TEST_H_ */
