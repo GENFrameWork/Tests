@@ -481,13 +481,15 @@ bool DEVTESTSCONSOLE::AppProc_Update()
                                                                                                     #endif                  
                                                                                                   }                                                          
                                                                                                 break;
-                                                            
-                                                              
+
+                                                                                default       : break;                                                                                                                          
                                                             
                                                           }
                                                         break;
 
           case DEVTESTSCONSOLE_XFSMSTATE_END          : break;
+
+                                        default       : break;          
 
         }
     }
@@ -507,6 +509,8 @@ bool DEVTESTSCONSOLE::AppProc_Update()
                                                         break;
                                                         
               case DEVTESTSCONSOLE_XFSMSTATE_END      : break;
+
+                                        default       : break;
             }
         }
     }

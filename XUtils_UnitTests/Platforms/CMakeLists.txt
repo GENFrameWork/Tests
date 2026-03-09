@@ -15,15 +15,16 @@ set(GEN_DIRECTORY "../../..")
 
 option(DEBUG_FEATURE                                            "Debug mode"                                              ON )
 option(XTRACE_FEATURE                                           "XTrace"                                                  ON )
-option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )
-                        
+option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )                        
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
+
+option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
                         
 option(XSLEEP_FEATURE                                           "XSleep"                                                  ON )
 option(XUUID_FEATURE                                            "UUID functions"                                          ON )    
                         
-#option(LINUX_VISUALSTUDIOCODEPAGE_FEATURE                       "Linux CodePage Editor Visual Studio CP1252"              ON )   
-option(LINUX_VISUALSTUDIOUTF8_FEATURE                           "Linux CodePage Editor UTF8"                              ON )   
+#option(LINUX_VISUALSTUDIO_CP1252_FEATURE                       "Linux CodePage Editor Visual Studio CP1252"              ON )   
+option(LINUX_VISUALSTUDIO_UTF8_FEATURE                          "Linux CodePage Editor UTF8"                              ON )   
                                                     
 option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
                         
@@ -35,7 +36,7 @@ option(GOOGLETEST_FEATURE                                       "Google Test fun
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Main.cmake") 
 
                      
 # --------------------------------------------------------------------
@@ -63,11 +64,11 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTe
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_CreateProject.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CreateProject.cmake") 
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Libraries.cmake") 
 

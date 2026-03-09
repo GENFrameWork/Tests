@@ -18,6 +18,8 @@ option(XTRACE_FEATURE                                           "XTrace"        
 option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
 
+option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
+
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
        
 option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
@@ -66,7 +68,7 @@ add_definitions(${APP_CFG_DEVTESTSCANVAS2D})
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Main.cmake") 
                    
                    
 # --------------------------------------------------------------------
@@ -86,11 +88,11 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/DevTestsCanva
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_CreateProject.txt")
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CreateProject.cmake")
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Libraries.cmake") 
 

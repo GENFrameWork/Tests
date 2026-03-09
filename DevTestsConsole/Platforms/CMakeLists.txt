@@ -10,19 +10,16 @@ project(devtestsconsole)
 set(GEN_DIRECTORY "../../..") 
 
 
-# Compile Selection
-include("${GEN_DIRECTORY}/Common/cmake/Main/GEN_CMakeLists_Main_Platform-Compiler.txt") 
-
-
 # --------------------------------------------------------------------
 # Activate features/Defines
 
 option(DEBUG_FEATURE                                            "Debug mode"                                              ON )
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
-
 option(XTRACE_FEATURE                                           "XTrace"                                                  ON )
 option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with the Internet"        ON )                        
 option(XFEEDBACK_CONTROL_FEATURE                                "XFeedback Control"                                       ON )  
+
+option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
 
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
 
@@ -134,6 +131,12 @@ option(APPFLOW_CFG_DIOLOCATION_FEATURE                          "Application Flo
 
 option(IDENTIFICATION_FEATURE                                   "Identification"                                          ON )
      
+
+# --------------------------------------------------------------------
+# Compile Selection
+include("${GEN_DIRECTORY}/Common/cmake/Main/GEN_Main_Platform-Compiler.cmake") 
+
+
 if(COMPILE_FOR_WINDOWS)   
     
   option(WINDOWS_XVIRTUALDESKTOPMANAGER_FEATURE                 "Windows Virtual Desktop Manager"                         ON )
@@ -160,7 +163,7 @@ add_definitions(${APP_CFG_DEVTESTSCONSOLE})
 # --------------------------------------------------------------------
 # Main CMakeList of GEN
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Main.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Main.cmake") 
 
                         
 # --------------------------------------------------------------------
@@ -198,11 +201,11 @@ endif()
 # --------------------------------------------------------------------
 # Create proyect 
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_CreateProject.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_CreateProject.cmake") 
 
 
 # --------------------------------------------------------------------
 # Add Libraries
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CMakeLists_Libraries.txt") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_Libraries.cmake") 
 
