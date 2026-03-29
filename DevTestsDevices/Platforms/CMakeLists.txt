@@ -101,13 +101,8 @@ endif()
 
 
 # --------------------------------------------------------------------
-# Create proyect 
+# End Proyect 
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CreateProject.cmake") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_End.cmake")
 
-
-# --------------------------------------------------------------------
-# Add Libraries
-
-include("${GEN_DIRECTORY}/Common/cmake/GEN_Libraries.cmake") 
 

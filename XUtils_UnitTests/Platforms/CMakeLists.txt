@@ -18,18 +18,18 @@ option(XTRACE_FEATURE                                           "XTrace"        
 option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )                        
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
 
+option(LINUX_VISUALSTUDIO_UTF8_FEATURE                          "Linux CodePage Editor UTF8"                              ON )   
+
 option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
                         
 option(XSLEEP_FEATURE                                           "XSleep"                                                  ON )
 option(XUUID_FEATURE                                            "UUID functions"                                          ON )    
-                        
-#option(LINUX_VISUALSTUDIO_CP1252_FEATURE                       "Linux CodePage Editor Visual Studio CP1252"              ON )   
-option(LINUX_VISUALSTUDIO_UTF8_FEATURE                          "Linux CodePage Editor UTF8"                              ON )   
-                                                    
+
+option(DIO_FEATURE                                              "Input/Output"                                            ON )
+                                                                            
 option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
                         
 option(GOOGLETEST_FEATURE                                       "Google Test functionality"                               ON )
-#option(GOOGLETEST_EXECFORDISCOVER_FEATURE                       "Google Test Execution for discovery"                     ON )
 
 
 
@@ -60,15 +60,8 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTe
 list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XUUID.cpp")
 
 
-
 # --------------------------------------------------------------------
-# Create proyect 
+# End Proyect 
 
-include("${GEN_DIRECTORY}/Common/cmake/GEN_CreateProject.cmake") 
-
-
-# --------------------------------------------------------------------
-# Add Libraries
-
-include("${GEN_DIRECTORY}/Common/cmake/GEN_Libraries.cmake") 
+include("${GEN_DIRECTORY}/Common/cmake/GEN_End.cmake")
 
