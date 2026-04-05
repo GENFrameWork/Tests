@@ -18,9 +18,11 @@ option(XTRACE_FEATURE                                           "XTrace"        
 option(XTRACE_NOINTERNET_FEATURE                                "No need for trace dependencies with Internet"            ON )                        
 option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control"                                         ON )
 
+option(COVERAGE_CREATEINFO_FEATURE                              "Coverage - Create Info"                                  ON ) 
+
 option(LINUX_VISUALSTUDIO_UTF8_FEATURE                          "Linux CodePage Editor UTF8"                              ON )   
 
-option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
+#option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
                         
 option(XSLEEP_FEATURE                                           "XSleep"                                                  ON )
 option(XUUID_FEATURE                                            "UUID functions"                                          ON )    
