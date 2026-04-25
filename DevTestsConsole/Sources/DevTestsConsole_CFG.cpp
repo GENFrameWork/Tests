@@ -84,7 +84,7 @@ bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
 *---------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance(bool ini)
 {
-  if(!instance) instance = new DEVTESTSCONSOLE_CFG(ini?APPLICATION_NAMEFILE:NULL);
+  if(!instance) instance = GEN_NEW DEVTESTSCONSOLE_CFG(ini?APPLICATION_NAMEFILE:NULL);
 
   return (*instance);
 }

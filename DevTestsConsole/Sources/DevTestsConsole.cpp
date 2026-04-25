@@ -444,7 +444,7 @@ bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_Update()
 {
-  if(GetEvent()==DEVTESTSCONSOLE_XFSMEVENT_NONE) // Not new event
+  if(GetEvent()==DEVTESTSCONSOLE_XFSMEVENT_NONE) // Not GEN_NEW event
     {
       switch(GetCurrentState())
         {
@@ -1092,7 +1092,7 @@ bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
 
   for(int c=0; c<11; c++)
     {
-      XSTRING* string = new XSTRING();
+      XSTRING* string = GEN_NEW XSTRING();
       if(string)
         {
           string->Set(__L("hola"));
@@ -1311,12 +1311,12 @@ bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
 
   for(int c=0; c<nchild; c++)
     {
-      XSTRING* subnodedata = new XSTRING();
+      XSTRING* subnodedata = GEN_NEW XSTRING();
       if(subnodedata)
         {
           subnodedata->Format(__L("%2d Child"), c+1);
 
-          XTREE_NODE_TEST* subnode = new XTREE_NODE_TEST(subnodedata);
+          XTREE_NODE_TEST* subnode = GEN_NEW XTREE_NODE_TEST(subnodedata);
           if(subnode)
             {
               node->AddChild(subnode);
@@ -1352,12 +1352,12 @@ bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexchild)
 {
-  XSTRING* subnodedata = new XSTRING();
+  XSTRING* subnodedata = GEN_NEW XSTRING();
   if(!subnodedata) return false;
 
   subnodedata->Format(__L("%2d Insert Child"), indexchild);
 
-  XTREE_NODE_TEST* subnode = new XTREE_NODE_TEST(subnodedata);
+  XTREE_NODE_TEST* subnode = GEN_NEW XTREE_NODE_TEST(subnodedata);
   if(subnode)
     {
       Test_XTree_AddChilds(subnode, 5);
@@ -1386,12 +1386,12 @@ bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
   XSTRING*          rootdata  = NULL;
   XTREE_NODE_TEST*  root      = NULL;
 
-  rootdata = new XSTRING();
+  rootdata = GEN_NEW XSTRING();
   if(!rootdata) return false;
 
   rootdata->Set("Root");
 
-  root = new XTREE_NODE_TEST(rootdata);
+  root = GEN_NEW XTREE_NODE_TEST(rootdata);
   if(!root)
     {
       delete rootdata;
@@ -1943,13 +1943,13 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
 {
-  DIOSCRAPERWEBPUBLICIP*        publicip        = new DIOSCRAPERWEBPUBLICIP;
-  DIOSCRAPERWEBGEOLOCATIONIP*   geolocationip   = new DIOSCRAPERWEBGEOLOCATIONIP;
-  DIOSCRAPERWEBSEXNAME*         sexname         = new DIOSCRAPERWEBSEXNAME;
-  DIOSCRAPERWEBUSERAGENTID*     useragentID     = new DIOSCRAPERWEBUSERAGENTID;
-  DIOSCRAPERWEBTRANSLATION*     translation     = new DIOSCRAPERWEBTRANSLATION;
-  DIOSCRAPERWEBMACMANUFACTURER* macmanufactured = new DIOSCRAPERWEBMACMANUFACTURER;
-  DIOSCRAPERWEBWEATHER*         weather         = new DIOSCRAPERWEBWEATHER;
+  DIOSCRAPERWEBPUBLICIP*        publicip        = GEN_NEW DIOSCRAPERWEBPUBLICIP;
+  DIOSCRAPERWEBGEOLOCATIONIP*   geolocationip   = GEN_NEW DIOSCRAPERWEBGEOLOCATIONIP;
+  DIOSCRAPERWEBSEXNAME*         sexname         = GEN_NEW DIOSCRAPERWEBSEXNAME;
+  DIOSCRAPERWEBUSERAGENTID*     useragentID     = GEN_NEW DIOSCRAPERWEBUSERAGENTID;
+  DIOSCRAPERWEBTRANSLATION*     translation     = GEN_NEW DIOSCRAPERWEBTRANSLATION;
+  DIOSCRAPERWEBMACMANUFACTURER* macmanufactured = GEN_NEW DIOSCRAPERWEBMACMANUFACTURER;
+  DIOSCRAPERWEBWEATHER*         weather         = GEN_NEW DIOSCRAPERWEBWEATHER;
 
   XSTRING localIP;
 
@@ -2172,7 +2172,7 @@ bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
 *---------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
 {
-  DIOMPSSE* MPSSE = new DIOMPSSE();
+  DIOMPSSE* MPSSE = GEN_NEW DIOMPSSE();
   if(!MPSSE)  return false;
 
   bool status = false;
@@ -2251,7 +2251,7 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
 {
   bool status = false;
   
-  DIODNSPROTOCOL_MITM_SERVER* mitmserver = new DIODNSPROTOCOL_MITM_SERVER();
+  DIODNSPROTOCOL_MITM_SERVER* mitmserver = GEN_NEW DIODNSPROTOCOL_MITM_SERVER();
   if(!mitmserver)
     {
       return status;
@@ -2315,13 +2315,13 @@ bool DEVTESTSCONSOLE::Test_DIOCheckTCPIPConnections(DEVTESTSCONSOLE* tests)
   DIOCHECKTCPIPCONNECTIONS*   checkTCPIPconnections         = NULL;
   bool                        status                        = false;
 
-  checkinternetconnection = new DIOCHECKINTERNETCONNECTION(10);
+  checkinternetconnection = GEN_NEW DIOCHECKINTERNETCONNECTION(10);
   if(checkinternetconnection)
     {
       //haveinternetconnection = checkinternetconnection->Check();
     }
 
-  checkTCPIPconnections = new DIOCHECKTCPIPCONNECTIONS();
+  checkTCPIPconnections = GEN_NEW DIOCHECKTCPIPCONNECTIONS();
   if(checkTCPIPconnections)
     {
       XDWORD connectionID = 0x55AA55AA;
@@ -2416,7 +2416,7 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
   MAC.Set(MACdata);
   broadcastIP.Set(__L("192.168.0.255"));
 
-  wakeonlan = new DIOWAKEONLAN();
+  wakeonlan = GEN_NEW DIOWAKEONLAN();
   if(!wakeonlan) return status;
 
   status = wakeonlan->SendActivation(&MAC, &broadcastIP);
@@ -2458,14 +2458,14 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
       HASH* hash = NULL;
       switch(c)
         {
-          case  0 :  hash = new HASHCRC32();                    leyend = __L("CRC32");      break;
-          case  1 :  hash = new HASHMD5();                      leyend = __L("MD5");        break;
-          case  2 :  hash = new HASHSHA1();                     leyend = __L("SHA1");       break;
-          case  3 :  hash = new HASHSHA2(HASHSHA2TYPE_224);     leyend = __L("SHA2 224");   break;
-          case  4 :  hash = new HASHSHA2(HASHSHA2TYPE_256);     leyend = __L("SHA2 256");   break;
-          case  5 :  hash = new HASHSHA2(HASHSHA2TYPE_384);     leyend = __L("SHA2 384");   break;
-          case  6 :  hash = new HASHSHA2(HASHSHA2TYPE_512);     leyend = __L("SHA2 512");   break;
-          case  7 :  hash = new HASHWHIRLPOOL();                leyend = __L("Whirpool");   break;
+          case  0 :  hash = GEN_NEW HASHCRC32();                    leyend = __L("CRC32");      break;
+          case  1 :  hash = GEN_NEW HASHMD5();                      leyend = __L("MD5");        break;
+          case  2 :  hash = GEN_NEW HASHSHA1();                     leyend = __L("SHA1");       break;
+          case  3 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_224);     leyend = __L("SHA2 224");   break;
+          case  4 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);     leyend = __L("SHA2 256");   break;
+          case  5 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);     leyend = __L("SHA2 384");   break;
+          case  6 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_512);     leyend = __L("SHA2 512");   break;
+          case  7 :  hash = GEN_NEW HASHWHIRLPOOL();                leyend = __L("Whirpool");   break;
         }
 
       if(!hash) return false;
@@ -2559,11 +2559,11 @@ bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 			CIPHER*		cipher = NULL;
 			switch(c)
 				{
-					case  0 :  cipher = new CIPHER();						leyend = __L("XOR (base)");	  break;
-					case  1 :  cipher = new CIPHERDES();				leyend = __L("DES");			    break;
-					case  2 :  cipher = new CIPHER3DES();				leyend = __L("3DES");			    break;										
-					case  3 :  cipher = new CIPHERAES();				leyend = __L("AES");			    break;	
-					case  4 :  cipher = new CIPHERBLOWFISH();		leyend = __L("Blowfish");	    break;						
+					case  0 :  cipher = GEN_NEW CIPHER();						leyend = __L("XOR (base)");	  break;
+					case  1 :  cipher = GEN_NEW CIPHERDES();				leyend = __L("DES");			    break;
+					case  2 :  cipher = GEN_NEW CIPHER3DES();				leyend = __L("3DES");			    break;										
+					case  3 :  cipher = GEN_NEW CIPHERAES();				leyend = __L("AES");			    break;	
+					case  4 :  cipher = GEN_NEW CIPHERBLOWFISH();		leyend = __L("Blowfish");	    break;						
 				}
 					
 			if(cipher) 
@@ -2629,7 +2629,7 @@ xpathtarget.Create(3 , xpathgeneric.Get(), __L("cacert")  , __L(".h"));
 
 //status = trustedrootcertificates.GenerateEmbeddedHeadere(&xpath, &xpathtarget);
 
-	CIPHERKEYSFILEPEM* filekeys = new CIPHERKEYSFILEPEM();	
+	CIPHERKEYSFILEPEM* filekeys = GEN_NEW CIPHERKEYSFILEPEM();	
   if(filekeys) 
     {
       status = true;
@@ -2662,7 +2662,7 @@ xpathtarget.Create(3 , xpathgeneric.Get(), __L("cacert")  , __L(".h"));
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 {
-  CIPHERRSA* cipher = new CIPHERRSA();
+  CIPHERRSA* cipher = GEN_NEW CIPHERRSA();
 	if(!cipher) return false; 
 
   bool status = false;
@@ -2673,7 +2673,7 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 	XPATHSMANAGER::GetInstance().GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathgeneric);
 	xpath.Create(3 , xpathgeneric.Get(), __L("keys"), CIPHERKEYSFILEGKF_EXT);	
 	
-	CIPHERKEYSFILEGKF*		filekeys   = new CIPHERKEYSFILEGKF(xpath);	
+	CIPHERKEYSFILEGKF*		filekeys   = GEN_NEW CIPHERKEYSFILEGKF(xpath);	
 	CIPHERKEYPUBLICRSA*		publickey  = NULL;
 	CIPHERKEYPRIVATERSA*	privatekey = NULL;		
 		
@@ -3185,7 +3185,7 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
   DIOURL      url;     
   bool        status          = false;  
   
-  ntp = new DIONTP();
+  ntp = GEN_NEW DIONTP();
   if(!ntp)
     {
       return status;   
@@ -3527,7 +3527,7 @@ bool DEVTESTSCONSOLE::Test_I2C_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 {	
 	tests->console->PrintMessage(__L(" I2C Test START..."),1,true,true);	
 		
-	DIOI2CGPIOMCP2317* mcp2317 = new DIOI2CGPIOMCP2317;
+	DIOI2CGPIOMCP2317* mcp2317 = GEN_NEW DIOI2CGPIOMCP2317;
 	if(!mcp2317) return false;
 	
 	if(mcp2317->Ini(1, 0x23, 10))
@@ -3593,7 +3593,7 @@ bool DEVTESTSCONSOLE::Test_SPI_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 	tests->console->PrintMessage(__L(" SPI Test START..."),1,true,true);	
 		
   /*
-	DIOSPIGPIOMCP23S17* mcp23s17 = new DIOSPIGPIOMCP23S17();
+	DIOSPIGPIOMCP23S17* mcp23s17 = GEN_NEW DIOSPIGPIOMCP23S17();
 	if(!mcp23s17) return false;
 	
 	if(mcp23s17->Ini(0, 10))
@@ -3758,7 +3758,7 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 
 	tests->console->Printf(__L("\n Creando dispositivo... \n"), 1 , true, true);	
 
-	DIOSTREAMUARTCONFIG* diostreamcfg = new DIOSTREAMUARTCONFIG();
+	DIOSTREAMUARTCONFIG* diostreamcfg = GEN_NEW DIOSTREAMUARTCONFIG();
 	if(diostreamcfg)
     {
 	    diostreamcfg->SetFromString(__L("/dev/ttyUSB2,115200,8,N,1,NONE"));
@@ -3766,7 +3766,7 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 	    DIOSTREAMUART* diostream = (DIOSTREAMUART*)DIOFACTORY::GetInstance().CreateStreamIO(diostreamcfg);
 	    if(diostream) 
         {
-	        DIOATCMDGSM* dioatcmdgsm =  new DIOATCMDGSM(diostream);
+	        DIOATCMDGSM* dioatcmdgsm =  GEN_NEW DIOATCMDGSM(diostream);
 	        if(dioatcmdgsm) 
             {					
 	            tests->console->Printf(__L(" Comprobando dispositivo... \n"), 1 , true, true);	
@@ -3914,7 +3914,7 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 
   XSTRING			string;		
 
-	DIOSNMP* snmp = new DIOSNMP();
+	DIOSNMP* snmp = GEN_NEW DIOSNMP();
 	if(snmp)  
     {	
 	    status = snmp->Open(__L("47.61.135.23"), DIOSNMP_DEFAULT_PORT, false);
@@ -3958,13 +3958,13 @@ bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
   root = fileJSON.GetRoot();
   if(!root)
     {
-      root = new XFILEJSONOBJECT();
+      root = GEN_NEW XFILEJSONOBJECT();
       if(!root) return false;
 
       fileJSON.SetRoot(root);
     }
 
-  XFILEJSONOBJECT* first_obj = new XFILEJSONOBJECT();
+  XFILEJSONOBJECT* first_obj = GEN_NEW XFILEJSONOBJECT();
   if(first_obj)
     {
        XFILEJSON_ADDVALUE(first_obj, __L("number1"), (int)10);
@@ -4556,7 +4556,7 @@ bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
   bool        status = false;
 
 
-  xlicense = new XLICENSE();
+  xlicense = GEN_NEW XLICENSE();
   if(!xlicense)		
     {
       return false;
@@ -4710,13 +4710,13 @@ bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
   XTIMER          xtimercadence;
   bool            status   = false;
 
-  xscheduler = new XSCHEDULER();
+  xscheduler = GEN_NEW XSCHEDULER();
   if(!xscheduler) 
     {
       return false;
     }
 
-  xtask = new XSCHEDULERTASK(xscheduler);
+  xtask = GEN_NEW XSCHEDULERTASK(xscheduler);
   if(xtask) 
     {     
       xdatetimecadence.SetToZero();
@@ -4773,7 +4773,7 @@ bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
   DIODYNDNS_MANAGER*  dyndnsmanager;
   bool							  status = false;	
 
-  dyndnsmanager = new DIODYNDNS_MANAGER();
+  dyndnsmanager = GEN_NEW DIODYNDNS_MANAGER();
   if(!dyndnsmanager)
     {
       return false; 
@@ -4883,7 +4883,7 @@ bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
   XPATH             xpathzipfile;  
 	bool              status      = false;
 
- 	manager = new COMPRESSMANAGER();
+ 	manager = GEN_NEW COMPRESSMANAGER();
   if(manager)
     {
 	    compressor = manager->Create(COMPRESSBASE_TYPE_ZIP);
@@ -4915,7 +4915,7 @@ bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
 	xpathzipfile.Add(__L("test.zip"));
 
 								
-	XFILEZIP* zipfile = new XFILEZIP();		
+	XFILEZIP* zipfile = GEN_NEW XFILEZIP();		
 	if(zipfile) 
     {
 	    status = zipfile->Open(xpathzipfile);
@@ -5179,7 +5179,7 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
   DIOLINUXDBUS_MESSAGE  reply;  
   
 
-  DIOLINUXDBUS* dbus = new DIOLINUXDBUS();
+  DIOLINUXDBUS* dbus = GEN_NEW DIOLINUXDBUS();
   if(dbus)
     {
       if(dbus->Ini())
@@ -5362,7 +5362,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
   bool                       status     = false;
    
   /* 
-  XFILETXT* xfiletxtdevices =  new XFILETXT();
+  XFILETXT* xfiletxtdevices =  GEN_NEW XFILETXT();
   if(xfiletxtdevices)
     {
       XPATH xpathdevices;
@@ -5387,7 +5387,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                   int index = line.Find(__L("I:"), true);
                   if(index == 0)
                     {
-                      INPLINUXDEVICEID* deviceID = new INPLINUXDEVICEID();
+                      INPLINUXDEVICEID* deviceID = GEN_NEW INPLINUXDEVICEID();
                       if(deviceID)
                         {
                           do{ line = xfiletxtdevices->GetLine(c);

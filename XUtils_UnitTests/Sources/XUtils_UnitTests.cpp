@@ -37,25 +37,13 @@
 #include "XUtils_UnitTests.h"
 
 #ifdef GOOGLETEST_ACTIVE
-
-  #ifdef XMEMORY_CONTROL_ACTIVE        
-    #undef new
-  #endif
-
-  #include "gtest/gtest.h"
-
-  #ifdef XMEMORY_CONTROL_ACTIVE        
-    #define new new(GEN_MODULE_EXEC, GEN_LINE_EXEC)
-  #endif
-
+#include "gtest/gtest.h"
 #endif
 
 #include "VersionFrameWork.h"
 
 #include "XTranslation_GEN.h"
 #include "XTranslation.h"
-
-
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/

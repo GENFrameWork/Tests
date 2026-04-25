@@ -78,7 +78,7 @@ static void EnsureXSleepInstance()
 {
   if(!XSLEEP::GetIsInstanced())
     {
-      XSLEEP* instance = new XSLEEP();
+      XSLEEP* instance = GEN_NEW XSLEEP();
       XSLEEP::SetInstance(instance);
     }
 }
@@ -206,7 +206,7 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
   XSLEEP* originalinstance = NULL;
   if(XSLEEP::GetIsInstanced()) originalinstance = &XSLEEP::GetInstance();
 
-  XSLEEP* testinstance = new XSLEEP();
+  XSLEEP* testinstance = GEN_NEW XSLEEP();
   EXPECT_NE(testinstance, nullptr);
 
   EXPECT_TRUE(XSLEEP::SetInstance(testinstance));
@@ -265,7 +265,7 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, DelInstanceTwice)
   XSLEEP* originalinstance = NULL;
   if(XSLEEP::GetIsInstanced()) originalinstance = &XSLEEP::GetInstance();
 
-  XSLEEP* testinstance = new XSLEEP();
+  XSLEEP* testinstance = GEN_NEW XSLEEP();
   EXPECT_NE(testinstance, nullptr);
 
   EXPECT_TRUE(XSLEEP::SetInstance(testinstance));

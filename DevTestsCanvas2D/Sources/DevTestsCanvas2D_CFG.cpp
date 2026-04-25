@@ -84,7 +84,7 @@ bool DEVTESTSCANVAS2D_CFG::GetIsInstanced()
 *---------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D_CFG& DEVTESTSCANVAS2D_CFG::GetInstance(bool ini)
 {
-  if(!instance) instance = new DEVTESTSCANVAS2D_CFG(APPLICATION_NAMEFILE);
+  if(!instance) instance = GEN_NEW DEVTESTSCANVAS2D_CFG(APPLICATION_NAMEFILE);
 
   return (*instance);
 }

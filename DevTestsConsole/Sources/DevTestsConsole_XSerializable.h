@@ -114,7 +114,7 @@ class TESTSERIALIZABLE : public XSERIALIZABLE
 
                                       for(int c=0; c<10; c++)
                                         {
-                                          TESTSERIALIZABLE2* ser = new TESTSERIALIZABLE2();
+                                          TESTSERIALIZABLE2* ser = GEN_NEW TESTSERIALIZABLE2();
                                           if(ser)
                                             {
                                               vector_ser.Add(ser);

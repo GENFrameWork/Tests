@@ -355,7 +355,7 @@ bool DEVTESTSCANVAS2D::AppProc_FirstUpdate()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::AppProc_Update()
 {
-  if(GetEvent()==DEVTESTSCANVAS2D_XFSMEVENT_NONE) // Not new event
+  if(GetEvent()==DEVTESTSCANVAS2D_XFSMEVENT_NONE) // Not GEN_NEW event
     {
       switch(GetCurrentState())
         {
@@ -555,7 +555,7 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
   XPATH           xpath;
   GRPBITMAPFILE*  bitmapfile;
 
-  bitmapfile = new GRPBITMAPFILE();
+  bitmapfile = GEN_NEW GRPBITMAPFILE();
   if(!bitmapfile) return false;
 
   if(!backgroundbmp)
@@ -580,7 +580,7 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
       xpathbitmapref.Slash_Add();
       xpathbitmapref.Add(__L("ref.png"));
 
-      GRPBITMAPFILE* bitmapfileref = new GRPBITMAPFILE(xpathbitmapref);
+      GRPBITMAPFILE* bitmapfileref = GEN_NEW GRPBITMAPFILE(xpathbitmapref);
       if(bitmapfileref)
         {                                         
           GRPBITMAP* bitmapref = bitmapfileref->Load();         
