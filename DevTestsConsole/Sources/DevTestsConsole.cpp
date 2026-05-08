@@ -1394,7 +1394,7 @@ bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
   root = GEN_NEW XTREE_NODE_TEST(rootdata);
   if(!root)
     {
-      delete rootdata;
+      GEN_DELETE rootdata;
       return false;
     }
 
@@ -2147,13 +2147,13 @@ bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
 
       }
 
-  delete publicip;
-  delete geolocationip;
-  delete sexname;
-  delete useragentID;
-  delete translation;
-  delete macmanufactured;
-  delete weather;
+  GEN_DELETE publicip;
+  GEN_DELETE geolocationip;
+  GEN_DELETE sexname;
+  GEN_DELETE useragentID;
+  GEN_DELETE translation;
+  GEN_DELETE macmanufactured;
+  GEN_DELETE weather;
 
   return true;
 }
@@ -2186,7 +2186,7 @@ bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
       MPSSE->Close();
     }
 
-  delete MPSSE;
+  GEN_DELETE MPSSE;
 
   return status;
 }
@@ -2292,7 +2292,7 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
     }
 
 
-  delete mitmserver;  
+  GEN_DELETE mitmserver;  
 
   return status;
 }
@@ -2342,14 +2342,14 @@ bool DEVTESTSCONSOLE::Test_DIOCheckTCPIPConnections(DEVTESTSCONSOLE* tests)
 
   if(checkTCPIPconnections)
     {
-      delete checkTCPIPconnections;
+      GEN_DELETE checkTCPIPconnections;
       checkTCPIPconnections = NULL;
     }
 
 
   if(checkinternetconnection)
     {
-      delete checkinternetconnection;
+      GEN_DELETE checkinternetconnection;
       checkinternetconnection = NULL;
     }
 
@@ -2421,7 +2421,7 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
 
   status = wakeonlan->SendActivation(&MAC, &broadcastIP);
 
-  delete wakeonlan;
+  GEN_DELETE wakeonlan;
 
   return status;
 }
@@ -2471,7 +2471,7 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
       if(!hash) return false;
 
       tests->Test_Hash(hash, input, leyend.Get());
-      delete hash;
+      GEN_DELETE hash;
     }
 
   return true;
@@ -2590,7 +2590,7 @@ bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 
           if(!status) break;
 
-					delete cipher;
+					GEN_DELETE cipher;
 				}
 		}
 
@@ -2643,7 +2643,7 @@ xpathtarget.Create(3 , xpathgeneric.Get(), __L("cacert")  , __L(".h"));
         }
     }
 
-  delete filekeys;
+  GEN_DELETE filekeys;
 
   return status;
 }
@@ -2720,9 +2720,9 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 		
 	XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Test RSA keys : %s"), (status?__L("Ok."):__L("Fail.")));	
 
-	delete filekeys;
+	GEN_DELETE filekeys;
 	
-	delete cipher;
+	GEN_DELETE cipher;
 
 	return status;
 }
@@ -2942,7 +2942,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), line.Get());                                 
     
 
-  delete diostream;
+  GEN_DELETE diostream;
   
   return status;
 }
@@ -3198,7 +3198,7 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
     }
    else
     {
-      delete ntp;
+      GEN_DELETE ntp;
       return status;
     }
 
@@ -3212,7 +3212,7 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
 
   status = ntp->GetTime(url, DIONTP_DEFAULTTIMEOUT, GEN_XSYSTEM.HardwareUseLittleEndian(), (*xdatetime_local));
          
-  delete ntp;
+  GEN_DELETE ntp;
 
   GEN_XFACTORY.DeleteDateTime(xdatetime_local);
    
@@ -3571,7 +3571,7 @@ bool DEVTESTSCONSOLE::Test_I2C_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 				}
 		}
 
-	delete mcp2317;
+	GEN_DELETE mcp2317;
 	
   return true;	
 }
@@ -3622,7 +3622,7 @@ bool DEVTESTSCONSOLE::Test_SPI_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 				}
 		}
 
-	delete mcp23s17;
+	GEN_DELETE mcp23s17;
   */
 	
   return true;	
@@ -3879,13 +3879,13 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 
 		            } else tests->console->Printf(__L(" Dispositivo de comandos AT NO accesible!\n"));	
 									
-	            delete dioatcmdgsm;
+	            GEN_DELETE dioatcmdgsm;
            }
 
           DIOFACTORY::GetInstance().DeleteStreamIO(diostream);
         }
 			
-      delete diostreamcfg;																					    
+      GEN_DELETE diostreamcfg;																					    
 		}
 								
 	tests->console->Printf(__L("\n Terminada conexion AT.\n"), 1, true, true);	
@@ -3929,7 +3929,7 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 			    snmp->Close();
         }
 
-      delete snmp;
+      GEN_DELETE snmp;
 		}     
 
   #endif   	
@@ -4654,7 +4654,7 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
   xfileJSON.EncodeAllLines(true);  
   xfileJSON.ShowTraceJSON(XTRACE_COLOR_GREEN);
 
-  delete serializationmethod;
+  GEN_DELETE serializationmethod;
 
   GEN_XFACTORY.DeleteRand(xrand);
 
@@ -4751,7 +4751,7 @@ bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
     }
 
   tests->UnSubscribeEvent(XEVENT_TYPE_SCHEDULER, xscheduler);
-  delete xscheduler;
+  GEN_DELETE xscheduler;
    
   return status;
 }
@@ -4791,7 +4791,7 @@ bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
 	
   status = dyndnsmanager->AssingAll();
 
-  delete dyndnsmanager;
+  GEN_DELETE dyndnsmanager;
   
 	return status;
 }
@@ -4889,7 +4889,7 @@ bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
 	    compressor = manager->Create(COMPRESSBASE_TYPE_ZIP);
       if(!compressor)
         {
-          delete manager;
+          GEN_DELETE manager;
           return status;
         }    
     }
@@ -5264,7 +5264,7 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
           status = dbus->End();      
         }
  
-      delete dbus;
+      GEN_DELETE dbus;
     }
 
   #endif 
@@ -5502,7 +5502,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
                               XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[Input Device] Event [%d] Type: %15s Device [%s]"), deviceID->GetEventIndex(), typestr.Get(), deviceID->GetName()->Get());                         
                               #endif                                               
                             } 
-                           else delete deviceID;                                 
+                           else GEN_DELETE deviceID;                                 
                         }   
                     }
                 }
@@ -5511,7 +5511,7 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
           xfiletxtdevices->Close();
         }
 
-      delete xfiletxtdevices;
+      GEN_DELETE xfiletxtdevices;
     }
 
   */

@@ -578,7 +578,7 @@ bool DEVTESTSDEVICES::I2CTest_6AxisTrackingLSM303DLHC(DEVTESTSDEVICES* tests, in
           lsm303dlhc->End();
         }
 
-      delete lsm303dlhc;
+      GEN_DELETE lsm303dlhc;
     }    
 
   return status;
@@ -678,7 +678,7 @@ bool DEVTESTSDEVICES::I2CTest_ADDAConverterPCF8591(DEVTESTSDEVICES* tests, int p
           converterPCF8591->End();
         }
 
-      delete converterPCF8591;
+      GEN_DELETE converterPCF8591;
     }
 
   return status;
@@ -808,7 +808,7 @@ bool DEVTESTSDEVICES::I2CTest_AirQualityCCS811(DEVTESTSDEVICES* tests, int port,
         } 
     }
 
-  delete airqualityCCS811;
+  GEN_DELETE airqualityCCS811;
   
   GEN_XFACTORY.DeleteTimer(timerwakeup);  
 
@@ -947,7 +947,7 @@ bool DEVTESTSDEVICES::I2CTest_EEprom24XXX(DEVTESTSDEVICES* tests, int port, int 
 		    }
 
       eeprom24xxx->End();
-	    delete eeprom24xxx;
+	    GEN_DELETE eeprom24xxx;
 
     }
 
@@ -1015,7 +1015,7 @@ bool DEVTESTSDEVICES::I2CTest_GPIOMCP2317(DEVTESTSDEVICES* tests, int port, int 
       
       mcp2317->End();
       
-      delete mcp2317;
+      GEN_DELETE mcp2317;
     }
 
   return status;
@@ -1073,7 +1073,7 @@ bool DEVTESTSDEVICES::I2CTest_GPIOPCF8574(DEVTESTSDEVICES* tests, int port, int 
 					
 			pcf8574->End();
 			
-      delete pcf8574;
+      GEN_DELETE pcf8574;
     }  
 
   return status;
@@ -1134,7 +1134,7 @@ bool DEVTESTSDEVICES::I2CTest_LightSensorTSL2561(DEVTESTSDEVICES* tests, int por
           lightsensor->End();
         }
   
-      delete lightsensor;
+      GEN_DELETE lightsensor;
     }
 
   return status;
@@ -1186,13 +1186,13 @@ bool DEVTESTSDEVICES::I2CTest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int por
               XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("Clear Display ... "));        
               status = OLEDdisplaySSD1306->Clear(0xFF);
 
-              delete [] buffer;
+              GEN_DELETE_ARRAY buffer;
             }
 
           OLEDdisplaySSD1306->End();
         }
 
-      delete OLEDdisplaySSD1306;
+      GEN_DELETE OLEDdisplaySSD1306;
     }
 
   return status;
@@ -1274,7 +1274,7 @@ bool DEVTESTSDEVICES::I2CTest_PWMControlerPCA9685(DEVTESTSDEVICES* tests, int po
 
        pca9685->End();
 				  
-	     delete pca9685;
+	     GEN_DELETE pca9685;
     }
 
   return status;
@@ -1324,7 +1324,7 @@ bool DEVTESTSDEVICES::I2CTest_TemHumSensorAM2315(DEVTESTSDEVICES* tests, int por
       
       temhumsensorAM2315->End();
       
-      delete temhumsensorAM2315;
+      GEN_DELETE temhumsensorAM2315;
     }
    
   return status;
@@ -1378,7 +1378,7 @@ bool DEVTESTSDEVICES::I2CTest_TemHumSensorSHT20(DEVTESTSDEVICES* tests, int port
 
         } else XTRACE_PRINTCOLOR(4,__L("Error to connect I2C device..."));
 
-      delete temhumsensorSHT20;
+      GEN_DELETE temhumsensorSHT20;
     }
   return status;
 }
@@ -1421,7 +1421,7 @@ bool DEVTESTSDEVICES::I2CTest_MonitorGaugeLTC2942(DEVTESTSDEVICES* tests, int po
       
       monitorgaugeLTC2942->End();
       
-      delete monitorgaugeLTC2942;
+      GEN_DELETE monitorgaugeLTC2942;
     }
 
   return status;
@@ -1469,7 +1469,7 @@ bool DEVTESTSDEVICES::I2CTest_BatteryChargerBQ24295(DEVTESTSDEVICES* tests, int 
       
       batterychargerBQ24295->End();
       
-      delete batterychargerBQ24295;
+      GEN_DELETE batterychargerBQ24295;
     }
 
   return status;
@@ -1513,7 +1513,7 @@ bool DEVTESTSDEVICES::I2CTest_TouchSensorAT42QT1060(DEVTESTSDEVICES* tests, int 
       
       touchsensorAT42QT1060->End();
       
-      delete touchsensorAT42QT1060;
+      GEN_DELETE touchsensorAT42QT1060;
     }
 
   return status;
@@ -1708,7 +1708,7 @@ bool DEVTESTSDEVICES::SPITest_LCDDisplayPCF8833(DEVTESTSDEVICES* tests, int port
                       nframes++;
                     }  
 
-                  delete [] buffer;
+                  GEN_DELETE_ARRAY buffer;
 
                 } else XTRACE_PRINTCOLOR(1, __L("Error Create Buffer Random..."));
            
@@ -1722,7 +1722,7 @@ bool DEVTESTSDEVICES::SPITest_LCDDisplayPCF8833(DEVTESTSDEVICES* tests, int port
       status = LCDdisplayPCF8833->End();
       XTRACE_PRINTCOLOR(1, __L("[LCD Display PCF8833] End : %s "), status?__L("Ok!"):__L("Error!"));
 
-      delete LCDdisplayPCF8833;
+      GEN_DELETE LCDdisplayPCF8833;
     }
      
   return status;
@@ -1784,7 +1784,7 @@ bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int por
                   GEN_XSLEEP.Seconds(1);
                 }
 
-              delete [] buffer;
+              GEN_DELETE_ARRAY buffer;
             }
      
         } 
@@ -1793,7 +1793,7 @@ bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int por
       status = OLEDdisplaySSD1306->End();
       XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[Oled Display SSD1306] End : %s "), status?__L("Ok!"):__L("Error!"));      
 
-      delete OLEDdisplaySSD1306;      
+      GEN_DELETE OLEDdisplaySSD1306;      
     }
 
   return status;
@@ -1850,7 +1850,7 @@ bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1331(DEVTESTSDEVICES* tests, int por
           XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[Oled Display SSD1331] End : %s "), status?__L("Ok!"):__L("Error!"));      
         }
       
-      delete OLEDdisplaySSD1331;
+      GEN_DELETE OLEDdisplaySSD1331;
     }        
 
   return status;
@@ -1907,7 +1907,7 @@ bool DEVTESTSDEVICES::SPITest_TFTDisplayILI9341(DEVTESTSDEVICES* tests, int port
           XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("[TFT Display ILI9341] End : %s "), status?__L("Ok!"):__L("Error!"));      
         }
 
-      delete TFTdisplayILI9341;
+      GEN_DELETE TFTdisplayILI9341;
     }
 
   return status;
@@ -1974,7 +1974,7 @@ bool DEVTESTSDEVICES::SPITest_TFTDisplayST7789(DEVTESTSDEVICES* tests, int port,
       
       GEN_DIOGPIO.SetValue(DEVTESTSDEVICES_GPIOENTRYID_SPI_DISPLAY_CS, false);
 
-      delete TFTdisplayST7789;
+      GEN_DELETE TFTdisplayST7789;
     }
 
   return status;

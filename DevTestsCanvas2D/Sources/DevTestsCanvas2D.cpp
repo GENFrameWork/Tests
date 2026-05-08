@@ -421,7 +421,7 @@ bool DEVTESTSCANVAS2D::AppProc_End()
 
   if(backgroundbmp)
     {
-      delete backgroundbmp;
+      GEN_DELETE backgroundbmp;
       backgroundbmp = NULL;
     }
 
@@ -615,7 +615,7 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
     }
   
   
-  delete bitmapfile;
+  GEN_DELETE bitmapfile;
   
 
   screen->SetPosition(APPFLOW_CFG.Screen_GetPosX(), APPFLOW_CFG.Screen_GetPosY());
@@ -755,7 +755,7 @@ bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
           XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[Vector File Load] Error %d "), result);
         }
 
-      delete vectorfile;
+      GEN_DELETE vectorfile;
     }
 
   return true;

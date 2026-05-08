@@ -216,7 +216,7 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
   if(originalinstance)
     {
       EXPECT_TRUE(XSLEEP::SetInstance(originalinstance));
-      delete testinstance;
+      GEN_DELETE testinstance;
     }
   else
     {
