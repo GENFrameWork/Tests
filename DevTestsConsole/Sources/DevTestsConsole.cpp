@@ -424,7 +424,7 @@ bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 {
   //--------------------------------------------------------------------------------------
 
-  GEN_XFACTORY_CREATE(xtimerupdateconsole,CreateTimer())
+  xtimerupdateconsole = GEN_XFACTORY.CreateTimer();
   if(!xtimerupdateconsole) return false;
 
   //--------------------------------------------------------------------------------------
@@ -3191,7 +3191,7 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
       return status;   
     }
 
-  GEN_XFACTORY_CREATE(xdatetime_local, CreateDateTime())
+  xdatetime_local = GEN_XFACTORY.CreateDateTime();
   if(xdatetime_local) 
     {
       xdatetime_local->Read();
