@@ -730,7 +730,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
                                                       { false  , Test_CipherECDSAX25519             , __L("Test Cipher Curve 25519")              },         
                                                       { false  , Test_DIOStreamTCPIP                , __L("Test DIO Stream TCPIP")                },
-                                                      { true   , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
+                                                      { false  , Test_DIOStreamTLS                  , __L("Test DIO Stream TLS")                  },        
                                                       { false  , Test_SystemCPUUsage                , __L("Test System CPU Usage")                },         
                                                       { false  , Test_AppAlerts                     , __L("Test App Alerts")                      },  
                                                       { false  , Test_BluetoothEnum                 , __L("Test Bluetooth Enum")                  },                                          
@@ -746,7 +746,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager          , __L("Test Notifications Manager")           }, 
                                                       { false  , Test_ATCommandGSM                  , __L("Test AT Command GSM ")                 }, 
                                                       { false  , Test_SNMP                          , __L("Test SNMP ")                           },
-                                                      { false  , Test_XFileJSON                     , __L("Test XFile JSON")                      },  
+                                                      { true   , Test_XFileJSON                     , __L("Test XFile JSON")                      },  
                                                       { false  , Test_XFileXML                      , __L("Test XFile XML")                       },  
                                                       { false  , Test_XFileRIFF                     , __L("Test XFile RIFF")                      },
                                                       { false  , Test_DIOStreamUSBConnection        , __L("Test DIOStreamConnection")             },
@@ -3951,6 +3951,57 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
 {
+  bool status = true;
+
+  XCHAR envpath[MAX_PATH] = { 0 };
+  if(!GetEnvironmentVariableW(__L("LOCALAPPDATA"), envpath, MAX_PATH))
+    {         
+      return false;
+    }
+      
+  XPATH     pathJSON;
+  XFILEJSON fileJSON;
+
+  pathJSON.Set(envpath);
+  pathJSON.Slash_Add();
+  pathJSON.Add(__L("Microsoft\\Edge\\User Data"));
+  pathJSON.Slash_Add();
+  pathJSON.Add(__L("Local State"));
+     
+  if(fileJSON.Open(pathJSON, false))
+    {
+      if(fileJSON.ReadAllFile())
+        {
+          if(fileJSON.DecodeAllLines())
+            {
+              XFILEJSONOBJECT* object = fileJSON.GetObj(__L("profile"));
+              if(object) 
+                { 
+                  XVECTOR<XFILEJSONVALUE*>* values = object->GetValues();
+                  if(values)
+                    {
+                      for(int c=0; c<values->GetSize(); c++)
+                        {
+                          XFILEJSONVALUE* value = values->Get(c);
+                          if(value)
+                            {
+                              if(!value->GetName()->Compare(__L("info_cache"), true))
+                                {        
+                                  XVARIANT* variant = value->GetValue();
+                          
+                                  XSTRING profilename = ((XSTRING*)(variant->GetData()))->Get();
+
+                                  break;                                            
+                                } 
+                            }                    
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+  /*  
   XFILEJSON         fileJSON;
   XFILEJSONOBJECT*  root;
   bool              status = false;
@@ -4007,7 +4058,7 @@ bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
     {
       if(nprinters < printerarray_jsv->GetValues()->GetSize())  nprinters = printerarray_jsv->GetValues()->GetSize();
     }
-
+  */
 
 
   return status;

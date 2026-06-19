@@ -87,7 +87,7 @@ option(DIO_BUSPIRATE_FEATURE                                    "Data Input/Outp
 option(DIO_LEDNEOPIXELWS2812B_RPI5_FEATURE                      "Led Neopixel WS2812B Raspberry Pi 5"                     ON )
 option(DIO_PROTOCOL_CLI_BUS_FEATURE                             "Data Input/Output Protocol in CLI Bus"                   ON )
 #option(DIO_PCAP_FEATURE                                         "Data Input/Output Cap"                                   ON )
-option(DIO_IEC60870_5_FEATURE                                   "IEC60870_5 Protocol"                                     ON ) 
+#option(DIO_IEC60870_5_FEATURE                                   "IEC60870_5 Protocol"                                     ON ) 
 option(DIO_DNSPROTOCOL_MITM_SERVER                              "DNS Protocol Man in the Middle Server"                   ON )
 option(DIO_DYNDNS_FEATURE                                       "DynDNS"                                                  ON )
 option(DIO_WEBSERVER_RESOLVEENDPOINT_FEATURE                    "Web Server Resolved End Point"                           ON )
