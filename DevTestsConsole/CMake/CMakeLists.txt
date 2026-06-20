@@ -83,6 +83,8 @@ option(DIO_ONOTIFICATIONS_MANAGER_FEATURE                       "Notifications N
 option(DIO_WIFIMANAGERMODE_FEATURE                              "Data Input/Output Wifi Manager Mode"                     ON ) 
 option(DIO_SNMP_FEATURE                                         "SNMP (Simple Network Management Protocol)"               ON )
 option(DIO_MODBUSCLIENT_FEATURE                                 "Data Input/Output ModBus Client (UART/TCPIP)"            ON )
+
+option(DIO_IEC60870_5_FEATURE                                   "DIO IEC 60870-5"                                         ON )
 option(DIO_BUSPIRATE_FEATURE                                    "Data Input/Output Bus Pirate 4.0"                        ON )
 option(DIO_LEDNEOPIXELWS2812B_RPI5_FEATURE                      "Led Neopixel WS2812B Raspberry Pi 5"                     ON )
 option(DIO_PROTOCOL_CLI_BUS_FEATURE                             "Data Input/Output Protocol in CLI Bus"                   ON )
