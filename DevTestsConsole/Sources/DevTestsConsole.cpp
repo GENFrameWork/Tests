@@ -3951,18 +3951,18 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
 {
-  bool status = true;
-
-  XCHAR envpath[MAX_PATH] = { 0 };
-  if(!GetEnvironmentVariableW(__L("LOCALAPPDATA"), envpath, MAX_PATH))
-    {         
-      return false;
-    }
-      
+  XSTRING   envpath;      
   XPATH     pathJSON;
   XFILEJSON fileJSON;
+  bool      status = true;
 
-  pathJSON.Set(envpath);
+  GEN_XSYSTEM.GetEnviromentVariable(envpath);
+  if(envpath.IsEmpty())
+    {
+      return false;
+    }
+
+  pathJSON.Set(envpath.Get());
   pathJSON.Slash_Add();
   pathJSON.Add(__L("Microsoft\\Edge\\User Data"));
   pathJSON.Slash_Add();

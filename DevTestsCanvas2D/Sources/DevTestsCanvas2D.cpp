@@ -86,7 +86,7 @@
 #include "GRPVectorFile_XEvent.h"
 #include "GRPVectorFile.h"
 
-#include "GRPCanvas.h"
+#include "GRP2DCanvas.h"
 #include "GRPScreen.h"
 #include "GRPViewPort.h"
 #include "GRPBitmapFile.h"
@@ -324,7 +324,7 @@ bool DEVTESTSCANVAS2D::AppProc_FirstUpdate()
   //--------------------------------------------------------------------------------
 
   GRPVIEWPORT* viewport = NULL;
-  GRPCANVAS*   canvas   = NULL;
+  GRP2DCANVAS*   canvas   = NULL;
 
   viewport = GetMainScreen()->GetViewport(0);
   if(viewport) canvas =   viewport->GetCanvas();
@@ -642,7 +642,7 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
 bool DEVTESTSCANVAS2D::DrawFrame()
 {
   GRPVIEWPORT*      viewport = NULL;
-  GRPCANVAS*        canvas   = NULL;
+  GRP2DCANVAS*        canvas   = NULL;
   GRPRECTINT*       rect     = NULL;
 
   viewport = GetMainScreen()->GetViewport(0);
