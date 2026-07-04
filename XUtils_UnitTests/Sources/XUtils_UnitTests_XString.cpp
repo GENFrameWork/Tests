@@ -925,13 +925,28 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersToEnd)
 * --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteLastCharacterAndZeros) 
 {
-  XSTRING string = __L("12345000");
+  XSTRING string = __L("12345.000");
 
   EXPECT_TRUE(string.DeleteLastZeros());
   EXPECT_EQ(0, string.Compare(__L("12345"), false));
 
   EXPECT_TRUE(string.DeleteLastCharacter());
   EXPECT_EQ(0, string.Compare(__L("1234"), false));
+
+  string = __L("12345.6700");
+
+  EXPECT_TRUE(string.DeleteLastZeros());
+  EXPECT_EQ(0, string.Compare(__L("12345.67"), false));
+
+  string = __L("12345000");
+
+  EXPECT_FALSE(string.DeleteLastZeros());
+  EXPECT_EQ(0, string.Compare(__L("12345000"), false));
+
+  string = __L("12345.67");
+
+  EXPECT_FALSE(string.DeleteLastZeros());
+  EXPECT_EQ(0, string.Compare(__L("12345.67"), false));
 }
 
 

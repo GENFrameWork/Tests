@@ -22,7 +22,7 @@ option(COVERAGE_CREATEINFO_FEATURE                              "Coverage - Crea
 
 option(LINUX_VISUALSTUDIO_UTF8_FEATURE                          "Linux CodePage Editor UTF8"                              ON )   
 
-#option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
+option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
                         
 option(XSLEEP_FEATURE                                           "XSleep"                                                  ON )
 option(XUUID_FEATURE                                            "UUID functions"                                          ON )    
