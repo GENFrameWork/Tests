@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       XUtils_UnitTests_XUUID.cpp
-* 
+*
 * @class      XUTILS_UNITTESTS_XUUID
-* @brief      XUtils Unit Tests for XUUID class
+* @brief      XUtils unit tests for XUUID class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -46,32 +44,27 @@
 #include "XUUID.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         static XDWORD GenerateDWord(XRAND* xrand)
-* @brief      DWORd  generate Dword
-* @ingroup    
-* 
-* @param[in]  xrand : 
-* 
-* @return     static : 
-* 
+* @brief      Generates a random DWORD value.
+* @ingroup    UNIT TEST
+*
+* @param[in]  xrand : random generator used to build the value.
+*
+* @return     XDWORD : generated DWORD value.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 static XDWORD GenerateDWord(XRAND* xrand)
 {
@@ -86,13 +79,6 @@ namespace TEST_XUUID
 {
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber1)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  SetByNumber1
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber1) 
 {
   XRAND* xrand = GEN_XFACTORY.CreateRand();
@@ -123,13 +109,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber1)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber2)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  SetByNumber2
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber2) 
 {
   XRAND* xrand = GEN_XFACTORY.CreateRand();
@@ -149,13 +128,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetByNumber2)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByBuffer)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByBuffer
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, AssignByBuffer) 
 {
   XUUID     ID[2]; 
@@ -174,13 +146,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByBuffer)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByString)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByString
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, AssignByString) 
 {
   XUUID     ID[2]; 
@@ -199,15 +164,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByString)
 }
 
 
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyTo)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByCopyTo
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyTo) 
 {
   XUUID     ID[2]; 
@@ -226,13 +182,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyTo)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyFrom)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  AssignByCopyFrom
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyFrom) 
 {
   XUUID     ID[2]; 
@@ -251,13 +200,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, AssignByCopyFrom)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, ConstructorIsEmpty)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  ConstructorIsEmpty
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, ConstructorIsEmpty) 
 {
   XUUID ID;
@@ -266,13 +208,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, ConstructorIsEmpty)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, EmptyResetValues)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  EmptyResetValues
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, EmptyResetValues) 
 {
   XUUID   ID;
@@ -287,13 +222,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, EmptyResetValues)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, CompareDetectsDifferences)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  CompareDetectsDifferences
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, CompareDetectsDifferences) 
 {
   XUUID   ID[2];
@@ -313,13 +241,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, CompareDetectsDifferences)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, SetData6CopiesValues)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  SetData6CopiesValues
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, SetData6CopiesValues) 
 {
   XUUID   ID;
@@ -334,13 +255,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetData6CopiesValues)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, StringFormatLength)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  StringFormatLength
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, StringFormatLength) 
 {
   XUUID     ID;
@@ -353,13 +267,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, StringFormatLength)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, SetFromStringEmptyFails)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  SetFromStringEmptyFails
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, SetFromStringEmptyFails) 
 {
   XUUID     ID;
@@ -371,13 +278,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetFromStringEmptyFails)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, GenerateRandomProducesDifferentValues)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  GenerateRandomProducesDifferentValues
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, GenerateRandomProducesDifferentValues) 
 {
   XUUID ID[2];
@@ -401,13 +301,6 @@ TEST(UNITTEST_XUUID_CLASSNAME, GenerateRandomProducesDifferentValues)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XUUID_CLASSNAME, SetAndCopyReturnTrue)
-* @brief      Unit test of UNITTEST_XUUID_CLASSNAME:  SetAndCopyReturnTrue
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XUUID_CLASSNAME, SetAndCopyReturnTrue) 
 {
   XUUID   ID[3];

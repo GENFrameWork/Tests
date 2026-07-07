@@ -1,35 +1,33 @@
-﻿/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @file       XUtils UnitTests_XString.cpp
-* 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @file       XUtils_UnitTests_XString.cpp
+*
 * @class      XUTILS_UNITTESTS_XSTRING
-* @brief      XUtils Unit Tests for XString class
+* @brief      XUtils unit tests for XString class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -44,19 +42,15 @@
 #include "XString.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 char*  unittest_hellostringOEM = (char*)("Hello, world!");
 XCHAR* unittest_hellostring    = __L("Hello, world!");
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -67,15 +61,6 @@ namespace TEST_XSTRING
 {
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorSize)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConstructorSize
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorSize) 
 {
   XSTRING string(32);
@@ -84,15 +69,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorSize)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssignOEM)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConstructorAssignOEM
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssignOEM) 
 {
   XSTRING string(unittest_hellostringOEM);
@@ -101,15 +77,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssignOEM)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssign)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConstructorAssign
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssign) 
 {
   XSTRING string(unittest_hellostring);
@@ -118,15 +85,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssign)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingSize)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConstructorAssingSize
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingSize) 
 {
   XSTRING string(unittest_hellostring, 13);
@@ -136,15 +94,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingSize)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingDirect)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConstructorAssingDirect
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingDirect) 
 {
   XSTRING string(unittest_hellostring, 13);
@@ -154,15 +103,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConstructorAssingDirect)
 }  
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, Set)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  Set
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, Set) 
 {
   XSTRING string;
@@ -173,15 +113,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, Set)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, Add)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  Add
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, Add) 
 {
   XSTRING string;
@@ -192,15 +123,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, Add)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  AssignmentOperator
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator) 
 {
   XSTRING string = unittest_hellostring;
@@ -209,13 +131,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AssignmentOperator)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacter)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME: CompareOneCharacter
-* @ingroup    UNIT_TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacter) 
 {
   XSTRING string = "0";
@@ -224,13 +139,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacter)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME: CompareOneCharacterIgnoreCase
-* @ingroup    UNIT_TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase) 
 {
   XSTRING string = "A";
@@ -239,15 +147,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, CompareOneCharacterIgnoreCase)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertASCII
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII) 
 {
   XSTRING string1 = __L("Hello world!");
@@ -261,15 +160,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertASCII_codepage437
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437) 
 {
   XSTRING string1 = __L("Hello 437! ÇüéâäàåçêëèïîìÄÅÉÖÜñÑ");
@@ -283,16 +173,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage437)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_codepage850 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850) 
 {
   XSTRING string1 = __L("Hello 850! áéíóú üñÑ çÇ ß Øø Åå");
@@ -306,16 +186,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage850)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage852)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_codepage852 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage852) 
 {
   XSTRING string1 = __L("Hello 852! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
@@ -329,16 +199,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage852)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage866)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_codepage866 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage866) 
 {
   XSTRING string1 = __L("Hello 866! Привет мир! Ёё Жж Йй Яя Юю");
@@ -352,16 +212,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_codepage866)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_ISO_8859_1 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1) 
 {
   XSTRING string1 = __L("Hello 8859-1! àèìòù Ññ ÁÉÍÓÚ üç ß");
@@ -375,16 +225,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_1)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_ISO_8859_2 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2) 
 {
   XSTRING string1 = __L("Hello 8859-2! Ąą Ćć Ęę Łł Ńń Óó Śś Źź Żż");
@@ -398,16 +238,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_2)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_ISO_8859_3 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3) 
 {
   XSTRING string1 = __L("Hello 8859-3! Ħħ Ġġ Ċċ Żż àèìòù");
@@ -421,16 +251,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_3)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_ISO_8859_4 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4) 
 {
   XSTRING string1 = __L("Hello 8859-4! Āā Ēē Ģģ Īī Ķķ Ļļ Ņņ Šš Ūū Žž");
@@ -444,16 +264,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_ISO_8859_4)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_WINDOWS_1250 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250) 
 {
   XSTRING string1 = __L("Hello 1250! Ąą Čč Ďď Ęę Ěě Łł Ňň Řř Šš Ťť Ůů Žž");
@@ -467,16 +277,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1250)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_WINDOWS_1251 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251) 
 {
   XSTRING string1 = __L("Hello 1251! Привет мир! Ёё Жж Йй Яя Юю");
@@ -490,16 +290,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1251)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_WINDOWS_1252 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252) 
 {
   XSTRING string1 = __L("Hello 1252! àèìòù Ññ ÁÉÍÓÚ üç € “ ” ‘ ’ — …");
@@ -513,16 +303,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1252)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_WINDOWS_1253 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253) 
 {
   XSTRING string1 = __L("Hello 1253! Γειά σου κόσμε! Αα Ββ Γγ Δδ Εε Ζζ Ηη Θθ");
@@ -536,16 +316,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1253)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254)
-* @brief      Constructor of class
-* @ingroup    
-* 
-* @param[in]  UNITTEST_XSTRING_CLASSNAME : 
-* @param[in]  ConvertASCII_WINDOWS_1254 : 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254) 
 {
   XSTRING string1 = __L("Hello 1254! Türkçe: Ğğ İı Şş Çç Öö Üü");
@@ -559,15 +329,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertASCII_WINDOWS_1254)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF8
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8) 
 {
   XSTRING string1 = __L("แผ่นดินฮั่นเสื่อมโทรมแสนสังเวช");
@@ -581,15 +342,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF8)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF16)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF16
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF16) 
 {
   XSTRING string1 = __L("𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪");
@@ -603,15 +355,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF16)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF32)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertUTF32
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF32) 
 {
   XSTRING string1 = __L("𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪");
@@ -625,16 +368,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertUTF32)
 }
 
 
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, Base64)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  Base64
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, Base64) 
 {
   XSTRING string;
@@ -650,15 +383,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, Base64)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, EmptyAndIsEmpty)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  EmptyAndIsEmpty
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, EmptyAndIsEmpty) 
 {
   XSTRING string;
@@ -677,15 +401,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, EmptyAndIsEmpty)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, OperatorPlusEqual)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  OperatorPlusEqual
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, OperatorPlusEqual) 
 {
   XSTRING string;
@@ -699,15 +414,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, OperatorPlusEqual)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersMiddle)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  DeleteCharactersMiddle
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersMiddle) 
 {
   XSTRING string = __L("abcdef");
@@ -717,15 +423,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersMiddle)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharacterAllString)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  DeleteCharacterAllString
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharacterAllString) 
 {
   XSTRING string = __L("--a--b--");
@@ -735,15 +432,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharacterAllString)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, InsertAtPosition)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  InsertAtPosition
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, InsertAtPosition) 
 {
   XSTRING string = __L("ac");
@@ -753,15 +441,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, InsertAtPosition)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceFirstAndReplaceAll)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ReplaceFirstAndReplaceAll
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceFirstAndReplaceAll) 
 {
   XSTRING string = __L("one two one two");
@@ -774,15 +453,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceFirstAndReplaceAll)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ConvertIntRoundtrip)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ConvertIntRoundtrip
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ConvertIntRoundtrip) 
 {
   XSTRING string;
@@ -792,15 +462,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ConvertIntRoundtrip)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, OperatorsCompareAndEquality)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  OperatorsCompareAndEquality
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, OperatorsCompareAndEquality) 
 {
   XSTRING a = __L("abc");
@@ -818,15 +479,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, OperatorsCompareAndEquality)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, OperatorIndexBounds)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  OperatorIndexBounds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, OperatorIndexBounds) 
 {
   XSTRING string = __L("abcd");
@@ -837,15 +489,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, OperatorIndexBounds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, FillChar)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  FillChar
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, FillChar) 
 {
   XSTRING string = __L("----");
@@ -855,15 +498,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, FillChar)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, FindAndCountCharacter)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  FindAndCountCharacter
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, FindAndCountCharacter) 
 {
   XSTRING string = __L("abcaBCa");
@@ -876,15 +510,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, FindAndCountCharacter)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, FindCharacterEndToStart)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  FindCharacterEndToStart
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, FindCharacterEndToStart) 
 {
   XSTRING string = __L("a-b-c-a");
@@ -894,15 +519,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, FindCharacterEndToStart)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersToEnd)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  DeleteCharactersToEnd
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersToEnd) 
 {
   XSTRING string = __L("abcdef");
@@ -914,15 +530,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteCharactersToEnd)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, DeleteLastCharacterAndZeros)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  DeleteLastCharacterAndZeros
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteLastCharacterAndZeros) 
 {
   XSTRING string = __L("12345.000");
@@ -950,15 +557,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteLastCharacterAndZeros)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, InsertBeyondEnd)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  InsertBeyondEnd
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, InsertBeyondEnd) 
 {
   XSTRING string = __L("abc");
@@ -968,15 +566,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, InsertBeyondEnd)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceNotFound)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  ReplaceNotFound
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceNotFound) 
 {
   XSTRING string = __L("one two");
@@ -987,15 +576,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, ReplaceNotFound)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, DeleteNoCharactersAllString)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  DeleteNoCharactersAllString
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, DeleteNoCharactersAllString) 
 {
   XSTRING string = __L("\t  a \r\n");
@@ -1005,15 +585,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, DeleteNoCharactersAllString)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeGrowAndShrink)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  AdjustSizeGrowAndShrink
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeGrowAndShrink) 
 {
   XSTRING string = __L("abc");
@@ -1032,15 +603,6 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeGrowAndShrink)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeAutoTrim)
-* @brief      Unit test of UNITTEST_XSTRING_CLASSNAME:  AdjustSizeAutoTrim
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeAutoTrim) 
 {
   XSTRING string;

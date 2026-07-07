@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       XUtils_UnitTests.cpp
-* 
+*
 * @class      XUTILS_UNITTESTS
-* @brief      Unit Tests for GEN FrameWork
+* @brief      XUtils unit tests application
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -51,12 +49,9 @@
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 APPLICATIONCREATEINSTANCE(XUTILS_UNITTESTS, unittests)
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -65,12 +60,12 @@ APPLICATIONCREATEINSTANCE(XUTILS_UNITTESTS, unittests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XUTILS_UNITTESTS::XUTILS_UNITTESTS()
-* @brief      Constructor
-* @ingroup    DATAIO
+* @brief      Constructor of class.
+* @ingroup    UNIT TEST
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XUTILS_UNITTESTS::XUTILS_UNITTESTS()
 {
   Clean();
@@ -80,13 +75,12 @@ XUTILS_UNITTESTS::XUTILS_UNITTESTS()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XUTILS_UNITTESTS::~XUTILS_UNITTESTS()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup    DATAIO
+* @brief      Destructor of class.
+* @ingroup    UNIT TEST
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XUTILS_UNITTESTS::~XUTILS_UNITTESTS()
 {
   Clean();
@@ -96,12 +90,12 @@ XUTILS_UNITTESTS::~XUTILS_UNITTESTS()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XUTILS_UNITTESTS::AppProc_Ini()
-* @brief      AppProc_Ini
-* @ingroup    DATAIO
+* @brief      Initializes the application process.
+* @ingroup    UNIT TEST
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUTILS_UNITTESTS::AppProc_Ini()
 {
   GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
@@ -148,15 +142,14 @@ bool XUTILS_UNITTESTS::AppProc_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool XUTILS_UNITTESTS::AppProc_FirstUpdate()
-* @brief      AppProc_FirstUpdate
-* @ingroup    
-* 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Executes the first application update.
+* @ingroup    UNIT TEST
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUTILS_UNITTESTS::AppProc_FirstUpdate()
 {
   return true;
@@ -166,12 +159,12 @@ bool XUTILS_UNITTESTS::AppProc_FirstUpdate()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XUTILS_UNITTESTS::AppProc_Update()
-* @brief      AppProc_Update
-* @ingroup    DATAIO
+* @brief      Executes the application update cycle.
+* @ingroup    UNIT TEST
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUTILS_UNITTESTS::AppProc_Update()
 {
   return false;
@@ -179,31 +172,29 @@ bool XUTILS_UNITTESTS::AppProc_Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool XUTILS_UNITTESTS::AppProc_LastUpdate()
-* @brief      AppProc_LastUpdate
-* @ingroup    DATAIO
-* 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      App Proc Last Update.
+* @ingroup    UNIT TEST
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUTILS_UNITTESTS::AppProc_LastUpdate()
 {
   return false;
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool XUTILS_UNITTESTS::AppProc_End()
-* @brief      AppProc_End
-* @ingroup    DATAIO
+* @brief      Ends the application process.
+* @ingroup    UNIT TEST
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XUTILS_UNITTESTS::AppProc_End()
 {
   return true;
@@ -213,18 +204,15 @@ bool XUTILS_UNITTESTS::AppProc_End()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void XUTILS_UNITTESTS::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup    TEST
+* @brief      Cleans the object internal state.
+* @ingroup    UNIT TEST
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void XUTILS_UNITTESTS::Clean()
 {
 
 }
-
-
 
 

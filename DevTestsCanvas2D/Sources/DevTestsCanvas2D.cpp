@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DevTestsCanvas2D.cpp
-* 
+*
 * @class      DEVTESTSCANVAS2D
-* @brief      Developed Tests Canvas 2D class
+* @brief      Developed tests Canvas 2D class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -108,12 +106,9 @@
 #include "DevTestsCanvas2D_CFG.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -128,18 +123,17 @@ GRP2DCOLOR_RGBA8  colorblue(0, 0, 255);
 GRP2DCOLOR_RGBA8  colorgray(10, 10, 10, 150);
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         DEVTESTSCANVAS2D::DEVTESTSCANVAS2D() : XFSMACHINE(0)
-* @brief      Constructor
-* @ingroup    GRAPHIC
-* 
-* @return     Does not return anything. 
-* 
+*
+* @fn         DEVTESTSCANVAS2D::DEVTESTSCANVAS2D()
+* @brief      Constructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D::DEVTESTSCANVAS2D() :  XFSMACHINE(0)
 {
@@ -148,14 +142,13 @@ DEVTESTSCANVAS2D::DEVTESTSCANVAS2D() :  XFSMACHINE(0)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DEVTESTSCANVAS2D::~DEVTESTSCANVAS2D()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup    GRAPHIC
-* 
-* @return     Does not return anything. 
-* 
+* @brief      Destructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D::~DEVTESTSCANVAS2D()
 {
@@ -164,13 +157,13 @@ DEVTESTSCANVAS2D::~DEVTESTSCANVAS2D()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::InitFSMachine()
-* @brief      InitFSMachine
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Initializes the finite state machine.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::InitFSMachine()
 {
@@ -200,13 +193,13 @@ bool DEVTESTSCANVAS2D::InitFSMachine()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::AppProc_Ini()
-* @brief      AppProc_Ini
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Initializes the application process.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::AppProc_Ini()
 {
@@ -281,13 +274,13 @@ bool DEVTESTSCANVAS2D::AppProc_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::AppProc_FirstUpdate()
-* @brief      AppProc_FirstUpdate
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Executes the first application update.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::AppProc_FirstUpdate()
 {
@@ -345,13 +338,13 @@ bool DEVTESTSCANVAS2D::AppProc_FirstUpdate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::AppProc_Update()
-* @brief      AppProc_Update
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Executes the application update cycle.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::AppProc_Update()
 {
@@ -400,13 +393,13 @@ bool DEVTESTSCANVAS2D::AppProc_Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::AppProc_End()
-* @brief      AppProc_End
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Ends the application process.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::AppProc_End()
 {
@@ -447,13 +440,13 @@ bool DEVTESTSCANVAS2D::AppProc_End()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::UpdateInput()
-* @brief      UpdateInput
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Updates the input state.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::UpdateInput()
 {
@@ -536,17 +529,16 @@ bool DEVTESTSCANVAS2D::UpdateInput()
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
-* @brief      Ini_Graphics
-* @ingroup    GRAPHIC
-* 
-* @param[in]  screen : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Initializes the graphics subsystem.
+* @ingroup    TESTS
+*
+* @param[in]  screen : screen where the graphics resources are initialized.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
 {
@@ -631,13 +623,13 @@ bool DEVTESTSCANVAS2D::Ini_Graphics(GRPSCREEN* screen)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::DrawFrame()
-* @brief      DrawFrame
-* @ingroup    GRAPHIC
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Draws the current frame.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::DrawFrame()
 {
@@ -677,13 +669,13 @@ bool DEVTESTSCANVAS2D::DrawFrame()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::Do_Tests()
-* @brief      Do_Tests
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the configured tests.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Do_Tests()
 {
@@ -704,15 +696,15 @@ bool DEVTESTSCANVAS2D::Do_Tests()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
-* @brief      Test_ScriptLibInputSimulated
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the script lib input simulated test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
 {
@@ -723,15 +715,15 @@ bool DEVTESTSCANVAS2D::Test_ScriptLibInputSimulated(DEVTESTSCANVAS2D* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
-* @brief      Test_LoadVectorFileDXF
+* @brief      Runs the load vector file dxf test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
 {
@@ -763,15 +755,15 @@ bool DEVTESTSCANVAS2D::Test_LoadVectorFileDXF(DEVTESTSCANVAS2D* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void CBUILDER::AdjustLibraries(SCRIPT* script)
-* @brief      AdjustLibraries
-* @ingroup    APPLICATION
-* 
-* @param[in]  script : 
-* 
-* @return     void : does not return anything. 
-* 
+*
+* @fn         void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
+* @brief      Adjusts the script libraries.
+* @ingroup    TESTS
+*
+* @param[in]  script : script instance used to adjust the available libraries.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
 {
@@ -786,16 +778,15 @@ void DEVTESTSCANVAS2D::AdjustLibraries(SCRIPT* script)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D::HandleEvent_Script(SCRIPT_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    APPLICATION
-* 
-* @param[in]  event : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Handles script events.
+* @ingroup    TESTS
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::HandleEvent_Script(SCRIPT_XEVENT* event)
 {
@@ -812,14 +803,15 @@ void DEVTESTSCANVAS2D::HandleEvent_Script(SCRIPT_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D::HandleEvent_VectorFile(GRPVECTORFILE_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
+* @brief      Handles vector file events.
 * @ingroup    TESTS
-* 
-* @param[in]  event : 
-* 
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::HandleEvent_VectorFile(GRPVECTORFILE_XEVENT* event)
 {
@@ -836,16 +828,15 @@ void DEVTESTSCANVAS2D::HandleEvent_VectorFile(GRPVECTORFILE_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D::HandleEvent_Graphics(GRPXEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    GRAPHIC
-* 
-* @param[in]  event : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Handles graphics events.
+* @ingroup    TESTS
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::HandleEvent_Graphics(GRPXEVENT* event)
 {
@@ -862,16 +853,15 @@ void DEVTESTSCANVAS2D::HandleEvent_Graphics(GRPXEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D::HandleEvent(XEVENT* xevent)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    GRAPHIC
-* 
-* @param[in]  xevent : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Handles an event.
+* @ingroup    TESTS
+*
+* @param[in]  xevent : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::HandleEvent(XEVENT* xevent)
 {
@@ -902,14 +892,13 @@ void DEVTESTSCANVAS2D::HandleEvent(XEVENT* xevent)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup    GRAPHIC
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D::Clean()
 {

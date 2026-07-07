@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @file       XUtils_UniTests_XTimer.cpp
-* 
+*
+* @file       XUtils_UnitTests_XTimer.cpp
+*
 * @class      XUTILS_UNITTESTS_XTIMER
-* @brief      XUtils Unit Tests for XTimer class
+* @brief      XUtils unit tests for XTimer class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -47,21 +45,15 @@
 #include "XDateTime.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-
-
 
 
 #ifdef GOOGLETEST_ACTIVE      
@@ -69,15 +61,6 @@ namespace TEST_XTIMER
 {
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTimer_CLASSNAME, ConstructorSize)
-* @brief      Unit test of UNITTEST_XTimer_CLASSNAME:  ConstructorSize
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, ConstructorSize) 
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -89,13 +72,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, ConstructorSize)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, Reset)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  Reset
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, Reset)
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -113,13 +89,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, Reset)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureMilliSeconds)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureMilliSeconds
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureMilliSeconds)
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -138,13 +107,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureMilliSeconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureSeconds)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureSeconds
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureSeconds)
 
 {
@@ -164,13 +126,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureSeconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureToDate)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureToDate
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureToDate)
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -199,13 +154,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureToDate)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureString)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMeasureString
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureString)
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -228,13 +176,6 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureString)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
-* @brief      Unit test of UNITTEST_XTIMER_CLASSNAME:  GetMicroSecondsTickCounter
-* @ingroup    UNIT TEST
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
 {
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
@@ -255,6 +196,5 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
 
 
 #endif
-
 
 

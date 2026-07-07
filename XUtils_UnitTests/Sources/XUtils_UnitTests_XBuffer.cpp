@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       XUtils_UnitTests_XBuffer.cpp
-* 
+*
 * @class      XUTILS_UNITTESTS_XBUFFER
-* @brief      XUtils Unit Tests for XBuffer class
+* @brief      XUtils unit tests for XBuffer class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -45,21 +43,15 @@
 #include "XVariant.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
-
-
 
 
 #ifdef GOOGLETEST_ACTIVE      
@@ -67,15 +59,6 @@ namespace TEST_XBUFFER
 {
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, ConstructorSize)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  ConstructorSize
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorSize) 
 {
   XBUFFER buffer((XDWORD)32);
@@ -84,15 +67,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorSize)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, ConstructorDefault)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  ConstructorDefault
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorDefault)
 {
   XBUFFER buffer;
@@ -102,15 +76,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorDefault)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, ConstructorCopy)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  ConstructorCopy
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorCopy)
 {
   XBUFFER buffer1;
@@ -128,15 +93,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ConstructorCopy)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, SetSizeAndEmpty)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  SetSizeAndEmpty
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, SetSizeAndEmpty)
 {
   XBUFFER buffer;
@@ -151,15 +107,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, SetSizeAndEmpty)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, AddArrayAndGetArray)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  AddArrayAndGetArray
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddArrayAndGetArray)
 {
   XBUFFER buffer;
@@ -178,15 +125,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddArrayAndGetArray)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, InsertByteInMiddle)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  InsertByteInMiddle
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, InsertByteInMiddle)
 {
   XBUFFER buffer;
@@ -203,15 +141,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, InsertByteInMiddle)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, SetByteAtPosition)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  SetByteAtPosition
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, SetByteAtPosition)
 {
   XBUFFER buffer;
@@ -228,15 +157,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, SetByteAtPosition)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, DeleteByte)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  DeleteByte
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, DeleteByte)
 {
   XBUFFER buffer;
@@ -252,15 +172,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, DeleteByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, CopyToAndCopyFrom)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  CopyToAndCopyFrom
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, CopyToAndCopyFrom)
 {
   XBUFFER buffer1;
@@ -287,15 +198,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, CopyToAndCopyFrom)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, AddDoubleAndGetDouble)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  AddDoubleAndGetDouble
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddDoubleAndGetDouble)
 {
   XBUFFER buffer;
@@ -309,15 +211,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddDoubleAndGetDouble)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, CompareAndOperators)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  CompareAndOperators
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, CompareAndOperators)
 {
   XBUFFER buffer1;
@@ -347,15 +240,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, CompareAndOperators)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, AddAll)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  AddAll
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddAll)
 {
   XBUFFER buffer;
@@ -371,15 +255,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddAll)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddBool)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddBool
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddBool)
 {
   XBUFFER buffer;
@@ -389,15 +264,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddBool)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddByte)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddByte
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddByte)
 {
   XBUFFER buffer;
@@ -407,15 +273,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddWord)
 {
   XBUFFER buffer;
@@ -425,15 +282,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddDWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddDWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddDWord)
 {
   XBUFFER buffer;
@@ -443,15 +291,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddDWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddQWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddQWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddQWord)
 {
   XBUFFER buffer;
@@ -461,15 +300,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddQWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, AddFloat)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  AddFloat
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, AddFloat)
 {
   XBUFFER buffer;
@@ -479,15 +309,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, AddFloat)
 }  
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetByte)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetByte
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetByte)
 {
   XBUFFER buffer;
@@ -501,15 +322,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetArrayByte)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetArrayByte
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetArrayByte)
 {
   XBUFFER buffer;
@@ -523,15 +335,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetArrayByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetWord)
 {
   XBUFFER buffer;
@@ -546,15 +349,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetDWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetDWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetDWord)
 {
   XBUFFER buffer;
@@ -568,15 +362,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetDWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetQWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetQWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetQWord)
 {
   XBUFFER buffer;
@@ -590,15 +375,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetQWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, GetFloat)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  GetFloat
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, GetFloat)
 {
   XBUFFER buffer; 
@@ -612,15 +388,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, GetFloat)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractByte)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractByte
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractByte)
 {
   XBUFFER buffer;
@@ -634,15 +401,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractArrayByte)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractArrayByte
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractArrayByte)
 {
   XBUFFER buffer;
@@ -656,15 +414,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractArrayByte)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractWord)
 {
   XBUFFER buffer;
@@ -678,15 +427,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractDWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractDWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractDWord)
 {
   XBUFFER buffer;
@@ -700,15 +440,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractDWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractQWord)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractQWord
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractQWord)
 {
   XBUFFER buffer;
@@ -722,15 +453,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractQWord)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractFloat)
-* @brief      Unit test of UNITTEST_XBUFFER_CLASSNAME:  ExtractFloat
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractFloat)
 {
   XBUFFER buffer;
@@ -743,15 +465,7 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractFloat)
   EXPECT_EQ(0, buffer.GetSize());
 }
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, PositionAndGetDefault)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  PositionAndGetDefault
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
+
 TEST(UNITTEST_XBUFFER_CLASSNAME, PositionAndGetDefault)
 {
   XBUFFER buffer;
@@ -773,15 +487,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, PositionAndGetDefault)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, SetPosition)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  SetPosition
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, SetPosition)
 {
   XBUFFER buffer;
@@ -800,15 +505,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, SetPosition)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, InsertArrayAtBeginAndEnd)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  InsertArrayAtBeginAndEnd
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, InsertArrayAtBeginAndEnd)
 {
   XBUFFER buffer;
@@ -832,15 +528,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, InsertArrayAtBeginAndEnd)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, FillBufferAndGetPointers)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  FillBufferAndGetPointers
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, FillBufferAndGetPointers)
 {
   XBUFFER buffer;
@@ -859,15 +546,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, FillBufferAndGetPointers)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Swap)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Swap
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, Swap)
 {
   XBUFFER buffer;
@@ -886,15 +564,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Swap)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, CompareWithRawBuffer)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  CompareWithRawBuffer
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, CompareWithRawBuffer)
 {
   XBUFFER buffer;
@@ -909,15 +578,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, CompareWithRawBuffer)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, FindSubBuffer)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  FindSubBuffer
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, FindSubBuffer)
 {
   XBUFFER buffer;
@@ -940,15 +600,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, FindSubBuffer)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, PaddingAddAndDelete)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  PaddingAddAndDelete
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, PaddingAddAndDelete)
 {
   XBUFFER buffer;
@@ -972,15 +623,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, PaddingAddAndDelete)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, BitAddAndGetData)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  BitAddAndGetData
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, BitAddAndGetData)
 {
   XBUFFER buffer;
@@ -1000,15 +642,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, BitAddAndGetData)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, Base64RoundTrip)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  Base64RoundTrip
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, Base64RoundTrip)
 {
   XBUFFER buffer1;
@@ -1027,15 +660,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, Base64RoundTrip)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, DecodeBCD)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  DecodeBCD
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, DecodeBCD)
 {
   XBUFFER buffer;
@@ -1047,15 +671,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, DecodeBCD)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, DecodeBCDLong)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  DecodeBCDLong
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, DecodeBCDLong)
 {
   XBUFFER buffer;
@@ -1069,15 +684,6 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, DecodeBCDLong)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         TEST(UNITTEST_XBuffer_CLASSNAME, EndianGlobalAndLocal)
-* @brief      Unit test of UNITTEST_XBuffer_CLASSNAME:  EndianGlobalAndLocal
-* @ingroup    UNIT TEST
-*
-* @return     Does not return anything.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBUFFER_CLASSNAME, EndianGlobalAndLocal)
 {
   XBUFFER buffer;
@@ -1100,11 +706,9 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, EndianGlobalAndLocal)
 }
 
 
-
 }
 
 
 #endif
-
 
 

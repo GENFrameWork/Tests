@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       XUtils_UnitTests_XBase.cpp
-* 
+*
 * @class      XUTILS_UNITTESTS_XBASE
-* @brief      Unit Tests for XBase functions and defines
+* @brief      XUtils unit tests for XBase functions and defines
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -43,16 +41,12 @@
 #include "XBase.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -63,15 +57,6 @@ namespace TEST_XBASE
 {
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, DecimalNumbers)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  DecimalNumbers
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, DecimalNumbers) 
 {
   float  float1  = 0.0f;
@@ -104,15 +89,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, DecimalNumbers)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, BitPart)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  BitPart
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, BitPart) 
 {
   XBYTE    byte  = 0;
@@ -139,15 +115,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, BitPart)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, BitPart)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  BitPart
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, BitSwap) 
 {
   XWORD    word  = 0;
@@ -165,15 +132,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, BitSwap)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, InvertSign)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  InvertSign
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, InvertSign) 
 {
   int number = InvertSign(-12345);
@@ -181,15 +139,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, InvertSign)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, NumberBCD)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  NumberBCD
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, NumberBCD) 
 {
   XQWORD number1 = DWORDToBCD(12345678);
@@ -200,15 +149,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, NumberBCD)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XBASE_CLASSNAME, RotateBits)
-* @brief      Unit test of UNITTEST_XBASE_CLASSNAME:  RotateBits
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XBASE_CLASSNAME, RotateBits) 
 {
   XBYTE byte1 = RotateBitLeft(0xAA);
@@ -225,8 +165,6 @@ TEST(UNITTEST_XBASE_CLASSNAME, RotateBits)
 }
 
 
-
 #endif
-
 
 

@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DevTestsConsole_CFG.cpp
-* 
+*
 * @class      DEVTESTSCONSOLE_CFG
-* @brief      Developed Tests console CFG class
+* @brief      Developed tests console configuration class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -41,12 +39,9 @@
 #include "DevTestsConsole.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -54,19 +49,18 @@
 DEVTESTSCONSOLE_CFG* DEVTESTSCONSOLE_CFG::instance = NULL;
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool TESTS_CFG::GetIsInstanced()
-* @brief      GetIsInstanced
-* @ingroup
+* @fn         bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
+* @brief      Checks if the singleton instance is created.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
 {
   return instance!=NULL;
@@ -75,13 +69,15 @@ bool DEVTESTSCONSOLE_CFG::GetIsInstanced()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance()
-* @brief      GetInstance
-* @ingroup
+* @fn         DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance(bool ini)
+* @brief      Gets the singleton instance.
+* @ingroup    TESTS
 *
-* @return     DEVTESTSCONSOLE_CFG& :
+* @param[in]  ini : true to initialize the singleton instance; false to return the current instance.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* @return     DEVTESTSCONSOLE_CFG& : reference returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance(bool ini)
 {
   if(!instance) instance = GEN_NEW DEVTESTSCONSOLE_CFG(ini?APPLICATION_NAMEFILE:NULL);
@@ -93,12 +89,12 @@ DEVTESTSCONSOLE_CFG& DEVTESTSCONSOLE_CFG::GetInstance(bool ini)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE_CFG::DelInstance()
-* @brief      DelInstance
-* @ingroup
+* @brief      Deletes the singleton instance.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::DelInstance()
 {
   if(instance)
@@ -114,13 +110,13 @@ bool DEVTESTSCONSOLE_CFG::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
-* @brief      DoVariableMapping
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Maps configuration variables.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
 {
@@ -147,13 +143,13 @@ bool DEVTESTSCONSOLE_CFG::DoVariableMapping()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE_CFG::DoDefault()
-* @brief      DoDefault
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Loads default configuration values.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE_CFG::DoDefault()
 {
@@ -216,12 +212,12 @@ bool DEVTESTSCONSOLE_CFG::DoDefault()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
-* @brief      Database_GetURL
-* @ingroup    APPLICATION
+* @brief      Database Get URL.
+* @ingroup    TESTS
 *
-* @return     XSTRING* :
+* @return     XSTRING* : pointer returned by the operation.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
 {
   return &db_URL;
@@ -231,12 +227,12 @@ XSTRING* DEVTESTSCONSOLE_CFG::Database_GetURL()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
-* @brief      Database_GetPort
-* @ingroup    APPLICATION
+* @brief      Database Get Port.
+* @ingroup    TESTS
 *
-* @return     XDWORD :
+* @return     XDWORD : generated DWORD value.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
 {
   return db_port;
@@ -246,12 +242,12 @@ XDWORD DEVTESTSCONSOLE_CFG::Database_GetPort()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
-* @brief      Database_DatabaseName
-* @ingroup    APPLICATION
+* @brief      Database Database Name.
+* @ingroup    TESTS
 *
-* @return     XSTRING* :
+* @return     XSTRING* : pointer returned by the operation.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
 {
   return &db_databasename;
@@ -261,12 +257,12 @@ XSTRING* DEVTESTSCONSOLE_CFG::Database_DatabaseName()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
-* @brief      Database_GetUser
-* @ingroup    APPLICATION
+* @brief      Database Get User.
+* @ingroup    TESTS
 *
-* @return     XSTRING* :
+* @return     XSTRING* : pointer returned by the operation.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
 {
   return &db_user;
@@ -276,12 +272,12 @@ XSTRING* DEVTESTSCONSOLE_CFG::Database_GetUser()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
-* @brief      Database_GetPassword
-* @ingroup    APPLICATION
+* @brief      Database Get Password.
+* @ingroup    TESTS
 *
-* @return     XSTRING* :
+* @return     XSTRING* : pointer returned by the operation.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
 {
   return &db_password;
@@ -291,12 +287,12 @@ XSTRING* DEVTESTSCONSOLE_CFG::Database_GetPassword()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
-* @brief      Database_GetTimeoutConnection
-* @ingroup    APPLICATION
+* @brief      Database Get Timeout Connection.
+* @ingroup    TESTS
 *
-* @return     int :
+* @return     int : result code returned by the operation.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
 {
   return db_timeoutconnection;
@@ -305,15 +301,15 @@ int DEVTESTSCONSOLE_CFG::Database_GetTimeoutConnection()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPLICATIONCFG(namefile)
-* @brief      Constructor
-* @ingroup
+* @fn         DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile)
+* @brief      Constructor of class.
+* @ingroup    TESTS
 *
-* @param[in]  XCHAR* : name of file of config
+* @param[in]  namefile : configuration file name.
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 {
   Clean();
@@ -328,13 +324,12 @@ DEVTESTSCONSOLE_CFG::DEVTESTSCONSOLE_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCONSOLE_CFG::~DEVTESTSCONSOLE_CFG()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup
+* @brief      Destructor of class.
+* @ingroup    TESTS
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE_CFG::~DEVTESTSCONSOLE_CFG()
 {
   End();
@@ -346,13 +341,12 @@ DEVTESTSCONSOLE_CFG::~DEVTESTSCONSOLE_CFG()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCONSOLE_CFG::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE_CFG::Clean()
 {
 

@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DevTestsCanvas2D_CFG.cpp
-* 
+*
 * @class      DEVTESTSCANVAS2D_CFG
-* @brief      Developed Tests Canvas 2D Config class
+* @brief      Developed tests Canvas 2D configuration class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -41,18 +39,14 @@
 #include "DevTestsCanvas2D.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 DEVTESTSCANVAS2D_CFG* DEVTESTSCANVAS2D_CFG::instance = NULL;
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -61,12 +55,12 @@ DEVTESTSCANVAS2D_CFG* DEVTESTSCANVAS2D_CFG::instance = NULL;
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCANVAS2D_CFG::GetIsInstanced()
-* @brief      GetIsInstanced
-* @ingroup
+* @brief      Checks if the singleton instance is created.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::GetIsInstanced()
 {
   return instance!=NULL;
@@ -76,12 +70,14 @@ bool DEVTESTSCANVAS2D_CFG::GetIsInstanced()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCANVAS2D_CFG& DEVTESTSCANVAS2D_CFG::GetInstance(bool ini)
-* @brief      GetInstance
-* @ingroup
+* @brief      Gets the singleton instance.
+* @ingroup    TESTS
 *
-* @return     DEVTESTSCANVAS2D_CFG& :
+* @param[in]  ini : true to initialize the singleton instance; false to return the current instance.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* @return     DEVTESTSCANVAS2D_CFG& : reference returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D_CFG& DEVTESTSCANVAS2D_CFG::GetInstance(bool ini)
 {
   if(!instance) instance = GEN_NEW DEVTESTSCANVAS2D_CFG(APPLICATION_NAMEFILE);
@@ -93,12 +89,12 @@ DEVTESTSCANVAS2D_CFG& DEVTESTSCANVAS2D_CFG::GetInstance(bool ini)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCANVAS2D_CFG::DelInstance()
-* @brief      DelInstance
-* @ingroup
+* @brief      Deletes the singleton instance.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::DelInstance()
 {
   if(instance)
@@ -114,13 +110,13 @@ bool DEVTESTSCANVAS2D_CFG::DelInstance()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D_CFG::DoVariableMapping()
-* @brief      DoVariableMapping
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Maps configuration variables.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::DoVariableMapping()
 {
@@ -146,13 +142,13 @@ bool DEVTESTSCANVAS2D_CFG::DoVariableMapping()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCANVAS2D_CFG::DoDefault()
-* @brief      DoDefault
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Loads default configuration values.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCANVAS2D_CFG::DoDefault()
 {
@@ -202,13 +198,13 @@ bool DEVTESTSCANVAS2D_CFG::DoDefault()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetPosX()
-* @brief      Screen_GetPosX
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+* @brief      Gets the screen pos x.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetPosX()
 {
@@ -217,13 +213,13 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetPosX()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetPosY()
-* @brief      Screen_GetPosY
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+* @brief      Gets the screen pos y.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetPosY()
 {
@@ -232,15 +228,15 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetPosY()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D_CFG::Screen_SetPosX(int posx)
-* @brief      Screen_SetPosX
-* @ingroup    APPLICATION
-* 
-* @param[in]  posx : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Sets the screen pos x.
+* @ingroup    TESTS
+*
+* @param[in]  posx : screen horizontal position.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D_CFG::Screen_SetPosX(int posx)
 {
@@ -249,15 +245,15 @@ void DEVTESTSCANVAS2D_CFG::Screen_SetPosX(int posx)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCANVAS2D_CFG::Screen_SetPosY(int posy)
-* @brief      Screen_SetPosY
-* @ingroup    APPLICATION
-* 
-* @param[in]  posy : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Sets the screen pos y.
+* @ingroup    TESTS
+*
+* @param[in]  posy : screen vertical position.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D_CFG::Screen_SetPosY(int posy)
 {
@@ -266,13 +262,13 @@ void DEVTESTSCANVAS2D_CFG::Screen_SetPosY(int posy)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetSizeWidth()
-* @brief      Screen_GetSizeWidth
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+*
+* @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetWidth()
+* @brief      Gets the screen width.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetWidth()
 {
@@ -281,13 +277,13 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetSizeHeight()
-* @brief      Screen_GetSizeHeight
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+*
+* @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetHeight()
+* @brief      Gets the screen height.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetHeight()
 {
@@ -296,13 +292,13 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetHeight()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetMaxWidth()
-* @brief      Screen_GetMaxWidth
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+* @brief      Gets the screen max width.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetMaxWidth()
 {
@@ -311,13 +307,13 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetMaxWidth()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         int DEVTESTSCANVAS2D_CFG::Screen_GetMaxHeight()
-* @brief      Screen_GetMaxHeight
-* @ingroup    APPLICATION
-* 
-* @return     int : 
-* 
+* @brief      Gets the screen max height.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 int DEVTESTSCANVAS2D_CFG::Screen_GetMaxHeight()
 {
@@ -327,15 +323,15 @@ int DEVTESTSCANVAS2D_CFG::Screen_GetMaxHeight()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile) : APPLICATIONCFG(namefile)
-* @brief      Constructor
-* @ingroup
+* @fn         DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile)
+* @brief      Constructor of class.
+* @ingroup    TESTS
 *
-* @param[in]  XCHAR* : name of file of config
+* @param[in]  namefile : configuration file name.
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 {
   Clean();
@@ -350,13 +346,12 @@ DEVTESTSCANVAS2D_CFG::DEVTESTSCANVAS2D_CFG(XCHAR* namefile) : APPFLOWCFG(namefil
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSCANVAS2D_CFG::~DEVTESTSCANVAS2D_CFG()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup
+* @brief      Destructor of class.
+* @ingroup    TESTS
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCANVAS2D_CFG::~DEVTESTSCANVAS2D_CFG()
 {
   Clean();
@@ -366,13 +361,12 @@ DEVTESTSCANVAS2D_CFG::~DEVTESTSCANVAS2D_CFG()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCANVAS2D_CFG::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCANVAS2D_CFG::Clean()
 {
   screen_posx         = 0;    
@@ -384,6 +378,5 @@ void DEVTESTSCANVAS2D_CFG::Clean()
   screen_maxwidth     = 0;    
   screen_maxheight    = 0;    
 }
-
 
 

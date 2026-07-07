@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DevTestsDevices.cpp
-* 
+*
 * @class      DEVTESTSDEVICES
-* @brief      Developed Tests Devices I/O  UART / USB / I2C / GPIO  class
+* @brief      Developed tests devices I/O UART USB I2C GPIO class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -77,18 +75,14 @@
 #endif
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 APPLICATIONCREATEINSTANCE(DEVTESTSDEVICES, devtestsdevices)
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -97,12 +91,12 @@ APPLICATIONCREATEINSTANCE(DEVTESTSDEVICES, devtestsdevices)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSDEVICES::DEVTESTSDEVICES()
-* @brief      Constructor
-* @ingroup    DATAIO
+* @brief      Constructor of class.
+* @ingroup    TESTS
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSDEVICES::DEVTESTSDEVICES()
 {
   Clean();
@@ -112,13 +106,12 @@ DEVTESTSDEVICES::DEVTESTSDEVICES()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         DEVTESTSDEVICES::~DEVTESTSDEVICES()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup    DATAIO
+* @brief      Destructor of class.
+* @ingroup    TESTS
 *
 * @return     Does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSDEVICES::~DEVTESTSDEVICES()
 {
   Clean();
@@ -128,12 +121,12 @@ DEVTESTSDEVICES::~DEVTESTSDEVICES()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSDEVICES::AppProc_PlatformIni()
-* @brief      AppProc_PlatformIni
-* @ingroup    DATAIO
+* @brief      Initializes platform-specific resources.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_PlatformIni()
 {
   //--------------------------------------------------------------------------------------
@@ -163,12 +156,12 @@ bool DEVTESTSDEVICES::AppProc_PlatformIni()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSDEVICES::AppProc_Ini()
-* @brief      AppProc_Ini
-* @ingroup    DATAIO
+* @brief      Initializes the application process.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_Ini()
 {
   XSTRING string;
@@ -209,15 +202,14 @@ bool DEVTESTSDEVICES::AppProc_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::AppProc_FirstUpdate()
-* @brief      AppProc_FirstUpdate
-* @ingroup    
-* 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Executes the first application update.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_FirstUpdate()
 {
 
@@ -255,12 +247,12 @@ bool DEVTESTSDEVICES::AppProc_FirstUpdate()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSDEVICES::AppProc_Update()
-* @brief      AppProc_Update
-* @ingroup    DATAIO
+* @brief      Executes the application update cycle.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_Update()
 {
   return false;
@@ -268,15 +260,14 @@ bool DEVTESTSDEVICES::AppProc_Update()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::AppProc_LastUpdate()
-* @brief      AppProc_LastUpdate
-* @ingroup    DATAIO
-* 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      App Proc Last Update.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_LastUpdate()
 {
   return false;
@@ -286,12 +277,12 @@ bool DEVTESTSDEVICES::AppProc_LastUpdate()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSDEVICES::AppProc_End()
-* @brief      AppProc_End
-* @ingroup    DATAIO
+* @brief      Ends the application process.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_End()
 {
   return true;
@@ -301,12 +292,12 @@ bool DEVTESTSDEVICES::AppProc_End()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSDEVICES::AppProc_PlatformEnd()
-* @brief      AppProc_PlatformEnd
-* @ingroup    DATAIO
+* @brief      Ends platform-specific resources.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::AppProc_PlatformEnd()
 {
   return true;
@@ -314,15 +305,15 @@ bool DEVTESTSDEVICES::AppProc_PlatformEnd()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_Random(DEVTESTSDEVICES* tests)
-* @brief      Test_Random
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the random test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_Random(DEVTESTSDEVICES* tests)
 {
@@ -346,15 +337,15 @@ bool DEVTESTSDEVICES::Test_Random(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOStreamUART(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOStreamUART
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream uart test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOStreamUART(DEVTESTSDEVICES* tests)
 {
@@ -414,17 +405,17 @@ bool DEVTESTSDEVICES::Test_DIOStreamUART(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOStreamUSBReadCommand(DEVTESTSDEVICES* tests, DIOSTREAM* diostream, XBUFFER& command)
-* @brief      Test_DIOStreamUSBReadCommand
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  diostream : 
-* @param[in]  command : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream usbread command test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  diostream : diostream value used by the operation.
+* @param[in]  command : command value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOStreamUSBReadCommand(DEVTESTSDEVICES* tests, DIOSTREAM* diostream, XBUFFER& command)
 {
@@ -454,15 +445,15 @@ bool DEVTESTSDEVICES::Test_DIOStreamUSBReadCommand(DEVTESTSDEVICES* tests, DIOST
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOStreamUSB(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOStreamUSB
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream usb test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOStreamUSB(DEVTESTSDEVICES* tests)
 {
@@ -523,17 +514,17 @@ bool DEVTESTSDEVICES::Test_DIOStreamUSB(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_6AxisTrackingLSM303DLHC(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_6AxisTrackingLSM303DLHC
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest 6 Axis Tracking LSM303 DLHC.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_6AxisTrackingLSM303DLHC(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -586,17 +577,17 @@ bool DEVTESTSDEVICES::I2CTest_6AxisTrackingLSM303DLHC(DEVTESTSDEVICES* tests, in
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_6AxisTrackingBMI270(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_6AxisTrackingBMI270
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest 6 Axis Tracking BMI270.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_6AxisTrackingBMI270(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -608,17 +599,17 @@ bool DEVTESTSDEVICES::I2CTest_6AxisTrackingBMI270(DEVTESTSDEVICES* tests, int po
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_AxisTrackingMPU9150(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_AxisTrackingMPU9150
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Axis Tracking MPU9150.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_AxisTrackingMPU9150(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -630,17 +621,17 @@ bool DEVTESTSDEVICES::I2CTest_AxisTrackingMPU9150(DEVTESTSDEVICES* tests, int po
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_ADDAConverterPCF8591(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_ADDAConverterPCF8591
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest ADDAConverter PCF8591.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_ADDAConverterPCF8591(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -686,17 +677,17 @@ bool DEVTESTSDEVICES::I2CTest_ADDAConverterPCF8591(DEVTESTSDEVICES* tests, int p
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_AirQualityCCS811(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_AirQualityCCS811
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Air Quality CCS811.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_AirQualityCCS811(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -817,17 +808,17 @@ bool DEVTESTSDEVICES::I2CTest_AirQualityCCS811(DEVTESTSDEVICES* tests, int port,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_EEprom24XXX(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_EEprom24XXX
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest EEprom24 XXX.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_EEprom24XXX(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -956,17 +947,17 @@ bool DEVTESTSDEVICES::I2CTest_EEprom24XXX(DEVTESTSDEVICES* tests, int port, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_GPIOMCP2317(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_GPIOMCP2317
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest GPIOMCP2317.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_GPIOMCP2317(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1023,17 +1014,17 @@ bool DEVTESTSDEVICES::I2CTest_GPIOMCP2317(DEVTESTSDEVICES* tests, int port, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_GPIOPCF8574(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_GPIOPCF8574
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest GPIOPCF8574.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_GPIOPCF8574(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1081,17 +1072,17 @@ bool DEVTESTSDEVICES::I2CTest_GPIOPCF8574(DEVTESTSDEVICES* tests, int port, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_LightSensorTSL2561(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_LightSensorTSL2561
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Light Sensor TSL2561.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_LightSensorTSL2561(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1142,17 +1133,17 @@ bool DEVTESTSDEVICES::I2CTest_LightSensorTSL2561(DEVTESTSDEVICES* tests, int por
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_OLEDDisplaySSD1306
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest OLEDDisplay SSD1306.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1200,17 +1191,17 @@ bool DEVTESTSDEVICES::I2CTest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int por
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_PWMControlerPCA9685(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_PWMControlerPCA9685
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest PWMControler PCA9685.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_PWMControlerPCA9685(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1282,17 +1273,17 @@ bool DEVTESTSDEVICES::I2CTest_PWMControlerPCA9685(DEVTESTSDEVICES* tests, int po
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_TemHumSensorAM2315(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_TemHumSensorAM2315
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Tem Hum Sensor AM2315.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_TemHumSensorAM2315(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1332,17 +1323,17 @@ bool DEVTESTSDEVICES::I2CTest_TemHumSensorAM2315(DEVTESTSDEVICES* tests, int por
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_TemHumSensorSHT20(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_TemHumSensorSHT20
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Tem Hum Sensor SHT20.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_TemHumSensorSHT20(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1385,17 +1376,17 @@ bool DEVTESTSDEVICES::I2CTest_TemHumSensorSHT20(DEVTESTSDEVICES* tests, int port
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_MonitorGaugeLTC2942(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_MonitorGaugeLTC2942
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Monitor Gauge LTC2942.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_MonitorGaugeLTC2942(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1429,17 +1420,17 @@ bool DEVTESTSDEVICES::I2CTest_MonitorGaugeLTC2942(DEVTESTSDEVICES* tests, int po
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_BatteryChargerBQ24295(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_BatteryChargerBQ24295
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Battery Charger BQ24295.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_BatteryChargerBQ24295(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1477,17 +1468,17 @@ bool DEVTESTSDEVICES::I2CTest_BatteryChargerBQ24295(DEVTESTSDEVICES* tests, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::I2CTest_TouchSensorAT42QT1060(DEVTESTSDEVICES* tests, int port, int timeout)
-* @brief      I2CTest_TouchSensorAT42QT1060
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      I2 CTest Touch Sensor AT42 QT1060.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::I2CTest_TouchSensorAT42QT1060(DEVTESTSDEVICES* tests, int port, int timeout)
 {
@@ -1521,15 +1512,15 @@ bool DEVTESTSDEVICES::I2CTest_TouchSensorAT42QT1060(DEVTESTSDEVICES* tests, int 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOStreamI2C(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOStreamI2C
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream i2 c test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOStreamI2C(DEVTESTSDEVICES* tests)
 {  
@@ -1610,18 +1601,18 @@ bool DEVTESTSDEVICES::Test_DIOStreamI2C(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_GPIOMCP23S17(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_GPIOMCP23S17
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest GPIOMCP23 S17.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_GPIOMCP23S17(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1632,18 +1623,18 @@ bool DEVTESTSDEVICES::SPITest_GPIOMCP23S17(DEVTESTSDEVICES* tests, int port, int
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_LCDDisplayPCF8833(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_LCDDisplayPCF8833
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest LCDDisplay PCF8833.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_LCDDisplayPCF8833(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1730,18 +1721,18 @@ bool DEVTESTSDEVICES::SPITest_LCDDisplayPCF8833(DEVTESTSDEVICES* tests, int port
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_OLEDDisplaySSD1306
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest OLEDDisplay SSD1306.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1801,18 +1792,18 @@ bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1306(DEVTESTSDEVICES* tests, int por
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1331(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_OLEDDisplaySSD1331
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest OLEDDisplay SSD1331.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1331(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1858,18 +1849,18 @@ bool DEVTESTSDEVICES::SPITest_OLEDDisplaySSD1331(DEVTESTSDEVICES* tests, int por
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_TFTDisplayILI9341(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_TFTDisplayILI9341
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest TFTDisplay ILI9341.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_TFTDisplayILI9341(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1915,18 +1906,18 @@ bool DEVTESTSDEVICES::SPITest_TFTDisplayILI9341(DEVTESTSDEVICES* tests, int port
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_TFTDisplayST7789(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_TFTDisplayST7789
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest TFTDisplay ST7789.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_TFTDisplayST7789(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -1982,18 +1973,18 @@ bool DEVTESTSDEVICES::SPITest_TFTDisplayST7789(DEVTESTSDEVICES* tests, int port,
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::SPITest_TouchScreenSTMPE610(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
-* @brief      SPITest_TouchScreenSTMPE610
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  port : 
-* @param[in]  chipselect : 
-* @param[in]  timeout : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      SPITest Touch Screen STMPE610.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  port : port value used by the operation.
+* @param[in]  chipselect : chipselect value used by the operation.
+* @param[in]  timeout : timeout value used by the operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::SPITest_TouchScreenSTMPE610(DEVTESTSDEVICES* tests, int port, int chipselect, int timeout)
 {
@@ -2003,16 +1994,17 @@ bool DEVTESTSDEVICES::SPITest_TouchScreenSTMPE610(DEVTESTSDEVICES* tests, int po
 }
  
 
+
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOStreamSPI(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOStreamSPI
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream spi test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOStreamSPI(DEVTESTSDEVICES* tests)
 {  
@@ -2092,15 +2084,15 @@ bool DEVTESTSDEVICES::Test_DIOStreamSPI(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOGPIO(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOGPIO
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diogpio test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOGPIO(DEVTESTSDEVICES* tests)
 {  
@@ -2166,15 +2158,15 @@ bool DEVTESTSDEVICES::Test_DIOGPIO(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIOGPIO_Interrupt(DEVTESTSDEVICES* tests)
-* @brief      Test_DIOGPIO_Interrupt
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diogpio interrupt test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIOGPIO_Interrupt(DEVTESTSDEVICES* tests)
 {
@@ -2199,15 +2191,15 @@ bool DEVTESTSDEVICES::Test_DIOGPIO_Interrupt(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_EEPROMMemory(DEVTESTSDEVICES* tests)
-* @brief      Test_EEPROMMemory
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the eeprommemory test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_EEPROMMemory(DEVTESTSDEVICES* tests)
 {
@@ -2259,15 +2251,15 @@ bool DEVTESTSDEVICES::Test_EEPROMMemory(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DIONeoPixel(DEVTESTSDEVICES* tests)
-* @brief      Test_DIONeoPixel
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the dioneo pixel test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DIONeoPixel(DEVTESTSDEVICES* tests)
 {
@@ -2335,15 +2327,15 @@ bool DEVTESTSDEVICES::Test_DIONeoPixel(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_DirFunctions(DEVTESTSDEVICES* tests)
-* @brief      Test_DirFunctions
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the dir functions test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_DirFunctions(DEVTESTSDEVICES* tests)
 {
@@ -2376,15 +2368,15 @@ bool DEVTESTSDEVICES::Test_DirFunctions(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSDEVICES::Test_FileFunctions(DEVTESTSDEVICES* tests)
-* @brief      Test_FileFunctions
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the file functions test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSDEVICES::Test_FileFunctions(DEVTESTSDEVICES* tests)
 {
@@ -2444,15 +2436,15 @@ bool DEVTESTSDEVICES::Test_FileFunctions(DEVTESTSDEVICES* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSDEVICES::Test_Callback_Interrupt(void* param)
-* @brief      Test_Callback_Interrupt
-* @ingroup    APPLICATION
-* 
-* @param[in]  param : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Runs the callback interrupt test.
+* @ingroup    TESTS
+*
+* @param[in]  param : param value used by the operation.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSDEVICES::Test_Callback_Interrupt(void* param)
 {
@@ -2460,16 +2452,14 @@ void DEVTESTSDEVICES::Test_Callback_Interrupt(void* param)
 }
 
 
-
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSDEVICES::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup    APPLICATION
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSDEVICES::Clean()
 {

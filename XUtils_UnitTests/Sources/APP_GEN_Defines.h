@@ -3,8 +3,8 @@
 * @file       APP_GEN_Defines.h
 *
 * @class      APP_GEN_DEFINES
-* @brief      GEN Defines of the Application
-* @ingroup
+* @brief      GEN defines of the test application
+* @ingroup    TESTS
 *
 * @copyright  EndoraSoft. All rights reserved.
 *
@@ -24,8 +24,7 @@
 * SOFTWARE.
 * @endcond
 *
-*---------------------------------------------------------------------------------------------------------------------*/
-
+* --------------------------------------------------------------------------------------------------------------------*/
 #pragma once
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -56,7 +55,5 @@
  
 
 #endif
-
-
 
 

@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       DevTestsDevices_STM32Platform.cpp
-* 
+*
 * @class      DEVTESTSDEVICES_STM32PLATFORM
-* @brief      Developed Tests Devices I/O  UART / USB / I2C / GPIO  STM32 Platform functions
+* @brief      Developed tests devices STM32 platform functions
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -55,12 +53,9 @@
 #include "DevTestsDevices.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -68,21 +63,18 @@
 XSTM32_FATSD_SPI  FATSD_SPI;
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         int STM32_Platform_Main(void)
-* @brief      TM32_Platform_Main
-* @ingroup    DATAIO
+* @fn         int STM32_Platform_Ini(void)
+* @brief      Initializes STM32 platform resources.
+* @ingroup    TESTS
 *
-* @param[in]  void :
+* @return     int : non-zero if the platform initialization is successful.
 *
-* @return     int :
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 int STM32_Platform_Ini(void)
 {
   _main();
@@ -137,17 +129,14 @@ int STM32_Platform_Ini(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void STM32_Platform_NonPreemptiveDoTasks(void)
-* @brief      TM32_Platform_NonPreemptiveDoTasks
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     void : does not return anything. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Executes STM32 non-preemptive tasks.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void STM32_Platform_NonPreemptiveDoTasks(void)
 {
   __disable_irq();
@@ -159,17 +148,14 @@ void STM32_Platform_NonPreemptiveDoTasks(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void* STM32_Platform_GetI2C1(void)
-* @brief      STM32_Platform_GetI2C1
-* @ingroup    
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     void* : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Gets the STM32 I2C1 handle.
+* @ingroup    TESTS
+*
+* @return     void* : pointer to the requested platform handle.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void* STM32_Platform_GetI2C1(void)
 {
   if(!DIOSTM32STREAMI2C::ports[0]) return NULL; 
@@ -178,17 +164,14 @@ void* STM32_Platform_GetI2C1(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void* STM32_Platform_GetI2C2(void)
-* @brief      STM32_Platform_GetI2C2
-* @ingroup    
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     void* : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+*
+* @fn         void* STM32_Platform_GetI2C3(void)
+* @brief      Gets the STM32 I2C3 handle.
+* @ingroup    TESTS
+*
+* @return     void* : pointer to the requested platform handle.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void* STM32_Platform_GetI2C3(void)
 {
   if(!DIOSTM32STREAMI2C::ports[2]) return NULL; 
@@ -197,17 +180,14 @@ void* STM32_Platform_GetI2C3(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void* STM32_Platform_GetSPI1(void)
-* @brief      TM32_Platform_GetSPI1
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     void* : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Gets the STM32 SPI1 handle.
+* @ingroup    TESTS
+*
+* @return     void* : pointer to the requested platform handle.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void* STM32_Platform_GetSPI1(void)
 {
   if(!DIOSTM32STREAMSPI::ports[0]) return NULL; 
@@ -216,17 +196,14 @@ void* STM32_Platform_GetSPI1(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void* STM32_Platform_GetSPI2(void)
-* @brief      TM32_Platform_GetSPI2
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     void* : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Gets the STM32 SPI2 handle.
+* @ingroup    TESTS
+*
+* @return     void* : pointer to the requested platform handle.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void* STM32_Platform_GetSPI2(void)
 {
   if(!DIOSTM32STREAMSPI::ports[1]) return NULL; 
@@ -235,17 +212,16 @@ void* STM32_Platform_GetSPI2(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DSTATUS STM32_SD_Disk_Initialize(BYTE drive)
-* @brief      STM32_SD_Disk_Initialize
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  drive : 
-* 
-* @return     DSTATUS : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Initializes the STM32 SD disk.
+* @ingroup    TESTS
+*
+* @param[in]  drive : logical drive number.
+*
+* @return     DSTATUS : disk status returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DSTATUS STM32_SD_Disk_Initialize(BYTE drive)
 {
   return FATSD_SPI.Disk_Initialize((XBYTE)drive);
@@ -253,17 +229,16 @@ DSTATUS STM32_SD_Disk_Initialize(BYTE drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         DSTATUS SD_Disk_Status(BYTE drive)
-* @brief      STM32_SD_Disk_Status
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  drive : 
-* 
-* @return     DSTATUS : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+*
+* @fn         DSTATUS STM32_SD_Disk_Status(BYTE drive)
+* @brief      Gets the STM32 SD disk status.
+* @ingroup    TESTS
+*
+* @param[in]  drive : logical drive number.
+*
+* @return     DSTATUS : disk status returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DSTATUS STM32_SD_Disk_Status(BYTE drive)
 {
   return FATSD_SPI.Disk_Status((XBYTE)drive);
@@ -271,20 +246,19 @@ DSTATUS STM32_SD_Disk_Status(BYTE drive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DRESULT STM32_SD_Disk_Read(BYTE pdrive, BYTE* buffer, DWORD sector, UINT count)
-* @brief      STM32_SD_Disk_Read
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  pdrive : 
-* @param[in]  buffer : 
-* @param[in]  sector : 
-* @param[in]  count : 
-* 
-* @return     DRESULT : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Reads sectors from the STM32 SD disk.
+* @ingroup    TESTS
+*
+* @param[in]  pdrive : physical drive number.
+* @param[out]  buffer : buffer filled with the sectors read from the disk.
+* @param[in]  sector : first sector used by the disk operation.
+* @param[in]  count : number of sectors to process.
+*
+* @return     DRESULT : disk result returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DRESULT STM32_SD_Disk_Read(BYTE pdrive, BYTE* buffer, DWORD sector, UINT count)
 {
   return FATSD_SPI.Disk_Read((XBYTE)pdrive, (XBYTE*)buffer, (XDWORD)sector, (XDWORD)count);
@@ -292,20 +266,19 @@ DRESULT STM32_SD_Disk_Read(BYTE pdrive, BYTE* buffer, DWORD sector, UINT count)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         DRESULT SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT count)
-* @brief      STM32_SD_Disk_Write
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  pdrive : 
-* @param[in]  BYTE* buffer : 
-* @param[in]  sector : 
-* @param[in]  count : 
-* 
-* @return     DRESULT : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+*
+* @fn         DRESULT STM32_SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT count)
+* @brief      Writes sectors to the STM32 SD disk.
+* @ingroup    TESTS
+*
+* @param[in]  pdrive : physical drive number.
+* @param[in]  buffer : buffer that contains the sectors to write to the disk.
+* @param[in]  sector : first sector used by the disk operation.
+* @param[in]  count : number of sectors to process.
+*
+* @return     DRESULT : disk result returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DRESULT STM32_SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT count)
 {
   return FATSD_SPI.Disk_Write((XBYTE)pdrive, (const XBYTE*)buffer, (XDWORD)sector, (XDWORD) count);
@@ -313,19 +286,18 @@ DRESULT STM32_SD_Disk_Write(BYTE pdrive, const BYTE* buffer, DWORD sector, UINT 
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DRESULT STM32_SD_Disk_IOTCL(BYTE drive, BYTE ctrl, void* buffer)
-* @brief      STM32_SD_Disk_IOTCL
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  drive : 
-* @param[in]  ctrl : 
-* @param[in]  buffer : 
-* 
-* @return     DRESULT : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Executes an STM32 SD disk I/O control command.
+* @ingroup    TESTS
+*
+* @param[in]  drive : logical drive number.
+* @param[in]  ctrl : control command for the disk I/O operation.
+* @param[out]  buffer : data buffer used by the disk operation.
+*
+* @return     DRESULT : disk result returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 DRESULT STM32_SD_Disk_IOTCL(BYTE drive, BYTE ctrl, void* buffer)
 {
   return FATSD_SPI.Disk_IOTCL((XBYTE)drive, (XBYTE)ctrl, buffer);
@@ -333,18 +305,18 @@ DRESULT STM32_SD_Disk_IOTCL(BYTE drive, BYTE ctrl, void* buffer)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void STM32_Platform_Trace(const char* mask, ...)
-* @brief      TM32_Platform_Trace
-* @ingroup    
-* 
-* 
-* @param[in]  char* mask : 
-* @param[in]  ... : 
-* 
-* @return     void : does not return anything. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+*
+* @fn         void STM32_Platform_Trace(int iserror, const char* mask, ...)
+* @brief      Writes an STM32 platform trace message.
+* @ingroup    TESTS
+*
+* @param[in]  iserror : true when the trace must be emitted as an error.
+* @param[in]  mask : format mask used to build the trace text.
+* @param[in]  ... : variable arguments used to format the trace text.
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void STM32_Platform_Trace(int iserror, const char* mask, ...)
 {
   XSTRING   concat;
@@ -364,15 +336,14 @@ void STM32_Platform_Trace(int iserror, const char* mask, ...)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void STM32_Heap_Usage()
-* @brief      TM32_Heap_Usage
-* @ingroup    
-* 
-* 
-* @return     void : does not return anything. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Shows the STM32 heap usage.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void STM32_Heap_Usage()
 {    
   struct mallinfo m;
@@ -388,17 +359,14 @@ void STM32_Heap_Usage()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         int STM32_Platform_End(void)
-* @brief      TM32_Platform_End
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  void : 
-* 
-* @return     int : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Ends STM32 platform resources.
+* @ingroup    TESTS
+*
+* @return     int : non-zero if the platform end operation is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 int STM32_Platform_End(void)
 {
   return 1;
@@ -406,17 +374,16 @@ int STM32_Platform_End(void)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin)
-* @brief      AL_GPIO_EXTI_Callback
-* @ingroup    DATAIO
-* 
-* 
-* @param[in]  GPIO_pin : 
-* 
-* @return     void : does not return anything. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Handles the HAL GPIO external interrupt callback.
+* @ingroup    TESTS
+*
+* @param[in]  GPIO_pin : GPIO pin that generated the interrupt.
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin)
 {
   DIOGPIO_ENTRY* int_GPIOentry = GEN_DIOGPIO.GPIOEntry_GetInterruptByPin(GPIO_pin);
@@ -426,7 +393,5 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_pin)
       if(funcptr) funcptr(int_GPIOentry->GetIntParamPointer());
     }  
 }
-
-
 
 

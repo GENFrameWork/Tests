@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @file       XUtils_UnitTests_XDateTime.cpp
-* 
+*
 * @class      XUTILS_UNITTESTS_XDATETIME
-* @brief      XUtils Unit Tests for XDateTime class
+* @brief      XUtils unit tests for XDateTime class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -46,16 +44,12 @@
 #include "XDateTime.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -68,6 +62,24 @@ namespace TEST_XDATETIME
 
 /*---- AUXILIARY FUNCTIONS -------------------------------------------------------------------------------------------*/
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void SetKnownDateTime(XDATETIME* datetime, int day, int month, int year, int hours, int minutes, int seconds, int milliseconds)
+* @brief      Sets the known date time.
+* @ingroup    UNIT TEST
+*
+* @param[in]  datetime : datetime value used by the operation.
+* @param[in]  day : day value used by the operation.
+* @param[in]  month : month value used by the operation.
+* @param[in]  year : year value used by the operation.
+* @param[in]  hours : hours value used by the operation.
+* @param[in]  minutes : minutes value used by the operation.
+* @param[in]  seconds : seconds value used by the operation.
+* @param[in]  milliseconds : milliseconds value used by the operation.
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 static void SetKnownDateTime(XDATETIME* datetime, int day, int month, int year, int hours, int minutes, int seconds, int milliseconds)
 {
   if(!datetime) return;
@@ -83,16 +95,6 @@ static void SetKnownDateTime(XDATETIME* datetime, int day, int month, int year, 
 }
 
 
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  Constructor
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor) 
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -102,15 +104,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, Constructor)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, Assing1)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  Assing1
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, Assing1) 
 {
   XDATETIME*        datetime = GEN_XFACTORY.CreateDateTime();
@@ -137,15 +130,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, Assing1)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, Assing2)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  Assing2
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, Assing2) 
 {
   XDATETIME*        datetime = GEN_XFACTORY.CreateDateTime();
@@ -174,15 +158,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, Assing2)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandard)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringStandard
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandard)
 
 {
@@ -208,15 +183,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandard)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSeconds)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringStandardMilliSeconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSeconds)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -241,15 +207,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSeconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601Standard)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringISO8601Standard
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601Standard)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -274,15 +231,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601Standard)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardAddDay)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringStandardAddDay
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardAddDay)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -309,15 +257,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardAddDay)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSecondsAddDay)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringStandardMilliSecondsAddDay
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSecondsAddDay)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -344,15 +283,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardMilliSecondsAddDay
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601StandardAddDay)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringISO8601StandardAddDay
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601StandardAddDay)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -379,15 +309,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringISO8601StandardAddDay)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringStandard
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard) 
 {  
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -409,15 +330,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandarMilliSeconds)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringStandarMilliSeconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandarMilliSeconds) 
 {  
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -440,15 +352,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandarMilliSeconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601Standard)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringISO8601Standard
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601Standard) 
 {  
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -471,15 +374,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601Standard)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard2)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringStandard2
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard2) 
 {  
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -501,15 +395,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandard2)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardMilliSeconds2)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringStandardMilliSeconds2
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardMilliSeconds2) 
 
 {  
@@ -533,15 +418,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardMilliSeconds2)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601StandardMilliSeconds2)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringISO8601StandardMilliSeconds2
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601StandardMilliSeconds2) 
 {  
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -564,15 +440,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringISO8601StandardMilliSeco
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardDateWithDash)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeToStringStandardDateWithDash
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardDateWithDash)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -589,15 +456,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeToStringStandardDateWithDash)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardDateWithDash)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetDateTimeFromStringStandardDateWithDash
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardDateWithDash)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -619,15 +477,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetDateTimeFromStringStandardDateWithDash)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, IsValidDateAndLeapYear)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  IsValidDateAndLeapYear
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, IsValidDateAndLeapYear)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -646,15 +495,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, IsValidDateAndLeapYear)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, AddSecondsAcrossMidnight)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  AddSecondsAcrossMidnight
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, AddSecondsAcrossMidnight)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -672,15 +512,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, AddSecondsAcrossMidnight)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractDaysAcrossYear)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  SubtractDaysAcrossYear
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractDaysAcrossYear)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -698,15 +529,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractDaysAcrossYear)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, CopyCompareOperators)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  CopyCompareOperators
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, CopyCompareOperators)
 {
   XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
@@ -738,15 +560,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, CopyCompareOperators)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, IsBetweenInclusive)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  IsBetweenInclusive
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, IsBetweenInclusive)
 {
   XDATETIME* start   = GEN_XFACTORY.CreateDateTime();
@@ -774,15 +587,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, IsBetweenInclusive)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, AddMonthsAndAddYears)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  AddMonthsAndAddYears
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, AddMonthsAndAddYears)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -804,15 +608,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, AddMonthsAndAddYears)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, IsZeroAndZeroSetters)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  IsZeroAndZeroSetters
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, IsZeroAndZeroSetters)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -849,15 +644,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, IsZeroAndZeroSetters)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, IsLocalFlag)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  IsLocalFlag
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, IsLocalFlag)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -877,15 +663,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, IsLocalFlag)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, DaysOfYearAndDayOfYearRelation)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  DaysOfYearAndDayOfYearRelation
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, DaysOfYearAndDayOfYearRelation)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -907,15 +684,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, DaysOfYearAndDayOfYearRelation)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, GetSecondsFromADay)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  GetSecondsFromADay
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, GetSecondsFromADay)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -933,15 +701,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, GetSecondsFromADay)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, NDdaysRoundTripGregorianAndJulian)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  NDdaysRoundTripGregorianAndJulian
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, NDdaysRoundTripGregorianAndJulian)
 {
   XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
@@ -971,15 +730,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, NDdaysRoundTripGregorianAndJulian)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, SecondsRoundTripGregorian)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  SecondsRoundTripGregorian
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, SecondsRoundTripGregorian)
 {
   XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
@@ -1007,15 +757,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, SecondsRoundTripGregorian)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, IsTheSameDay)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  IsTheSameDay
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, IsTheSameDay)
 {
   XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
@@ -1038,15 +779,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, IsTheSameDay)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractSecondsAcrossMidnight)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  SubtractSecondsAcrossMidnight
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractSecondsAcrossMidnight)
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -1064,15 +796,6 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractSecondsAcrossMidnight)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XDATETIME_CLASSNAME, StringFormatsPostgreSQLAndFirstTime)
-* @brief      Unit test of UNITTEST_XDATETIME_CLASSNAME:  StringFormatsPostgreSQLAndFirstTime
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XDATETIME_CLASSNAME, StringFormatsPostgreSQLAndFirstTime)
 {
   XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();

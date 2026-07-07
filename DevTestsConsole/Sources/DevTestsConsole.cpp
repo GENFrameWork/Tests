@@ -1,35 +1,33 @@
-﻿/**-------------------------------------------------------------------------------------------------------------------
-* 
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @file       DevTestsConsole.cpp
-* 
+*
 * @class      DEVTESTSCONSOLE
-* @brief      Developed Tests console class
+* @brief      Developed tests console class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -198,12 +196,9 @@
 #include "DevTestsConsole_CFG.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
-
-
 
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
@@ -211,18 +206,17 @@
 APPLICATIONCREATEINSTANCE(DEVTESTSCONSOLE, devtestsconsole)
 
 
-
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DEVTESTSCONSOLE::DEVTESTSCONSOLE()
-* @brief      Constructor
-* @ingroup    APPLICATION
-* 
-* @return     Does not return anything. 
-* 
+* @brief      Constructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE::DEVTESTSCONSOLE() : XFSMACHINE(0)
 {
@@ -231,14 +225,13 @@ DEVTESTSCONSOLE::DEVTESTSCONSOLE() : XFSMACHINE(0)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
-* @brief      Destructor
-* @note       VIRTUAL
-* @ingroup    APPLICATION
-* 
-* @return     Does not return anything. 
-* 
+* @brief      Destructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
 {
@@ -247,13 +240,13 @@ DEVTESTSCONSOLE::~DEVTESTSCONSOLE()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::IniFSMachine()
-* @brief      IniFSMachine
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Initializes the finite state machine.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::IniFSMachine()
 {
@@ -287,12 +280,12 @@ bool DEVTESTSCONSOLE::IniFSMachine()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::AppProc_PlatformIni()
-* @brief      AppProc_PlatformIni
-* @ingroup    APPLICATION
+* @brief      Initializes platform-specific resources.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_PlatformIni()
 {
   //--------------------------------------------------------------------------------------
@@ -314,13 +307,13 @@ bool DEVTESTSCONSOLE::AppProc_PlatformIni()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::AppProc_Ini()
-* @brief      AppProc_Ini
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Initializes the application process.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_Ini()
 {
@@ -412,13 +405,13 @@ bool DEVTESTSCONSOLE::AppProc_Ini()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
-* @brief      AppProc_FirstUpdate
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Executes the first application update.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 {
@@ -434,13 +427,13 @@ bool DEVTESTSCONSOLE::AppProc_FirstUpdate()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::AppProc_Update()
-* @brief      AppProc_Update
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Executes the application update cycle.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_Update()
 {
@@ -521,15 +514,13 @@ bool DEVTESTSCONSOLE::AppProc_Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DEVTESTSCONSOLE::AppProc_End
-* @brief      End Application
-* @ingroup
+* @fn         bool DEVTESTSCONSOLE::AppProc_End()
+* @brief      Ends the application process.
+* @ingroup    TESTS
 *
-* @param
+* @return     bool : true if it is successful.
 *
-* @return     bool : true if is succesful.
-*
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_End()
 {
   XSTRING string;
@@ -574,12 +565,12 @@ bool DEVTESTSCONSOLE::AppProc_End()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::AppProc_PlatformEnd()
-* @brief      AppProc_PlatformEnd
-* @ingroup    APPLICATION
+* @brief      Ends platform-specific resources.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::AppProc_PlatformEnd()
 {
   return true;
@@ -589,14 +580,14 @@ bool DEVTESTSCONSOLE::AppProc_PlatformEnd()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
-* @brief      KeyValidSecuences
-* @ingroup    APPLICATION
+* @brief      Processes valid key sequences.
+* @ingroup    TESTS
 *
-* @param[in]  key :
+* @param[in]  key : key code to validate.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
 {
   XCHAR character = (XCHAR)key;
@@ -626,13 +617,13 @@ bool DEVTESTSCONSOLE::KeyValidSecuences(int key)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Show_PlaySound()
-* @brief      Show_PlaySound
-* @ingroup    APPLICATION
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Shows the play sound test.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Show_PlaySound()
 {
@@ -691,12 +682,12 @@ bool DEVTESTSCONSOLE::Show_PlaySound()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Do_Tests()
-* @brief      Do_Tests
-* @ingroup    APPLICATION
+* @brief      Runs the configured tests.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Do_Tests()
 {
   DEVTESTSCONSOLE_LIST_FUNCTION listfunctions[] = {   { false  , Test_XString                       , __L("Test XString")                         },
@@ -813,12 +804,12 @@ bool DEVTESTSCONSOLE::Do_Tests()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Params_IsModeServer()
-* @brief      IsModeServer
-* @ingroup    APPLICATION
+* @brief      Checks if the application parameters enable server mode.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Params_IsModeServer()
 {
   bool modeserver = false;
@@ -842,14 +833,14 @@ bool DEVTESTSCONSOLE::Params_IsModeServer()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
-* @brief      Test_XString
-* @ingroup    APPLICATION
+* @brief      Runs the xstring test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -915,14 +906,14 @@ bool DEVTESTSCONSOLE::Test_XString(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XBuffer(DEVTESTSCONSOLE* tests)
-* @brief      Test_XBuffer
-* @ingroup    APPLICATION
+* @brief      Runs the xbuffer test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XBuffer(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -1026,17 +1017,16 @@ bool DEVTESTSCONSOLE::Test_XBuffer(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XRand(DEVTESTSCONSOLE* tests)
-* @brief      Test_XRand
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the xrand test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XRand(DEVTESTSCONSOLE* tests)
 {
   GEN_XRAND.Ini();
@@ -1060,14 +1050,14 @@ bool DEVTESTSCONSOLE::Test_XRand(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
-* @brief      Test_XVector
-* @ingroup    APPLICATION
+* @brief      Runs the xvector test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -1109,17 +1099,6 @@ bool DEVTESTSCONSOLE::Test_XVector(DEVTESTSCONSOLE* tests)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn             bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
-* @brief       Test_XVectorSTL
-* @ingroup     APPLICATION
-* 
-* @param[in]   tests : 
-* 
-* @return         bool : true if is succesful. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 /*
 bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
 {
@@ -1144,13 +1123,15 @@ bool DEVTESTSCONSOLE::Test_XVectorSTL(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_XTrace()
-* @brief      Test_XDebugTrace
-* @ingroup    APPLICATION
+* @fn         bool DEVTESTSCONSOLE::Test_XTrace(DEVTESTSCONSOLE* tests)
+* @brief      Runs the xtrace test.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @param[in]  tests : test application instance used by the test.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTrace(DEVTESTSCONSOLE* tests)
 {
   XDWORD counter = 10;
@@ -1206,14 +1187,14 @@ bool DEVTESTSCONSOLE::Test_XTrace(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
-* @brief      Test_XLogs
-* @ingroup    APPLICATION
+* @brief      Runs the xlogs test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 {
   if(!APPFLOW_CFG.Log_IsActive()) 
@@ -1257,15 +1238,15 @@ bool DEVTESTSCONSOLE::Test_XLogs(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XTimer(DEVTESTSCONSOLE* tests)
-* @brief      Test_XTimer
+* @brief      Runs the xtimer test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTimer(DEVTESTSCONSOLE* tests)
 {
@@ -1295,16 +1276,16 @@ bool DEVTESTSCONSOLE::Test_XTimer(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREENODE_TEST* node, int nchild)
-* @brief      Test_XTree_AddChilds
-* @ingroup    APPLICATION
+* @fn         bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
+* @brief      Runs the xtree add childs test.
+* @ingroup    TESTS
 *
-* @param[in]  node :
-* @param[in]  nchild :
+* @param[in,out]  node : tree node used by the operation.
+* @param[in]  nchild : number of child nodes to add.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
 {
   bool status = true;
@@ -1341,15 +1322,15 @@ bool DEVTESTSCONSOLE::Test_XTree_AddChilds(XTREE_NODE_TEST* node, int nchild)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexchild)
-* @brief      Test_XTree_InsertChilds
-* @ingroup    APPLICATION
+* @brief      Runs the xtree insert childs test.
+* @ingroup    TESTS
 *
-* @param[in]  node :
-* @param[in]  indexchild :
+* @param[in,out]  node : tree node used by the operation.
+* @param[in]  indexchild : child index used by the insertion test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexchild)
 {
   XSTRING* subnodedata = GEN_NEW XSTRING();
@@ -1372,14 +1353,14 @@ bool DEVTESTSCONSOLE::Test_XTree_InsertChilds(XTREE_NODE_TEST* node, int indexch
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
-* @brief      Test_XTree
-* @ingroup    APPLICATION
+* @brief      Runs the xtree test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
 {
   XTREE_TEST        xtree;
@@ -1468,14 +1449,14 @@ bool DEVTESTSCONSOLE::Test_XTree(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
-* @brief      Test_XDir
-* @ingroup    APPLICATION
+* @brief      Runs the xdir test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
 {
   XDIR* xdir = GEN_XFACTORY.Create_Dir();
@@ -1510,15 +1491,15 @@ bool DEVTESTSCONSOLE::Test_XDir(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XVariant(DEVTESTSCONSOLE* tests)
-* @brief      Test_XVariant
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the xvariant test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XVariant(DEVTESTSCONSOLE* tests)
 {
@@ -1545,14 +1526,14 @@ bool DEVTESTSCONSOLE::Test_XVariant(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
-* @brief      Test_Threads
-* @ingroup    APPLICATION
+* @brief      Runs the threads test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -1604,14 +1585,14 @@ bool DEVTESTSCONSOLE::Test_Threads(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
-* @brief      Test_DateTime
-* @ingroup    APPLICATION
+* @brief      Runs the date time test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 {  
   XSTRING     datetimestring;
@@ -1667,14 +1648,14 @@ bool DEVTESTSCONSOLE::Test_DateTime(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOStreamTCPIPConnection
-* @ingroup    APPLICATION
+* @brief      Runs the diostream tcpipconnection test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -1725,17 +1706,16 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPConnection(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DEVTESTSCONSOLE::Test_System(DEVTESTSCONSOLE* tests)
-* @brief      Test_System
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+*
+* @fn         bool DEVTESTSCONSOLE::Test_XSystem(DEVTESTSCONSOLE* tests)
+* @brief      Runs the xsystem test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XSystem(DEVTESTSCONSOLE* tests)
 {
   XSTRING   plataform_name;
@@ -1763,14 +1743,14 @@ bool DEVTESTSCONSOLE::Test_XSystem(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
-* @brief      Test_SharedMemory
-* @ingroup    APPLICATION
+* @brief      Runs the shared memory test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
 {
   #define SHAREDMEMORYID __L("SharedMemoryID")
@@ -1849,14 +1829,14 @@ bool DEVTESTSCONSOLE::Test_SharedMemory(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_GPIO(DEVTESTSCONSOLE* tests)
-* @brief      Test_GPIO
-* @ingroup    APPLICATION
+* @brief      Runs the gpio test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_GPIO(DEVTESTSCONSOLE* tests)
 {   
   bool status = false;  
@@ -1885,14 +1865,14 @@ bool DEVTESTSCONSOLE::Test_GPIO(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
-* @brief      Test_WebClient
-* @ingroup    APPLICATION
+* @brief      Runs the web client test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
 {
   DIOWEBCLIENT  webclient;
@@ -1934,13 +1914,15 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_ScrapersWeb()
-* @brief      Test_ScrapersWeb
-* @ingroup    APPLICATION
+* @fn         bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
+* @brief      Runs the scraper web test.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful.
+* @param[in]  tests : test application instance used by the test.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
 {
   DIOSCRAPERWEBPUBLICIP*        publicip        = GEN_NEW DIOSCRAPERWEBPUBLICIP;
@@ -2162,14 +2144,14 @@ bool DEVTESTSCONSOLE::Test_ScraperWeb(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
-* @brief      Test_FT232H
-* @ingroup    APPLICATION
+* @brief      Runs the mpsse test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
 {
   DIOMPSSE* MPSSE = GEN_NEW DIOMPSSE();
@@ -2193,15 +2175,15 @@ bool DEVTESTSCONSOLE::Test_MPSSE(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DNSResolver(DEVTESTSCONSOLE* tests)
-* @brief      Test_DNSResolver
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the dnsresolver test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DNSResolver(DEVTESTSCONSOLE* tests)
 {
@@ -2237,15 +2219,15 @@ bool DEVTESTSCONSOLE::Test_DNSResolver(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
-* @brief      Test_DNSProtocolMitMServer
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the dnsprotocol mit mserver test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
 {
@@ -2301,14 +2283,14 @@ bool DEVTESTSCONSOLE::Test_DNSProtocolMitMServer(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_DIOCheckTCPIPConnections(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOCheckTCPIPConnections
-* @ingroup    APPLICATION
+* @brief      Runs the diocheck tcpipconnections test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOCheckTCPIPConnections(DEVTESTSCONSOLE* tests)
 {
   DIOCHECKINTERNETCONNECTION* checkinternetconnection       = NULL;
@@ -2361,14 +2343,14 @@ bool DEVTESTSCONSOLE::Test_DIOCheckTCPIPConnections(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_WifiEnum(DEVTESTSCONSOLE* tests)
-* @brief      Test_WifiEnum
-* @ingroup    APPLICATION
+* @brief      Runs the wifi enum test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WifiEnum(DEVTESTSCONSOLE* tests)
 {
   bool                            status            = false;
@@ -2396,14 +2378,14 @@ bool DEVTESTSCONSOLE::Test_WifiEnum(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
-* @brief      Test_WakeOnLAN
-* @ingroup    APPLICATION
+* @brief      Runs the wake on lan test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
 {
   DIOWAKEONLAN* wakeonlan = NULL;
@@ -2428,15 +2410,15 @@ bool DEVTESTSCONSOLE::Test_WakeOnLAN(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
-* @brief      Test_Hash
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the hash test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
 {
@@ -2479,19 +2461,19 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_OneCipher_Simetric(DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& output)
-* @brief      Test_OneCipher_Simetric
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* @param[in]  operation : 
-* @param[in]  cipher : 
-* @param[in]  input : 
-* @param[in]  output : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs one symmetric cipher test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+* @param[in]  operation : true to encrypt data; false to decrypt data.
+* @param[in]  cipher : cipher instance used by the test.
+* @param[in]  input : input buffer used by the test.
+* @param[out]  output : output buffer filled by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_OneCipher_Simetric(DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& output)
 {
@@ -2519,15 +2501,15 @@ bool DEVTESTSCONSOLE::Test_OneCipher_Simetric(DEVTESTSCONSOLE* tests, bool opera
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
-* @brief      Test_Cipher_Simetric
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the cipher simetric test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 {
@@ -2599,15 +2581,15 @@ bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
-* @brief      Test_CipherFileKeys
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the cipher file keys test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherFileKeys(DEVTESTSCONSOLE* tests)
 {
@@ -2650,15 +2632,15 @@ xpathtarget.Create(3 , xpathgeneric.Get(), __L("cacert")  , __L(".h"));
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
-* @brief      Test_CipherRSA
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the cipher rsa test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 {
@@ -2729,15 +2711,15 @@ bool DEVTESTSCONSOLE::Test_CipherRSA(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_CipherECDSAX25519(DEVTESTSCONSOLE* tests)
-* @brief      Test_CipherECDSAX25519
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the cipher ecdsax25519 test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_CipherECDSAX25519(DEVTESTSCONSOLE* tests)
 {
@@ -2798,15 +2780,15 @@ bool DEVTESTSCONSOLE::Test_CipherECDSAX25519(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIP(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOStreamTCPIP
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the diostream tcpip test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOStreamTCPIP(DEVTESTSCONSOLE* tests)
 {
@@ -2870,14 +2852,14 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIP(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOStreamTLS
-* @ingroup    APPLICATION
+* @brief      Runs the diostream tls test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) 
@@ -2951,14 +2933,14 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_SystemCPUUsage(DEVTESTSCONSOLE* tests)
-* @brief      Test_SystemCPUUsage
-* @ingroup    APPLICATION
+* @brief      Runs the system cpuusage test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SystemCPUUsage(DEVTESTSCONSOLE* tests)
 {
   XSTRING nameapp;
@@ -3003,14 +2985,14 @@ bool DEVTESTSCONSOLE::Test_SystemCPUUsage(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_AppAlerts(DEVTESTSCONSOLE* tests)
-* @brief      Test_AppAlerts
-* @ingroup    APPLICATION
+* @brief      Runs the app alerts test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_AppAlerts(DEVTESTSCONSOLE* tests)
 {
   int status[APPFLOW_ALERT_TYPE_MAX];
@@ -3040,14 +3022,14 @@ bool DEVTESTSCONSOLE::Test_AppAlerts(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
-* @brief      Test_BluetoothEnum
-* @ingroup    APPLICATION
+* @brief      Runs the bluetooth enum test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
 {
   #ifdef DIO_STREAMBLUETOOTH_ACTIVE
@@ -3102,14 +3084,14 @@ bool DEVTESTSCONSOLE::Test_BluetoothEnum(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
-* @brief      Test_BluetoothLEEnum
-* @ingroup    APPLICATION
+* @brief      Runs the bluetooth leenum test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
 {
   #ifdef DIO_STREAMBLUETOOTHLE_ACTIVE
@@ -3168,15 +3150,15 @@ bool DEVTESTSCONSOLE::Test_BluetoothLEEnum(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
-* @brief      Test_NTP_Protocol
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the ntp protocol test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
 {
@@ -3223,14 +3205,14 @@ bool DEVTESTSCONSOLE::Test_NTP_Protocol(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
-* @brief      Test_NTP_InternetServices
-* @ingroup    APPLICATION
+* @brief      Runs the ntp internet services test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 { 
   bool                      status      = false; 
@@ -3297,14 +3279,14 @@ bool DEVTESTSCONSOLE::Test_NTP_InternetServices(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
-* @brief      Test_Sound
-* @ingroup    APPLICATION
+* @brief      Runs the sound test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 {  
   bool        status = false; 
@@ -3422,14 +3404,14 @@ bool DEVTESTSCONSOLE::Test_Sound(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
-* @brief      Test_ProcessManager
-* @ingroup    APPLICATION
+* @brief      Runs the process manager test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
 {
   XSTRING             command;
@@ -3446,7 +3428,6 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
   bool status = GEN_XPROCESSMANAGER.Application_Execute(command.Get(), params.Get(), &in, &out, &returncode);
 
   XTRACE_PRINTCOLOR((status?XTRACE_COLOR_BLUE:XTRACE_COLOR_RED), __L("Exec: %s "), (status?__L("Ok"):__L("Error!")));
-
 
 
   /*
@@ -3491,14 +3472,14 @@ bool DEVTESTSCONSOLE::Test_ProcessManager(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_GetUserAndDomain(DEVTESTSCONSOLE* tests)
-* @brief      Test_GetUserAndDomain
-* @ingroup    APPLICATION
+* @brief      Runs the get user and domain test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_GetUserAndDomain(DEVTESTSCONSOLE* tests)
 {
   bool status;
@@ -3516,13 +3497,15 @@ bool DEVTESTSCONSOLE::Test_GetUserAndDomain(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool TEST::Test_I2C_GPIO_MCP2317()
-* @brief      Test_I2C_GPIO_MCP2317
-* @ingroup    APPLICATION
+* @fn         bool DEVTESTSCONSOLE::Test_I2C_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
+* @brief      Runs the i2 c gpio mcp2317 test.
+* @ingroup    TESTS
 *
-* @return     bool : true if is succesful. 
+* @param[in]  tests : test application instance used by the test.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_I2C_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 {	
 	tests->console->PrintMessage(__L(" I2C Test START..."),1,true,true);	
@@ -3580,14 +3563,14 @@ bool DEVTESTSCONSOLE::Test_I2C_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_SPI_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
-* @brief      Test_SPI_GPIO_MCP2317
-* @ingroup    APPLICATION
+* @brief      Runs the spi gpio mcp2317 test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SPI_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 {	
 	tests->console->PrintMessage(__L(" SPI Test START..."),1,true,true);	
@@ -3632,14 +3615,14 @@ bool DEVTESTSCONSOLE::Test_SPI_GPIO_MCP2317(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
-* @brief      Test_WifiManagerMode
-* @ingroup    APPLICATION
+* @brief      Runs the wifi manager mode test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 {
   DIOWIFIMANAGERMODE* wifimanagermode = NULL;
@@ -3697,17 +3680,16 @@ bool DEVTESTSCONSOLE::Test_WifiManagerMode(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_NotificationsManager(DEVTESTSCONSOLE* tests)
-* @brief      Test_NotificationsManager
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the notifications manager test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NotificationsManager(DEVTESTSCONSOLE* tests)
 {
   DIONOTIFICATIONSMANAGER* notificationmanager = GEN_DIOFACTORY.CreateNotificationsManager();
@@ -3741,17 +3723,16 @@ bool DEVTESTSCONSOLE::Test_NotificationsManager(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
-* @brief      Test_ATCommandGSM
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the atcommand gsm test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 {				
   #define ATCOMMAND_PIN  __L("7266")
@@ -3895,17 +3876,16 @@ bool DEVTESTSCONSOLE::Test_ATCommandGSM(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
-* @brief      Test_SNMP
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the snmp test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 {  
   bool        status = false;
@@ -3939,15 +3919,15 @@ bool DEVTESTSCONSOLE::Test_SNMP(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
-* @brief      Test_XFileJSON
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the xfile json test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
 {
@@ -4066,17 +4046,16 @@ bool DEVTESTSCONSOLE::Test_XFileJSON(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XFileXML(DEVTESTSCONSOLE* tests)
-* @brief      Test_XFileXML
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the xfile xml test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileXML(DEVTESTSCONSOLE* tests)
 {
   XPATH       xpath;
@@ -4116,17 +4095,16 @@ bool DEVTESTSCONSOLE::Test_XFileXML(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XFileRIFF(DEVTESTSCONSOLE* tests)
-* @brief      Test_XFileRIFF
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the xfile riff test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileRIFF(DEVTESTSCONSOLE* tests)
 {
   XFILERIFF xfileRIFF;  
@@ -4149,17 +4127,16 @@ bool DEVTESTSCONSOLE::Test_XFileRIFF(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamUSBConnection(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOStreamUSBConnection
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the diostream usbconnection test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOStreamUSBConnection(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
@@ -4245,17 +4222,16 @@ bool DEVTESTSCONSOLE::Test_DIOStreamUSBConnection(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XFileDFU(DEVTESTSCONSOLE* tests)
-* @brief      Test_XFileDFU
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the xfile dfu test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XFileDFU(DEVTESTSCONSOLE* tests)
 {
   XFILEDFU  xfileDFU;  
@@ -4281,17 +4257,16 @@ bool DEVTESTSCONSOLE::Test_XFileDFU(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_SystemHostFile(DEVTESTSCONSOLE* tests)
-* @brief      Test_SystemHostFile
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the system host file test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SystemHostFile(DEVTESTSCONSOLE* tests)
 {
   GEN_XSYSTEM.HostFile(true, __L("youtube.es"), __L("127.0.0.1"));
@@ -4303,17 +4278,16 @@ bool DEVTESTSCONSOLE::Test_SystemHostFile(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_SystemBatteryLevel(DEVTESTSCONSOLE* tests)
-* @brief      Test_SystemBatteryLevel
-* @ingroup    
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the system battery level test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_SystemBatteryLevel(DEVTESTSCONSOLE* tests)
 {
   bool    isincharge   = false;
@@ -4335,17 +4309,16 @@ bool DEVTESTSCONSOLE::Test_SystemBatteryLevel(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
-* @brief      Test_LedNeoPixelWS2812B
-* @ingroup    
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the led neo pixel ws2812 b test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
 { 
   DIOLEDNEOPIXELWS2812B* ledneopixelws2812b = GEN_DIOFACTORY.CreateLedNeopixelWS2812B(); 
@@ -4458,17 +4431,16 @@ bool DEVTESTSCONSOLE::Test_LedNeoPixelWS2812B(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOPCap
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the diopcap test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 {
 	#ifdef DIO_PCAP_ACTIVE
@@ -4586,17 +4558,16 @@ bool DEVTESTSCONSOLE::Test_DIOPCap(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
-* @brief      Test_License
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the xlicense test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 {
 	XLICENSE* 	xlicense  = NULL;
@@ -4647,15 +4618,15 @@ bool DEVTESTSCONSOLE::Test_XLicense(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
-* @brief      Test_XSerializable
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the xserializable test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 {
@@ -4714,15 +4685,15 @@ bool DEVTESTSCONSOLE::Test_XSerializable(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
-* @brief      Test_InputSimulate
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the input simulate test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 {
@@ -4743,15 +4714,15 @@ bool DEVTESTSCONSOLE::Test_InputSimulate(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
-* @brief      Test_Scheduler
-* @ingroup    APPLICATION
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the scheduler test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
 {
@@ -4809,15 +4780,15 @@ bool DEVTESTSCONSOLE::Test_Scheduler(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
-* @brief      Test_DynDNS
+* @brief      Runs the dyn dns test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
 {	
@@ -4849,15 +4820,15 @@ bool DEVTESTSCONSOLE::Test_DynDNS(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
-* @brief      Test_ID_IBAN
+* @brief      Runs the id iban test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
 {
@@ -4913,15 +4884,15 @@ bool DEVTESTSCONSOLE::Test_ID_IBAN(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
-* @brief      Test_Compress
+* @brief      Runs the compress test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
 {
@@ -5019,15 +4990,15 @@ bool DEVTESTSCONSOLE::Test_Compress(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
-* @brief      Test_DIOStreamTCPIPServer
+* @brief      Runs the diostream tcpipserver test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
 {  
@@ -5088,15 +5059,15 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTCPIPServer(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_XPath(DEVTESTSCONSOLE* tests)
-* @brief      test  Xpath
+* @brief      Runs the xpath test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_XPath(DEVTESTSCONSOLE* tests)
 {
@@ -5116,17 +5087,19 @@ bool DEVTESTSCONSOLE::Test_XPath(DEVTESTSCONSOLE* tests)
 
 
 #ifdef WINDOWS
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
-* @brief      Test_WindowsACL
-* @ingroup    APPLICATION
+* @brief      Runs the windows acl test.
+* @ingroup    TESTS
 *
-* @param[in]  tests :
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
 {
   XWINDOWSACCESSCONTROLLISTS  ACList;
@@ -5148,15 +5121,15 @@ bool DEVTESTSCONSOLE::Test_WindowsACL(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
-* @brief      test  registry
+* @brief      Runs the windows registry test.
 * @ingroup    TESTS
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 {
@@ -5178,15 +5151,15 @@ bool DEVTESTSCONSOLE::Test_WindowsRegistry(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
-* @brief      test  windows winget
-* @ingroup    
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the windows winget test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
 {  
@@ -5209,17 +5182,19 @@ bool DEVTESTSCONSOLE::Test_WindowsWinget(DEVTESTSCONSOLE* tests)
 
 
 #ifdef LINUX
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
-* @brief      Test_DBUS
-* @ingroup    APPLICATION
+* @brief      Runs the dbus test.
+* @ingroup    TESTS
 *
-* @param[in]  tests : 
+* @param[in]  tests : test application instance used by the test.
 *
-* @return     bool : true if is succesful. 
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 {
   bool                  status = false;
@@ -5325,17 +5300,16 @@ bool DEVTESTSCONSOLE::Test_DBUS(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
-* @brief      Test_NetWorkManager
-* @ingroup    
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     bool : true if is succesful. 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the net work manager test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
 {
   #ifdef LINUX_DIO_NETWORKMANAGER_ACTIVE
@@ -5395,17 +5369,16 @@ bool DEVTESTSCONSOLE::Test_NetWorkManager(DEVTESTSCONSOLE* tests)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
-* @brief      Test_DeviceBusInputFile
-* @ingroup    APPLICATION
-* 
-* 
-* @param[in]  tests : 
-* 
-* @return     static : 
-* 
-* ---------------------------------------------------------------------------------------------------------------------*/
+* @brief      Runs the device bus input file test.
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
 {
   INPDEVICE_TYPE             typedevice = INPDEVICE_TYPE_TOUCHSCREEN; 
@@ -5579,16 +5552,16 @@ bool DEVTESTSCONSOLE::Test_DeviceBusInputFile(DEVTESTSCONSOLE* tests)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
-* @brief      Test_Hash
-* @ingroup    APPLICATION
+* @brief      Runs the hash test.
+* @ingroup    TESTS
 *
-* @param[in]  HASH :
-* @param[in]  input :
-* @param[in]  leyend :
+* @param[in]  HASH : hash instance used by the test.
+* @param[in]  input : input buffer used by the test.
+* @param[in]  leyend : legend text shown with the hash result.
 *
-* @return     bool : true if is succesful.
+* @return     bool : true if it is successful.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 {
   if(!HASH) return false;
@@ -5606,15 +5579,15 @@ bool DEVTESTSCONSOLE::Test_Hash(HASH* HASH, XBUFFER& input, XCHAR* leyend)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
-* @brief      Test_WaitSound
-* @ingroup    APPLICATION
-* 
-* @param[in]  item : 
-* 
-* @return     bool : true if is succesful. 
-* 
+* @brief      Runs the wait sound test.
+* @ingroup    TESTS
+*
+* @param[in]  item : sound item used by the wait operation.
+*
+* @return     bool : true if it is successful.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 {
@@ -5647,15 +5620,14 @@ bool DEVTESTSCONSOLE::Test_WaitSound(SNDITEM* item)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    APPLICATION
+* @brief      Handles scheduler events.
+* @ingroup    TESTS
 *
-* @param[in]  event :
+* @param[in]  event : event information to process.
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 {  
   switch(event->GetTask()->GetID())
@@ -5671,16 +5643,15 @@ void DEVTESTSCONSOLE::HandleEvent_Scheduler(XSCHEDULER_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    APPLICATION
-* 
-* @param[in]  event : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Handles sound events.
+* @ingroup    TESTS
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
 {  
@@ -5710,15 +5681,14 @@ void DEVTESTSCONSOLE::HandleEvent_Sound(SNDFACTORY_XEVENT* event)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCONSOLE::HandleEvent_WebClient(DIOWEBCLIENT_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    APPLICATION
+* @brief      Handles web client events.
+* @ingroup    TESTS
 *
-* @param[in]  event :
+* @param[in]  event : event information to process.
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_WebClient(DIOWEBCLIENT_XEVENT* event)
 {
   XSTRING line;
@@ -5759,16 +5729,15 @@ void DEVTESTSCONSOLE::HandleEvent_WebClient(DIOWEBCLIENT_XEVENT* event)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SERVER_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
-* @ingroup    APPLICATION
-* 
-* @param[in]  event : 
-* 
-* @return     void : does not return anything. 
-* 
+* @brief      Handles DNS protocol MitM server events.
+* @ingroup    TESTS
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SERVER_XEVENT* event)
 {
@@ -5798,14 +5767,15 @@ void DEVTESTSCONSOLE::HandleEvent_DNSProtocol_MitM_Server(DIODNSPROTOCOL_MITM_SE
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
-* @brief      Handle Event for the observer manager of this class
-* @note       INTERNAL
+* @brief      Handles DIO stream events.
 * @ingroup    TESTS
-* 
-* @param[in]  event : 
-* 
+*
+* @param[in]  event : event information to process.
+*
+* @return     void : does not return anything.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 {
@@ -5834,15 +5804,15 @@ void DEVTESTSCONSOLE::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         DEVTESTSCONSOLE::HandleEvent
-* @brief      Handle Events
-* @ingroup
+* @fn         void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
+* @brief      Handles an event.
+* @ingroup    TESTS
 *
-* @param[]    xevent : event send to control
+* @param[in]  xevent : event information to process.
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
 {
   if(!xevent) 
@@ -5894,14 +5864,14 @@ void DEVTESTSCONSOLE::HandleEvent(XEVENT* xevent)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCONSOLE::ThreadRunFunction(void* param)
-* @brief      ThreadRunFunction
-* @ingroup    APPLICATION
+* @brief      Runs the thread function.
+* @ingroup    TESTS
 *
-* @param[in]  param :
+* @param[in]  param : param value used by the operation.
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::ThreadRunFunction(void* param)
 {
   DEVTESTSCONSOLE_XTHREADPARAM* threadparam = (DEVTESTSCONSOLE_XTHREADPARAM*)param;
@@ -5930,13 +5900,12 @@ void DEVTESTSCONSOLE::ThreadRunFunction(void* param)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void DEVTESTSCONSOLE::Clean()
-* @brief      Clean the attributes of the class: Default initialice
-* @note       INTERNAL
-* @ingroup
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
 *
 * @return     void : does not return anything.
 *
-*---------------------------------------------------------------------------------------------------------------------*/
+* --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTSCONSOLE::Clean()
 {  
   xtimerupdateconsole         = NULL;

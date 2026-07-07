@@ -1,35 +1,33 @@
 /**-------------------------------------------------------------------------------------------------------------------
-* 
-* @file       UnitTests_XSleep.cpp
-* 
+*
+* @file       XUtils_UnitTests_XSleep.cpp
+*
 * @class      XUTILS_UNITTESTS_XSLEEP
-* @brief      Unit Tests for XSleep class
+* @brief      XUtils unit tests for XSleep class
 * @ingroup    TESTS
-* 
+*
 * @copyright  EndoraSoft. All rights reserved.
-* 
+*
 * @cond
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 * documentation files(the "Software"), to deal in the Software without restriction, including without limitation
 * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
 * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
 * the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * @endcond
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Defines.h"
-
 
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
@@ -45,16 +43,12 @@
 #include "XTimer.h"
 
 
-
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -65,13 +59,15 @@ namespace TEST_XSLEEP
 {
 
        
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         static void EnsureXSleepInstance()
-* @brief      Ensure XSleep instance
+* @brief      Ensures that the XSleep singleton instance exists.
 * @ingroup    UNIT TEST
 *
-* @return     Does not return anything. 
+* @return     void : does not return anything.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 static void EnsureXSleepInstance()
@@ -83,15 +79,7 @@ static void EnsureXSleepInstance()
     }
 }
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn  
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Seconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
+
 TEST(UNITTEST_XSLEEP_CLASSNAME, Seconds)
 {
   EnsureXSleepInstance();
@@ -106,15 +94,6 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, Seconds)
  }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Miliseconds)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Miliseconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, Miliseconds)
 {
   EnsureXSleepInstance();
@@ -129,15 +108,6 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, Miliseconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Microseconds)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Microseconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, Microseconds)
 {
   EnsureXSleepInstance();
@@ -152,15 +122,6 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, Microseconds)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  Nanoseconds
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 /*
 TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
 {
@@ -177,30 +138,12 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
 */
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, SetInstanceNull)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  SetInstanceNull
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, SetInstanceNull)
 {
   EXPECT_FALSE(XSLEEP::SetInstance(NULL));
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  InstanceLifecycle
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
 {
   XSLEEP* originalinstance = NULL;
@@ -226,15 +169,6 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, InstanceLifecycle)
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, SleepAPIAcceptsZero)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  SleepAPIAcceptsZero
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, SleepAPIAcceptsZero)
 {
   EnsureXSleepInstance();
@@ -250,16 +184,6 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, SleepAPIAcceptsZero)
 }
 
 
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         TEST(UNITTEST_XSLEEP_CLASSNAME, DelInstanceTwice)
-* @brief      Unit test of UNITTEST_XSLEEP_CLASSNAME:  DelInstanceTwice
-* @ingroup    UNIT TEST
-* 
-* @return     Does not return anything. 
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 TEST(UNITTEST_XSLEEP_CLASSNAME, DelInstanceTwice)
 {
   XSLEEP* originalinstance = NULL;
