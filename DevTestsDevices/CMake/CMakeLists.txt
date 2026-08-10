@@ -56,7 +56,7 @@ option(DIO_STREAMSPI_TFTDISPLAY_ILI9341_FEATURE                 "Stream SPI TFT 
 option(DIO_STREAMSPI_TFTDISPLAY_ST7789_FEATURE                  "Stream SPI TFT Display ST7789"                           ON )
 option(DIO_STREAMSPI_TOUCHSCREEN_STMPE610_FEATURE               "Stream SPI Touch Screen STMPE610"                        ON )
                                                                                                                           
-option(DIO_LEDNEOPIXELWS2812B_RPI5_FEATURE                      "Led Neopixel WS2812B Raspberry Pi 5"                     ON )
+option(DIO_LEDNEOPIXELWS2812B_FEATURE                           "Led Neopixel WS2812B"                                    ON )
                                                                                                                           
 option(XEEPROMMEMORYMANAGER_FEATURE                             "EEPROM Memory Manager"                                   ON )
                                                                                                                           

@@ -86,7 +86,7 @@ option(DIO_MODBUSCLIENT_FEATURE                                 "Data Input/Outp
 
 option(DIO_IEC60870_5_FEATURE                                   "DIO IEC 60870-5"                                         ON )
 option(DIO_BUSPIRATE_FEATURE                                    "Data Input/Output Bus Pirate 4.0"                        ON )
-option(DIO_LEDNEOPIXELWS2812B_RPI5_FEATURE                      "Led Neopixel WS2812B Raspberry Pi 5"                     ON )
+option(DIO_LEDNEOPIXELWS2812B_FEATURE                           "Led Neopixel WS2812B"                                    ON )
 option(DIO_PROTOCOL_CLI_BUS_FEATURE                             "Data Input/Output Protocol in CLI Bus"                   ON )
 #option(DIO_PCAP_FEATURE                                         "Data Input/Output Cap"                                   ON )
 #option(DIO_IEC60870_5_FEATURE                                   "IEC60870_5 Protocol"                                     ON ) 
