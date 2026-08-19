@@ -47,16 +47,24 @@ option(HASH_MD5_FEATURE                                         "Hash MD5"      
 option(HASH_SHA1_FEATURE                                        "Hash SHA1"                                               ON )    
 option(HASH_SHA2_FEATURE                                        "Hash SHA2"                                               ON )
 option(HASH_COMP128V1_FEATURE                                   "Hash COMP128V1"                                          ON )
-option(HASH_WHIRLPOOL_FEATURE                                   "Hash Whirlpool"                                          ON )    
+option(HASH_WHIRLPOOL_FEATURE                                   "Hash Whirlpool"                                          ON )  
+
+option(HASH_HMAC_FEATURE                                        "Hash HMAC"                                               ON )
+
 option(CIPHER_SYMMETRIC_FEATURE                                 "Cipher Symetric"                                         ON )
 option(CIPHER_SYMMETRIC_DES_FEATURE                             "Cipher Symetric DES"                                     ON )
 option(CIPHER_SYMMETRIC_AES_FEATURE                             "Cipher Symetric AES"                                     ON )
+option(CIPHER_SYMMETRIC_AESGCM_FEATURE                          "Cipher Symetric AES GCM"                                 ON )
 option(CIPHER_SYMMETRIC_BLOWFISH_FEATURE                        "Cipher Symetric BlowFish"                                ON )
+
+option(CIPHER_HKDF_FEATURE                                      "Cipher Symetric HKDF"                                    ON )
+
 option(CIPHER_ASYMMETRIC_FEATURE                                "Cipher Asymetric"                                        ON ) 
 option(CIPHER_ASYMMETRIC_FILEKEY_GFK                            "Cipher Asymetric File Key (.Gen Key File)"               ON ) 
 option(CIPHER_ASYMMETRIC_FILEKEY_PEM                            "Cipher Asymetric File Key (.PEM)"                        ON ) 
 option(CIPHER_ASYMMETRIC_RSA_FEATURE                            "Cipher Asymetric RSA"                                    ON ) 
 option(CIPHER_ASYMMETRIC_X25519_FEATURE                         "Cipher Asimetric ECDSA X25519"                           ON ) 
+
         
 option(DIO_FEATURE                                              "Data Input/Output"                                       ON ) 
 option(DIO_STREAMUART_FEATURE                                   "Data Input/Output Stream UART"                           ON )

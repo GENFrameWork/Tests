@@ -78,10 +78,13 @@
 #include "HashSHA1.h"
 #include "HashSHA2.h"
 #include "HashWhirlpool.h"
+#include "HashHMAC.h"
 #include "CipherDES.h"
 #include "Cipher3DES.h"
 #include "CipherAES.h"
+#include "CipherAESGCM.h"
 #include "CipherBlowfish.h"
+#include "CipherHKDF.h"
 #include "CipherKeySymmetrical.h"
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
@@ -715,8 +718,10 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_DIOCheckTCPIPConnections      , __L("Test DIOCheckTCPIPConnections")        },
                                                       { false  , Test_WifiEnum                      , __L("Test Wifi Enum")                       },                                          
                                                       { false  , Test_WakeOnLAN                     , __L("Test Wake On LAN")                     }, 
-                                                      { false  , Test_Hash                          , __L("Test Hash")                            },
+                                                      { true   , Test_Hash                          , __L("Test Hash")                            },
                                                       { false  , Test_Cipher_Simetric               , __L("Test Cipher Simetric")                 }, 
+                                                      { true   , Test_Cipher_HKDF                   , __L("Test Cipher HKDF")                     }, 
+                                                      { true   , Test_Cipher_AESGCM                 , __L("Test Cipher AES GCM")                  }, 
                                                       { false  , Test_CipherFileKeys                , __L("Test Cipher File Keys")                },         
                                                       { false  , Test_CipherRSA                     , __L("Test Cipher RSA")                      },         
                                                       { false  , Test_CipherECDSAX25519             , __L("Test Cipher Curve 25519")              },         
@@ -737,7 +742,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
                                                       { false  , Test_NotificationsManager          , __L("Test Notifications Manager")           }, 
                                                       { false  , Test_ATCommandGSM                  , __L("Test AT Command GSM ")                 }, 
                                                       { false  , Test_SNMP                          , __L("Test SNMP ")                           },
-                                                      { true   , Test_XFileJSON                     , __L("Test XFile JSON")                      },  
+                                                      { false  , Test_XFileJSON                     , __L("Test XFile JSON")                      },  
                                                       { false  , Test_XFileXML                      , __L("Test XFile XML")                       },  
                                                       { false  , Test_XFileRIFF                     , __L("Test XFile RIFF")                      },
                                                       { false  , Test_DIOStreamUSBConnection        , __L("Test DIOStreamConnection")             },
@@ -787,7 +792,7 @@ bool DEVTESTSCONSOLE::Do_Tests()
   console->PrintMessage(__L(" "), 0, false, true);
 
   #ifndef DEVTESTSCONSOLE_NOKEY
-  console->WaitKey(__L("  Pulsa una tecla para continuar... (%d)"), 1, false, 5);
+  console->WaitKey(__L("  Pulsa una tecla para continuar... (%d)"), 1, false, 30);
   #else
   if(!status)
     {
@@ -2427,12 +2432,21 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
   XBUFFER  input;
   XSTRING  leyend;
   XSTRING  string;
+  bool     status = false;
 
   string = __L("The quick brown fox jumps over the lazy dog");
 
   tests->console->Printf(__L("Sentence: \"%s\"\n\n"), string.Get());
 
   XBUFFER charstr;
+
+  string.ConvertToASCII(charstr);
+
+  if(charstr.GetSize() > 1)
+    {
+      charstr.Resize(charstr.GetSize()-1);                          // ConvertToASCII() adds a zero terminator
+    }
+
   input.Add((XBYTE*)charstr.Get(), charstr.GetSize());
 
   for(int c=0;c<8;c++)
@@ -2456,7 +2470,120 @@ bool DEVTESTSCONSOLE::Test_Hash(DEVTESTSCONSOLE* tests)
       GEN_DELETE hash;
     }
 
-  return true;
+  //--------------------------------------------------------------------------------------------------
+  // HMAC (RFC 2104) of the same sentence, keyed with a fixed key.
+
+  XBYTE   HMACkeydata[]  = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+                             0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b };
+  XBUFFER HMACkey;
+
+  HMACkey.Add(HMACkeydata, sizeof(HMACkeydata));
+
+  tests->console->Printf(__L("\nHMAC (key: 20 bytes of 0x0B)\n\n"));
+
+  for(int c=0;c<5;c++)
+    {
+      HASH*     hash     = NULL;
+      HASHHMAC* hashhmac = NULL;
+
+      switch(c)
+        {
+          case  0 :  hash = GEN_NEW HASHMD5();                      leyend = __L("HMAC MD5");        break;
+          case  1 :  hash = GEN_NEW HASHSHA1();                     leyend = __L("HMAC SHA1");       break;
+          case  2 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);     leyend = __L("HMAC SHA256");     break;
+          case  3 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);     leyend = __L("HMAC SHA384");     break;
+          case  4 :  hash = GEN_NEW HASHSHA2(HASHSHA2TYPE_512);     leyend = __L("HMAC SHA512");     break;
+        }
+
+      if(!hash) return false;
+
+      hashhmac = GEN_NEW HASHHMAC(hash);
+      if(!hashhmac)
+        {
+          GEN_DELETE hash;
+          return false;
+        }
+
+      hashhmac->SetKey(HMACkey);
+
+      tests->Test_Hash(hashhmac, input, leyend.Get());
+
+      GEN_DELETE hashhmac;
+      GEN_DELETE hash;
+    }
+
+  //--------------------------------------------------------------------------------------------------
+  // Check the HMAC implementation against the test case 1 of the RFC 4231:
+  // key = 20 bytes of 0x0B, data = "Hi There".
+
+  XBYTE   HMACresultSHA256[] = { 0xb0, 0x34, 0x4c, 0x61, 0xd8, 0xdb, 0x38, 0x53, 0x5c, 0xa8, 0xaf, 0xce, 0xaf, 0x0b, 0xf1, 0x2b,
+                                 0x88, 0x1d, 0xc2, 0x00, 0xc9, 0x83, 0x3d, 0xa7, 0x26, 0xe9, 0x37, 0x6c, 0x2e, 0x32, 0xcf, 0xf7 };
+
+  XBYTE   HMACresultSHA384[] = { 0xaf, 0xd0, 0x39, 0x44, 0xd8, 0x48, 0x95, 0x62, 0x6b, 0x08, 0x25, 0xf4, 0xab, 0x46, 0x90, 0x7f,
+                                 0x15, 0xf9, 0xda, 0xdb, 0xe4, 0x10, 0x1e, 0xc6, 0x82, 0xaa, 0x03, 0x4c, 0x7c, 0xeb, 0xc5, 0x9c,
+                                 0xfa, 0xea, 0x9e, 0xa9, 0x07, 0x6e, 0xde, 0x7f, 0x4a, 0xf1, 0x52, 0xe8, 0xb2, 0xfa, 0x9c, 0xb6 };
+
+  XSTRING HMACdata           = __L("Hi There");
+  XBUFFER HMACinput;
+
+  HMACdata.ConvertToASCII(HMACinput);
+
+  if(HMACinput.GetSize() > 1)
+    {
+      HMACinput.Resize(HMACinput.GetSize()-1);                      // ConvertToASCII() adds a zero terminator
+    }
+
+  tests->console->Printf(__L("\nHMAC check with the RFC 4231 test case 1\n\n"));
+
+  for(int c=0;c<2;c++)
+    {
+      HASHSHA2* hashsha2 = NULL;
+      HASHHMAC* hashhmac = NULL;
+      XBYTE*    expected = NULL;
+      XDWORD    sizeexpected = 0;
+
+      switch(c)
+        {
+          case  0 :  hashsha2     = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
+                     expected     = HMACresultSHA256;
+                     sizeexpected = sizeof(HMACresultSHA256);
+                     leyend       = __L("HMAC SHA256");
+                     break;
+
+          case  1 :  hashsha2     = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);
+                     expected     = HMACresultSHA384;
+                     sizeexpected = sizeof(HMACresultSHA384);
+                     leyend       = __L("HMAC SHA384");
+                     break;
+        }
+
+      if(!hashsha2) return false;
+
+      hashhmac = GEN_NEW HASHHMAC(hashsha2);
+      if(!hashhmac)
+        {
+          GEN_DELETE hashsha2;
+          return false;
+        }
+
+      hashhmac->SetKey(HMACkey);
+      hashhmac->ResetResult();
+
+      status = hashhmac->Do(HMACinput);
+      if(status)
+        {
+          status = hashhmac->GetResult()->Compare(expected, sizeexpected);
+        }
+
+      tests->console->Printf(__L("%-12s : %s\n"), leyend.Get(), status?__L("Ok."):__L("Error!"));
+
+      GEN_DELETE hashhmac;
+      GEN_DELETE hashsha2;
+
+      if(!status) break;
+    }
+
+  return status;
 }
 
 
@@ -2575,6 +2702,465 @@ bool DEVTESTSCONSOLE::Test_Cipher_Simetric(DEVTESTSCONSOLE* tests)
 					GEN_DELETE cipher;
 				}
 		}
+
+  if(!status) return false;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DEVTESTSCONSOLE::Test_Cipher_HKDF(DEVTESTSCONSOLE* tests)
+* @brief      test  cipher  HKDf
+* @ingroup    
+* 
+* @param[in]  tests : 
+* 
+* @return     bool : true if is succesful. 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Cipher_HKDF(DEVTESTSCONSOLE* tests)
+{
+  //--------------------------------------------------------------------------------------------------
+  // HKDF (RFC 5869) check with the test case 1: extract and expand with SHA-256.
+
+  XBYTE       HKDFikmdata[]   = { 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+                                  0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b };
+
+  XBYTE       HKDFsaltdata[]  = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c };
+
+  XBYTE       HKDFinfodata[]  = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9 };
+
+  XBYTE       HKDFPRKdata[]   = { 0x07, 0x77, 0x09, 0x36, 0x2c, 0x2e, 0x32, 0xdf, 0x0d, 0xdc, 0x3f, 0x0d, 0xc4, 0x7b, 0xba, 0x63,
+                                  0x90, 0xb6, 0xc7, 0x3b, 0xb5, 0x0f, 0x9c, 0x31, 0x22, 0xec, 0x84, 0x4a, 0xd7, 0xc2, 0xb3, 0xe5 };
+
+  XBYTE       HKDFOKMdata[]   = { 0x3c, 0xb2, 0x5f, 0x25, 0xfa, 0xac, 0xd5, 0x7a, 0x90, 0x43, 0x4f, 0x64, 0xd0, 0x36, 0x2f, 0x2a,
+                                  0x2d, 0x2d, 0x0a, 0x90, 0xcf, 0x1a, 0x5a, 0x4c, 0x5d, 0xb0, 0x2d, 0x56, 0xec, 0xc4, 0xc5, 0xbf,
+                                  0x34, 0x00, 0x72, 0x08, 0xd5, 0xb8, 0x87, 0x18, 0x58, 0x65 };
+
+  HASHSHA2    HKDFhash(HASHSHA2TYPE_256);
+  CIPHERHKDF  HKDF(&HKDFhash);
+
+  XBUFFER     HKDFikm;
+  XBUFFER     HKDFsalt;
+  XBUFFER     HKDFinfo;
+  XBUFFER     HKDFPRK;
+  XBUFFER     HKDFOKM;
+
+  XBUFFER		  input;
+  XBUFFER			output;
+  XBYTE			  inputdata[]	    = { 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a };
+
+  bool        status = false;   
+
+  HKDFikm.Add(HKDFikmdata   , sizeof(HKDFikmdata));
+  HKDFsalt.Add(HKDFsaltdata , sizeof(HKDFsaltdata));
+  HKDFinfo.Add(HKDFinfodata , sizeof(HKDFinfodata));
+
+  tests->console->Printf(__L("[ HKDF SHA2 256 ]\n"));
+
+  status = HKDF.Extract(HKDFsalt, HKDFikm, HKDFPRK);
+  if(status)
+    {
+      status = HKDFPRK.Compare(HKDFPRKdata, sizeof(HKDFPRKdata));
+    }
+
+  tests->console->Printf(__L("  Extract  : "));
+
+  for(int c=0; c<(int)(HKDFPRK.GetSize()); c++)
+    {
+      tests->console->Printf(__L("%02X"), HKDFPRK.GetByte(c));
+    }
+
+  tests->console->Printf(__L("\n  RFC 5869 test case 1 PRK : %s\n"), status?__L("Ok."):__L("Error!"));
+
+  if(status)
+    {
+      status = HKDF.Expand(HKDFPRK, HKDFinfo, sizeof(HKDFOKMdata), HKDFOKM);
+      if(status)
+        {
+          status = HKDFOKM.Compare(HKDFOKMdata, sizeof(HKDFOKMdata));
+        }
+
+      tests->console->Printf(__L("  Expand   : "));
+
+      for(int c=0; c<(int)(HKDFOKM.GetSize()); c++)
+        {
+          tests->console->Printf(__L("%02X"), HKDFOKM.GetByte(c));
+        }
+
+      tests->console->Printf(__L("\n  RFC 5869 test case 1 OKM : %s\n\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(!status) return false;
+
+  //--------------------------------------------------------------------------------------------------
+  // Derive the key and the initialization vector of a symmetric cipher from a secret, the way TLS 1.3
+  // does it with HKDF-Expand-Label, and use them with AES.
+
+  CIPHERKEYSYMMETRICAL  HKDFderivedkey;
+  CIPHERAES             HKDFcipher;
+  XBUFFER               HKDFcontext;
+  XBUFFER               HKDFkey;
+  XBUFFER               HKDFinivector;
+
+  status = HKDF.ExpandLabel(HKDFPRK, __L("key"), HKDFcontext, 32, HKDFkey);
+  if(status)
+    {
+      status = HKDF.ExpandLabel(HKDFPRK, __L("iv"), HKDFcontext, 16, HKDFinivector);
+    }
+
+  if(!status) return false;
+
+  tests->console->Printf(__L("[ HKDF derived material for AES ]\n"));
+
+  tests->console->Printf(__L("  Key      : "));
+
+  for(int c=0; c<(int)(HKDFkey.GetSize()); c++)
+    {
+      tests->console->Printf(__L("%02X"), HKDFkey.GetByte(c));
+    }
+
+  tests->console->Printf(__L("\n  IV       : "));
+
+  for(int c=0; c<(int)(HKDFinivector.GetSize()); c++)
+    {
+      tests->console->Printf(__L("%02X"), HKDFinivector.GetByte(c));
+    }
+
+  tests->console->Printf(__L("\n"));
+
+  HKDFderivedkey.Set(HKDFkey);
+
+  HKDFcipher.SetChainingMode(CIPHERCHAININGMODE_CBC);
+  HKDFcipher.SetPaddingType(XBUFFER_PADDINGTYPE_ZEROS);
+  HKDFcipher.SetInitVector(HKDFinivector);
+  HKDFcipher.SetKey(&HKDFderivedkey);
+
+  input.Empty();
+  input.Add((XBYTE*)inputdata, sizeof(inputdata));
+
+  tests->console->Printf(__L("  Cipher   : "));
+  status = Test_OneCipher_Simetric(tests, true, &HKDFcipher, input, output);
+
+  if(status)
+    {
+      input.Empty();
+
+      tests->console->Printf(__L("  Uncipher : "));
+      status = Test_OneCipher_Simetric(tests, false, &HKDFcipher, output, input);
+    }
+
+  if(status)
+    {
+      if(input.GetSize() > sizeof(inputdata))
+        {
+          input.Resize(sizeof(inputdata));
+        }
+
+      status = input.Compare((XBYTE*)inputdata, sizeof(inputdata));
+    }
+
+  tests->console->Printf(__L("  Round trip with the derived key : %s\n"), status?__L("Ok."):__L("Error!"));
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTSCONSOLE::Test_Cipher_AESGCM(DEVTESTSCONSOLE* tests)
+* @brief      Runs the cipher AES GCM test against the test vectors of the NIST SP 800-38D
+* @ingroup    TESTS
+*
+* @param[in]  tests : test application instance used by the test.
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTSCONSOLE::Test_Cipher_AESGCM(DEVTESTSCONSOLE* tests)
+{
+  if(!tests->console) return false;
+
+  //--------------------------------------------------------------------------------------------------
+  // Test vectors of the NIST SP 800-38D: cases 1 to 6 with AES-128 and 13 to 16 with AES-256.
+  // Cases 5 and 6 use nonces that are not of 96 bits, so they exercise the reduction of the nonce
+  // with GHASH instead of the direct path.
+
+  XBYTE                 AESGCM_zeros[]          = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+  XBYTE                 AESGCM_key128[]         = { 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30, 0x83, 0x08 };
+  XBYTE                 AESGCM_key256[]         = { 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30, 0x83, 0x08,
+                                                    0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30, 0x83, 0x08 };
+  XBYTE                 AESGCM_nonce96[]        = { 0xca, 0xfe, 0xba, 0xbe, 0xfa, 0xce, 0xdb, 0xad, 0xde, 0xca, 0xf8, 0x88 };
+  XBYTE                 AESGCM_nonce8[]         = { 0xca, 0xfe, 0xba, 0xbe, 0xfa, 0xce, 0xdb, 0xad };
+  XBYTE                 AESGCM_nonce60[]        = { 0x93, 0x13, 0x22, 0x5d, 0xf8, 0x84, 0x06, 0xe5, 0x55, 0x90, 0x9c, 0x5a, 0xff, 0x52, 0x69, 0xaa,
+                                                    0x6a, 0x7a, 0x95, 0x38, 0x53, 0x4f, 0x7d, 0xa1, 0xe4, 0xc3, 0x03, 0xd2, 0xa3, 0x18, 0xa7, 0x28,
+                                                    0xc3, 0xc0, 0xc9, 0x51, 0x56, 0x80, 0x95, 0x39, 0xfc, 0xf0, 0xe2, 0x42, 0x9a, 0x6b, 0x52, 0x54,
+                                                    0x16, 0xae, 0xdb, 0xf5, 0xa0, 0xde, 0x6a, 0x57, 0xa6, 0x37, 0xb3, 0x9b };
+  XBYTE                 AESGCM_plain[]          = { 0xd9, 0x31, 0x32, 0x25, 0xf8, 0x84, 0x06, 0xe5, 0xa5, 0x59, 0x09, 0xc5, 0xaf, 0xf5, 0x26, 0x9a,
+                                                    0x86, 0xa7, 0xa9, 0x53, 0x15, 0x34, 0xf7, 0xda, 0x2e, 0x4c, 0x30, 0x3d, 0x8a, 0x31, 0x8a, 0x72,
+                                                    0x1c, 0x3c, 0x0c, 0x95, 0x95, 0x68, 0x09, 0x53, 0x2f, 0xcf, 0x0e, 0x24, 0x49, 0xa6, 0xb5, 0x25,
+                                                    0xb1, 0x6a, 0xed, 0xf5, 0xaa, 0x0d, 0xe6, 0x57, 0xba, 0x63, 0x7b, 0x39, 0x1a, 0xaf, 0xd2, 0x55 };
+  XBYTE                 AESGCM_aad[]            = { 0xfe, 0xed, 0xfa, 0xce, 0xde, 0xad, 0xbe, 0xef, 0xfe, 0xed, 0xfa, 0xce, 0xde, 0xad, 0xbe, 0xef,
+                                                    0xab, 0xad, 0xda, 0xd2 };
+  XBYTE                 AESGCM_cipher02[]       = { 0x03, 0x88, 0xda, 0xce, 0x60, 0xb6, 0xa3, 0x92, 0xf3, 0x28, 0xc2, 0xb9, 0x71, 0xb2, 0xfe, 0x78 };
+  XBYTE                 AESGCM_cipher03[]       = { 0x42, 0x83, 0x1e, 0xc2, 0x21, 0x77, 0x74, 0x24, 0x4b, 0x72, 0x21, 0xb7, 0x84, 0xd0, 0xd4, 0x9c,
+                                                    0xe3, 0xaa, 0x21, 0x2f, 0x2c, 0x02, 0xa4, 0xe0, 0x35, 0xc1, 0x7e, 0x23, 0x29, 0xac, 0xa1, 0x2e,
+                                                    0x21, 0xd5, 0x14, 0xb2, 0x54, 0x66, 0x93, 0x1c, 0x7d, 0x8f, 0x6a, 0x5a, 0xac, 0x84, 0xaa, 0x05,
+                                                    0x1b, 0xa3, 0x0b, 0x39, 0x6a, 0x0a, 0xac, 0x97, 0x3d, 0x58, 0xe0, 0x91, 0x47, 0x3f, 0x59, 0x85 };
+  XBYTE                 AESGCM_cipher05[]       = { 0x61, 0x35, 0x3b, 0x4c, 0x28, 0x06, 0x93, 0x4a, 0x77, 0x7f, 0xf5, 0x1f, 0xa2, 0x2a, 0x47, 0x55,
+                                                    0x69, 0x9b, 0x2a, 0x71, 0x4f, 0xcd, 0xc6, 0xf8, 0x37, 0x66, 0xe5, 0xf9, 0x7b, 0x6c, 0x74, 0x23,
+                                                    0x73, 0x80, 0x69, 0x00, 0xe4, 0x9f, 0x24, 0xb2, 0x2b, 0x09, 0x75, 0x44, 0xd4, 0x89, 0x6b, 0x42,
+                                                    0x49, 0x89, 0xb5, 0xe1, 0xeb, 0xac, 0x0f, 0x07, 0xc2, 0x3f, 0x45, 0x98 };
+  XBYTE                 AESGCM_cipher06[]       = { 0x8c, 0xe2, 0x49, 0x98, 0x62, 0x56, 0x15, 0xb6, 0x03, 0xa0, 0x33, 0xac, 0xa1, 0x3f, 0xb8, 0x94,
+                                                    0xbe, 0x91, 0x12, 0xa5, 0xc3, 0xa2, 0x11, 0xa8, 0xba, 0x26, 0x2a, 0x3c, 0xca, 0x7e, 0x2c, 0xa7,
+                                                    0x01, 0xe4, 0xa9, 0xa4, 0xfb, 0xa4, 0x3c, 0x90, 0xcc, 0xdc, 0xb2, 0x81, 0xd4, 0x8c, 0x7c, 0x6f,
+                                                    0xd6, 0x28, 0x75, 0xd2, 0xac, 0xa4, 0x17, 0x03, 0x4c, 0x34, 0xae, 0xe5 };
+  XBYTE                 AESGCM_cipher14[]       = { 0xce, 0xa7, 0x40, 0x3d, 0x4d, 0x60, 0x6b, 0x6e, 0x07, 0x4e, 0xc5, 0xd3, 0xba, 0xf3, 0x9d, 0x18 };
+  XBYTE                 AESGCM_cipher15[]       = { 0x52, 0x2d, 0xc1, 0xf0, 0x99, 0x56, 0x7d, 0x07, 0xf4, 0x7f, 0x37, 0xa3, 0x2a, 0x84, 0x42, 0x7d,
+                                                    0x64, 0x3a, 0x8c, 0xdc, 0xbf, 0xe5, 0xc0, 0xc9, 0x75, 0x98, 0xa2, 0xbd, 0x25, 0x55, 0xd1, 0xaa,
+                                                    0x8c, 0xb0, 0x8e, 0x48, 0x59, 0x0d, 0xbb, 0x3d, 0xa7, 0xb0, 0x8b, 0x10, 0x56, 0x82, 0x88, 0x38,
+                                                    0xc5, 0xf6, 0x1e, 0x63, 0x93, 0xba, 0x7a, 0x0a, 0xbc, 0xc9, 0xf6, 0x62, 0x89, 0x80, 0x15, 0xad };
+  XBYTE                 AESGCM_tag01[]          = { 0x58, 0xe2, 0xfc, 0xce, 0xfa, 0x7e, 0x30, 0x61, 0x36, 0x7f, 0x1d, 0x57, 0xa4, 0xe7, 0x45, 0x5a };
+  XBYTE                 AESGCM_tag02[]          = { 0xab, 0x6e, 0x47, 0xd4, 0x2c, 0xec, 0x13, 0xbd, 0xf5, 0x3a, 0x67, 0xb2, 0x12, 0x57, 0xbd, 0xdf };
+  XBYTE                 AESGCM_tag03[]          = { 0x4d, 0x5c, 0x2a, 0xf3, 0x27, 0xcd, 0x64, 0xa6, 0x2c, 0xf3, 0x5a, 0xbd, 0x2b, 0xa6, 0xfa, 0xb4 };
+  XBYTE                 AESGCM_tag04[]          = { 0x5b, 0xc9, 0x4f, 0xbc, 0x32, 0x21, 0xa5, 0xdb, 0x94, 0xfa, 0xe9, 0x5a, 0xe7, 0x12, 0x1a, 0x47 };
+  XBYTE                 AESGCM_tag05[]          = { 0x36, 0x12, 0xd2, 0xe7, 0x9e, 0x3b, 0x07, 0x85, 0x56, 0x1b, 0xe1, 0x4a, 0xac, 0xa2, 0xfc, 0xcb };
+  XBYTE                 AESGCM_tag06[]          = { 0x61, 0x9c, 0xc5, 0xae, 0xff, 0xfe, 0x0b, 0xfa, 0x46, 0x2a, 0xf4, 0x3c, 0x16, 0x99, 0xd0, 0x50 };
+  XBYTE                 AESGCM_tag13[]          = { 0x53, 0x0f, 0x8a, 0xfb, 0xc7, 0x45, 0x36, 0xb9, 0xa9, 0x63, 0xb4, 0xf1, 0xc4, 0xcb, 0x73, 0x8b };
+  XBYTE                 AESGCM_tag14[]          = { 0xd0, 0xd1, 0xc8, 0xa7, 0x99, 0x99, 0x6b, 0xf0, 0x26, 0x5b, 0x98, 0xb5, 0xd4, 0x8a, 0xb9, 0x19 };
+  XBYTE                 AESGCM_tag15[]          = { 0xb0, 0x94, 0xda, 0xc5, 0xd9, 0x34, 0x71, 0xbd, 0xec, 0x1a, 0x50, 0x22, 0x70, 0xe3, 0xcc, 0x6c };
+  XBYTE                 AESGCM_tag16[]          = { 0x76, 0xfc, 0x6e, 0xce, 0x0f, 0x4e, 0x17, 0x68, 0xcd, 0xdf, 0x88, 0x53, 0xbb, 0x2d, 0x55, 0x1b };
+
+  typedef struct
+  {
+    XCHAR*                leyend;
+
+    XBYTE*                key;
+    XDWORD                sizekey;
+
+    XBYTE*                nonce;
+    XDWORD                sizenonce;
+
+    XBYTE*                plain;
+    XDWORD                sizeplain;
+
+    XBYTE*                additionaldata;
+    XDWORD                sizeadditionaldata;
+
+    XBYTE*                cipher;
+    XDWORD                sizecipher;
+
+    XBYTE*                tag;
+
+  } AESGCM_TESTVECTOR;
+
+  AESGCM_TESTVECTOR     AESGCM_vectors[] = { { __L("TC01 AES-128 no data")       , AESGCM_zeros    , 16, AESGCM_zeros    , 12, NULL          ,  0, NULL        ,  0, NULL            ,  0, AESGCM_tag01   },
+                                             { __L("TC02 AES-128 one block")     , AESGCM_zeros    , 16, AESGCM_zeros    , 12, AESGCM_zeros  , 16, NULL        ,  0, AESGCM_cipher02 , 16, AESGCM_tag02   },
+                                             { __L("TC03 AES-128 four blocks")   , AESGCM_key128   , 16, AESGCM_nonce96  , 12, AESGCM_plain  , 64, NULL        ,  0, AESGCM_cipher03 , 64, AESGCM_tag03   },
+                                             { __L("TC04 AES-128 with AAD")      , AESGCM_key128   , 16, AESGCM_nonce96  , 12, AESGCM_plain  , 60, AESGCM_aad  , 20, AESGCM_cipher03 , 60, AESGCM_tag04   },
+                                             { __L("TC05 AES-128 nonce of 8")    , AESGCM_key128   , 16, AESGCM_nonce8   ,  8, AESGCM_plain  , 60, AESGCM_aad  , 20, AESGCM_cipher05 , 60, AESGCM_tag05   },
+                                             { __L("TC06 AES-128 nonce of 60")   , AESGCM_key128   , 16, AESGCM_nonce60  , 60, AESGCM_plain  , 60, AESGCM_aad  , 20, AESGCM_cipher06 , 60, AESGCM_tag06   },
+                                             { __L("TC13 AES-256 no data")       , AESGCM_zeros    , 32, AESGCM_zeros    , 12, NULL          ,  0, NULL        ,  0, NULL            ,  0, AESGCM_tag13   },
+                                             { __L("TC14 AES-256 one block")     , AESGCM_zeros    , 32, AESGCM_zeros    , 12, AESGCM_zeros  , 16, NULL        ,  0, AESGCM_cipher14 , 16, AESGCM_tag14   },
+                                             { __L("TC15 AES-256 four blocks")   , AESGCM_key256   , 32, AESGCM_nonce96  , 12, AESGCM_plain  , 64, NULL        ,  0, AESGCM_cipher15 , 64, AESGCM_tag15   },
+                                             { __L("TC16 AES-256 with AAD")      , AESGCM_key256   , 32, AESGCM_nonce96  , 12, AESGCM_plain  , 60, AESGCM_aad  , 20, AESGCM_cipher15 , 60, AESGCM_tag16   } };
+
+  bool                  status = false;
+
+  for(int c=0; c<(int)(sizeof(AESGCM_vectors)/sizeof(AESGCM_TESTVECTOR)); c++)
+    {
+      CIPHERAESGCM          cipherAESGCM;
+      CIPHERKEYSYMMETRICAL  key;
+      XBUFFER               nonce;
+      XBUFFER               plain;
+      XBUFFER               additionaldata;
+      XBUFFER               ciphertext;
+      XBUFFER               tag;
+
+      key.Set(AESGCM_vectors[c].key, AESGCM_vectors[c].sizekey);
+
+      nonce.Add(AESGCM_vectors[c].nonce, AESGCM_vectors[c].sizenonce);
+
+      if(AESGCM_vectors[c].sizeplain)
+        {
+          plain.Add(AESGCM_vectors[c].plain, AESGCM_vectors[c].sizeplain);
+        }
+
+      if(AESGCM_vectors[c].sizeadditionaldata)
+        {
+          additionaldata.Add(AESGCM_vectors[c].additionaldata, AESGCM_vectors[c].sizeadditionaldata);
+        }
+
+      tests->console->Printf(__L("[ %s ]\n"), AESGCM_vectors[c].leyend);
+
+      // ----- Cipher -----------------------------------------------------------------------------------
+
+      status = cipherAESGCM.SetKey(&key);
+
+      if(status)
+        {
+          status = cipherAESGCM.CipherAEAD(plain, nonce, additionaldata, tag);
+        }
+
+      if(status)
+        {
+          status = (cipherAESGCM.GetResult()->GetSize() == AESGCM_vectors[c].sizecipher)?true:false;
+        }
+
+      if(status && AESGCM_vectors[c].sizecipher)
+        {
+          status = cipherAESGCM.GetResult()->Compare(AESGCM_vectors[c].cipher, AESGCM_vectors[c].sizecipher);
+        }
+
+      tests->console->Printf(__L("  Cipher   : "));
+
+      for(int d=0; d<(int)(cipherAESGCM.GetResult()->GetSize()); d++)
+        {
+          tests->console->Printf(__L("%02X"), cipherAESGCM.GetResult()->GetByte(d));
+        }
+
+      tests->console->Printf(__L("\n  Tag      : "));
+
+      for(int d=0; d<(int)(tag.GetSize()); d++)
+        {
+          tests->console->Printf(__L("%02X"), tag.GetByte(d));
+        }
+
+      if(status)
+        {
+          status = tag.Compare(AESGCM_vectors[c].tag, CIPHERAESGCM_TAGSIZE);
+        }
+
+      tests->console->Printf(__L("\n  NIST SP 800-38D vector   : %s\n"), status?__L("Ok."):__L("Error!"));
+
+      // ----- Uncipher ---------------------------------------------------------------------------------
+
+      if(status)
+        {
+          if(AESGCM_vectors[c].sizecipher)
+            {
+              ciphertext.Add(cipherAESGCM.GetResult());
+            }
+
+          status = cipherAESGCM.UncipherAEAD(ciphertext, nonce, additionaldata, tag);
+
+          if(status)
+            {
+              if(AESGCM_vectors[c].sizeplain)
+                   status = cipherAESGCM.GetResult()->Compare(plain);
+              else status = cipherAESGCM.GetResult()->IsEmpty();
+            }
+        }
+
+      tests->console->Printf(__L("  Uncipher and authenticate: %s\n\n"), status?__L("Ok."):__L("Error!"));
+
+      if(!status)
+        {
+          return false;
+        }
+    }
+
+  //--------------------------------------------------------------------------------------------------
+  // A message that has been tampered with must never be accepted, and its plain text must never be
+  // handed over. These are the checks that separate an AEAD from a plain cipher.
+
+  CIPHERAESGCM          cipherAESGCM;
+  CIPHERKEYSYMMETRICAL  key;
+  XBUFFER               nonce;
+  XBUFFER               plain;
+  XBUFFER               additionaldata;
+  XBUFFER               ciphertext;
+  XBUFFER               tag;
+  XBUFFER               altered;
+
+  key.Set(AESGCM_key128, sizeof(AESGCM_key128));
+
+  nonce.Add(AESGCM_nonce96, sizeof(AESGCM_nonce96));
+  plain.Add(AESGCM_plain, sizeof(AESGCM_plain));
+  additionaldata.Add(AESGCM_aad, sizeof(AESGCM_aad));
+
+  tests->console->Printf(__L("[ Rejection of tampered messages ]\n"));
+
+  status = cipherAESGCM.SetKey(&key);
+
+  if(status)
+    {
+      status = cipherAESGCM.CipherAEAD(plain, nonce, additionaldata, tag);
+    }
+
+  if(status)
+    {
+      ciphertext.Add(cipherAESGCM.GetResult());
+
+      status = cipherAESGCM.UncipherAEAD(ciphertext, nonce, additionaldata, tag);
+    }
+
+  tests->console->Printf(__L("  Valid message accepted   : %s\n"), status?__L("Ok."):__L("Error!"));
+
+  if(status)
+    {
+      altered.Add(tag);
+      altered.Get()[0] ^= 0x01;
+
+      status = cipherAESGCM.UncipherAEAD(ciphertext, nonce, additionaldata, altered)?false:true;
+
+      tests->console->Printf(__L("  Altered tag rejected     : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(status)
+    {
+      status = cipherAESGCM.GetResult()->IsEmpty();
+
+      tests->console->Printf(__L("  Plain text wiped         : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(status)
+    {
+      altered.Delete();
+      altered.Add(ciphertext);
+      altered.Get()[0] ^= 0x01;
+
+      status = cipherAESGCM.UncipherAEAD(altered, nonce, additionaldata, tag)?false:true;
+
+      tests->console->Printf(__L("  Altered cipher rejected  : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(status)
+    {
+      altered.Delete();
+      altered.Add(additionaldata);
+      altered.Get()[0] ^= 0x01;
+
+      status = cipherAESGCM.UncipherAEAD(ciphertext, nonce, altered, tag)?false:true;
+
+      tests->console->Printf(__L("  Altered AAD rejected     : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(status)
+    {
+      altered.Delete();
+      altered.Add(nonce);
+      altered.Get()[0] ^= 0x01;
+
+      status = cipherAESGCM.UncipherAEAD(ciphertext, altered, additionaldata, tag)?false:true;
+
+      tests->console->Printf(__L("  Altered nonce rejected   : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  if(status)
+    {
+      altered.Delete();
+      altered.Add(tag.Get(), CIPHERAESGCM_TAGSIZE_MIN);
+
+      status = cipherAESGCM.UncipherAEAD(ciphertext, nonce, additionaldata, altered)?false:true;
+
+      tests->console->Printf(__L("  Short tag rejected       : %s\n"), status?__L("Ok."):__L("Error!"));
+    }
+
+  tests->console->Printf(__L("\n"));
 
   return status;
 }

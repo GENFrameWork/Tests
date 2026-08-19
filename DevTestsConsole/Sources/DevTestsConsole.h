@@ -196,6 +196,8 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_Hash                           (DEVTESTSCONSOLE* tests);
     static bool                     Test_OneCipher_Simetric             (DEVTESTSCONSOLE* tests, bool operation, CIPHER* cipher, XBUFFER& input, XBUFFER& result);
     static bool                     Test_Cipher_Simetric                (DEVTESTSCONSOLE* tests);
+    static bool                     Test_Cipher_HKDF                    (DEVTESTSCONSOLE* tests);
+    static bool                     Test_Cipher_AESGCM                  (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherFileKeys                 (DEVTESTSCONSOLE* tests);
     static bool							        Test_CipherRSA				   	          (DEVTESTSCONSOLE* tests);
     static bool                     Test_CipherECDSAX25519              (DEVTESTSCONSOLE* tests);
