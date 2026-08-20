@@ -41,6 +41,10 @@
 #endif
 #include "DIOURL.h"
 #include "DIOGPIO.h"
+#ifdef DIO_STREAMTLS_ACTIVE
+#include "DIOStreamTLSKeySchedule.h"
+#include "DIOStreamTLSSession.h"
+#endif
 
 #include "APPFlowConsole.h"
 
@@ -203,6 +207,8 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_CipherECDSAX25519              (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTCPIP                 (DEVTESTSCONSOLE* tests);
     static bool                     Test_DIOStreamTLS                   (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DIOStreamTLS_KeySchedule       (DEVTESTSCONSOLE* tests);
+    static bool                     Test_DIOStreamTLS_Record            (DEVTESTSCONSOLE* tests);
     static bool                     Test_SystemCPUUsage                 (DEVTESTSCONSOLE* tests);
     static bool                     Test_AppAlerts                      (DEVTESTSCONSOLE* tests);
     static bool                     Test_BluetoothEnum                  (DEVTESTSCONSOLE* tests);
@@ -254,6 +260,10 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
 
     bool                            Test_Hash                           (HASH* HASH, XBUFFER& input, XCHAR* leyend);
 
+    static bool                     Test_DIOStreamTLS_Check             (DEVTESTSCONSOLE* tests, XCHAR* leyend, XBUFFER& got, XBYTE* expected, XDWORD sizeexpected);
+    static bool                     Test_DIOStreamTLS_BuildKeySchedule  (DIOSTREAMTLSKEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    static bool                     Test_DIOStreamTLS_SessionIni         (DIOSTREAMTLSSESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+
     static bool                     Test_WaitSound                      (SNDITEM* item);   
 
     void                            HandleEvent_Scheduler               (XSCHEDULER_XEVENT* event);
@@ -274,5 +284,3 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
