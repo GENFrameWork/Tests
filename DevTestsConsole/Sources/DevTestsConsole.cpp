@@ -89,12 +89,14 @@
 #include "CipherKeysFileGKF.h"
 #include "CipherKeysFilePEM.h"
 #include "CipherTrustedRootCertificatesX509.h"
+#include "CipherCertificateX509Validator.h"
 #include "CipherRSA.h"
 #include "CipherECDSAX25519.h"
 #include "DIOStreamTLSKeySchedule.h"
 #include "DIOStreamTLSRecord.h"
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
 #include "DIOStreamTLSSession.h"
+#include "DIOStreamTLSSignature.h"
 #include "DIOStreamTLSHandshakeClient.h"
 #include "DevTestsConsole_TLS_RFC8448.h"
 
@@ -1902,8 +1904,7 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
   tests->SubscribeEvent(DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB        , &webclient);
 
   url = __L("http://example.com/");
-  status = webclient.Get(url, webpage, NULL, 30) &&
-           (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+  status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
   XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTP: %s"), status?__L("Ok!"):__L("Error!"));
 
   #ifdef DIO_STREAMTLS_ACTIVE
@@ -1911,8 +1912,7 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
   if(status)
     {
       url = __L("https://example.com/");
-      status = webclient.Get(url, webpage, NULL, 30) &&
-               (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+      status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
       XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS example.com: %s"), status?__L("Ok!"):__L("Error!"));
     }
 
@@ -1926,15 +1926,13 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
       resultserver = webclient.GetHeader()->GetResultServer();
       status       = getstatus && (resultserver == 200) && !webpage.IsEmpty();
 
-      XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS www.google.com [GET: %s, HTTP: %d, size: %d]: %s"),
-                        getstatus?__L("Ok"):__L("Error"), resultserver, webpage.GetSize(), status?__L("Ok!"):__L("Error!"));
+      XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS www.google.com [GET: %s, HTTP: %d, size: %d]: %s"), getstatus?__L("Ok"):__L("Error"), resultserver, webpage.GetSize(), status?__L("Ok!"):__L("Error!"));
     }
 
   if(status)
     {
       url = __L("http://example.com/");
-      status = webclient.Get(url, webpage, NULL, 30) &&
-               (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+      status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
       XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTP after HTTPS: %s"), status?__L("Ok!"):__L("Error!"));
     }
 
@@ -3861,10 +3859,11 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   // -----------------------------------------------------------------------------------------------
 
-  tests->console->Printf(__L("\n[ Generated TLS 1.3 ClientHello and automatic X25519 ]\n"));
+  tests->console->Printf(__L("\n[ Generated TLS 1.3 ClientHello and automatic key share ]\n"));
 
   DIOSTREAMTLSSESSION          generatedsession;
   DIOSTREAMTLSHANDSHAKECLIENT generatedclient;
+  DIOSTREAMTLSCONFIG          generatedconfig;
   XBUFFER                     generatedclienthello;
   XBUFFER                     generatedrecords;
   XBUFFER                     generatedinput;
@@ -3874,6 +3873,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = generatedsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256,
                                 DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && generatedclient.Ini(&generatedsession, true);
+  status = status && generatedconfig.ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
+  status = status && generatedclient.Capabilities_Set(&generatedconfig);
   status = status && generatedclient.ClientHello_Create(__L("localhost"), generatedclienthello, generatedrecords);
   status = status && generatedsession.RecordInput_Add(generatedrecords);
   status = status && (generatedsession.Record_Extract(generatedtype, generatedplain) == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
@@ -3888,7 +3889,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   bool                                                             generatedSNI = false;
   bool                                                             generatedgroup = false;
   bool                                                             generatedsignature = false;
+  bool                                                             generatedcertificatesignature = false;
   bool                                                             generatedversion = false;
+  bool                                                             generatedALPN = false;
 
   generatedinput.Add(generatedclienthello);
 
@@ -3896,8 +3899,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && generatedinput.IsEmpty();
   status = status && (generatedmessage.GetBody()->GetClientVersion() == DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
   status = status && (generatedmessage.GetBody()->GetSessionIDLength() == DIOSTREAMTLS_MSG_SESSIONID_SIZE);
-  status = status && (generatedmessage.GetBody()->GetCipherSuites()->GetSize() == 1);
+  status = status && (generatedmessage.GetBody()->GetCipherSuites()->GetSize() == 2);
   status = status && (generatedmessage.GetBody()->GetCipherSuites()->Get(0) == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  status = status && (generatedmessage.GetBody()->GetCipherSuites()->Get(1) == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
 
   for(XDWORD c=0; c<generatedmessage.GetBody()->Extensions_GetAll()->GetSize(); c++)
     {
@@ -3917,16 +3921,45 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
           case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS     : { DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* groups;
 
                                                                       groups = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension;
-                                                                      generatedgroup = (groups->List_Get()->GetSize() == 1) &&
-                                                                                       (groups->List_Get()->Get(0) == DIOSTREAMTLS_MSG_CURVEID_X25519);
+                                                                      generatedgroup = (groups->List_Get()->GetSize() == 2) &&
+                                                                                       (groups->List_Get()->Get(0) == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+                                                                                       (groups->List_Get()->Get(1) == DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
                                                                     }
                                                                     break;
 
           case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS : { DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* algorithms;
 
                                                                        algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension;
-                                                                       generatedsignature = (algorithms->List_Get()->GetSize() == 1) &&
-                                                                                            (algorithms->List_Get()->Get(0) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+                                                                       generatedsignature = (algorithms->List_Get()->GetSize() == 3) &&
+                                                                                            (algorithms->List_Get()->Get(0) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) &&
+                                                                                            (algorithms->List_Get()->Get(1) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) &&
+                                                                                            (algorithms->List_Get()->Get(2) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+                                                                     }
+                                                                     break;
+
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT : { DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT* algorithms;
+
+                                                                           algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT*)extension;
+                                                                           generatedcertificatesignature = (algorithms->List_Get()->GetSize() == 9) &&
+                                                                                                           (algorithms->List_Get()->Get(0) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) &&
+                                                                                                           (algorithms->List_Get()->Get(1) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) &&
+                                                                                                           (algorithms->List_Get()->Get(2) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512) &&
+                                                                                                           (algorithms->List_Get()->Get(3) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256) &&
+                                                                                                           (algorithms->List_Get()->Get(4) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384) &&
+                                                                                                           (algorithms->List_Get()->Get(5) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512) &&
+                                                                                                           (algorithms->List_Get()->Get(6) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) &&
+                                                                                                           (algorithms->List_Get()->Get(7) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384) &&
+                                                                                                           (algorithms->List_Get()->Get(8) == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);
+                                                                         }
+                                                                         break;
+
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN                : { DIOSTREAMTLS_MSG_EXTENSION_ALPN* ALPN;
+                                                                       DIOSTREAMTLS_ALPN_TYPE           applicationprotocol;
+
+                                                                       ALPN = (DIOSTREAMTLS_MSG_EXTENSION_ALPN*)extension;
+                                                                       generatedALPN = (ALPN->List_GetNProtocols() == 1) &&
+                                                                                       ALPN->List_Get(0, applicationprotocol) &&
+                                                                                       (applicationprotocol == DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
                                                                      }
                                                                      break;
 
@@ -3952,7 +3985,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
         }
     }
 
-  status = status && generatedSNI && generatedgroup && generatedsignature && generatedversion;
+  status = status && generatedSNI && generatedgroup && generatedsignature && generatedcertificatesignature &&
+                     generatedversion && generatedALPN;
   status = status && generatedkey;
   status = status && (generatedkey->GetKeyType() == DIOSTREAMTLS_MSG_CURVEID_X25519);
   status = status && (generatedkey->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY);
@@ -3984,7 +4018,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   generatedserverhello.GetBody()->SetSessionIDLength(generatedmessage.GetBody()->GetSessionIDLength());
   memcpy(generatedserverhello.GetBody()->GetSessionID(), generatedmessage.GetBody()->GetSessionID(),
          generatedmessage.GetBody()->GetSessionIDLength());
-  generatedserverhello.GetBody()->SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  generatedserverhello.GetBody()->SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
   generatedserverhello.GetBody()->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
 
   generatedserverversion = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER();
@@ -4016,13 +4050,260 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = status && generatedserverhello.SetToBuffer(generatedserverhellobuffer, false);
   status = status && generatedclient.ServerHello_Process(generatedserverhellobuffer);
+  status = status && (generatedsession.GetKeySchedule()->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+  status = status && (generatedsession.GetKeySchedule()->GetHashSize() == HASHSHA2_384_DIGEST_SIZE);
   status = status && (generatedclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
   status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
   status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
   status = status && !memcmp(generatedsession.GetKeyExchange()->GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED),
                              generatedserverkey.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY);
 
-  tests->console->Printf(__L("  %-42s : %s\n"), __L("ServerHello derives the X25519 secret"), status?__L("Ok."):__L("Error!"));
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("Server selects AES-256 and derives X25519"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_ENCRYPTEDEXTENSIONS> generatedencryptedextensions;
+  DIOSTREAMTLS_MSG_EXTENSION_ALPN*                                         generatedserverALPN;
+  XBUFFER                                                                  generatedencryptedextensionsbuffer;
+
+  generatedencryptedextensions.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_ENCRYPTED_EXTENSIONS);
+
+  generatedserverALPN = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
+  if(!generatedserverALPN) return false;
+
+  if(!generatedserverALPN->List_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1) ||
+     !generatedencryptedextensions.GetBody()->Extensions_Add(generatedserverALPN))
+    {
+      GEN_DELETE generatedserverALPN;
+      return false;
+    }
+
+  status = generatedencryptedextensions.SetToBuffer(generatedencryptedextensionsbuffer, false);
+  status = status && generatedclient.Handshake_Process(generatedencryptedextensionsbuffer);
+  status = status && generatedclient.IsApplicationProtocolNegotiated();
+  status = status && (generatedclient.GetApplicationProtocol() == DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("ALPN selects the offered HTTP/1.1"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSSESSION                                                    invalidALPNsession;
+  DIOSTREAMTLSHANDSHAKECLIENT                                           invalidALPNclient;
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_ENCRYPTEDEXTENSIONS> invalidALPNextensions;
+  DIOSTREAMTLS_MSG_EXTENSION_ALPN*                                      invalidserverALPN;
+  XBUFFER                                                               generatedsharedsecret;
+  XBUFFER                                                               invalidALPNbuffer;
+
+  generatedsharedsecret.Add(generatedserverkey.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY);
+  invalidALPNextensions.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_ENCRYPTED_EXTENSIONS);
+
+  invalidserverALPN = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_ALPN();
+  if(!invalidserverALPN) return false;
+
+  if(!invalidserverALPN->List_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_2) ||
+     !invalidALPNextensions.GetBody()->Extensions_Add(invalidserverALPN))
+    {
+      GEN_DELETE invalidserverALPN;
+      return false;
+    }
+
+  status = invalidALPNextensions.SetToBuffer(invalidALPNbuffer, false);
+  status = status && invalidALPNsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256,
+                                            DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
+  status = status && invalidALPNclient.Ini(&invalidALPNsession, true);
+  status = status && invalidALPNclient.Start(generatedclienthello);
+  status = status && invalidALPNclient.ServerHello_Process(generatedserverhellobuffer, generatedsharedsecret);
+  status = status && !invalidALPNclient.Handshake_Process(invalidALPNbuffer);
+  status = status && !invalidALPNclient.IsApplicationProtocolNegotiated();
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("An unoffered ALPN protocol is refused"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  // -----------------------------------------------------------------------------------------------
+
+  tests->console->Printf(__L("\n[ ECDHE P-256 and HelloRetryRequest ]\n"));
+
+  CIPHERECDSA P256clientcipher;
+  CIPHERECDSA P256servercipher;
+  XBUFFER     P256clientprivate;
+  XBUFFER     P256clientpublic;
+  XBUFFER     P256serverprivate;
+  XBUFFER     P256serverpublic;
+  XBUFFER     P256clientsecret;
+  XBUFFER     P256serversecret;
+  XBUFFER     invalidP256public;
+
+  status = P256clientcipher.KeyPair_Create(P256clientprivate, P256clientpublic);
+  status = status && P256servercipher.KeyPair_Create(P256serverprivate, P256serverpublic);
+  status = status && P256clientcipher.SharedSecret_Create(P256clientprivate, P256serverpublic, P256clientsecret);
+  status = status && P256servercipher.SharedSecret_Create(P256serverprivate, P256clientpublic, P256serversecret);
+  status = status && P256clientsecret.Compare(P256serversecret);
+  status = status && (P256clientsecret.GetSize() == CIPHERECDSA_P256_COORDINATE_SIZE);
+
+  invalidP256public.Add(P256clientpublic);
+  invalidP256public.Get()[invalidP256public.GetSize()-1] ^= 0x01;
+  status = status && !P256clientcipher.PublicKey_Check(invalidP256public);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("ECDHE P-256 creates the same shared secret"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSSESSION          HRRsession;
+  DIOSTREAMTLSHANDSHAKECLIENT HRRclient;
+  DIOSTREAMTLSCONFIG          HRRconfig;
+  XBUFFER                     HRRfirstclienthello;
+  XBUFFER                     HRRfirstrecords;
+  XBUFFER                     HRRbuffer;
+  XBUFFER                     HRRsecondclienthello;
+  XBUFFER                     HRRsecondrecords;
+
+  status = HRRsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256,
+                          DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
+  status = status && HRRclient.Ini(&HRRsession, true);
+  status = status && HRRclient.Capabilities_Set(&HRRconfig);
+  status = status && HRRclient.ClientHello_Create(__L("localhost"), HRRfirstclienthello, HRRfirstrecords);
+
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> HRRfirstmessage;
+  XBUFFER                                                          HRRfirstinput;
+
+  HRRfirstinput.Add(HRRfirstclienthello);
+  status = status && HRRfirstmessage.GetFromBuffer(HRRfirstinput, false) && HRRfirstinput.IsEmpty();
+
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> HRRmessage;
+  DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER*             HRRversion;
+  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST*           HRRkeyshare;
+  DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*                              HRRcookie;
+  XBYTE                                                            HRRrandom[] =
+  {
+    0xCF, 0x21, 0xAD, 0x74, 0xE5, 0x9A, 0x61, 0x11, 0xBE, 0x1D, 0x8C, 0x02, 0x1E, 0x65, 0xB8, 0x91,
+    0xC2, 0xA2, 0x11, 0x16, 0x7A, 0xBB, 0x8C, 0x5E, 0x07, 0x9E, 0x09, 0xE2, 0xC8, 0xA8, 0x33, 0x9C,
+  };
+  XBYTE                                                            HRRcookiedata[] =
+  {
+    0x00, 0x04, 0x11, 0x22, 0x33, 0x44,
+  };
+
+  HRRmessage.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO);
+  HRRmessage.GetBody()->SetLegacyVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  memcpy(HRRmessage.GetBody()->GetRandom(), HRRrandom, sizeof(HRRrandom));
+  HRRmessage.GetBody()->SetSessionIDLength(HRRfirstmessage.GetBody()->GetSessionIDLength());
+  memcpy(HRRmessage.GetBody()->GetSessionID(), HRRfirstmessage.GetBody()->GetSessionID(),
+         HRRfirstmessage.GetBody()->GetSessionIDLength());
+  HRRmessage.GetBody()->SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  HRRmessage.GetBody()->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
+
+  HRRversion = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER();
+  HRRkeyshare = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST();
+  HRRcookie = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+
+  if(!HRRversion || !HRRkeyshare || !HRRcookie) return false;
+
+  HRRversion->SetVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
+  HRRkeyshare->SetSelectedGroup(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  HRRcookie->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE);
+
+  if(!HRRcookie->GetData()->Add(HRRcookiedata, sizeof(HRRcookiedata)) ||
+     !HRRmessage.GetBody()->Extensions_Add(HRRversion) ||
+     !HRRmessage.GetBody()->Extensions_Add(HRRkeyshare) ||
+     !HRRmessage.GetBody()->Extensions_Add(HRRcookie))
+    {
+      return false;
+    }
+
+  status = status && HRRmessage.SetToBuffer(HRRbuffer, false);
+  status = status && HRRclient.HelloRetryRequest_Process(HRRbuffer, HRRsecondclienthello, HRRsecondrecords);
+  status = status && (HRRclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO);
+  status = status && (HRRsession.GetTranscript()->GetByte(0) == DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH);
+  status = status && (HRRsession.GetTranscript()->GetByte(3) == HASHSHA2_256_DIGEST_SIZE);
+
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> HRRsecondmessage;
+  XBUFFER                                                          HRRsecondinput;
+  DIOSTREAMTLS_MSG_EXTENSION_KEY*                                  HRRsecondkey = NULL;
+  bool                                                             HRRcookieechoed = false;
+
+  HRRsecondinput.Add(HRRsecondclienthello);
+  status = status && HRRsecondmessage.GetFromBuffer(HRRsecondinput, false) && HRRsecondinput.IsEmpty();
+  status = status && !memcmp(HRRsecondmessage.GetBody()->GetRandom(), HRRfirstmessage.GetBody()->GetRandom(),
+                             DIOSTREAMTLS_MSG_RANDOM_SIZE);
+
+  for(XDWORD c=0; c<HRRsecondmessage.GetBody()->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = HRRsecondmessage.GetBody()->Extensions_GetAll()->Get(c);
+
+      if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE))
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
+
+          if(keyshare->List_Get()->GetSize() == 1) HRRsecondkey = keyshare->List_Get()->Get(0);
+        }
+
+      if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE))
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* cookie = (DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+
+          HRRcookieechoed = cookie->GetData()->Compare(HRRcookiedata, sizeof(HRRcookiedata));
+        }
+    }
+
+  status = status && HRRsecondkey && HRRcookieechoed;
+  status = status && (HRRsecondkey->GetKeyType() == DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+  status = status && (HRRsecondkey->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE);
+  status = status && P256servercipher.PublicKey_Check((*HRRsecondkey->GetKeyData()));
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("HRR rebuilds transcript and ClientHello2"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  CIPHERECDSA                                                      HRRservercipher;
+  XBUFFER                                                          HRRserverprivate;
+  XBUFFER                                                          HRRserverpublic;
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> HRRserverhello;
+  DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER*             HRRserverversion;
+  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER*                       HRRserverkeyshare;
+  XBUFFER                                                           HRRserverhellobuffer;
+
+  status = HRRservercipher.KeyPair_Create(HRRserverprivate, HRRserverpublic);
+
+  HRRserverhello.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO);
+  HRRserverhello.GetBody()->SetLegacyVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  for(XDWORD c=0; c<DIOSTREAMTLS_MSG_RANDOM_SIZE; c++) HRRserverhello.GetBody()->GetRandom()[c] = (XBYTE)(0x80 + c);
+  HRRserverhello.GetBody()->SetSessionIDLength(HRRfirstmessage.GetBody()->GetSessionIDLength());
+  memcpy(HRRserverhello.GetBody()->GetSessionID(), HRRfirstmessage.GetBody()->GetSessionID(),
+         HRRfirstmessage.GetBody()->GetSessionIDLength());
+  HRRserverhello.GetBody()->SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  HRRserverhello.GetBody()->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
+
+  HRRserverversion = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER();
+  HRRserverkeyshare = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_SERVER();
+  if(!HRRserverversion || !HRRserverkeyshare) return false;
+
+  HRRserverversion->SetVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
+  HRRserverkeyshare->GetKey()->SetKeyType(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+
+  if(!HRRserverkeyshare->GetKey()->GetKeyData()->Add(HRRserverpublic) ||
+     !HRRserverhello.GetBody()->Extensions_Add(HRRserverversion) ||
+     !HRRserverhello.GetBody()->Extensions_Add(HRRserverkeyshare))
+    {
+      return false;
+    }
+
+  status = status && HRRserverhello.SetToBuffer(HRRserverhellobuffer, false);
+  status = status && HRRclient.ServerHello_Process(HRRserverhellobuffer);
+  status = status && (HRRclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
+  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
+  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("ServerHello completes ECDHE P-256 after HRR"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  XBYTE oversizedhandshakeheader[] =
+  {
+    DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE, 0x40, 0x00, 0x00,
+  };
+  XBUFFER oversizedhandshake;
+  XBUFFER oversizedextracted;
+
+  oversizedhandshake.Add(oversizedhandshakeheader, sizeof(oversizedhandshakeheader));
+  status = !DIOSTREAMTLS_MSG_HANDSHAKE::Message_Extract(oversizedhandshake, oversizedextracted);
+  status = status && (oversizedhandshake.GetSize() == sizeof(oversizedhandshakeheader));
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("Oversized handshake input is bounded"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
   // -----------------------------------------------------------------------------------------------
@@ -4187,6 +4468,148 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   CIPHERCERTIFICATEX509 decodedtrustcertificate;
   status = status && decodedtrustcertificate.Decode((*trustedroots.Get(0)));
   status = status && decodedtrustcertificate.VerifySignature(decodedtrustcertificate.GetPublicCipherKey());
+  status = status && DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256,
+                                                        decodedtrustcertificate.GetPublicCipherKey());
+  status = status && DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384,
+                                                        decodedtrustcertificate.GetPublicCipherKey());
+  status = status && DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512,
+                                                        decodedtrustcertificate.GetPublicCipherKey());
+  status = status && !DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256,
+                                                         decodedtrustcertificate.GetPublicCipherKey());
+
+  XSTRING pss384base64;
+  XSTRING pss512base64;
+  XBUFFER pss384buffer;
+  XBUFFER pss512buffer;
+
+  pss384base64.Add(__L("MIIDYzCCAhugAwIBAgIUf3wsp8ggcPddOBnGa6Ftnvh9/2kwPQYJKoZIhvcNAQEKMDCgDTALBglghkgBZQMEAgKhGjAYBgkqhkiG"));
+  pss384base64.Add(__L("9w0BAQgwCwYJYIZIAWUDBAICogMCATAwETEPMA0GA1UEAwwGcHNzMzg0MB4XDTI2MDgyMTA0NDgzMVoXDTI2MDkyMDA0NDgzMVow"));
+  pss384base64.Add(__L("ETEPMA0GA1UEAwwGcHNzMzg0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2s0JKaQS2yJCgtMG1zc0+t1OPnn7cBJd"));
+  pss384base64.Add(__L("kWMHD/9yXvwqncIIzbxFo+a0B+0InIrv0Ocebw3qhMHrcgUwTJdQJYbV9DM5s4n4oTQDs8IMO6fdyp/ZXt+GowIZ0KQUrWQflePo"));
+  pss384base64.Add(__L("90vEUr5yl6WOr+KZRdivRyegvetLyJjWHyPZRx85iMfNhbNH/yjBHs3EI5oPk3nSxEDF7z/S/hpkNxXsSuNPc2tI//Zmyskm4Nzj"));
+  pss384base64.Add(__L("IMHI7Ak9YONUhMJnEJluv/4YR1fEw8WjHJ1OROlI3qQt9eoCRcYffje4qiIJxAMjRgqzYFUsfBSMg4Xkfgo9ltZnoj/c74PSn6Ax"));
+  pss384base64.Add(__L("whU7TG31+wIDAQABo1MwUTAdBgNVHQ4EFgQUHaFoFV3wRSd6sB5advMuEYcjC3IwHwYDVR0jBBgwFoAUHaFoFV3wRSd6sB5advMu"));
+  pss384base64.Add(__L("EYcjC3IwDwYDVR0TAQH/BAUwAwEB/zA9BgkqhkiG9w0BAQowMKANMAsGCWCGSAFlAwQCAqEaMBgGCSqGSIb3DQEBCDALBglghkgB"));
+  pss384base64.Add(__L("ZQMEAgKiAwIBMAOCAQEAe/g796UGJhR+7NKEfv+8UBsxwH0NWWpqpd5upYgcT4Igk43ImWClGWIytQOb6n3lHcd9NmO44TzKjB6T"));
+  pss384base64.Add(__L("6CZPsU9DRttUII8FihqJxbiqia3SjLx8CgjFXGP+VvJBt8HQs7vtiHtBUTVQ7tc35k7BY4rs8X62BeN01rrGkjdkLqNZKUKHTAOv"));
+  pss384base64.Add(__L("e4tTM3KTSiqn+wTew1wf9B681bGnrBUBFiKDPWh8lQnIBMOIBZeEMpVHlgvb+JyxAvT33shlgWNcdd8a1htJo1SfK67l2Mme+hDo"));
+  pss384base64.Add(__L("K1jE3sDuOjFm2sBoBx+fR5utDzfDGdj24OjZEi40Fir3TmRuh+1Gey8ZmYZEUQ=="));
+
+  pss512base64.Add(__L("MIIDYzCCAhugAwIBAgIUdxs2eOU1xe36clzjtetaz7NAYy8wPQYJKoZIhvcNAQEKMDCgDTALBglghkgBZQMEAgOhGjAYBgkqhkiG"));
+  pss512base64.Add(__L("9w0BAQgwCwYJYIZIAWUDBAIDogMCAUAwETEPMA0GA1UEAwwGcHNzNTEyMB4XDTI2MDgyMTA0NDgzMVoXDTI2MDkyMDA0NDgzMVow"));
+  pss512base64.Add(__L("ETEPMA0GA1UEAwwGcHNzNTEyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtiUJlEXv2sKrLQj627v5cCtskhNgOghZ"));
+  pss512base64.Add(__L("LqcGMdL5/9dMf7n/gvbOzNJmgsHZd93jOSIiRdB00lYahOKrC8UlsJNCl2dx/v9WfhT8yX0nvLLRIHiFYNyj3noRnGlLkfuQ9ICG"));
+  pss512base64.Add(__L("f3jegGIBD8Vbp6HIOsyMXzWW6RjpMsVoirNvrHrS+WLjLXyxU8RnXDR+Pm3Ht1mUssdoaLbE0/CfZHyF1YnPA8DgMZ3BbgieVT1I"));
+  pss512base64.Add(__L("uSj8zSDqolHckuetbhbVv3Io5RWq792GLzsPl7vQH44hO7lU0j22iuhEpGa9umPxrmL3RfYv/9aFRt/ftrivYGvIAfHUIIjVqdQu"));
+  pss512base64.Add(__L("tvRZV45TOwIDAQABo1MwUTAdBgNVHQ4EFgQUNE2DuHIXuEaiC6wkeUXlZGdDzTQwHwYDVR0jBBgwFoAUNE2DuHIXuEaiC6wkeUXl"));
+  pss512base64.Add(__L("ZGdDzTQwDwYDVR0TAQH/BAUwAwEB/zA9BgkqhkiG9w0BAQowMKANMAsGCWCGSAFlAwQCA6EaMBgGCSqGSIb3DQEBCDALBglghkgB"));
+  pss512base64.Add(__L("ZQMEAgOiAwIBQAOCAQEAr3iWlaIaE+DkynspvN73KiOEWUSkhWNXrRqLHNv+bXace1+DAJxcwbB7gLQEHUHro7aXvT4F1IrzkceY"));
+  pss512base64.Add(__L("UUDQjkJFmRmO40bg2XlXXr3P79NsXO0zNqqUwtjSTyGanShUy0SWY9zMPa5YgDVJPkF+QUOYKekhz2J5cCv2Jkzv42b/glHhrJNZ"));
+  pss512base64.Add(__L("ikpJ3ryI/w2gvntsaPq2QHCt6AVLDOhTX1E0Z6VS39tXGBERcTmJKKUfxnM/eTpkPoyXvHNDJcrrFBR+PA0/YB8pbmXycAwxuTG2"));
+  pss512base64.Add(__L("tOYSOkLYG6tMoLuLs9NXkJtrwb0jIno7uxkTXHqxTODhcT0Hmgq04EjImrxRLw=="));
+
+  status = status && pss384buffer.ConvertFromBase64(pss384base64);
+  status = status && pss512buffer.ConvertFromBase64(pss512base64);
+
+  CIPHERCERTIFICATEX509 pss384certificate;
+  CIPHERCERTIFICATEX509 pss512certificate;
+
+  status = status && pss384certificate.Decode(pss384buffer);
+  status = status && (pss384certificate.GetAlgorithmType() == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS);
+  status = status && (pss384certificate.GetRSASSAPSSHashType() == CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384);
+  status = status && (pss384certificate.GetRSASSAPSSSaltSize() == HASHSHA2_384_DIGEST_SIZE);
+  status = status && pss384certificate.VerifySignature(pss384certificate.GetPublicCipherKey());
+
+  status = status && pss512certificate.Decode(pss512buffer);
+  status = status && (pss512certificate.GetAlgorithmType() == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS);
+  status = status && (pss512certificate.GetRSASSAPSSHashType() == CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512);
+  status = status && (pss512certificate.GetRSASSAPSSSaltSize() == HASHSHA2_512_DIGEST_SIZE);
+  status = status && pss512certificate.VerifySignature(pss512certificate.GetPublicCipherKey());
+
+  XBUFFER invalidPSSparameters;
+  CIPHERCERTIFICATEX509 invalidPSScertificate;
+
+  status = status && invalidPSSparameters.Add(pss384buffer);
+  status = status && invalidPSSparameters.Set((XBYTE)(HASHSHA2_384_DIGEST_SIZE - 1), 97);
+  status = status && invalidPSSparameters.Set((XBYTE)(HASHSHA2_384_DIGEST_SIZE - 1), 609);
+  status = status && !invalidPSScertificate.Decode(invalidPSSparameters);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("X.509 RSA-PSS SHA-384/512 is verified"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  XSTRING ECDSAcertificatebase64;
+  XSTRING ECDSAcontentbase64;
+  XSTRING ECDSAsignaturebase64;
+  XBUFFER ECDSAcertificatebuffer;
+  XBUFFER ECDSAcontent;
+  XBUFFER ECDSAsignature;
+
+  ECDSAcertificatebase64.Add(__L("MIIBbDCCARKgAwIBAgIITDMgud/Fp34wCgYIKoZIzj0EAwIwFTETMBEGA1UEAxMKZWNkc2EudGVzdDAeFw0yNjA4MjAwMDAwMDBa"));
+  ECDSAcertificatebase64.Add(__L("Fw0yNjA5MjAwMDAwMDBaMBUxEzARBgNVBAMTCmVjZHNhLnRlc3QwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAR8tm/XNYdHtJYy"));
+  ECDSAcertificatebase64.Add(__L("32EtjsPF4PfCRap7UJ1nEwLbDTpAg8k4aih589S9TipmvKDzk1PpgyQpGJVHzOmFjJRpluHTo0wwSjAMBgNVHRMBAf8EAjAAMA4G"));
+  ECDSAcertificatebase64.Add(__L("A1UdDwEB/wQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDATAVBgNVHREEDjAMggplY2RzYS50ZXN0MAoGCCqGSM49BAMCA0gAMEUC"));
+  ECDSAcertificatebase64.Add(__L("IHIp0oNEuNMM11WyIAdp8wCMaUkZdkcWMb2vc2N5/7F4AiEA7yhfbbwhmV9Y3Q1FBE/lPJep9iXdFiQLR1B7+21TzDY="));
+
+  ECDSAcontentbase64.Add(__L("ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRMUyAxLjMsIHNlcnZl"));
+  ECDSAcontentbase64.Add(__L("ciBDZXJ0aWZpY2F0ZVZlcmlmeQAAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHw=="));
+
+  ECDSAsignaturebase64.Add(__L("MEUCIQCJsxddoYx77lfBe9TO+BjZDubpPWHCYgnbhmEH1QJCEgIgSg/f49k6DLIWhJoTUNHaijIMsqFutuaOUo78bXiz5q8="));
+
+  status = status && ECDSAcertificatebuffer.ConvertFromBase64(ECDSAcertificatebase64);
+  status = status && ECDSAcontent.ConvertFromBase64(ECDSAcontentbase64);
+  status = status && ECDSAsignature.ConvertFromBase64(ECDSAsignaturebase64);
+
+  CIPHERCERTIFICATEX509 ECDSAcertificate;
+
+  status = status && ECDSAcertificate.Decode(ECDSAcertificatebuffer);
+  status = status && (ECDSAcertificate.GetAlgorithmType() == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256);
+  status = status && ECDSAcertificate.IsPublicCipherKeyValid();
+  status = status && ECDSAcertificate.GetPublicCipherKey();
+  status = status && (ECDSAcertificate.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC);
+  status = status && ECDSAcertificate.VerifySignature(ECDSAcertificate.GetPublicCipherKey());
+
+  XBUFFER invalidECDSApointbuffer;
+  CIPHERCERTIFICATEX509 invalidECDSApointcertificate;
+
+  status = status && invalidECDSApointbuffer.Add(ECDSAcertificatebuffer);
+  invalidECDSApointbuffer.Get()[140] ^= 0x01;
+  status = status && !invalidECDSApointcertificate.Decode(invalidECDSApointbuffer);
+
+  XBUFFER invalidECDSAcertificatebuffer;
+  CIPHERCERTIFICATEX509 invalidECDSAcertificate;
+
+  status = status && invalidECDSAcertificatebuffer.Add(ECDSAcertificatebuffer);
+  invalidECDSAcertificatebuffer.Get()[invalidECDSAcertificatebuffer.GetSize()-1] ^= 0x01;
+  status = status && invalidECDSAcertificate.Decode(invalidECDSAcertificatebuffer);
+  status = status && !invalidECDSAcertificate.VerifySignature(invalidECDSAcertificate.GetPublicCipherKey());
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("X.509 ECDSA P-256/SHA-256 is verified"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  status = DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                               ECDSAcertificate.GetPublicCipherKey());
+  status = status && !DIOSTREAMTLSSIGNATURE::IsSupported(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256,
+                                                          ECDSAcertificate.GetPublicCipherKey());
+  status = status && DIOSTREAMTLSSIGNATURE::Verify(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                                   ECDSAcertificate.GetPublicCipherKey(), ECDSAcontent, ECDSAsignature);
+
+  XBUFFER invalidECDSAsignature;
+  XBUFFER malformedECDSAsignature;
+
+  status = status && invalidECDSAsignature.Add(ECDSAsignature);
+  invalidECDSAsignature.Get()[invalidECDSAsignature.GetSize()-1] ^= 0x01;
+  status = status && !DIOSTREAMTLSSIGNATURE::Verify(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                                    ECDSAcertificate.GetPublicCipherKey(), ECDSAcontent,
+                                                    invalidECDSAsignature);
+
+  status = status && malformedECDSAsignature.Add(ECDSAsignature);
+  malformedECDSAsignature.Get()[1]--;
+  status = status && !DIOSTREAMTLSSIGNATURE::Verify(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
+                                                    ECDSAcertificate.GetPublicCipherKey(), ECDSAcontent,
+                                                    malformedECDSAsignature);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("ECDSA CertificateVerify is verified"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
 
   certificatevalidationdate.SetYear(2018);
   certificatevalidationdate.SetMonth(8);
@@ -4327,12 +4750,36 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = streamconfig.IsTLS();
   status = status && (streamconfig.GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  status = status && (streamconfig.GetCipherSuites()->GetSize() == 2);
+  status = status && (streamconfig.GetSupportedGroups()->GetSize() == 2);
+  status = status && (streamconfig.GetSignatureSchemes()->GetSize() == 3);
+  status = status && (streamconfig.GetCertificateSignatureSchemes()->GetSize() == 9);
+  status = status && streamconfig.GetApplicationProtocols()->IsEmpty();
   status = status && !streamconfig.IsAllowUnauthenticatedServer();
   status = status && streamconfig.TrustedRoot_Add((*trustedroots.Get(0)));
   status = status && (streamconfig.GetTrustedRoots()->GetSize() == 1);
   status = status && streamconfig.GetTrustedRoots()->Get(0)->Compare((*trustedroots.Get(0)));
 
+  streamconfig.SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+  status = status && (streamconfig.GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+  status = status && (streamconfig.GetCipherSuites()->GetSize() == 1);
+  streamconfig.SetCipherSuite(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+
   tests->console->Printf(__L("  %-42s : %s\n"), __L("TLS configuration is secure by default"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSCONFIG ECDSAconfig;
+
+  // ECDSA P-256/P-384/P-521 are now part of CertificateSignatureSchemes by default (see "TLS configuration is
+  // secure by default" above: 9 schemes, 3 of them ECDSA), so re-adding P-256 there must be rejected as a
+  // duplicate rather than growing the list. For the handshake-signing SignatureSchemes list (CertificateVerify),
+  // the defaults remain RSA-PSS only, so P-256 is still an explicit opt-in there.
+  status = ECDSAconfig.SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  status = status && !ECDSAconfig.CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  status = status && (ECDSAconfig.GetSignatureSchemes()->GetSize() == 4);
+  status = status && (ECDSAconfig.GetCertificateSignatureSchemes()->GetSize() == 9);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("ECDSA P-256 remains an explicit option"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
   // -----------------------------------------------------------------------------------------------
@@ -4544,18 +4991,87 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   DIOSTREAMTLSSESSION posthandshakeclient;
   DIOSTREAMTLSSESSION posthandshakeserver;
-  XBYTE               keyupdatemessage[] = { DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE, 0x00, 0x00, 0x01, 0x00 };
   XBUFFER             keyupdaterecords;
+  XBUFFER             keyupdateresponse;
+  XBUFFER             keyupdateapplicationrecords;
 
   status = Test_DIOStreamTLS_SessionIni(posthandshakeclient, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && Test_DIOStreamTLS_SessionIni(posthandshakeserver, DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER);
-  status = status && posthandshakeserver.GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE,
-                                                              keyupdatemessage, sizeof(keyupdatemessage), keyupdaterecords);
-  status = status && posthandshakeclient.RecordInput_Add(keyupdaterecords);
-  status = status && (posthandshakeclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
-  status = status && posthandshakeclient.IsError();
+  status = status && posthandshakeclient.KeyUpdate_Create(true, keyupdaterecords);
+  status = status && (posthandshakeclient.GetRecord()->GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == 0);
+  status = status && posthandshakeserver.RecordInput_Add(keyupdaterecords);
+  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (posthandshakeserver.GetRecord()->GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == 0);
+  status = status && posthandshakeclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                             DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)->Compare
+                                                                             ((*posthandshakeserver.GetKeySchedule()->GetTrafficSecret
+                                                                             (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                              DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)));
+  status = status && posthandshakeserver.PostHandshakeOutput_Extract(keyupdateresponse) && !keyupdateresponse.IsEmpty();
+  status = status && posthandshakeclient.RecordInput_Add(keyupdateresponse);
+  status = status && (posthandshakeclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && posthandshakeserver.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                             DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)->Compare
+                                                                             ((*posthandshakeclient.GetKeySchedule()->GetTrafficSecret
+                                                                             (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                              DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)));
+  status = status && posthandshakeclient.ApplicationData_Protect(applicationdata, sizeof(applicationdata),
+                                                                  keyupdateapplicationrecords);
+  status = status && posthandshakeserver.RecordInput_Add(keyupdateapplicationrecords);
+  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && posthandshakeserver.GetApplicationInput()->Compare(applicationdata, sizeof(applicationdata));
 
-  tests->console->Printf(__L("  %-42s : %s\n"), __L("Unsupported KeyUpdate is rejected cleanly"), status?__L("Ok."):__L("Error!"));
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("KeyUpdate renews both traffic directions"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSSESSION invalidkeyupdateclient;
+  DIOSTREAMTLSSESSION invalidkeyupdateserver;
+  XBYTE               invalidkeyupdatemessage[] = { DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
+                                                     0x00, 0x00, 0x01, 0x02 };
+  XBUFFER             invalidkeyupdaterecords;
+
+  status = Test_DIOStreamTLS_SessionIni(invalidkeyupdateclient, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
+  status = status && Test_DIOStreamTLS_SessionIni(invalidkeyupdateserver, DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER);
+  status = status && invalidkeyupdateserver.GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE,
+                                                                  invalidkeyupdatemessage,
+                                                                  sizeof(invalidkeyupdatemessage),
+                                                                  invalidkeyupdaterecords);
+  status = status && invalidkeyupdateclient.RecordInput_Add(invalidkeyupdaterecords);
+  status = status && (invalidkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
+  status = status && invalidkeyupdateclient.IsError();
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("An invalid KeyUpdate value is refused"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSSESSION trailingkeyupdateclient;
+  DIOSTREAMTLSSESSION trailingkeyupdateserver;
+  XBYTE               trailingkeyupdatemessage[] = { DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
+                                                      0x00, 0x00, 0x01, 0x00,
+                                                      DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
+                                                      0x00, 0x00, 0x01, 0x00 };
+  XBUFFER             trailingkeyupdaterecords;
+
+  status = Test_DIOStreamTLS_SessionIni(trailingkeyupdateclient, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
+  status = status && Test_DIOStreamTLS_SessionIni(trailingkeyupdateserver, DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER);
+  status = status && trailingkeyupdateserver.GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE,
+                                                                   trailingkeyupdatemessage,
+                                                                   sizeof(trailingkeyupdatemessage),
+                                                                   trailingkeyupdaterecords);
+  status = status && trailingkeyupdateclient.RecordInput_Add(trailingkeyupdaterecords);
+  status = status && (trailingkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
+  status = status && trailingkeyupdateclient.IsError();
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("Data after KeyUpdate in the same record is refused"), status?__L("Ok."):__L("Error!"));
+  if(!status) return false;
+
+  DIOSTREAMTLSSESSION prematurekeyupdate;
+  XBUFFER             prematurekeyupdateoutput;
+
+  status = prematurekeyupdate.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256,
+                                   DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
+  status = status && !prematurekeyupdate.KeyUpdate_Create(false, prematurekeyupdateoutput);
+
+  tests->console->Printf(__L("  %-42s : %s\n"), __L("KeyUpdate before application keys is refused"), status?__L("Ok."):__L("Error!"));
 
   tests->console->Printf(__L("\n"));
 
