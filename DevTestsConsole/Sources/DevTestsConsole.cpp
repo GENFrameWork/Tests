@@ -1923,6 +1923,20 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
       bool getstatus;
       int  resultserver;
 
+      url          = __L("www.genframework.com/assets/document/Introduccion_a_GEN_Framework.pdf");
+      getstatus    = webclient.Get(url, webpage, NULL, 30);
+      resultserver = webclient.GetHeader()->GetResultServer();
+      status       = getstatus && (resultserver == 200) && !webpage.IsEmpty();
+
+      XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS www.genframework.com [GET: %s, HTTP: %d, size: %d]: %s"),
+                        getstatus?__L("Ok"):__L("Error"), resultserver, webpage.GetSize(), status?__L("Ok!"):__L("Error!"));
+    }
+
+ if(status)
+    {
+      bool getstatus;
+      int  resultserver;
+
       url          = __L("https://www.google.com/");
       getstatus    = webclient.Get(url, webpage, NULL, 30);
       resultserver = webclient.GetHeader()->GetResultServer();
