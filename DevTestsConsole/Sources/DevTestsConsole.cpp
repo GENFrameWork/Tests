@@ -92,12 +92,12 @@
 #include "CipherCertificateX509Validator.h"
 #include "CipherRSA.h"
 #include "CipherECDSAX25519.h"
-#include "DIOStreamTLSKeySchedule.h"
+#include "DIOStreamTLS13KeySchedule.h"
 #include "DIOStreamTLSRecord.h"
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
-#include "DIOStreamTLSSession.h"
+#include "DIOStreamTLS13Session.h"
 #include "DIOStreamTLSSignature.h"
-#include "DIOStreamTLSHandshakeClient.h"
+#include "DIOStreamTLS13HandshakeClient.h"
 #include "DevTestsConsole_TLS_RFC8448.h"
 
 #include "CompressManager.h"
@@ -1904,7 +1904,8 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
   tests->SubscribeEvent(DIOWEBCLIENT_XEVENT_TYPE_CLOSEWEB        , &webclient);
 
   url = __L("http://example.com/");
-  status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+  status = webclient.Get(url, webpage, NULL, 30) &&
+           (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
   XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTP: %s"), status?__L("Ok!"):__L("Error!"));
 
   #ifdef DIO_STREAMTLS_ACTIVE
@@ -1912,7 +1913,8 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
   if(status)
     {
       url = __L("https://example.com/");
-      status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+      status = webclient.Get(url, webpage, NULL, 30) &&
+               (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
       XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS example.com: %s"), status?__L("Ok!"):__L("Error!"));
     }
 
@@ -1921,18 +1923,21 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
       bool getstatus;
       int  resultserver;
 
-      url          = __L("https://www.google.com/");
+      url          = __L("https://deped2026.imtlazarus.com/lazarus/api/win-getcommand/index.php");
+      //url          = __L("https://www.google.com/");
       getstatus    = webclient.Get(url, webpage, NULL, 30);
       resultserver = webclient.GetHeader()->GetResultServer();
       status       = getstatus && (resultserver == 200) && !webpage.IsEmpty();
 
-      XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS www.google.com [GET: %s, HTTP: %d, size: %d]: %s"), getstatus?__L("Ok"):__L("Error"), resultserver, webpage.GetSize(), status?__L("Ok!"):__L("Error!"));
+      XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTPS www.google.com [GET: %s, HTTP: %d, size: %d]: %s"),
+                        getstatus?__L("Ok"):__L("Error"), resultserver, webpage.GetSize(), status?__L("Ok!"):__L("Error!"));
     }
 
   if(status)
     {
       url = __L("http://example.com/");
-      status = webclient.Get(url, webpage, NULL, 30) && (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
+      status = webclient.Get(url, webpage, NULL, 30) &&
+               (webclient.GetHeader()->GetResultServer() == 200) && !webpage.IsEmpty();
       XTRACE_PRINTCOLOR((status?1:4), __L("GET Web Client HTTP after HTTPS: %s"), status?__L("Ok!"):__L("Error!"));
     }
 
@@ -3861,8 +3866,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   tests->console->Printf(__L("\n[ Generated TLS 1.3 ClientHello and automatic key share ]\n"));
 
-  DIOSTREAMTLSSESSION          generatedsession;
-  DIOSTREAMTLSHANDSHAKECLIENT generatedclient;
+  DIOSTREAMTLS13SESSION          generatedsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT generatedclient;
   DIOSTREAMTLSCONFIG          generatedconfig;
   XBUFFER                     generatedclienthello;
   XBUFFER                     generatedrecords;
@@ -3877,7 +3882,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && generatedclient.Capabilities_Set(&generatedconfig);
   status = status && generatedclient.ClientHello_Create(__L("localhost"), generatedclienthello, generatedrecords);
   status = status && generatedsession.RecordInput_Add(generatedrecords);
-  status = status && (generatedsession.Record_Extract(generatedtype, generatedplain) == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (generatedsession.Record_Extract(generatedtype, generatedplain) == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && (generatedtype == DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE);
   status = status && generatedplain.Compare(generatedclienthello);
 
@@ -4052,9 +4057,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && generatedclient.ServerHello_Process(generatedserverhellobuffer);
   status = status && (generatedsession.GetKeySchedule()->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
   status = status && (generatedsession.GetKeySchedule()->GetHashSize() == HASHSHA2_384_DIGEST_SIZE);
-  status = status && (generatedclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
-  status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
-  status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
+  status = status && (generatedclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
+  status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE);
+  status = status && (generatedsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE);
   status = status && !memcmp(generatedsession.GetKeyExchange()->GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED),
                              generatedserverkey.GetKey(CIPHERECDSAX25519_TYPEKEY_SHARED), CIPHERECDSAX25519_MAXKEY);
 
@@ -4085,8 +4090,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("ALPN selects the offered HTTP/1.1"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION                                                    invalidALPNsession;
-  DIOSTREAMTLSHANDSHAKECLIENT                                           invalidALPNclient;
+  DIOSTREAMTLS13SESSION                                                    invalidALPNsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT                                           invalidALPNclient;
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_ENCRYPTEDEXTENSIONS> invalidALPNextensions;
   DIOSTREAMTLS_MSG_EXTENSION_ALPN*                                      invalidserverALPN;
   XBUFFER                                                               generatedsharedsecret;
@@ -4145,8 +4150,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("ECDHE P-256 creates the same shared secret"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          HRRsession;
-  DIOSTREAMTLSHANDSHAKECLIENT HRRclient;
+  DIOSTREAMTLS13SESSION          HRRsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT HRRclient;
   DIOSTREAMTLSCONFIG          HRRconfig;
   XBUFFER                     HRRfirstclienthello;
   XBUFFER                     HRRfirstrecords;
@@ -4209,7 +4214,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = status && HRRmessage.SetToBuffer(HRRbuffer, false);
   status = status && HRRclient.HelloRetryRequest_Process(HRRbuffer, HRRsecondclienthello, HRRsecondrecords);
-  status = status && (HRRclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_SERVERHELLO);
+  status = status && (HRRclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO);
   status = status && (HRRsession.GetTranscript()->GetByte(0) == DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH);
   status = status && (HRRsession.GetTranscript()->GetByte(3) == HASHSHA2_256_DIGEST_SIZE);
 
@@ -4285,9 +4290,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = status && HRRserverhello.SetToBuffer(HRRserverhellobuffer, false);
   status = status && HRRclient.ServerHello_Process(HRRserverhellobuffer);
-  status = status && (HRRclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
-  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
-  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
+  status = status && (HRRclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
+  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE);
+  status = status && (HRRsession.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("ServerHello completes ECDHE P-256 after HRR"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
@@ -4310,8 +4315,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   tests->console->Printf(__L("\n[ Complete TLS 1.3 client handshake ]\n"));
 
-  DIOSTREAMTLSSESSION          session;
-  DIOSTREAMTLSHANDSHAKECLIENT handshakeclient;
+  DIOSTREAMTLS13SESSION          session;
+  DIOSTREAMTLS13HANDSHAKECLIENT handshakeclient;
   XBUFFER                     clienthellomessage;
   XBUFFER                     serverhellomessage;
   XBUFFER                     sharedsecretmessage;
@@ -4331,10 +4336,10 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = handshakeclient.RecordInput_Add(DEVTESTSCONSOLE_TLS_RFC8448_SERVERFLIGHTRECORD, 4);
   status = status && handshakeclient.Process();
-  status = status && (handshakeclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
+  status = status && (handshakeclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
   status = status && handshakeclient.RecordInput_Add(&DEVTESTSCONSOLE_TLS_RFC8448_SERVERFLIGHTRECORD[4], 97);
   status = status && handshakeclient.Process();
-  status = status && (handshakeclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
+  status = status && (handshakeclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS);
   status = status && handshakeclient.RecordInput_Add(&DEVTESTSCONSOLE_TLS_RFC8448_SERVERFLIGHTRECORD[101],
                                                      sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERFLIGHTRECORD) - 101);
   status = status && handshakeclient.Process();
@@ -4343,8 +4348,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   if(!status) return false;
 
   status = handshakeclient.IsServerFinishedVerified();
-  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_HANDSHAKE);
-  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_APPLICATION);
+  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE);
+  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLS13SESSION_EPOCH_APPLICATION);
   status = status && handshakeclient.GetServerCertificate();
   status = status && (handshakeclient.GetServerCertificate()->CertificateList_GetAll()->GetSize() == 1);
   status = status && handshakeclient.GetServerCertificateVerify();
@@ -4375,8 +4380,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
                                                     sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTFINISHEDRECORD));
   status = status && handshakeclient.IsHandshakeCompleted();
   status = status && handshakeclient.IsServerFinishedVerified();
-  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLSSESSION_EPOCH_APPLICATION);
-  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLSSESSION_EPOCH_APPLICATION);
+  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == DIOSTREAMTLS13SESSION_EPOCH_APPLICATION);
+  status = status && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == DIOSTREAMTLS13SESSION_EPOCH_APPLICATION);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Client Finished completes both directions"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
@@ -4402,8 +4407,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   forgedfinishedmessage.Add(DEVTESTSCONSOLE_TLS_RFC8448_SERVERFINISHED, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERFINISHED));
   forgedfinishedmessage.Get()[DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE] ^= 0x01;
 
-  DIOSTREAMTLSSESSION          forgedsession;
-  DIOSTREAMTLSHANDSHAKECLIENT forgedclient;
+  DIOSTREAMTLS13SESSION          forgedsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT forgedclient;
 
   status = forgedsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && forgedclient.Ini(&forgedsession, true);
@@ -4413,26 +4418,26 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && forgedclient.Handshake_Process(certificatemessage);
   status = status && forgedclient.Handshake_Process(certificateverifymessage);
   status = status && !forgedclient.Handshake_Process(forgedfinishedmessage);
-  status = status && (forgedclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR);
+  status = status && (forgedclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("A forged Finished is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          ordersession;
-  DIOSTREAMTLSHANDSHAKECLIENT orderclient;
+  DIOSTREAMTLS13SESSION          ordersession;
+  DIOSTREAMTLS13HANDSHAKECLIENT orderclient;
 
   status = ordersession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && orderclient.Ini(&ordersession, true);
   status = status && orderclient.Start(clienthellomessage);
   status = status && orderclient.ServerHello_Process(serverhellomessage, sharedsecretmessage);
   status = status && !orderclient.Handshake_Process(certificatemessage);
-  status = status && (orderclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_ERROR);
+  status = status && (orderclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_ERROR);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("An out-of-order message is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          requestsession;
-  DIOSTREAMTLSHANDSHAKECLIENT requestclient;
+  DIOSTREAMTLS13SESSION          requestsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT requestclient;
   XBUFFER                     certificaterequestmessage;
 
   certificaterequestmessage.Add(certificaterequestdata, sizeof(certificaterequestdata));
@@ -4446,7 +4451,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && requestclient.IsCertificateRequested();
   status = status && requestclient.Handshake_Process(certificatemessage);
   status = status && requestclient.Handshake_Process(certificateverifymessage);
-  status = status && (requestclient.GetState() == DIOSTREAMTLSHANDSHAKECLIENT_STATE_WAIT_FINISHED);
+  status = status && (requestclient.GetState() == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Optional CertificateRequest is accepted"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
@@ -4625,8 +4630,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("RFC certificate is loaded as explicit trust"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          authenticatedsession;
-  DIOSTREAMTLSHANDSHAKECLIENT authenticatedclient;
+  DIOSTREAMTLS13SESSION          authenticatedsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT authenticatedclient;
 
   status = authenticatedsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && authenticatedclient.Ini(&authenticatedsession, false);
@@ -4637,7 +4642,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && authenticatedclient.Handshake_Process(certificatemessage);
   status = status && authenticatedclient.Handshake_Process(certificateverifymessage);
   status = status && authenticatedclient.IsServerAuthenticated();
-  status = status && (authenticatedclient.GetAuthenticationError() == DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_NONE);
+  status = status && (authenticatedclient.GetAuthenticationError() == DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE);
   status = status && authenticatedclient.Handshake_Process(serverfinishedmessage);
   status = status && authenticatedclient.IsServerFinishedVerified();
 
@@ -4648,8 +4653,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   forgedcertificateverifymessage.Add(certificateverifymessage);
   forgedcertificateverifymessage.Get()[DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + 4] ^= 0x01;
 
-  DIOSTREAMTLSSESSION          invalidsignaturesession;
-  DIOSTREAMTLSHANDSHAKECLIENT invalidsignatureclient;
+  DIOSTREAMTLS13SESSION          invalidsignaturesession;
+  DIOSTREAMTLS13HANDSHAKECLIENT invalidsignatureclient;
 
   status = invalidsignaturesession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && invalidsignatureclient.Ini(&invalidsignaturesession, false);
@@ -4660,13 +4665,13 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && invalidsignatureclient.Handshake_Process(certificatemessage);
   status = status && !invalidsignatureclient.Handshake_Process(forgedcertificateverifymessage);
   status = status && !invalidsignatureclient.IsServerAuthenticated();
-  status = status && (invalidsignatureclient.GetAuthenticationError() == DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
+  status = status && (invalidsignatureclient.GetAuthenticationError() == DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("A forged CertificateVerify is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          invalidnamesession;
-  DIOSTREAMTLSHANDSHAKECLIENT invalidnameclient;
+  DIOSTREAMTLS13SESSION          invalidnamesession;
+  DIOSTREAMTLS13HANDSHAKECLIENT invalidnameclient;
 
   status = invalidnamesession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && invalidnameclient.Ini(&invalidnamesession, false);
@@ -4690,8 +4695,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   expiredvalidationdate.SetMilliSeconds(0);
   expiredvalidationdate.SetIsLocal(false);
 
-  DIOSTREAMTLSSESSION          expiredsession;
-  DIOSTREAMTLSHANDSHAKECLIENT expiredclient;
+  DIOSTREAMTLS13SESSION          expiredsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT expiredclient;
 
   status = expiredvalidationdate.IsValidDate();
   status = status && expiredsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
@@ -4713,8 +4718,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   XVECTOR<XBUFFER*> untrustedroots;
   untrustedroots.Add(&untrustedroot);
 
-  DIOSTREAMTLSSESSION          untrustedsession;
-  DIOSTREAMTLSHANDSHAKECLIENT untrustedclient;
+  DIOSTREAMTLS13SESSION          untrustedsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT untrustedclient;
 
   status = untrustedsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && untrustedclient.Ini(&untrustedsession, false);
@@ -4728,8 +4733,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("An untrusted certificate is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION          noconfigurationsession;
-  DIOSTREAMTLSHANDSHAKECLIENT noconfigurationclient;
+  DIOSTREAMTLS13SESSION          noconfigurationsession;
+  DIOSTREAMTLS13HANDSHAKECLIENT noconfigurationclient;
 
   status = noconfigurationsession.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && noconfigurationclient.Ini(&noconfigurationsession, false);
@@ -4737,7 +4742,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && noconfigurationclient.ServerHello_Process(serverhellomessage, sharedsecretmessage);
   status = status && noconfigurationclient.Handshake_Process(encryptedextensionsmessage);
   status = status && !noconfigurationclient.Handshake_Process(certificatemessage);
-  status = status && (noconfigurationclient.GetAuthenticationError() == DIOSTREAMTLSHANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+  status = status && (noconfigurationclient.GetAuthenticationError() == DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Authenticated mode requires trust policy"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
@@ -4834,42 +4839,42 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Local credentials are deleted together"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION memoryclient;
-  DIOSTREAMTLSSESSION memoryserver;
+  DIOSTREAMTLS13SESSION memoryclient;
+  DIOSTREAMTLS13SESSION memoryserver;
   XBYTE               memoryrequest[]  = "request from client";
   XBYTE               memoryresponse[] = "response from server";
   XBUFFER             memoryrecords;
 
   status = Test_DIOStreamTLS_SessionIni(memoryclient, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && Test_DIOStreamTLS_SessionIni(memoryserver, DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER);
-  status = status && memoryclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+  status = status && memoryclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                       DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)->Compare
                                                                       ((*memoryserver.GetKeySchedule()->GetTrafficSecret
-                                                                      (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                      (DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                        DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)));
-  status = status && memoryclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+  status = status && memoryclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                       DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)->Compare
                                                                       ((*memoryserver.GetKeySchedule()->GetTrafficSecret
-                                                                      (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                      (DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                        DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)));
   status = status && memoryclient.ApplicationData_Protect(memoryrequest, sizeof(memoryrequest)-1, memoryrecords);
   status = status && memoryserver.RecordInput_Add(memoryrecords);
-  status = status && (memoryserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (memoryserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && memoryserver.GetApplicationInput()->Compare(memoryrequest, sizeof(memoryrequest)-1);
 
   memoryrecords.Delete();
 
   status = status && memoryserver.ApplicationData_Protect(memoryresponse, sizeof(memoryresponse)-1, memoryrecords);
   status = status && memoryclient.RecordInput_Add(memoryrecords);
-  status = status && (memoryclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (memoryclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && memoryclient.GetApplicationInput()->Compare(memoryresponse, sizeof(memoryresponse)-1);
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Local and remote directions cross in memory"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION acceptedclient;
-  DIOSTREAMTLSSESSION acceptedserver1;
-  DIOSTREAMTLSSESSION acceptedserver2;
+  DIOSTREAMTLS13SESSION acceptedclient;
+  DIOSTREAMTLS13SESSION acceptedserver1;
+  DIOSTREAMTLS13SESSION acceptedserver2;
   XBYTE               accepteddata[] = "first record of an accepted socket";
   XBUFFER             acceptedrecords;
 
@@ -4880,8 +4885,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && acceptedclient.ApplicationData_Protect(accepteddata, sizeof(accepteddata)-1, acceptedrecords);
   status = status && acceptedserver1.RecordInput_Add(acceptedrecords);
   status = status && acceptedserver2.RecordInput_Add(acceptedrecords);
-  status = status && (acceptedserver1.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
-  status = status && (acceptedserver2.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (acceptedserver1.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
+  status = status && (acceptedserver2.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && acceptedserver1.GetApplicationInput()->Compare(accepteddata, sizeof(accepteddata)-1);
   status = status && acceptedserver2.GetApplicationInput()->Compare(accepteddata, sizeof(accepteddata)-1);
   status = status && (acceptedserver1.GetRecord()->GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == 1);
@@ -4890,8 +4895,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Accepted sockets keep independent sessions"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION applicationclient;
-  DIOSTREAMTLSSESSION applicationserver;
+  DIOSTREAMTLS13SESSION applicationclient;
+  DIOSTREAMTLS13SESSION applicationserver;
   XBYTE               applicationdata[41];
   XBUFFER             applicationrecords;
 
@@ -4902,9 +4907,9 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && applicationclient.GetRecord()->SetMaxPlainSize(7);
   status = status && applicationclient.ApplicationData_Protect(applicationdata, sizeof(applicationdata), applicationrecords);
   status = status && applicationserver.RecordInput_Add(applicationrecords.Get(), 4);
-  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_INCOMPLETE);
+  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE);
   status = status && applicationserver.RecordInput_Add(&applicationrecords.Get()[4], applicationrecords.GetSize() - 4);
-  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && applicationserver.GetApplicationInput()->Compare(applicationdata, sizeof(applicationdata));
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Fragmented records deliver only plaintext"), status?__L("Ok."):__L("Error!"));
@@ -4927,7 +4932,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
   status = applicationserver.ApplicationData_Protect(reverseplain, reverserecords);
   status = status && applicationclient.RecordInput_Add(reverserecords);
-  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && applicationclient.GetApplicationInput()->Compare(reverseplain);
   applicationclient.GetApplicationInput()->Delete();
 
@@ -4940,7 +4945,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = applicationserver.GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE,
                                                    newsessionticketmessage, sizeof(newsessionticketmessage), newsessionticketrecords);
   status = status && applicationclient.RecordInput_Add(newsessionticketrecords);
-  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && !applicationclient.IsError();
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("NewSessionTicket is consumed internally"), status?__L("Ok."):__L("Error!"));
@@ -4953,19 +4958,19 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = applicationclient.CloseNotify_Create(closeclientrecords);
   status = status && applicationclient.CloseNotify_Create(closeidempotent) && closeidempotent.IsEmpty();
   status = status && applicationserver.RecordInput_Add(closeclientrecords);
-  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (applicationserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && applicationserver.IsCloseNotifyReceived();
   status = status && !applicationclient.ApplicationData_Protect(applicationdata, sizeof(applicationdata), applicationrecords);
   status = status && applicationserver.CloseNotify_Create(closeserverrecords);
   status = status && applicationclient.RecordInput_Add(closeserverrecords);
-  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (applicationclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && applicationclient.IsCloseNotifySent() && applicationclient.IsCloseNotifyReceived();
   status = status && applicationserver.IsCloseNotifySent() && applicationserver.IsCloseNotifyReceived();
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("close_notify is reciprocal and idempotent"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION truncatedsession;
+  DIOSTREAMTLS13SESSION truncatedsession;
 
   status = Test_DIOStreamTLS_SessionIni(truncatedsession, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
   status = status && !truncatedsession.TransportClosed();
@@ -4974,8 +4979,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-42s : %s\n"), __L("TCP close without close_notify is truncated"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION tamperedclient;
-  DIOSTREAMTLSSESSION tamperedserver;
+  DIOSTREAMTLS13SESSION tamperedclient;
+  DIOSTREAMTLS13SESSION tamperedserver;
   XBUFFER             tamperedrecords;
 
   status = Test_DIOStreamTLS_SessionIni(tamperedclient, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
@@ -4983,14 +4988,14 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && tamperedclient.ApplicationData_Protect(applicationdata, sizeof(applicationdata), tamperedrecords);
   tamperedrecords.Get()[tamperedrecords.GetSize()-1] ^= 0x01;
   status = status && tamperedserver.RecordInput_Add(tamperedrecords);
-  status = status && (tamperedserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
+  status = status && (tamperedserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_ERROR);
   status = status && tamperedserver.IsError() && tamperedserver.GetApplicationInput()->IsEmpty();
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Forged application record is never exposed"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION posthandshakeclient;
-  DIOSTREAMTLSSESSION posthandshakeserver;
+  DIOSTREAMTLS13SESSION posthandshakeclient;
+  DIOSTREAMTLS13SESSION posthandshakeserver;
   XBUFFER             keyupdaterecords;
   XBUFFER             keyupdateresponse;
   XBUFFER             keyupdateapplicationrecords;
@@ -5000,32 +5005,32 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = status && posthandshakeclient.KeyUpdate_Create(true, keyupdaterecords);
   status = status && (posthandshakeclient.GetRecord()->GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) == 0);
   status = status && posthandshakeserver.RecordInput_Add(keyupdaterecords);
-  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && (posthandshakeserver.GetRecord()->GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) == 0);
-  status = status && posthandshakeclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+  status = status && posthandshakeclient.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                              DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)->Compare
                                                                              ((*posthandshakeserver.GetKeySchedule()->GetTrafficSecret
-                                                                             (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                             (DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                               DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)));
   status = status && posthandshakeserver.PostHandshakeOutput_Extract(keyupdateresponse) && !keyupdateresponse.IsEmpty();
   status = status && posthandshakeclient.RecordInput_Add(keyupdateresponse);
-  status = status && (posthandshakeclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
-  status = status && posthandshakeserver.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+  status = status && (posthandshakeclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
+  status = status && posthandshakeserver.GetKeySchedule()->GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                              DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)->Compare
                                                                              ((*posthandshakeclient.GetKeySchedule()->GetTrafficSecret
-                                                                             (DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION,
+                                                                             (DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION,
                                                                               DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)));
   status = status && posthandshakeclient.ApplicationData_Protect(applicationdata, sizeof(applicationdata),
                                                                   keyupdateapplicationrecords);
   status = status && posthandshakeserver.RecordInput_Add(keyupdateapplicationrecords);
-  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_COMPLETE);
+  status = status && (posthandshakeserver.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_COMPLETE);
   status = status && posthandshakeserver.GetApplicationInput()->Compare(applicationdata, sizeof(applicationdata));
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("KeyUpdate renews both traffic directions"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION invalidkeyupdateclient;
-  DIOSTREAMTLSSESSION invalidkeyupdateserver;
+  DIOSTREAMTLS13SESSION invalidkeyupdateclient;
+  DIOSTREAMTLS13SESSION invalidkeyupdateserver;
   XBYTE               invalidkeyupdatemessage[] = { DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
                                                      0x00, 0x00, 0x01, 0x02 };
   XBUFFER             invalidkeyupdaterecords;
@@ -5037,14 +5042,14 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
                                                                   sizeof(invalidkeyupdatemessage),
                                                                   invalidkeyupdaterecords);
   status = status && invalidkeyupdateclient.RecordInput_Add(invalidkeyupdaterecords);
-  status = status && (invalidkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
+  status = status && (invalidkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_ERROR);
   status = status && invalidkeyupdateclient.IsError();
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("An invalid KeyUpdate value is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION trailingkeyupdateclient;
-  DIOSTREAMTLSSESSION trailingkeyupdateserver;
+  DIOSTREAMTLS13SESSION trailingkeyupdateclient;
+  DIOSTREAMTLS13SESSION trailingkeyupdateserver;
   XBYTE               trailingkeyupdatemessage[] = { DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
                                                       0x00, 0x00, 0x01, 0x00,
                                                       DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE,
@@ -5058,13 +5063,13 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
                                                                    sizeof(trailingkeyupdatemessage),
                                                                    trailingkeyupdaterecords);
   status = status && trailingkeyupdateclient.RecordInput_Add(trailingkeyupdaterecords);
-  status = status && (trailingkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLSSESSION_RESULT_ERROR);
+  status = status && (trailingkeyupdateclient.ApplicationData_Process() == DIOSTREAMTLS13SESSION_RESULT_ERROR);
   status = status && trailingkeyupdateclient.IsError();
 
   tests->console->Printf(__L("  %-42s : %s\n"), __L("Data after KeyUpdate in the same record is refused"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  DIOSTREAMTLSSESSION prematurekeyupdate;
+  DIOSTREAMTLS13SESSION prematurekeyupdate;
   XBUFFER             prematurekeyupdateoutput;
 
   status = prematurekeyupdate.Ini(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256,
@@ -5081,7 +5086,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTLS_SessionIni(DIOSTREAMTLSSESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTLS_SessionIni(DIOSTREAMTLS13SESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 * @brief      Initialize one deterministic TLS 1.3 application epoch from the RFC 8448 transcript
 * @note       The same setup is used for both roles to verify the role-neutral application record processing.
 * @ingroup    TESTS
@@ -5092,7 +5097,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
 * @return     bool : true if it is successful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_DIOStreamTLS_SessionIni(DIOSTREAMTLSSESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+bool DEVTESTSCONSOLE::Test_DIOStreamTLS_SessionIni(DIOSTREAMTLS13SESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 {
   XBUFFER sharedsecret;
   XBUFFER clienthello;
@@ -5180,7 +5185,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Check(DEVTESTSCONSOLE* tests, XCHAR* ley
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTLS_BuildKeySchedule(DIOSTREAMTLSKEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+* @fn         bool DEVTESTSCONSOLE::Test_DIOStreamTLS_BuildKeySchedule(DIOSTREAMTLS13KEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 * @brief      Runs the whole key schedule of the RFC 8448 handshake for one of the two roles
 * @note       Only the role changes between the client and the server: this is what the second phase will reuse.
 * @ingroup    TESTS
@@ -5191,7 +5196,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Check(DEVTESTSCONSOLE* tests, XCHAR* ley
 * @return     bool : true if it is successful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTSCONSOLE::Test_DIOStreamTLS_BuildKeySchedule(DIOSTREAMTLSKEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
+bool DEVTESTSCONSOLE::Test_DIOStreamTLS_BuildKeySchedule(DIOSTREAMTLS13KEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role)
 {
   XBUFFER sharedsecret;
   XBUFFER transcript;
@@ -5236,7 +5241,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_KeySchedule(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
-  DIOSTREAMTLSKEYSCHEDULE keyschedule;
+  DIOSTREAMTLS13KEYSCHEDULE keyschedule;
   XBUFFER                 sharedsecret;
   XBUFFER                 transcript;
   XBUFFER                 transcripthash;
@@ -5293,12 +5298,12 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_KeySchedule(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("\n[ Traffic secrets, asked for by direction and never by role ]\n"));
 
   status = Test_DIOStreamTLS_Check(tests, __L("Handshake, local  (of the client)"),
-                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
+                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
                                    DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSTRAFFIC));
   if(!status) return false;
 
   status = Test_DIOStreamTLS_Check(tests, __L("Handshake, remote (of the server)"),
-                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
+                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
                                    DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSTRAFFIC));
   if(!status) return false;
 
@@ -5352,28 +5357,28 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_KeySchedule(DEVTESTSCONSOLE* tests)
   if(!keyschedule.ApplicationTrafficSecrets_Calculate(transcripthash)) return false;
 
   status = Test_DIOStreamTLS_Check(tests, __L("Application, local  (of the client)"),
-                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
+                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
                                    DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPTRAFFIC));
   if(!status) return false;
 
   status = Test_DIOStreamTLS_Check(tests, __L("Application, remote (of the server)"),
-                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
+                                   *keyschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
                                    DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPTRAFFIC));
   if(!status) return false;
 
-  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL, key, IV)) return false;
+  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL, key, IV)) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Client handshake write key"), key, DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSKEY, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSKEY))) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Client handshake write iv") , IV , DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSIV , sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSIV)))  return false;
 
-  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE, key, IV)) return false;
+  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE, key, IV)) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Server handshake write key"), key, DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSKEY, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSKEY))) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Server handshake write iv") , IV , DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSIV , sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSIV)))  return false;
 
-  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL, key, IV)) return false;
+  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL, key, IV)) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Client application write key"), key, DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPKEY, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPKEY))) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Client application write iv") , IV , DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPIV , sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTAPIV)))  return false;
 
-  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE, key, IV)) return false;
+  if(!keyschedule.GetTrafficKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE, key, IV)) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Server application write key"), key, DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPKEY, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPKEY))) return false;
   if(!Test_DIOStreamTLS_Check(tests, __L("Server application write iv") , IV , DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPIV , sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERAPIV)))  return false;
 
@@ -5382,19 +5387,19 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_KeySchedule(DEVTESTSCONSOLE* tests)
 
   tests->console->Printf(__L("\n[ The same schedule from the point of view of a server ]\n"));
 
-  DIOSTREAMTLSKEYSCHEDULE serverschedule;
+  DIOSTREAMTLS13KEYSCHEDULE serverschedule;
 
   status = Test_DIOStreamTLS_BuildKeySchedule(serverschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER);
   tests->console->Printf(__L("  %-38s : %s\n"), __L("Built with the server role"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
   status = Test_DIOStreamTLS_Check(tests, __L("Handshake, local  (of the server)"),
-                                   *serverschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
+                                   *serverschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),
                                    DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_SERVERHSTRAFFIC));
   if(!status) return false;
 
   status = Test_DIOStreamTLS_Check(tests, __L("Handshake, remote (of the client)"),
-                                   *serverschedule.GetTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
+                                   *serverschedule.GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE),
                                    DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSTRAFFIC, sizeof(DEVTESTSCONSOLE_TLS_RFC8448_CLIENTHSTRAFFIC));
 
   tests->console->Printf(__L("\n"));
@@ -5418,8 +5423,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
 {
   if(!tests->console) return false;
 
-  DIOSTREAMTLSKEYSCHEDULE   clientschedule;
-  DIOSTREAMTLSKEYSCHEDULE   serverschedule;
+  DIOSTREAMTLS13KEYSCHEDULE   clientschedule;
+  DIOSTREAMTLS13KEYSCHEDULE   serverschedule;
   DIOSTREAMTLSRECORD        clientrecord;
   DIOSTREAMTLSRECORD        serverrecord;
   DIOSTREAMTLS_CONTENTTYPE  contenttype;
@@ -5446,7 +5451,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
   tests->console->Printf(__L("  %-38s : %s\n"), __L("Nothing protected before the keys"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
-  status = clientrecord.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
+  status = clientrecord.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
   tests->console->Printf(__L("  %-38s : %s\n"), __L("Handshake keys of the remote end"), status?__L("Ok."):__L("Error!"));
   if(!status) return false;
 
@@ -5502,7 +5507,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
 
   records.Delete();
 
-  status = writer.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
+  status = writer.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
   if(status)
     {
       status = writer.Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clientfinished, records);
@@ -5530,7 +5535,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
 
   if(!serverrecord.Ini(&serverschedule)) return false;
 
-  status = serverrecord.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
+  status = serverrecord.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
   if(status)
     {
       stream.Delete();
@@ -5568,8 +5573,8 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
   if(!fragmenter.Ini(&clientschedule))   return false;
   if(!defragmenter.Ini(&serverschedule)) return false;
 
-  if(!fragmenter.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))    return false;
-  if(!defragmenter.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)) return false;
+  if(!fragmenter.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))    return false;
+  if(!defragmenter.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)) return false;
 
   status = (!fragmenter.SetMaxPlainSize(0) && !fragmenter.SetMaxPlainSize(DIOSTREAMTLSRECORD_MAXPLAINSIZE + 1));
   tests->console->Printf(__L("  %-38s : %s\n"), __L("A size out of range is refused"), status?__L("Ok."):__L("Error!"));
@@ -5627,7 +5632,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS_Record(DEVTESTSCONSOLE* tests)
   XBUFFER             discarded;
 
   if(!victim.Ini(&serverschedule))                                                                          return false;
-  if(!victim.SetKeys(DIOSTREAMTLSKEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))     return false;
+  if(!victim.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))     return false;
 
   tampered.Add(records);
   tampered.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE] ^= 0x01;

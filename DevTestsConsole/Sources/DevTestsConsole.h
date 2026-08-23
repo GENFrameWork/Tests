@@ -42,8 +42,8 @@
 #include "DIOURL.h"
 #include "DIOGPIO.h"
 #ifdef DIO_STREAMTLS_ACTIVE
-#include "DIOStreamTLSKeySchedule.h"
-#include "DIOStreamTLSSession.h"
+#include "DIOStreamTLS13KeySchedule.h"
+#include "DIOStreamTLS13Session.h"
 #endif
 
 #include "APPFlowConsole.h"
@@ -261,8 +261,8 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     bool                            Test_Hash                           (HASH* HASH, XBUFFER& input, XCHAR* leyend);
 
     static bool                     Test_DIOStreamTLS_Check             (DEVTESTSCONSOLE* tests, XCHAR* leyend, XBUFFER& got, XBYTE* expected, XDWORD sizeexpected);
-    static bool                     Test_DIOStreamTLS_BuildKeySchedule  (DIOSTREAMTLSKEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
-    static bool                     Test_DIOStreamTLS_SessionIni         (DIOSTREAMTLSSESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    static bool                     Test_DIOStreamTLS_BuildKeySchedule  (DIOSTREAMTLS13KEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    static bool                     Test_DIOStreamTLS_SessionIni         (DIOSTREAMTLS13SESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
 
     static bool                     Test_WaitSound                      (SNDITEM* item);   
 
