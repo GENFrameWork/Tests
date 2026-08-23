@@ -3925,9 +3925,10 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
           case DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS     : { DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* groups;
 
                                                                       groups = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension;
-                                                                      generatedgroup = (groups->List_Get()->GetSize() == 2) &&
+                                                                      generatedgroup = (groups->List_Get()->GetSize() == 3) &&
                                                                                        (groups->List_Get()->Get(0) == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-                                                                                       (groups->List_Get()->Get(1) == DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
+                                                                                       (groups->List_Get()->Get(1) == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+                                                                                       (groups->List_Get()->Get(2) == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
                                                                     }
                                                                     break;
 
@@ -4755,7 +4756,7 @@ bool DEVTESTSCONSOLE::Test_DIOStreamTLS(DEVTESTSCONSOLE* tests)
   status = streamconfig.IsTLS();
   status = status && (streamconfig.GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
   status = status && (streamconfig.GetCipherSuites()->GetSize() == 2);
-  status = status && (streamconfig.GetSupportedGroups()->GetSize() == 2);
+  status = status && (streamconfig.GetSupportedGroups()->GetSize() == 3);
   status = status && (streamconfig.GetSignatureSchemes()->GetSize() == 3);
   status = status && (streamconfig.GetCertificateSignatureSchemes()->GetSize() == 9);
   status = status && streamconfig.GetApplicationProtocols()->IsEmpty();
