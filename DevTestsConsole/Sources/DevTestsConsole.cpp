@@ -1923,8 +1923,7 @@ bool DEVTESTSCONSOLE::Test_WebClient(DEVTESTSCONSOLE* tests)
       bool getstatus;
       int  resultserver;
 
-      url          = __L("https://deped2026.imtlazarus.com/lazarus/api/win-getcommand/index.php");
-      //url          = __L("https://www.google.com/");
+      url          = __L("https://www.google.com/");
       getstatus    = webclient.Get(url, webpage, NULL, 30);
       resultserver = webclient.GetHeader()->GetResultServer();
       status       = getstatus && (resultserver == 200) && !webpage.IsEmpty();
