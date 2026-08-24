@@ -72,7 +72,7 @@ option(DIO_STREAMUART_FEATURE                                   "Data Input/Outp
 #option(DIO_STREAMBLUETOOTHLE_FEATURE                            "Data Input/Output Stream Bluetooth LE"                   ON )
 option(DIO_STREAMTCPIP_FEATURE                                  "Stream TCPIP"                                            ON )
 #option(DIO_STREAMWIFI_FEATURE                                   "Data Input/Output Stream Wifi"                           ON )
-option(DIO_STREAMTLS_FEATURE                                    "Data Input/Output Stream TLS"                            ON )
+#option(DIO_STREAMTLS_FEATURE                                    "Data Input/Output Stream TLS"                            ON )
 option(DIO_CHECKCONNECTIONS_FEATURE                             "Check Connections"                                       ON )
 option(DIO_NETWORKTIMEPROTOCOL_FEATURE                          "Network Time Protocol"                                   ON )
 option(DIO_DYNDNS_FEATURE                                       "DynDNS"                                                  ON )
