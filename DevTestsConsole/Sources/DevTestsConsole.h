@@ -177,7 +177,7 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_XLogs                          (DEVTESTSCONSOLE* tests);
     static bool                     Test_XTimer                         (DEVTESTSCONSOLE* tests);
     static bool                     Test_XVector                        (DEVTESTSCONSOLE* tests);
-  //static bool                     Test_XVectorSTL                     (DEVTESTSCONSOLE* tests);
+  
     bool                            Test_XTree_AddChilds                (XTREE_NODE_TEST* node, int nchild);
     bool                            Test_XTree_InsertChilds             (XTREE_NODE_TEST* node, int indexchild);
     static bool                     Test_XTree                          (DEVTESTSCONSOLE* tests);
@@ -255,14 +255,13 @@ class DEVTESTSCONSOLE : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHI
     static bool                     Test_DeviceBusInputFile             (DEVTESTSCONSOLE* tests);   
     #endif
 
-
   private:
 
     bool                            Test_Hash                           (HASH* HASH, XBUFFER& input, XCHAR* leyend);
 
     static bool                     Test_DIOStreamTLS_Check             (DEVTESTSCONSOLE* tests, XCHAR* leyend, XBUFFER& got, XBYTE* expected, XDWORD sizeexpected);
     static bool                     Test_DIOStreamTLS_BuildKeySchedule  (DIOSTREAMTLS13KEYSCHEDULE& keyschedule, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
-    static bool                     Test_DIOStreamTLS_SessionIni         (DIOSTREAMTLS13SESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    static bool                     Test_DIOStreamTLS_SessionIni        (DIOSTREAMTLS13SESSION& session, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
 
     static bool                     Test_WaitSound                      (SNDITEM* item);   
 

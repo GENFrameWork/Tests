@@ -66,10 +66,10 @@ class DEVTESTSCONSOLE_CFG : public APPFLOWCFG
     
   private:
                                     DEVTESTSCONSOLE_CFG                       (XCHAR* namefile);
-                                    DEVTESTSCONSOLE_CFG                       (DEVTESTSCONSOLE_CFG const&);        // Don't implement
+                                    DEVTESTSCONSOLE_CFG                       (DEVTESTSCONSOLE_CFG const&);        
     virtual                        ~DEVTESTSCONSOLE_CFG                       ();
 
-    void                            operator =                                (DEVTESTSCONSOLE_CFG const&);        // Don't implement
+    void                            operator =                                (DEVTESTSCONSOLE_CFG const&);        
 
 
     void                            Clean                                     ();

@@ -67,14 +67,12 @@ class DEVTESTSCANVAS2D_CFG : public APPFLOWCFG
     int                             Screen_GetMaxWidth                      ();
     int                             Screen_GetMaxHeight                     ();
 
-
   private:
-
                                     DEVTESTSCANVAS2D_CFG                    (XCHAR* namefile);
-                                    DEVTESTSCANVAS2D_CFG                    (DEVTESTSCANVAS2D_CFG const&);       // Don't implement
+                                    DEVTESTSCANVAS2D_CFG                    (DEVTESTSCANVAS2D_CFG const&);       
     virtual                        ~DEVTESTSCANVAS2D_CFG                    ();
 
-    void                            operator =                              (DEVTESTSCANVAS2D_CFG const&);       // Don't implement
+    void                            operator =                              (DEVTESTSCANVAS2D_CFG const&);       
 
     void                            Clean                                   ();
 
