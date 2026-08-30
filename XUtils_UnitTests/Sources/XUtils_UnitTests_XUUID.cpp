@@ -316,6 +316,55 @@ TEST(UNITTEST_XUUID_CLASSNAME, SetAndCopyReturnTrue)
 }
 
 
+TEST(UNITTEST_XUUID_CLASSNAME, SetFromBufferTooShortDoesNotCrash)
+{
+  XUUID   ID;
+  XBUFFER shortbuffer;
+
+  // Real XUUIDMAXDATA4+... buffer needs 4+2+2+1+1+6 = 16 bytes; give it far less.
+  shortbuffer.Add((XBYTE)0xAB);
+  shortbuffer.Add((XBYTE)0xCD);
+
+  // Documents real behavior: SetFromBuffer() doesn't check the buffer's size before reading
+  // from it via successive Get() calls, but Get() itself fails gracefully once the buffer
+  // runs out, so this doesn't crash -- it just ends up with mostly-default/zeroed fields.
+  EXPECT_TRUE(ID.SetFromBuffer(shortbuffer));
+}
+
+
+TEST(UNITTEST_XUUID_CLASSNAME, GetToBufferAndGetToStringOnNeverSetUUID)
+{
+  XUUID   ID;
+  XBUFFER IDbuffer;
+  XSTRING IDstr;
+
+  ASSERT_TRUE(ID.IsEmpty());
+
+  // A never-Set (default constructed / all-zero) UUID still produces a well-formed,
+  // fixed-size buffer and canonical-length string -- both getters are unconditional.
+  EXPECT_TRUE(ID.GetToBuffer(IDbuffer));
+  EXPECT_EQ((XDWORD)(4+2+2+1+1+XUUIDMAXDATA4), IDbuffer.GetSize());
+
+  EXPECT_TRUE(ID.GetToString(IDstr));
+  EXPECT_EQ((XDWORD)36, IDstr.GetSize());
+  EXPECT_EQ(0, IDstr.Compare(__L("00000000-0000-0000-0000-000000000000"), false));
+}
+
+
+TEST(UNITTEST_XUUID_CLASSNAME, SetFromStringMalformedStillReturnsTrue)
+{
+  // Source concern (not fixed): SetFromString() only rejects a fully EMPTY string
+  // (explicit "if(string2.IsEmpty()) return false;"); any other string, however malformed
+  // (wrong dash placement, invalid hex digits, wrong length), is fed straight into
+  // UnFormat() and the method unconditionally returns true afterwards regardless of
+  // whether UnFormat() actually parsed anything meaningful.
+  XUUID   ID;
+  XSTRING malformed(__L("not-a-valid-uuid-at-all"));
+
+  EXPECT_TRUE(ID.SetFromString(malformed));
+}
+
+
 }
 #endif
 

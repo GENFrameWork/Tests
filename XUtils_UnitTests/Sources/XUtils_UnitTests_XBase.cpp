@@ -162,6 +162,61 @@ TEST(UNITTEST_XBASE_CLASSNAME, RotateBits)
 }
 
 
+TEST(UNITTEST_XBASE_CLASSNAME, SizeBufferASCII)
+{
+  XBYTE buffer1[6] = { 'a', 'b', 'c', 0, 'd', 'e' };
+  EXPECT_EQ(3, SizeBufferASCII(buffer1));
+
+  XBYTE buffer2[4] = { 'a', 'b', 'c', 'd' };
+  EXPECT_EQ(4, SizeBufferASCII(buffer2, 4));
+
+  XBYTE buffer3[1] = { 0 };
+  EXPECT_EQ(0, SizeBufferASCII(buffer3));
+
+  XBYTE buffer4[4] = { 'a', 'b', 'c', 'd' };
+  EXPECT_EQ(2, SizeBufferASCII(buffer4, 2));
+}
+
+
+TEST(UNITTEST_XBASE_CLASSNAME, DecimalNumbersNegativeAndZero)
+{
+  double double1 = Truncate(-1.75);
+  EXPECT_EQ(-1.0, double1);
+
+  double double2 = Fraction(-1.75);
+  EXPECT_NEAR(-0.75, double2, 0.0001);
+
+  float floatvalue = (float)RoundOff(-1.567f, 2);
+  EXPECT_NEAR(-1.57f, floatvalue, 0.001f);
+
+  // AdjustDouble/AdjustFloat round to nearest (floor(x*factor+0.5)/factor), they don't truncate,
+  // so with 0 decimals 1.789 rounds up to 2.0.
+  double doublezerodecimals = AdjustDouble(1.789, 0);
+  EXPECT_EQ(2.0, doublezerodecimals);
+
+  float floatzerodecimals = AdjustFloat(1.789f, 0);
+  EXPECT_EQ(2.0f, floatzerodecimals);
+
+  double roundoffzero = RoundOff(1.789, 0);
+  EXPECT_EQ(2.0, roundoffzero);
+}
+
+
+TEST(UNITTEST_XBASE_CLASSNAME, NumberBCDZeroAndBoundary)
+{
+  XQWORD bcdzero = DWORDToBCD(0);
+  EXPECT_EQ(0, bcdzero);
+
+  XDWORD dwordzero = BCDToDWORD(bcdzero);
+  EXPECT_EQ(0, dwordzero);
+
+  // 9-digit boundary value, every digit distinct and using the digit 9 (max valid BCD nibble)
+  XQWORD bcd = DWORDToBCD(999999999);
+  XDWORD roundtrip = BCDToDWORD(bcd);
+  EXPECT_EQ(999999999, roundtrip);
+}
+
+
 }
 
 

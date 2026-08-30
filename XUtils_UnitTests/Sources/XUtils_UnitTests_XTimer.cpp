@@ -192,6 +192,86 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMicroSecondsTickCounter)
 }
 
 
+TEST(UNITTEST_XTIMER_CLASSNAME, AddMilliSecondsDirectly)
+{
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_TRUE(xtimer != NULL);
+
+  if(xtimer)
+    {
+      xtimer->Reset();
+      xtimer->AddMilliSeconds(5000);
+      EXPECT_NEAR(5000, (double)xtimer->GetMeasureMilliSeconds(), 65);
+    }
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+  xtimer = NULL;
+  EXPECT_TRUE(xtimer == NULL);
+}
+
+
+TEST(UNITTEST_XTIMER_CLASSNAME, SetMilliSecondsResetsBaseline)
+{
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_TRUE(xtimer != NULL);
+
+  if(xtimer)
+    {
+      // Push the timer far ahead first, then confirm SetMilliSeconds discards that offset
+      // (it Reset()s internally before adding), rather than accumulating on top of it.
+      xtimer->AddSeconds(100000L);
+      xtimer->SetMilliSeconds(3000);
+      EXPECT_NEAR(3000, (double)xtimer->GetMeasureMilliSeconds(), 65);
+    }
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+  xtimer = NULL;
+  EXPECT_TRUE(xtimer == NULL);
+}
+
+
+TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureHoursMinutesMicroSeconds)
+{
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_TRUE(xtimer != NULL);
+
+  if(xtimer)
+    {
+      xtimer->Reset();
+      xtimer->AddSeconds(3661L);  // 1h 1m 1s
+
+      EXPECT_EQ(1,  xtimer->GetMeasureHours());
+      EXPECT_EQ(61, xtimer->GetMeasureMinutes());  // total elapsed minutes, not modulo
+      EXPECT_GE(xtimer->GetMeasureMicroSeconds(), (XQWORD)(3661L*1000000L));
+    }
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+  xtimer = NULL;
+  EXPECT_TRUE(xtimer == NULL);
+}
+
+
+TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureStringShortForm)
+{
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_TRUE(xtimer != NULL);
+
+  XSTRING measure;
+
+  xtimer->AddSeconds(3661L);  // 1h 1m 1s, no days/months/years component
+
+  if(xtimer)
+    {
+      xtimer->GetMeasureString(measure, false);
+      EXPECT_STREQ(measure.Get(), __L("01:01:01"));
+    }
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+  xtimer = NULL;
+  EXPECT_TRUE(xtimer == NULL);
+}
+
+
 }
 
 

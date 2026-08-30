@@ -516,6 +516,83 @@ TEST(UNITTEST_XVARIANT_CLASSNAME, FromStringEmptyDoesNotModify)
   EXPECT_EQ((int)variant, 123);
 }
 
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, SetTypeChangesTypeTagOnly)
+{
+  XVARIANT variant((int)123);
+
+  // SetType() is documented as only changing the type tag, independent of Set() -- it does
+  // not reallocate/convert the underlying data, so GetType() reflects the new tag right away.
+  variant.SetType(XVARIANT_TYPE_FLOAT);
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_FLOAT);
+}
+
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetDataFromStringCharPtr)
+{
+  XVARIANT variant;
+  char     text[] = "Hello ASCII";
+
+  EXPECT_TRUE(variant.GetDataFromString(text));
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_STRING);
+
+  XSTRING value = variant;
+  EXPECT_EQ(value.Compare(__L("Hello ASCII"), true), 0);
+}
+
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetDataFromStringXCharPtr)
+{
+  XVARIANT variant;
+  XCHAR*   text = __L("Hello Unicode");
+
+  EXPECT_TRUE(variant.GetDataFromString(text));
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_STRING);
+
+  XSTRING value = variant;
+  EXPECT_EQ(value.Compare(__L("Hello Unicode"), true), 0);
+}
+
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetDataVariantCopiesFromAnotherVariant)
+{
+  XVARIANT source((int)456);
+  XVARIANT target;
+
+  EXPECT_EQ(true, target.GetDataVariant(source));
+
+  EXPECT_EQ(target.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)target, 456);
+}
+
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, GetDataVariantRejectsSelf)
+{
+  XVARIANT variant((int)789);
+
+  // &value == this -> documented early-out, returns false and leaves the variant untouched.
+  EXPECT_EQ(false, variant.GetDataVariant(variant));
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)variant, 789);
+}
+
+
+TEST(UNITTEST_XVARIANT_CLASSNAME, OperatorVoidPointerReadBack)
+{
+  void*    ptr = (void*)0xDEADBEEF;
+  XVARIANT variant(ptr);
+
+  EXPECT_EQ(variant.GetType(), XVARIANT_TYPE_POINTER);
+
+  void* readback = variant;
+  EXPECT_EQ(readback, ptr);
+}
+
+
 }
 
 
