@@ -41,6 +41,7 @@
 #include "XFactory.h"
 #include "XFileTXT.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XString.h"
 
@@ -59,6 +60,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILETXT
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -81,7 +94,7 @@ static void RemoveIfExists(XPATH& xpath)
 
 TEST(UNITTEST_XFILETXT_CLASSNAME, CreateAddLineWriteThenOpenReadRoundTripASCII)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfiletxt_ascii.txt"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfiletxt_ascii.txt"));
   RemoveIfExists(xpath);
 
   {
@@ -127,7 +140,7 @@ TEST(UNITTEST_XFILETXT_CLASSNAME, CreateAddLineWriteThenOpenReadRoundTripASCII)
 
 TEST(UNITTEST_XFILETXT_CLASSNAME, UTF8BOMIsWrittenAndDetectedOnReopen)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfiletxt_utf8.txt"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfiletxt_utf8.txt"));
   RemoveIfExists(xpath);
 
   {
@@ -170,7 +183,7 @@ TEST(UNITTEST_XFILETXT_CLASSNAME, LineEndingContentSplitsCorrectlyOnReopenFor0AA
 
   for(int t = 0; t < 2; t++)
     {
-      XPATH xpath(__L("/tmp/xutils_unittests_xfiletxt_lf.txt"));
+      XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfiletxt_lf.txt"));
       RemoveIfExists(xpath);
 
       {
@@ -212,7 +225,7 @@ TEST(UNITTEST_XFILETXT_CLASSNAME, OpenForcesDefaultTypeLFSoAutoDetectionNeverFir
   // GetTypeLF() always reports the platform default after reopening a file, even when the file's
   // actual on-disk line endings are something else entirely (0D here, deliberately written with
   // plain libc I/O so this is independent of XFILETXT's own write path).
-  XPATH xpath(__L("/tmp/xutils_unittests_xfiletxt_lfbug.txt"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfiletxt_lfbug.txt"));
   RemoveIfExists(xpath);
 
   {
@@ -237,9 +250,16 @@ TEST(UNITTEST_XFILETXT_CLASSNAME, OpenForcesDefaultTypeLFSoAutoDetectionNeverFir
   EXPECT_STREQ(reader.GetLineText(0), __L("first"));
   EXPECT_STREQ(reader.GetLineText(1), __L("second"));
 
-  // ... but GetTypeLF() incorrectly reports the platform default (0A) rather than the file's real
-  // 0D line endings -- the bug.
+  // ... but GetTypeLF() incorrectly reports the platform default rather than the file's real
+  // 0D line endings -- the bug. XFILETXTTYPELF_DEFAULT (XFileTXT.h) is itself intentionally
+  // platform-dependent (XFILETXTTYPELF_0A on Linux, XFILETXTTYPELF_0D0A everywhere else), so
+  // the value this bug surfaces differs by platform even though the underlying bug (Open()
+  // stomping typeLF so ReadNLines()'s auto-detection can never fire) is the same on both.
+#if defined(LINUX)
   EXPECT_EQ(reader.GetTypeLF(), XFILETXTTYPELF_0A);
+#elif defined(WINDOWS)
+  EXPECT_EQ(reader.GetTypeLF(), XFILETXTTYPELF_0D0A);
+#endif
 
   reader.Close();
   RemoveIfExists(xpath);
@@ -438,7 +458,7 @@ TEST(UNITTEST_XFILETXT_CLASSNAME, CopyFromIsBrokenAndNeverTouchesTheCaller)
 
 TEST(UNITTEST_XFILETXT_CLASSNAME, IsBinaryFileDetectsNonTextContent)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfiletxt_binary.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfiletxt_binary.bin"));
   RemoveIfExists(xpath);
 
   {

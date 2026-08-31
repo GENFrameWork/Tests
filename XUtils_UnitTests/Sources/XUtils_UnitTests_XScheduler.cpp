@@ -38,14 +38,13 @@
 #include "gtest/gtest.h"
 #endif
 
-#include <unistd.h>
-
 #include "XFactory.h"
 #include "XScheduler.h"
 #include "XScheduler_XEvent.h"
 #include "XObserver.h"
 #include "XDateTime.h"
 #include "XTimer.h"
+#include "XSleep.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -106,6 +105,26 @@ static XBYTE DayOfWeekMaskFor(XDATETIME* xdatetime)
     }
 
   return XSCHEDULER_DAYWEEK_NONE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void EnsureXSleepInstance()
+* @brief      Ensures that the XSleep singleton instance exists (GEN's own portable sleep API is used
+*             instead of any STL/POSIX sleep function, per project policy).
+* @ingroup    UNIT TEST
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void EnsureXSleepInstance()
+{
+  if(!XSLEEP::GetIsInstanced())
+    {
+      XSLEEP* instance = GEN_NEW XSLEEP();
+      XSLEEP::SetInstance(instance);
+    }
 }
 
 
@@ -481,13 +500,15 @@ TEST(UNITTEST_XSCHEDULER_CLASSNAME, EndToEndActiveTaskFiresSchedulerXEvent)
 
   EXPECT_TRUE(scheduler.Task_Add(task));
 
+  EnsureXSleepInstance();
+
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
   bool    fired  = false;
 
   while(xtimer->GetMeasureSeconds() < 3)
     {
       if(observer.count >= 1) { fired = true; break; }
-      usleep(2000);
+      GEN_XSLEEP.MicroSeconds(2000);
     }
 
   GEN_XFACTORY.DeleteTimer(xtimer);

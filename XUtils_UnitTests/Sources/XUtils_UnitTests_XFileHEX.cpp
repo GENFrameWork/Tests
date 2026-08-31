@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFileHEX.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XString.h"
 #include "XBuffer.h"
@@ -63,6 +64,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILEHEX
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -436,7 +449,7 @@ TEST(UNITTEST_XFILEHEX_CLASSNAME, EntryDeleteAllRemovesEveryEntryAndFailsWhenAlr
 
 TEST(UNITTEST_XFILEHEX_CLASSNAME, WriteThenReopenWholeFileRoundTrip)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilehex_roundtrip.hex"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilehex_roundtrip.hex"));
   RemoveIfExists(xpath);
 
   {

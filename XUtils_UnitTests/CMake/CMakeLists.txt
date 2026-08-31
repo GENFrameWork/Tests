@@ -189,8 +189,23 @@ list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTe
 # build.ninja's compiled-object list before this change). Both compile cleanly standalone (confirmed
 # via -fsyntax-only) against this build's existing XPath/XFile/XConsole.h(header-only, XCONSOLE_FEATURE
 # off)/GRPRect.h dependencies, so no XCONSOLE.cpp or other extra sibling source is required.
+# XLINUXProcessManager.cpp is Linux-only (mirrors how GEN_Main_Sources_Linux.cmake itself only adds
+# it under COMPILE_FOR_LINUX) -- must NOT be compiled on Windows, so it is guarded here too. NOTE: we
+# deliberately check CMAKE_SYSTEM_NAME directly instead of COMPILE_FOR_LINUX -- see
+# Common/CMake/Main/GEN_Main_Platform-Compiler.cmake's own platform-detection block: COMPILE_FOR_LINUX
+# is only ever turned ON via option() when CMAKE_SYSTEM_NAME matches "Linux", but is never explicitly
+# turned OFF/unset on the Windows branch (unlike COMPILE_ON_WSL_LINUX, which IS explicitly unset in its
+# own else() branch a few lines above). Because option() is a no-op once a variable is already cached,
+# a build directory that was ever configured for Linux and later reconfigured for Windows without
+# deleting CMakeCache.txt keeps COMPILE_FOR_LINUX stuck at ON forever, which is exactly what caused
+# XLINUXProcessManager.cpp to still be compiled on a real Windows/clang-cl build. This is a real,
+# reportable GEN CMake bug (not something we are fixing here, since it lives in Common/CMake, not in
+# this test project) -- see the accompanying message for the report. Checking CMAKE_SYSTEM_NAME
+# ourselves sidesteps that stale-cache trap entirely, regardless of what COMPILE_FOR_LINUX says.
 list(APPEND GEN_SOURCES_MODULES_LIST "${GEN_DIRECTORY}/GEN/XUtils/XProcessManager.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${GEN_DIRECTORY}/GEN/Platforms/Linux/XLINUXProcessManager.cpp")
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+  list(APPEND GEN_SOURCES_MODULES_LIST "${GEN_DIRECTORY}/GEN/Platforms/Linux/XLINUXProcessManager.cpp")
+endif()
 list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/XUtils_UnitTests_XProcessManager.cpp")
 
 # XSerializable.cpp/XSerializationMethod.cpp/XSerializationMethodBinary.cpp/

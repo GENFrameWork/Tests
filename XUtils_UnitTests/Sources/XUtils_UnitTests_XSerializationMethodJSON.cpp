@@ -169,50 +169,60 @@ TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, AddStringAndAddBoolStoreRealJS
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, AddBufferIsANoOpThatWritesNoJSONValue)
+TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, AddThenExtractBufferRoundTripsThroughBase64)
 {
+  // FIXED (previously a known bug, now confirmed corrected): Add(XBUFFER*, ...) used to have its
+  // one line of real work commented out ("//XFILEJSON_ADDVALUE(...)") and its body was otherwise
+  // just "return true;", so an XBUFFER field serialized through this backend was silently
+  // dropped. It now base64-encodes the buffer's content via ConvertToBase64() and writes it as a
+  // real JSON string value, and the paired Extract(XBUFFER&, ...) reads that string back and
+  // decodes it via ConvertFromBase64() -- a real, working round trip.
   XFILEJSON              filejson;
   XSERIALIZATIONMETHOD*  basemethod = XSERIALIZABLE::CreateInstance(filejson);
   ASSERT_TRUE(basemethod != NULL);
 
+  XBYTE   payloadbytes[3] = { 0xAA, 0xBB, 0xCC };
   XBUFFER payload;
-  payload.Add((XBYTE)0xAA);
+  payload.Add(payloadbytes, 3);
 
-  // XSerializationMethodJSON.cpp's Add(XBUFFER*, ...) has its one line of real work commented
-  // out ("//XFILEJSON_ADDVALUE(...)") and its body is otherwise just "return true;" -- so a
-  // XBUFFER field serialized through this backend is silently dropped, same class of gap as
-  // XSERIALIZATIONMETHODBINARY's own Add(XBUFFER*, ...). Documented, not fixed.
   EXPECT_TRUE(basemethod->Add(&payload, __L("payload")));
-  EXPECT_EQ((void*)NULL, (void*)filejson.GetValue(__L("payload")));
+  EXPECT_NE((void*)NULL, (void*)filejson.GetValue(__L("payload")));
+
+  XBUFFER readback;
+  EXPECT_TRUE(basemethod->Extract(readback, __L("payload")));
+  ASSERT_EQ(readback.GetSize(), (XDWORD)3);
+  EXPECT_EQ(readback.GetByte(0), (XBYTE)0xAA);
+  EXPECT_EQ(readback.GetByte(1), (XBYTE)0xBB);
+  EXPECT_EQ(readback.GetByte(2), (XBYTE)0xCC);
 
   GEN_DELETE basemethod;
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, MissingAddLongOverloadSilentlyFallsBackToInertBaseStubThroughPolymorphicDispatch)
+TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, AddLongOverloadNowExistsAndRoundTripsThroughPolymorphicDispatch)
 {
+  // FIXED (previously a known bug, now confirmed corrected): XSerializationMethodJSON.h used to
+  // declare Add(long long,...) but, unlike the base class and XSERIALIZATIONMETHODBINARY (both
+  // of which declare BOTH Add(long,...) and Add(long long,...)), it had no Add(long,...)
+  // override at all -- so through the polymorphic XSERIALIZATIONMETHOD* interface that
+  // XSERIALIZABLE actually drives, the call resolved against the BASE class's own Add(long,...)
+  // vtable slot, which XSERIALIZATIONMETHODJSON never overrode, silently invoking the inert base
+  // stub instead of any JSON-specific behavior. XSerializationMethodJSON.h now declares its own
+  // Add(long,...)/Extract(long&,...) overrides (real vtable slots, matching the base class
+  // exactly), so a long-typed field serialized through XSERIALIZABLE with the JSON backend now
+  // genuinely round-trips.
   XFILEJSON              filejson;
   XSERIALIZATIONMETHOD*  basemethod = XSERIALIZABLE::CreateInstance(filejson);
   ASSERT_TRUE(basemethod != NULL);
 
   long longvalue = 123;
 
-  // XSerializationMethodJSON.h declares Add(long long,...) but, unlike the base class and
-  // XSERIALIZATIONMETHODBINARY (both of which declare BOTH Add(long,...) and
-  // Add(long long,...)), it has no Add(long,...) override at all. Calling Add(long,...)
-  // directly on a concretely-typed XSERIALIZATIONMETHODJSON* is not merely "falls back to a
-  // different overload" -- on this platform (64-bit Linux, sizeof(long)==sizeof(long long)) it
-  // is genuinely AMBIGUOUS at compile time between int/float/double/long long/XBYTE/XWORD/
-  // XDWORD/XQWORD, confirmed with a standalone probe. Through the polymorphic
-  // XSERIALIZATIONMETHOD* interface XSERIALIZABLE actually drives (Primitive_Add<T>() calls
-  // serializationmethod->Add(var, name) where serializationmethod is statically typed as
-  // XSERIALIZATIONMETHOD*), the call resolves at compile time against the BASE class's own
-  // Add(long,...) declaration -- and since XSERIALIZATIONMETHODJSON never overrides that
-  // particular vtable slot, virtual dispatch silently invokes the inert BASE STUB (always
-  // returns false, never touches fileJSON) instead of any JSON-specific behavior. A long-typed
-  // field serialized through XSERIALIZABLE with the JSON backend is therefore silently dropped.
-  EXPECT_FALSE(basemethod->Add(longvalue, __L("longfield")));
-  EXPECT_EQ((void*)NULL, (void*)filejson.GetValue(__L("longfield")));
+  EXPECT_TRUE(basemethod->Add(longvalue, __L("longfield")));
+  EXPECT_NE((void*)NULL, (void*)filejson.GetValue(__L("longfield")));
+
+  long readback = -1;
+  EXPECT_TRUE(basemethod->Extract(readback, __L("longfield")));
+  EXPECT_EQ(readback, 123L);
 
   GEN_DELETE basemethod;
 }
@@ -238,6 +248,16 @@ TEST(UNITTEST_XSERIALIZATIONMETHODJSON_CLASSNAME, AddStructDefaultsToOpenTrueUnl
 
   XFILEJSONOBJECT* after = method->GetActualObject();
   EXPECT_NE((void*)before, (void*)after);   // a brand-new struct node was opened, not closed
+
+  // Close what we opened: AddStruct(name,true) only allocates+installs the new node as the
+  // "actual object" (XSerializationMethodJSON.cpp AddStruct()) -- it is never attached into the
+  // parent's tree until the matching AddStruct(name,false) call runs `before->Add(name, after)`.
+  // Leaving it unbalanced (as this test only needs to observe the open-defaults-to-true behavior)
+  // would leak `after`, since `filejson`'s own destruction never reaches a node it was never
+  // given. Balancing it here attaches `after` under `before` so it is freed along with everything
+  // else when `basemethod`/`filejson` go away.
+  EXPECT_TRUE(method->AddStruct(__L("nested"), false));
+  EXPECT_EQ((void*)before, (void*)method->GetActualObject());
 
   GEN_DELETE basemethod;
 }

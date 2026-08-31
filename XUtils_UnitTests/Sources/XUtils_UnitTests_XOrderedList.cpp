@@ -57,7 +57,7 @@ namespace TEST_XORDEREDLIST
 {
 
 
-// NOTE on the comparator contract (XOrderedList.h lines 68-86): the
+// NOTE on the comparator contract (XOrderedList.h lines 53-83): the
 // XCOMPARATOR<T> abstract base class (Compare(T*, T*)) is decorative/
 // mismatched dead scaffolding -- XORDEREDLIST::Add actually calls
 // `comparator.Compare(element, current->data)` with T BY VALUE (not T*),
@@ -66,30 +66,34 @@ namespace TEST_XORDEREDLIST
 // really implements XCOMPARATOR<T> (pointer signature) will not compile
 // as the Compare template argument here.
 //
-// The three-way result is also NOT the usual strcmp-style convention:
-// `case 1: return this->Insert(current, element);` inserts the new
-// element BEFORE `current` when Compare(element, current) == 1. So to get
-// ASCENDING order, Compare(a, b) must return 1 when "a belongs before b"
-// i.e. when a < b, and -1 when a > b (the reverse of a typical
-// less-than-returns-negative comparator) -- confirmed empirically: wiring
-// it the "intuitive" way (1 when a>b) produces a DESCENDING list instead.
+// FIXED (previously a known bug, now confirmed corrected): Add() used to
+// use a `switch` on the three-way result with only cases 0 and 1 handled
+// (any other value, including the standard "-1 means a<b", silently fell
+// through to "keep scanning") and inserted BEFORE `current` on result==1,
+// the reverse of the usual strcmp-style convention. Add() now does a plain
+// `if(result < 0) return this->Insert(current, element);` -- the standard,
+// intuitive convention: Compare(a, b) returns negative when a belongs
+// before b (a < b for ascending order), 0 for an exact-duplicate reject,
+// and any positive value to keep scanning.
 class INTCOMPARATOR_ASCENDING
 {
   public:
     int Compare(int a, int b)
     {
       if(a == b) return 0;
-      return (a < b) ? 1 : -1;
+      return (a < b) ? -1 : 1;
     }
 };
 
 
-// A comparator that returns values outside the only two handled cases
-// (0 and 1) to exercise the `switch` statement's undocumented fallback
-// (XOrderedList.h lines 76-83 has no `default:` label -- any other
-// result silently falls through to `current = current->next;`, i.e.
-// "keep scanning", which for a comparator that ALWAYS returns 2 means
-// every Add() ends up scanning to the tail and appending there).
+// A comparator that returns a value outside the only two meaningful cases
+// (0 and negative) to exercise Add()'s fallback for any other, non-negative
+// result: `if(result < 0)` is false for 2, so it always falls through to
+// `current = current->next;` ("keep scanning"), which for a comparator
+// that ALWAYS returns 2 means every Add() ends up scanning to the tail
+// and appending there. (This particular fallback path is unchanged by the
+// fix above, since 2 was never one of the previously-mishandled values in
+// either implementation.)
 class ALWAYS_KEEP_SCANNING_COMPARATOR
 {
   public:

@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XDir.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XBuffer.h"
 
 
@@ -61,6 +62,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XDIR
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -119,7 +132,7 @@ TEST(UNITTEST_XDIR_CLASSNAME, ExistReturnsFalseForMissingDirectory)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH missing(__L("/tmp/xutils_unittests_xdir_definitely_does_not_exist"));
+  XPATH missing; BuildTestFilePath(missing, __L("xutils_unittests_xdir_definitely_does_not_exist"));
 
   EXPECT_FALSE(xdir->Exist(missing));
   EXPECT_FALSE(xdir->Exist(missing.Get()));
@@ -133,7 +146,7 @@ TEST(UNITTEST_XDIR_CLASSNAME, MakeNonRecursiveCreatesSingleLevelDirectoryAndExis
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH testdir(__L("/tmp/xutils_unittests_xdir_singlelevel"));
+  XPATH testdir; BuildTestFilePath(testdir, __L("xutils_unittests_xdir_singlelevel"));
 
   // Defensive cleanup from any previous interrupted run.
   if(xdir->Exist(testdir)) xdir->Delete(testdir, true);
@@ -158,8 +171,8 @@ TEST(UNITTEST_XDIR_CLASSNAME, MakeNonRecursiveFailsWhenParentDirectoryIsMissing)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH missingparent(__L("/tmp/xutils_unittests_xdir_missingparent"));
-  XPATH nested(__L("/tmp/xutils_unittests_xdir_missingparent/child"));
+  XPATH missingparent; BuildTestFilePath(missingparent, __L("xutils_unittests_xdir_missingparent"));
+  XPATH nested; BuildTestFilePath(nested, __L("xutils_unittests_xdir_missingparent/child"));
 
   if(xdir->Exist(missingparent)) xdir->Delete(missingparent, true);
   ASSERT_FALSE(xdir->Exist(missingparent));
@@ -177,26 +190,33 @@ TEST(UNITTEST_XDIR_CLASSNAME, MakeRecursiveCreatesIntermediateLevels)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH base(__L("/tmp/xutils_unittests_xdir_recursive"));
-  XPATH nested(__L("/tmp/xutils_unittests_xdir_recursive/sub1/sub2"));
+  XPATH base; BuildTestFilePath(base, __L("xutils_unittests_xdir_recursive"));
+  XPATH nested; BuildTestFilePath(nested, __L("xutils_unittests_xdir_recursive/sub1/sub2"));
 
   if(xdir->Exist(base)) xdir->Delete(base, true);
   ASSERT_FALSE(xdir->Exist(base));
 
   bool makeresult = xdir->Make(nested, true);
 
-  // NOTE (source behavior, not a bug we fix): XPATH::GetPathInSequence() - which
-  // XLINUXDIR::Make()'s recursive branch walks to build each intermediate mkdir() call - only
-  // reports a segment as "found" when it is followed by a separator (see
-  // XUtils_UnitTests_XPath.cpp's GetPathInSequenceReturnsEachSlashDelimitedSegment test). Since
-  // "nested" has no trailing slash, its final path component ("sub2") is never handed to
-  // mkdir() by that loop - only the parent chain up to and including "sub1" is actually
-  // created. Make() still unconditionally returns true (no failure check after the loop).
+  // NOTE (source behavior, not a bug we fix, but a genuine cross-platform inconsistency we
+  // report): XLINUXDIR::Make()'s recursive branch walks XPATH::GetPathInSequence() directly on
+  // the untouched input path, and that call only reports a segment as "found" when it is
+  // followed by a separator (see XUtils_UnitTests_XPath.cpp's
+  // GetPathInSequenceReturnsEachSlashDelimitedSegment test). Since "nested" has no trailing
+  // slash, its final path component ("sub2") is never handed to mkdir() by Linux's loop - only
+  // the parent chain up to and including "sub1" is actually created there.
+  // XWINDOWSDIR::Make(), by contrast, calls xpath.Slash_Add() to append a trailing separator
+  // *before* walking segments, so on Windows the final component ("sub2") IS created. Both
+  // implementations unconditionally return true (neither checks for failure after the loop).
   EXPECT_TRUE(makeresult);
   EXPECT_TRUE(xdir->Exist(base));
-  XPATH sub1(__L("/tmp/xutils_unittests_xdir_recursive/sub1"));
+  XPATH sub1; BuildTestFilePath(sub1, __L("xutils_unittests_xdir_recursive/sub1"));
   EXPECT_TRUE(xdir->Exist(sub1));
+#if defined(LINUX)
   EXPECT_FALSE(xdir->Exist(nested));
+#elif defined(WINDOWS)
+  EXPECT_TRUE(xdir->Exist(nested));
+#endif
 
   EXPECT_TRUE(xdir->Delete(base, true));
   EXPECT_FALSE(xdir->Exist(base));
@@ -210,10 +230,10 @@ TEST(UNITTEST_XDIR_CLASSNAME, DeleteRecursiveRemovesNonEmptyDirectoryTree)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH base(__L("/tmp/xutils_unittests_xdir_deletetree"));
-  XPATH subdir(__L("/tmp/xutils_unittests_xdir_deletetree/subdir"));
-  XPATH filea(__L("/tmp/xutils_unittests_xdir_deletetree/a.txt"));
-  XPATH fileb(__L("/tmp/xutils_unittests_xdir_deletetree/subdir/b.txt"));
+  XPATH base; BuildTestFilePath(base, __L("xutils_unittests_xdir_deletetree"));
+  XPATH subdir; BuildTestFilePath(subdir, __L("xutils_unittests_xdir_deletetree/subdir"));
+  XPATH filea; BuildTestFilePath(filea, __L("xutils_unittests_xdir_deletetree/a.txt"));
+  XPATH fileb; BuildTestFilePath(fileb, __L("xutils_unittests_xdir_deletetree/subdir/b.txt"));
 
   if(xdir->Exist(base)) xdir->Delete(base, true);
   ASSERT_FALSE(xdir->Exist(base));
@@ -243,9 +263,9 @@ TEST(UNITTEST_XDIR_CLASSNAME, FirstSearchAndNextSearchEnumerateDirectoryEntries)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH base(__L("/tmp/xutils_unittests_xdir_search"));
-  XPATH subdir(__L("/tmp/xutils_unittests_xdir_search/childdir"));
-  XPATH filea(__L("/tmp/xutils_unittests_xdir_search/one.dat"));
+  XPATH base; BuildTestFilePath(base, __L("xutils_unittests_xdir_search"));
+  XPATH subdir; BuildTestFilePath(subdir, __L("xutils_unittests_xdir_search/childdir"));
+  XPATH filea; BuildTestFilePath(filea, __L("xutils_unittests_xdir_search/one.dat"));
 
   if(xdir->Exist(base)) xdir->Delete(base, true);
   ASSERT_FALSE(xdir->Exist(base));
@@ -298,7 +318,7 @@ TEST(UNITTEST_XDIR_CLASSNAME, FirstSearchOnMissingDirectoryReturnsFalse)
   ASSERT_NE(xdir, (XDIR*)NULL);
 
   XDIRELEMENT element;
-  XPATH       missing(__L("/tmp/xutils_unittests_xdir_search_missing"));
+  XPATH missing; BuildTestFilePath(missing, __L("xutils_unittests_xdir_search_missing"));
 
   EXPECT_FALSE(xdir->FirstSearch(missing.Get(), (XCHAR*)__L("*"), &element));
 
@@ -327,13 +347,25 @@ TEST(UNITTEST_XDIR_CLASSNAME, ChangeToSwitchesWorkingDirectoryAndIsRestored)
   XPATH original;
   ASSERT_TRUE(xdir->GetActual(original));
 
-  XPATH target(__L("/tmp"));
+  XPATH target; GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, target);
 
   ASSERT_TRUE(xdir->ChangeTo(target));
 
+  // ChangeTo()/GetActual() round-trips through the OS's own working-directory API, which
+  // normalizes away any trailing path separator -- so the expected value here is the ROOT path
+  // with its own trailing slash removed, not a hardcoded "/tmp" (portable across platforms).
+  XPATH expected(target);
+  expected.Slash_Delete();
+  expected.Slash_Normalize();  // GEN_XPATHSMANAGER stores '/'-separated paths on every platform.
+
+  // On Windows, GetActual() returns the native '\'-separated working directory (the OS's own
+  // GetCurrentDirectory() convention), while "expected" is built from XPATHSMANAGER's own
+  // always-forward-slash convention. Normalize before comparing so the two sides use the same
+  // separator; this is purely a test-side comparison detail, not a change to XDIR's behavior.
   XPATH afterchange;
   ASSERT_TRUE(xdir->GetActual(afterchange));
-  EXPECT_STREQ(afterchange.Get(), __L("/tmp"));
+  afterchange.Slash_Normalize();
+  EXPECT_STREQ(afterchange.Get(), expected.Get());
 
   // Restore the working directory exactly, so later tests/relative paths in this same
   // process (e.g. the "assets" ROOT resolved by XPATHSMANAGER) are unaffected.
@@ -352,13 +384,13 @@ TEST(UNITTEST_XDIR_CLASSNAME, CopyDuplicatesFileContentByteForByte)
   XDIR* xdir = CreateConcreteDir();
   ASSERT_NE(xdir, (XDIR*)NULL);
 
-  XPATH base(__L("/tmp/xutils_unittests_xdir_copy"));
+  XPATH base; BuildTestFilePath(base, __L("xutils_unittests_xdir_copy"));
 
   if(xdir->Exist(base)) xdir->Delete(base, true);
   ASSERT_TRUE(xdir->Make(base, false));
 
-  XPATH source(__L("/tmp/xutils_unittests_xdir_copy/source.txt"));
-  XPATH target(__L("/tmp/xutils_unittests_xdir_copy/target.txt"));
+  XPATH source; BuildTestFilePath(source, __L("xutils_unittests_xdir_copy/source.txt"));
+  XPATH target; BuildTestFilePath(target, __L("xutils_unittests_xdir_copy/target.txt"));
 
   WriteSmallFile(source, "hello xdir copy");
 

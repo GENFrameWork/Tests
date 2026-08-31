@@ -38,18 +38,27 @@
 #include "gtest/gtest.h"
 #endif
 
+#include "XFactory.h"
+#include "XProcessManager.h"
+#include "XConsole.h"
+#include "XBuffer.h"
+#include "XTimer.h"
+
+// XLINUXPROCESSMANAGER (and the real background-process-spawning tests that exercise it below) is a
+// Linux-only class (GEN/Platforms/Linux/XLINUXProcessManager.h/.cpp, only ever compiled into this
+// project's own CMakeLists.txt under COMPILE_FOR_LINUX -- see CMake/CMakeLists.txt). It, and the C
+// runtime headers only its tests need (stdio.h/string.h for /proc parsing, unistd.h/sys/wait.h/
+// signal.h for fork()/waitpid()/SIGTERM), are therefore only included/used on Linux, so this test
+// file compiles cleanly on every other platform too.
+#ifdef LINUX
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
 
-#include "XFactory.h"
-#include "XProcessManager.h"
 #include "XLINUXProcessManager.h"
-#include "XConsole.h"
-#include "XBuffer.h"
-#include "XTimer.h"
+#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -88,6 +97,13 @@ XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XPROCESSMANAGER
 {
+
+
+// Everything below that needs a real, concrete XPROCESSMANAGER (the XLINUXPROCESSMANAGER subclass,
+// real OS process spawning/termination, /proc parsing) is Linux-only for the same reason the includes
+// above are: no other platform's concrete XPROCESSMANAGER subclass is compiled into this project.
+// Only the portable, platform-agnostic XPROCESS record tests above run everywhere.
+#ifdef LINUX
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -361,21 +377,29 @@ TEST(UNITTEST_XPROCESSMANAGER_CLASSNAME, MakeSystemCommandDoesNotReportNonZeroEx
 }
 
 
-TEST(UNITTEST_XPROCESSMANAGER_CLASSNAME, MakeCommandAlwaysFailsOnLinuxDueToInvalidPopenMode)
+TEST(UNITTEST_XPROCESSMANAGER_CLASSNAME, MakeCommandCapturesRealOutputThroughAPopenPipe)
 {
-  // Real bug (XLINUXProcessManager.cpp:154): MakeCommand() calls popen(cmd, "rt") -- "rt" is an
-  // MSVCRT/Windows-style text-mode flag, not a valid POSIX popen() type string. glibc's popen()
-  // strictly requires "r" or "w" (optionally "e") and rejects anything else with EINVAL, so pipe
-  // is always NULL on Linux and MakeCommand() always returns false, regardless of the command.
-  // Confirmed directly (errno==EINVAL) before writing this test. Captured as real behavior, not fixed.
+  // FIXED (previously a known bug, now confirmed corrected in XLINUXProcessManager.cpp):
+  // MakeCommand() used to call popen(cmd, "rt") -- "rt" is an MSVCRT/Windows-style text-mode
+  // flag, not a valid POSIX popen() type string. glibc's popen() strictly requires "r" or "w"
+  // (optionally "e") and rejected anything else with EINVAL, so pipe was always NULL and
+  // MakeCommand() always returned false regardless of the command. It now correctly calls
+  // popen(cmd, "r"), so MakeCommand is a real, working API on Linux -- exercised here for the
+  // first time.
   EnsureXProcessManagerInstance();
 
   XBUFFER out;
   int     returncode = -1;
 
-  EXPECT_FALSE(GEN_XPROCESSMANAGER.MakeCommand(__L("echo hello"), &out, &returncode));
-  EXPECT_TRUE(out.IsEmpty());
-  EXPECT_EQ(returncode, -1); // never touched: MakeCommand() returns before reaching pclose()
+  EXPECT_TRUE(GEN_XPROCESSMANAGER.MakeCommand(__L("echo hello"), &out, &returncode));
+  EXPECT_FALSE(out.IsEmpty());
+  EXPECT_EQ(returncode, 0);
+
+  out.Add((XBYTE)0);
+
+  XSTRING outstring;
+  outstring = out.GetPtrChar();
+  EXPECT_NE(outstring.Find(__L("hello"), false), XSTRING_NOTFOUND);
 }
 
 
@@ -595,6 +619,9 @@ TEST(UNITTEST_XPROCESSMANAGER_CLASSNAME, ApplicationTerminateSendsSIGTERMToRealC
   EXPECT_TRUE(WIFSIGNALED(status));
   EXPECT_EQ(WTERMSIG(status), SIGTERM);
 }
+
+
+#endif // LINUX
 
 
 }

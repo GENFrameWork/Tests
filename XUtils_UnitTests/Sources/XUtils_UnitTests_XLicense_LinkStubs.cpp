@@ -45,6 +45,12 @@
 // need no network code at all, XLicense.cpp is compiled in directly (see CMakeLists.txt) and only
 // these two never-invoked DIOWEBCLIENT symbols are supplied here, as inert link-time stubs, purely
 // so the linker is satisfied -- LoadFromURL is dead code in this test binary, never called.
+//
+// GEN update: DIOWEBCLIENT now holds two by-value DIOWEBCLIENT_OPERATIONERROR members
+// (lastoperationerror / lastHTTPSattempterror), so constructing a DIOWEBCLIENT also requires
+// DIOWEBCLIENT_OPERATIONERROR's default constructor to link. Its other methods are never invoked
+// here (our DIOWEBCLIENT constructor stub below does nothing), so only that one constructor is
+// stubbed, same as everything else in this file: inert, never exercised by any test.
 #include "DIOWebClient.h"
 #include "DIOWebHeader.h"
 
@@ -78,6 +84,12 @@ DIOWEBCLIENT_HEADER::DIOWEBCLIENT_HEADER()
 
 
 DIOWEBCLIENT_HEADER::~DIOWEBCLIENT_HEADER()
+{
+
+}
+
+
+DIOWEBCLIENT_OPERATIONERROR::DIOWEBCLIENT_OPERATIONERROR()
 {
 
 }

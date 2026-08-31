@@ -235,48 +235,82 @@ TEST(UNITTEST_XAVLTREE_CLASSNAME, MultiModeAllowsDuplicatesAndGetMultipleReturns
 }
 
 
-TEST(UNITTEST_XAVLTREE_CLASSNAME, NonMultiModeRejectsDuplicateKeyButAddReturnValueIsMisleading)
+TEST(UNITTEST_XAVLTREE_CLASSNAME, NonMultiModeRejectsDuplicateKeyAndAddReturnValueNowReflectsIt)
 {
-  // KNOWN BUG (XAVLTree.h lines 164-170): Add() unconditionally
-  // `return true;` regardless of whether Insert() actually inserted
-  // anything -- in non-multi mode, Insert() silently no-ops (`return
-  // NULL;`) on a duplicate key without touching `root`/`nelements`, yet
-  // Add() still reports success. The tree's SIZE correctly reflects that
-  // nothing was added; only the boolean return value lies.
+  // FIXED (previously a known bug, now confirmed corrected in XAVLTree.h): Add() used to
+  // unconditionally `return true;` regardless of whether Insert() actually inserted anything --
+  // in non-multi mode, Insert() silently no-ops (`return NULL;`) on a duplicate key without
+  // touching `root`/`nelements`, yet Add() still reported success. Add() is now
+  // `return Insert(root, key) != NULL;`, so its boolean result genuinely reflects whether a new
+  // node was inserted.
   XAVLTREE<int> tree(false);
 
   bool firstAdd  = tree.Add(5);
-  bool secondAdd = tree.Add(5); // duplicate, silently rejected internally
+  bool secondAdd = tree.Add(5); // duplicate, correctly rejected
 
   EXPECT_TRUE(firstAdd);
-  EXPECT_TRUE(secondAdd);              // documents the misleading "true"
-  EXPECT_EQ(tree.GetSize(), (XDWORD)1); // but only one node actually exists
+  EXPECT_FALSE(secondAdd);
+  EXPECT_EQ(tree.GetSize(), (XDWORD)1);
 }
 
 
-// NOTE (XAVLTree.h lines 341-357): both Delete(const K&) and
-// Delete(XITERATOR) are confirmed HARD COMPILE ERRORS as shipped -- both
-// call a lowercase `remove(...)` that is never defined anywhere in this
-// class (only `Remove(XAVLNODE<K>*)` and `Remove(XAVLNODE<K>*, const K&)`,
-// capitalized, exist, and neither is ever called). Unqualified lookup
-// instead resolves `remove` to the C standard library's global
-// `::remove(const char*)` (from <cstdio>, "delete this file"), which does
-// not match either call site's argument list/count -- confirmed directly:
-//   XAVLTree.h:348: error: no matching function for call to 'remove'
-//     note: candidate function not viable: requires single argument
-//     '__filename', but 2 arguments were provided
-// Per the hard rule against fixing XUtils source, Delete is not exercised
-// anywhere in this file.
+TEST(UNITTEST_XAVLTREE_CLASSNAME, DeleteRemovesAnExistingKeyAndReportsMissingOnes)
+{
+  // FIXED (previously a known bug, now confirmed corrected): both Delete(const K&) and
+  // Delete(XITERATOR) used to call a lowercase `remove(...)` that was never defined anywhere in
+  // this class -- unqualified lookup resolved it to the C standard library's global
+  // `::remove(const char*)` ("delete this file"), a hard compile error at every call site. Both
+  // overloads now correctly call the class's own `DeleteNode(XAVLNODE<K>*)`, so Delete is a real,
+  // compilable, working API -- exercised here for the first time.
+  XAVLTREE<int> tree(false);
 
-// NOTE (XAVLTree.h line 682): the copy constructor and operator= (which
-// both funnel through the protected `Copy(XAVLNODE<K>* node)` helper) are
-// ALSO confirmed HARD COMPILE ERRORS as shipped -- `Copy` does
-// `this->Add(node->element);` but XAVLNODE<K> has no `element` member at
-// all (only `key`, `height`, `balance`, `left`, `right`, `parent`) --
-// confirmed directly:
-//   XAVLTree.h:682: error: no member named 'element' in 'XAVLNODE<int>'
-// So neither the copy constructor nor operator= can be exercised; not
-// tested here.
+  tree.Add(5);
+  tree.Add(3);
+  tree.Add(9);
+
+  ASSERT_EQ(tree.GetSize(), (XDWORD)3);
+
+  EXPECT_TRUE(tree.Delete(3));
+  EXPECT_EQ(tree.GetSize(), (XDWORD)2);
+
+  // Deleting a key that no longer exists (already removed, or never inserted) must fail cleanly.
+  EXPECT_FALSE(tree.Delete(3));
+  EXPECT_FALSE(tree.Delete(999));
+  EXPECT_EQ(tree.GetSize(), (XDWORD)2);
+
+  EXPECT_TRUE(tree.Delete(5));
+  EXPECT_TRUE(tree.Delete(9));
+  EXPECT_EQ(tree.GetSize(), (XDWORD)0);
+}
+
+
+TEST(UNITTEST_XAVLTREE_CLASSNAME, CopyConstructorDuplicatesAllKeysIndependentlyOfOriginal)
+{
+  // FIXED (previously a known bug, now confirmed corrected): the copy constructor and operator=
+  // (which both funnel through the protected `Copy(XAVLNODE<K>* node)` helper) used to do
+  // `this->Add(node->element);`, but XAVLNODE<K> has no `element` member at all (only `key`,
+  // `height`, `balance`, `left`, `right`, `parent`) -- a hard compile error at every use. `Copy`
+  // now correctly does `this->Add(node->key);`, so the copy constructor is a real, compilable,
+  // working API -- exercised here for the first time.
+  XAVLTREE<int> original(false);
+
+  original.Add(5);
+  original.Add(3);
+  original.Add(9);
+
+  XAVLTREE<int> copy(original);
+
+  ASSERT_EQ(copy.GetSize(), (XDWORD)3);
+  EXPECT_NE(copy.Find(5), NOTFOUND);
+  EXPECT_NE(copy.Find(3), NOTFOUND);
+  EXPECT_NE(copy.Find(9), NOTFOUND);
+
+  // The copy owns its own nodes -- mutating it must not affect the original.
+  copy.Delete(3);
+  EXPECT_EQ(copy.GetSize(), (XDWORD)2);
+  EXPECT_EQ(original.GetSize(), (XDWORD)3);
+  EXPECT_NE(original.Find(3), NOTFOUND);
+}
 
 
 }

@@ -170,17 +170,21 @@ TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddStringWritesTypeTagAndUTF
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddStructAndAddArrayWriteExpectedMarkerBytes)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddStructIsAValidityCheckOnlyAndAddArrayWritesExpectedMarkerBytes)
 {
+  // CHANGED (confirmed in the current XSerializationMethodBinary.cpp): AddStruct() no longer
+  // writes a STRUCT_ID marker to the buffer at all -- it is now purely a "do we have somewhere
+  // to write to" validity check (`if(!bufferdata) return false; return true;`), writing zero
+  // bytes either way. This is consistent with the format's actual needs: every field written
+  // inside a struct already carries its own type tag via Add(...), so no separate struct
+  // boundary marker is required for a binary reader to know where one ends -- only AddArray()
+  // still needs to record an explicit element count up front, which it continues to do.
   XSERIALIZATIONMETHODBINARY method;
   XBUFFER                    buffer;
   method.SetBufferData(&buffer);
 
   EXPECT_TRUE(method.AddStruct(__L("s"), true));
-  ASSERT_EQ(buffer.GetSize(), 2u);   // STRUCT_ID written as an XWORD (2 bytes)
-  XWORD structid = 0;
-  ASSERT_TRUE(buffer.Get(structid, 0));
-  EXPECT_EQ(structid, (XWORD)XSERIALIZATIONMETHOD_STRUCT_ID);
+  EXPECT_EQ(buffer.GetSize(), 0u);
 
   buffer.Empty();
 
@@ -196,8 +200,14 @@ TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddStructAndAddArrayWriteExp
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddVariantIsANoOpThatWritesNothingToTheBuffer)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddThenExtractVariantRoundTripsTypeAndValue)
 {
+  // FIXED (previously a known bug, now confirmed corrected): Add(XVARIANT*, ...) used to have a
+  // body that was literally "return true;" -- it never wrote a type tag, never wrote the
+  // variant's value, and did not even check bufferdata/var for NULL, so any XVARIANT field was
+  // silently dropped. It now writes a real type tag, the XVARIANT_TYPE, a UTF-8-encoded string
+  // payload size and the payload itself, and the paired Extract(XVARIANT&, ...) reads all of
+  // that back and reconstructs the value via FromString() -- a real, working round trip.
   XSERIALIZATIONMETHODBINARY method;
   XBUFFER                    buffer;
   method.SetBufferData(&buffer);
@@ -205,17 +215,25 @@ TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddVariantIsANoOpThatWritesN
   XVARIANT variant;
   variant = (int)123;
 
-  // XSerializationMethodBinary.cpp's Add(XVARIANT*, ...) body is literally "return true;" --
-  // it never writes a type tag, never writes the variant's value, and does not even check
-  // bufferdata/var for NULL. Any XVARIANT field serialized through this backend is silently
-  // dropped. Documented, not fixed.
   EXPECT_TRUE(method.Add(&variant, __L("v")));
-  EXPECT_EQ(buffer.GetSize(), 0u);
+  EXPECT_GT(buffer.GetSize(), 0u);
+  EXPECT_EQ(buffer.GetByte(0), (XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XVARIANT);
+
+  XVARIANT readback;
+  EXPECT_TRUE(method.Extract(readback, __L("v")));
+  EXPECT_EQ(readback.GetType(), XVARIANT_TYPE_INTEGER);
+  EXPECT_EQ((int)readback, 123);
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddBufferOnlyWritesATypeTagAndLosesTheActualContent)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddThenExtractBufferRoundTripsTheActualContent)
 {
+  // FIXED (previously a known bug, now confirmed corrected): Add(XBUFFER*, ...) used to write
+  // only the XBYTE type-tag and never touch var's actual bytes, silently losing the payload's
+  // content (and it did not NULL-check its own `bufferdata` member either). It now writes a
+  // type tag, the payload's size, and the payload bytes themselves via the shared
+  // XSERIALIZATIONMETHODBINARY_AddData() helper, and the paired Extract(XBUFFER&, ...) reads
+  // all of it back byte-for-byte.
   XSERIALIZATIONMETHODBINARY method;
   XBUFFER                    buffer;
   method.SetBufferData(&buffer);
@@ -224,51 +242,81 @@ TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, AddBufferOnlyWritesATypeTagA
   XBUFFER payload;
   payload.Add(payloadbytes, 4);
 
-  // XSerializationMethodBinary.cpp's Add(XBUFFER*, ...) writes only the XBYTE type-tag and
-  // never touches var's actual bytes -- the payload's content is silently lost. (Note also:
-  // unlike every other Add() overload here, this one does not NULL-check its own `bufferdata`
-  // member before dereferencing it -- calling this without a prior SetBufferData() would
-  // crash; not exercised here to avoid crashing the whole test binary.)
   EXPECT_TRUE(method.Add(&payload, __L("payload")));
 
-  ASSERT_EQ(buffer.GetSize(), 1u);
+  ASSERT_GT(buffer.GetSize(), 1u);
   EXPECT_EQ(buffer.GetByte(0), (XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBUFFER);
+
+  XBUFFER readback;
+  EXPECT_TRUE(method.Extract(readback, __L("payload")));
+  ASSERT_EQ(readback.GetSize(), (XDWORD)4);
+  EXPECT_EQ(readback.GetByte(0), (XBYTE)0xAA);
+  EXPECT_EQ(readback.GetByte(1), (XBYTE)0xBB);
+  EXPECT_EQ(readback.GetByte(2), (XBYTE)0xCC);
+  EXPECT_EQ(readback.GetByte(3), (XBYTE)0xDD);
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, DirectExtractCallsAlwaysReturnTrueWithoutTouchingTheOutputArgument)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, DirectExtractGenuinelyReadsBackThePreviouslyWrittenValue)
 {
+  // FIXED (previously a known bug, now confirmed corrected): XSERIALIZATIONMETHODBINARY::Extract()
+  // used to take its scalar argument BY VALUE -- a real signature mismatch vs. the base class's
+  // by-reference Extract(int&, ...) -- and its own .cpp body was simply "return true;", never
+  // even reading bufferdata, so a write-back to the caller was categorically impossible. The
+  // header now declares every Extract() overload by reference (matching the base class exactly,
+  // a real override rather than a hiding declaration), and the .cpp body genuinely reads the
+  // type tag and value bytes back from the buffer at the tracked read cursor.
   XSERIALIZATIONMETHODBINARY method;
   XBUFFER                    buffer;
   method.SetBufferData(&buffer);
 
-  method.Add((int)999, __L("value"));   // real bytes really are in the buffer now
+  method.Add((int)999, __L("value"));
 
-  // XSERIALIZATIONMETHODBINARY::Extract() takes its scalar argument BY VALUE (a real, verifiable
-  // signature bug vs. the base class's by-reference Extract(int&,...) -- see
-  // XSerializationMethodBinary.h lines 98-113), and Extract(int,...)'s own .cpp body is simply
-  // "return true;" -- it never even reads bufferdata. So calling it directly (bypassing the
-  // by-value/by-reference hiding problem entirely, since we're calling it on the concrete type)
-  // still cannot possibly write back to the caller: only a local copy is ever modified.
   int readback = 12345;
   EXPECT_TRUE(method.Extract(readback, __L("value")));
-  EXPECT_EQ(readback, 12345);   // unchanged -- 999 was never read back
+  EXPECT_EQ(readback, 999);
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, ExtractStructAndExtractArrayAlwaysReturnTrueRegardlessOfBufferContent)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, ExtractArrayNowValidatesAgainstRealBufferContentButExtractStructRemainsANoOp)
 {
+  // CHANGED (confirmed in the current XSerializationMethodBinary.cpp): ExtractArray() is no
+  // longer an unconditional "return true;" stub -- it now genuinely reads back the ARRAY_ID
+  // marker and stored element count that AddArray() writes, and fails if either the marker is
+  // missing/wrong or the stored count does not match the count the caller asked for (including
+  // when there is no buffer at all to read from). ExtractStruct() remains an unconditional
+  // "return true;" -- but that is now consistent, not buggy, since the paired AddStruct() also
+  // writes nothing for a reader to skip over.
   XSERIALIZATIONMETHODBINARY method;
 
-  // No buffer set at all, yet these still report success -- ExtractStruct()/ExtractArray()'s
-  // bodies are unconditional "return true;" stubs with no cursor/position tracking of any kind.
+  // No buffer set at all: ExtractStruct() still trivially succeeds (nothing to read)...
   EXPECT_TRUE(method.ExtractStruct(__L("s")));
-  EXPECT_TRUE(method.ExtractArray(3, __L("a")));
+  // ... but ExtractArray() now correctly fails, since there is no ARRAY_ID marker to read.
+  EXPECT_FALSE(method.ExtractArray(3, __L("a")));
+
+  XBUFFER buffer;
+  method.SetBufferData(&buffer);
+
+  EXPECT_TRUE(method.AddArray(3, __L("a"), true));
+  EXPECT_TRUE(method.ExtractArray(3, __L("a")));   // real marker + matching count: succeeds
+
+  buffer.Empty();
+  EXPECT_TRUE(method.AddArray(3, __L("a"), true));
+  EXPECT_FALSE(method.ExtractArray(5, __L("a")));  // real marker but a mismatched count: fails
 }
 
 
-TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, PolymorphicRoundTripThroughXSerializableNeverReconstructsTheOriginalValues)
+TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, PolymorphicRoundTripThroughXSerializableNowReconstructsTheOriginalValues)
 {
+  // FIXED (previously a known bug, now confirmed corrected): XSERIALIZABLE::Primitive_Extract<T>
+  // (T& var, name) calls serializationmethod->Extract(var, name) where `serializationmethod` is
+  // statically typed as XSERIALIZATIONMETHOD* -- this used to resolve to the BASE class's inert
+  // Extract(T&, XCHAR*) stub, because XSERIALIZATIONMETHODBINARY's own Extract(T, XCHAR*)
+  // overload took its argument by value (a different signature that HID rather than overrode
+  // the base virtual). Now that every XSERIALIZATIONMETHODBINARY::Extract() overload takes its
+  // argument by reference -- a real override -- virtual dispatch correctly reaches the derived
+  // class's genuine, working implementation, and binary deserialization through the intended,
+  // polymorphic XSERIALIZABLE API is fully functional.
   XBUFFER                     databuffer;
   XSERIALIZATIONMETHODBINARY  method;
   method.SetBufferData(&databuffer);
@@ -284,21 +332,9 @@ TEST(UNITTEST_XSERIALIZATIONMETHODBINARY_CLASSNAME, PolymorphicRoundTripThroughX
   TESTBINARYWIDGET destination;
   EXPECT_EQ(destination.GetValue(), 0);   // fresh/default state before deserializing
 
-  // XSERIALIZABLE::Primitive_Extract<T>(T& var, name) calls
-  // serializationmethod->Extract(var, name) where `serializationmethod` is statically typed as
-  // XSERIALIZATIONMETHOD* (XSerializable.h line 79) -- so this resolves to the BASE class's
-  // Extract(T&, XCHAR*) overload (an inert stub, see XUtils_UnitTests_XSerializationMethod.cpp),
-  // never XSERIALIZATIONMETHODBINARY's own Extract(T, XCHAR*) overload at all, because a `T&`
-  // parameter and a `T` parameter are different signatures and the derived class's version
-  // HIDES rather than OVERRIDES the base virtual. Combined with the by-value-only bug confirmed
-  // above (which would prevent a write-back even if it *were* reached), the net effect is that
-  // binary deserialization through the intended, polymorphic XSERIALIZABLE API is completely
-  // non-functional: the destination object keeps its untouched default field values even though
-  // the buffer genuinely contains the correct serialized bytes. This is the single highest-impact
-  // finding for this module -- captured here as real, current behavior, not fixed.
   EXPECT_TRUE(destination.DoDeserialize(&method));
-  EXPECT_EQ(destination.GetValue(), 0);
-  EXPECT_TRUE(destination.GetLabel().IsEmpty());
+  EXPECT_EQ(destination.GetValue(), 42);
+  EXPECT_STREQ(destination.GetLabel().Get(), __L("hello"));
 }
 
 

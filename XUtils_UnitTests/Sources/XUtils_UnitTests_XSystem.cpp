@@ -83,15 +83,20 @@ TEST(UNITTEST_XSYSTEM_CLASSNAME, GetOperativeSystemID)
   EnsureXSystemInstance();
 
   // NOTE: the base XSYSTEM::GetOperativeSystemID() documents Empty()+true, but this
-  // application's Linux startup (MainProcLINUX.cpp) installs an XLINUXSYSTEM singleton before
-  // any test runs, and XLINUXSYSTEM overrides this to fill the string with uname() details
-  // ("Linux <release> <version> <machine> ") - so the live singleton's actual answer depends
-  // on which concrete subclass is installed, not just on the base class's documented contract.
+  // application's platform-specific startup installs a concrete XSYSTEM subclass before any
+  // test runs, and that subclass overrides this to fill the string with platform-specific
+  // details (XLINUXSYSTEM: uname() details "Linux <release> <version> <machine> "; XWINDOWSSYSTEM:
+  // a WMI-derived Win32_OperatingSystem caption, which never contains the word "Linux") - so the
+  // live singleton's actual answer depends on which concrete subclass is installed, not just on
+  // the base class's documented contract.
   XSTRING SOid;
 
   EXPECT_TRUE(XSYSTEM::GetInstance().GetOperativeSystemID(SOid));
   EXPECT_FALSE(SOid.IsEmpty());
+
+  #ifdef LINUX
   EXPECT_NE(SOid.Find(__L("Linux"), false), XSTRING_NOTFOUND);
+  #endif
 }
 
 

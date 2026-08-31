@@ -226,19 +226,15 @@ TEST(UNITTEST_XFSMACHINE_CLASSNAME, AddSecuencialStatesBuildsIdentityTransitions
 }
 
 
-// NOTE (real XUtils bug, XFSMachine.cpp): XFSMACHINESTATE::GetOutput() and ::AddTransition() both
-// treat outputstates[c]==0 as an "end of list" sentinel and stop scanning at the first such slot.
-// DeleteTransition() zeroes the deleted slot and then tries to compact the tail by shifting
-// inputs[c+1]/outputstates[c+1] into inputs[c]/outputstates[c] -- but its shift loop condition
-// itself checks `if(!outputstates[c]) break` using the slot it JUST zeroed, so it always breaks
-// immediately on the very first iteration and never actually shifts anything. The practical
-// consequence: deleting a transition that is not the LAST populated slot leaves a "hole" that
-// GetOutput's own sentinel check can never see past, silently making every transition stored in a
-// later slot unreachable (GetOutput falls back to returning the state's own ID for them), even
-// though DeleteTransition() reports success and the data for the later transition/s technically
-// still sits in the array. This test captures that real, observable behaviour rather than the
-// "only the deleted transition is removed" behaviour one would expect from the API.
-TEST(UNITTEST_XFSMACHINE_CLASSNAME, DeleteTransitionOfNonLastSlotOrphansLaterTransitions)
+// FIXED (previously a known bug, now confirmed corrected in XFSMachine.cpp): DeleteTransition()
+// used to zero the deleted slot and then try to compact the tail by shifting
+// inputs[c+1]/outputstates[c+1] into inputs[c]/outputstates[c], but its shift loop condition
+// checked `if(!outputstates[c]) break` using the slot it had JUST zeroed, so it always broke
+// immediately on the very first iteration and never actually shifted anything -- silently
+// orphaning every transition stored in a later slot. The shift loop no longer re-checks the
+// sentinel on the slot it is overwriting, so compaction now genuinely moves every later slot
+// down by one, and no transition is ever left unreachable behind a zeroed hole.
+TEST(UNITTEST_XFSMACHINE_CLASSNAME, DeleteTransitionOfNonLastSlotCompactsLaterTransitions)
 {
   XFSMACHINESTATE state(1, 2);
 
@@ -250,16 +246,15 @@ TEST(UNITTEST_XFSMACHINE_CLASSNAME, DeleteTransitionOfNonLastSlotOrphansLaterTra
   // Input 10 no longer maps to output 2 (falls back to the state's own ID) -- expected.
   EXPECT_EQ(state.GetOutput(10), 1);
 
-  // BUG: input 20 -> output 3 (still physically stored in slot 1) is now unreachable because
-  // GetOutput() stops at the zeroed slot 0 before ever inspecting slot 1.
-  EXPECT_EQ(state.GetOutput(20), 1);
+  // Input 20 -> output 3 was compacted into slot 0 and remains fully reachable.
+  EXPECT_EQ(state.GetOutput(20), 3);
 }
 
 
 TEST(UNITTEST_XFSMACHINE_CLASSNAME, DeleteTransitionOfLastSlotWorksCorrectly)
 {
-  // Deleting the LAST populated slot does not suffer from the compaction bug above (there is
-  // nothing after it to orphan), so this is the one shape of deletion that behaves as expected.
+  // Deleting the LAST populated slot never needed compaction (there is nothing after it to
+  // shift), so this is unaffected by the fix above and behaves exactly as before.
   XFSMACHINESTATE state(1, 2);
 
   EXPECT_TRUE(state.AddTransition(10, 2));  // slot 0

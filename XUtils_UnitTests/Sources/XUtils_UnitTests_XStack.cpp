@@ -129,31 +129,24 @@ TEST(UNITTEST_XSTACK_CLASSNAME, GetVectorEscapeHatch)
 }
 
 
-TEST(UNITTEST_XSTACK_CLASSNAME, PopWithDuplicateValuesBreaksLIFOOrder)
+TEST(UNITTEST_XSTACK_CLASSNAME, PopWithDuplicateValuesPreservesLIFOOrder)
 {
-  // KNOWN BUG (see XStack.h Pop(), ~lines 69-74 and XVector.h Delete()):
-  // Pop() finds the true top via stack.GetLast(), but then removes it from
-  // the backing XVECTOR via stack.Delete(element), which deletes the FIRST
-  // element equal to `element`, not the true top index. With duplicate
-  // values on the stack this silently corrupts LIFO order: after pushing
-  // 5, 3, 5 the array is [5,3,5]; Pop() correctly returns the top (5), but
-  // Delete(5) removes index 0 instead of index 2, leaving [3,5] instead of
-  // the correct post-pop [5,3]. The very next Pop()/Top() then reads the
-  // stale duplicate at the end (5) again instead of the expected 3.
-  //
-  // This test intentionally documents the ACTUAL (buggy) current behavior,
-  // per the analysis report's guidance -- it is not asserting correct LIFO
-  // semantics, since the real implementation does not provide them for
-  // stacks containing duplicate values.
+  // FIXED (previously a known bug, now confirmed corrected in XStack.h Pop()): Pop() used to find
+  // the true top via stack.GetLast() but then remove it from the backing XVECTOR via
+  // stack.Delete(element), which deletes the FIRST element equal to `element` rather than the true
+  // top index -- with duplicate values this silently corrupted LIFO order. Pop() now removes the
+  // top via stack.DeleteLast() instead, which always targets the correct index regardless of
+  // duplicate values. Verified here: after pushing 5, 3, 5 the array is [5,3,5]; popping now
+  // correctly yields 5, 3, 5 in true LIFO order.
   XSTACK<int> stack;
 
   stack.Push(5);
   stack.Push(3);
   stack.Push(5);
 
-  EXPECT_EQ(stack.Pop(), 5);   // true top, correctly identified
-  EXPECT_EQ(stack.Pop(), 5);   // BUG: should be 3, but the stale duplicate survives
-  EXPECT_EQ(stack.Pop(), 3);   // the value that should have been popped second
+  EXPECT_EQ(stack.Pop(), 5);
+  EXPECT_EQ(stack.Pop(), 3);
+  EXPECT_EQ(stack.Pop(), 5);
   EXPECT_TRUE(stack.IsEmpty());
 }
 

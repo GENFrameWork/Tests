@@ -270,8 +270,18 @@ TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, SetHasBeenChangedRoundTripsTheRawFlag)
 }
 
 
-TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddReturnsFalseForEmptyVectorDueToUncheckedGetZero)
+TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddAcceptsAnEmptyVector)
 {
+  // FIXED (previously a known bug, now confirmed corrected in XSerializable.h): XVector_Add<T>
+  // used to unconditionally call var->Get(0) to type-check the element type via dynamic_cast
+  // *before* checking whether the vector was empty. XVECTOR<T*>::Get() on an out-of-range index
+  // (including index 0 on an empty vector) safely returns a default-constructed T(), i.e. NULL
+  // for a pointer element type, so dynamic_cast<XSERIALIZABLE*>(NULL) was NULL/falsy and
+  // XVector_Add unconditionally treated an empty vector as "not serializable", returning false
+  // without ever calling AddArray() -- even though serializing zero elements is a perfectly
+  // sensible case. The condition is now `var->GetSize() && !dynamic_cast<...>(var->Get(0))`,
+  // short-circuiting on GetSize()==0 before Get(0) is ever called, so an empty vector correctly
+  // proceeds to AddArray(0, name, ...) and reports success.
   XFILEJSON              filejson;
   XSERIALIZATIONMETHOD*  method = XSERIALIZABLE::CreateInstance(filejson);
   ASSERT_TRUE(method != NULL);
@@ -281,20 +291,13 @@ TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddReturnsFalseForEmptyVectorDueTo
 
   XVECTOR<TESTSERIALIZABLENESTED*> emptyvector;
 
-  // XVector_Add<T> unconditionally calls var->Get(0) to type-check the element type via
-  // dynamic_cast *before* checking whether the vector is empty (XSerializable.h line 127).
-  // XVECTOR<T*>::Get() on an out-of-range index (including index 0 on an empty vector)
-  // safely returns a default-constructed T(), i.e. NULL for a pointer element type, so
-  // dynamic_cast<XSERIALIZABLE*>(NULL) is NULL/falsy and XVector_Add unconditionally treats
-  // an empty vector as "not serializable" and returns false without ever calling AddArray(),
-  // even though serializing zero elements is a perfectly sensible case. Documented, not fixed.
-  EXPECT_FALSE(container.XVector_Add<TESTSERIALIZABLENESTED>(&emptyvector, __L("items")));
+  EXPECT_TRUE(container.XVector_Add<TESTSERIALIZABLENESTED>(&emptyvector, __L("items")));
 
   GEN_DELETE method;
 }
 
 
-TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddDoesNotBoxElementsSoXVectorExtractCanNeverReadThemBack)
+TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddBoxesElementsSoXVectorExtractReadsThemBack)
 {
   XFILEJSON              filejson;
   XSERIALIZATIONMETHOD*  method = XSERIALIZABLE::CreateInstance(filejson);
@@ -314,14 +317,16 @@ TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddDoesNotBoxElementsSoXVectorExtr
   sourcevector.Add(item0);
   sourcevector.Add(item1);
 
-  // Non-empty vector: Get(0) returns a real element, dynamic_cast succeeds, so the empty-vector
-  // bug above does not trigger and XVector_Add proceeds. But XVector_Add<T> (XSerializable.h
-  // line 125-147) calls AddArray(...,true) ONCE and then calls element->Serialize() directly
-  // for every element -- unlike XVectorClass_Add (a few lines below it), it never wraps each
-  // element in its own AddStruct(...)/Class_Add() boundary. With the JSON backend this means
-  // every element's fields land as FLAT, repeated, same-named primitive values directly under
-  // the single shared array node (e.g. two unwrapped "innervalue" entries), not as two separate
-  // per-element JSON objects.
+  // FIXED (previously a known bug, now confirmed corrected in XSerializable.h): XVector_Add<T>
+  // used to call AddArray(...,true) once and then call element->Serialize() directly for every
+  // element -- unlike XVectorClass_Add, it never wrapped each element in its own AddStruct(...)
+  // boundary. With the JSON backend this meant every element's fields landed as FLAT, repeated,
+  // same-named primitive values directly under the single shared array node, not as separate
+  // per-element JSON objects, so the later ExtractArrayElement(...,true) calls (which require
+  // each array element to be a JSON object) always failed and the round trip silently did
+  // nothing. XVector_Add now wraps each element's Serialize() call in its own
+  // AddStruct(NULL, true)/AddStruct(NULL, false) pair, exactly like XVectorClass_Add, so each
+  // element becomes its own JSON object and the round trip genuinely works.
   EXPECT_TRUE(container.XVector_Add<TESTSERIALIZABLENESTED>(&sourcevector, __L("items")));
 
   XVECTOR<TESTSERIALIZABLENESTED*> destvector;
@@ -335,18 +340,13 @@ TEST(UNITTEST_XSERIALIZABLE_CLASSNAME, XVectorAddDoesNotBoxElementsSoXVectorExtr
   destvector.Add(dest0);
   destvector.Add(dest1);
 
-  // XVector_Extract's ExtractArrayElement(index, name, true) call (XSerializationMethodJSON.cpp)
-  // requires each array element to have JSON type XFILEJSONVALUETYPE_OBJECT -- exactly what
-  // XVectorClass_Add's per-element Class_Add() WOULD have produced, but what plain XVector_Add
-  // never produces. So every ExtractArrayElement(...) call here fails, element->Deserialize()
-  // is never reached for either destination element, and both keep whatever value they already
-  // had -- the vector "round trip" through the plain (non-Class) XVector_Add/XVector_Extract
-  // pair is completely non-functional for a multi-field-capable element type, even though the
-  // overall XVector_Extract() call itself still reports success. Documented, not fixed.
+  // With XVector_Add now producing one real JSON object per element, ExtractArrayElement(index,
+  // name, true) (which requires XFILEJSONVALUETYPE_OBJECT) finds what it expects, so
+  // Deserialize() genuinely runs for each destination element and the round trip now works.
   EXPECT_TRUE(container.XVector_Extract<TESTSERIALIZABLENESTED>(&destvector, __L("items")));
 
-  EXPECT_EQ(dest0->GetInnerValue(), -1);
-  EXPECT_EQ(dest1->GetInnerValue(), -1);
+  EXPECT_EQ(dest0->GetInnerValue(), 10);
+  EXPECT_EQ(dest1->GetInnerValue(), 20);
 
   GEN_DELETE item0;
   GEN_DELETE item1;

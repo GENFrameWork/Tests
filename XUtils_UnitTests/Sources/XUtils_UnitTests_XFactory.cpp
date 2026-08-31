@@ -45,7 +45,18 @@
 #include "FormatFiles/XFile.h"
 #include "XDir.h"
 #include "XThread.h"
+
+// The concrete XFACTORY subclass is platform-specific (exactly as MainProcLINUX.cpp /
+// MainProcWINDOWS.cpp themselves install a different one per platform at real app bootstrap:
+// XLINUXFACTORY on Linux, XWINDOWSFACTORY on Windows) -- isolate that choice here the same way,
+// instead of hardcoding one platform's concrete class, so this file builds and links everywhere.
+#if defined(LINUX)
 #include "XLINUXFactory.h"
+#define UNITTEST_XFACTORY_CONCRETECLASS XLINUXFACTORY
+#elif defined(WINDOWS)
+#include "XWINDOWSFactory.h"
+#define UNITTEST_XFACTORY_CONCRETECLASS XWINDOWSFACTORY
+#endif
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -81,7 +92,7 @@ static void EnsureXFactoryInstance()
 {
   if(!XFACTORY::GetIsInstanced())
     {
-      XFACTORY::SetInstance(GEN_NEW XLINUXFACTORY());
+      XFACTORY::SetInstance(GEN_NEW UNITTEST_XFACTORY_CONCRETECLASS());
     }
 }
 
@@ -113,7 +124,7 @@ TEST(UNITTEST_XFACTORY_CLASSNAME, InstanceLifecycle)
   EXPECT_TRUE(XFACTORY::GetIsInstanced());
   EXPECT_EQ(&XFACTORY::GetInstance(), testinstance);
 
-  EXPECT_TRUE(XFACTORY::SetInstance(GEN_NEW XLINUXFACTORY()));
+  EXPECT_TRUE(XFACTORY::SetInstance(GEN_NEW UNITTEST_XFACTORY_CONCRETECLASS()));
   EXPECT_TRUE(XFACTORY::GetIsInstanced());
 }
 
@@ -128,7 +139,7 @@ TEST(UNITTEST_XFACTORY_CLASSNAME, DelInstanceTwice)
   EXPECT_FALSE(XFACTORY::GetIsInstanced());
   EXPECT_FALSE(XFACTORY::DelInstance());
 
-  EXPECT_TRUE(XFACTORY::SetInstance(GEN_NEW XLINUXFACTORY()));
+  EXPECT_TRUE(XFACTORY::SetInstance(GEN_NEW UNITTEST_XFACTORY_CONCRETECLASS()));
   EXPECT_TRUE(XFACTORY::GetIsInstanced());
 }
 

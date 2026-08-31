@@ -49,6 +49,9 @@
 #include "XLicense.h"
 #include "XFileINI.h"
 #include "XPath.h"
+#include "XPathsManager.h"
+#include "XDir.h"
+#include "XFactory.h"
 #include "XBuffer.h"
 #include "XString.h"
 #include "XUUID.h"
@@ -68,6 +71,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XLICENSE
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 TEST(UNITTEST_XLICENSE_CLASSNAME, GetReturnsEmptyBufferInitially)
 {
@@ -238,7 +253,7 @@ TEST(UNITTEST_XLICENSE_CLASSNAME, GenerateThenLoadFromFileFullRoundTrip)
   // section/keys), then reads it back through LoadFromFile() -- exercising GenerateMachineID's
   // determinism, Generate()'s AES cipher, and LoadFromBuffer()'s machine-ID verification gate
   // together, all without touching the buggy CHECKLICENSEFULLLOCAL macro.
-  XPATH      xpath(__L("/tmp/xutils_unittests_xlicense_roundtrip.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xlicense_roundtrip.ini"));
   XLICENSE   xlicense;
   XLICENSEID xlicenseID;
   XSTRING    appID;
@@ -278,7 +293,12 @@ TEST(UNITTEST_XLICENSE_CLASSNAME, GenerateThenLoadFromFileFullRoundTrip)
       EXPECT_EQ(readlicense.GetByte(c), license.GetByte(c));
     }
 
-  remove("/tmp/xutils_unittests_xlicense_roundtrip.ini");
+  XDIR* cleanupdir = GEN_XFACTORY.Create_Dir();
+  if(cleanupdir)
+    {
+      cleanupdir->Delete(xpath, false);
+      GEN_XFACTORY.Delete_Dir(cleanupdir);
+    }
 }
 
 
@@ -286,7 +306,7 @@ TEST(UNITTEST_XLICENSE_CLASSNAME, LoadFromFileWithMismatchedMachineIDFails)
 {
   // LoadFromBuffer() recomputes this machine's real ID and rejects the file if the stored
   // 'licenseID' does not match -- a fabricated, clearly-wrong UUID string must be rejected.
-  XPATH   xpath(__L("/tmp/xutils_unittests_xlicense_mismatch.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xlicense_mismatch.ini"));
   XSTRING appID;
   XSTRING wronglicenseIDstring;
   XSTRING licensehexstring;

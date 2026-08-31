@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFileCSV.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XString.h"
 
@@ -62,6 +63,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILECSV
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -269,7 +282,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, WriteRecordReplacesAtIndexAndDeleteRecordRemov
 
 TEST(UNITTEST_XFILECSV_CLASSNAME, OpenParsesHandWrittenCommaSeparatedRows)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_comma.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_comma.csv"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,
@@ -310,7 +323,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, SemicolonIsPreferredOverCommaWhenBothArePresen
   // if no ';' is found on the line -- so a line containing both characters is always split on
   // ';', with any ',' left embedded inside whichever field contains it. This is real, existing
   // behavior (not a crash), captured here concretely rather than assumed.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_mixed.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_mixed.csv"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath, "first;second,stillsecond;third\n");
@@ -350,7 +363,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, NoQuoteHandlingMeansAFieldContainingTheSeparat
   record->AddElement(__L("plain value"));
   writer.AddRecord(record);
 
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_noquote.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_noquote.csv"));
   RemoveIfExists(xpath);
 
   ASSERT_TRUE(writer.Create(xpath));
@@ -379,7 +392,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, NoQuoteHandlingMeansAFieldContainingTheSeparat
 
 TEST(UNITTEST_XFILECSV_CLASSNAME, WriteThenCloseThenReopenRoundTripWithoutHeader)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_roundtrip.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_roundtrip.csv"));
   RemoveIfExists(xpath);
 
   {
@@ -430,7 +443,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, OpenWithoutPreDeclaredHeaderTreatsEveryLineAsA
   // CSV file that has a real header row, without the caller pre-declaring one first, silently
   // parses that header row as an ordinary data record -- there is no way to ask XFILECSV to
   // "auto-detect" a header purely from the file's own content.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_header_quirk.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_header_quirk.csv"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,
@@ -461,7 +474,7 @@ TEST(UNITTEST_XFILECSV_CLASSNAME, PreDeclaringHeaderViaGetHeaderAddElementMakesO
   // leaves GetHeader()->GetNElements() at 0 no matter what is passed in). The only way to
   // actually make HaveHeader() report true before Open() is to reach into GetHeader()'s live
   // record directly and call AddElement() on it -- demonstrated here.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecsv_header_predeclared.csv"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecsv_header_predeclared.csv"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,

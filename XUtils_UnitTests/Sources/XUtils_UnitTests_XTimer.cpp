@@ -242,7 +242,10 @@ TEST(UNITTEST_XTIMER_CLASSNAME, GetMeasureHoursMinutesMicroSeconds)
 
       EXPECT_EQ(1,  xtimer->GetMeasureHours());
       EXPECT_EQ(61, xtimer->GetMeasureMinutes());  // total elapsed minutes, not modulo
-      EXPECT_GE(xtimer->GetMeasureMicroSeconds(), (XQWORD)(3661L*1000000L));
+      // Multiply as XQWORD (64-bit) from the start: on platforms where "long" is 32 bits (e.g. LLP64
+      // targets such as Windows/clang-cl), 3661L*1000000L overflows a 32-bit long before the result is
+      // ever cast to XQWORD, tripping -Winteger-overflow -- casting each operand up-front avoids that.
+      EXPECT_GE(xtimer->GetMeasureMicroSeconds(), (XQWORD)3661*(XQWORD)1000000);
     }
 
   GEN_XFACTORY.DeleteTimer(xtimer);

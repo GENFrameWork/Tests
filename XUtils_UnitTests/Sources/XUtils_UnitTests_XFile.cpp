@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFile.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XBuffer.h"
 
 
@@ -61,6 +62,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILE
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -98,7 +111,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, ExistReturnsFalseForMissingFile)
   XFILE* xfile = CreateConcreteFile();
   ASSERT_NE(xfile, (XFILE*)NULL);
 
-  XPATH missing(__L("/tmp/xutils_unittests_xfile_definitely_does_not_exist.bin"));
+  XPATH missing; BuildTestFilePath(missing, __L("xutils_unittests_xfile_definitely_does_not_exist.bin"));
 
   EXPECT_FALSE(xfile->Exist(missing));
   EXPECT_FALSE(xfile->Exist(missing.Get()));
@@ -109,7 +122,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, ExistReturnsFalseForMissingFile)
 
 TEST(UNITTEST_XFILE_CLASSNAME, CreateWriteCloseThenOpenReadRoundTrip)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_roundtrip.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_roundtrip.bin"));
 
   // Defensive cleanup from any previous interrupted run.
   {
@@ -129,8 +142,9 @@ TEST(UNITTEST_XFILE_CLASSNAME, CreateWriteCloseThenOpenReadRoundTrip)
 
     ASSERT_TRUE(writer->Create(xpath));
     EXPECT_TRUE(writer->IsOpen());
-    // (IsReadOnly() happens to read false here too, but only because it is ALWAYS false --
-    // see IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug below.)
+    // (IsReadOnly() reads false here on both platforms -- Create() is inherently read-write.
+    // See IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug below for the platform difference
+    // that shows up once a file is opened read-only instead.)
 
     EXPECT_TRUE(writer->Write(payload, sizeof(payload)));
     EXPECT_TRUE(writer->Flush());
@@ -155,9 +169,18 @@ TEST(UNITTEST_XFILE_CLASSNAME, CreateWriteCloseThenOpenReadRoundTrip)
     ASSERT_TRUE(reader->Open(xpath, true));
     EXPECT_TRUE(reader->IsOpen());
 
-    // NOT `EXPECT_TRUE` -- see IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug below: this is a
-    // real, confirmed XUtils bug, not the documented behavior.
+    // See IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug below: XLINUXFILE::Open() never
+    // assigns its `isreadonly` argument to the member IsReadOnly() reads, so on Linux this is
+    // always false regardless of how the file was opened (a real, confirmed XUtils bug, not
+    // fixed here). XWINDOWSFILE::Open(), by contrast, does assign `this->isreadonly`
+    // correctly, so on Windows IsReadOnly() genuinely reflects the true (read-only) open mode
+    // used just above -- this is a real cross-platform behavioral difference in GEN, reported
+    // and not fixed, so the test asserts what each platform's XFILE actually, verifiably does.
+#if defined(LINUX)
     EXPECT_FALSE(reader->IsReadOnly());
+#elif defined(WINDOWS)
+    EXPECT_TRUE(reader->IsReadOnly());
+#endif
 
     EXPECT_EQ(reader->GetSize(), (XQWORD)sizeof(payload));
 
@@ -186,7 +209,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, CreateWriteCloseThenOpenReadRoundTrip)
 
 TEST(UNITTEST_XFILE_CLASSNAME, WriteXBufferConvenienceOverloadMatchesRawWrite)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_writebuffer.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_writebuffer.bin"));
 
   {
     XFILE* cleanup = CreateConcreteFile();
@@ -218,7 +241,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, WriteXBufferConvenienceOverloadMatchesRawWrite)
 
 TEST(UNITTEST_XFILE_CLASSNAME, SetPositionAndGetPositionSeek)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_seek.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_seek.bin"));
 
   {
     XFILE* cleanup = CreateConcreteFile();
@@ -261,8 +284,8 @@ TEST(UNITTEST_XFILE_CLASSNAME, SetPositionAndGetPositionSeek)
 
 TEST(UNITTEST_XFILE_CLASSNAME, RenameMovesFileToNewPath)
 {
-  XPATH original(__L("/tmp/xutils_unittests_xfile_renameorig.bin"));
-  XPATH renamed(__L("/tmp/xutils_unittests_xfile_renamednew.bin"));
+  XPATH original; BuildTestFilePath(original, __L("xutils_unittests_xfile_renameorig.bin"));
+  XPATH renamed; BuildTestFilePath(renamed, __L("xutils_unittests_xfile_renamednew.bin"));
 
   {
     XFILE* cleanup = CreateConcreteFile();
@@ -291,7 +314,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, RenameMovesFileToNewPath)
 
 TEST(UNITTEST_XFILE_CLASSNAME, GetPathNameFileReturnsLastOpenedOrCreatedPath)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_pathname.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_pathname.bin"));
 
   {
     XFILE* cleanup = CreateConcreteFile();
@@ -319,15 +342,21 @@ TEST(UNITTEST_XFILE_CLASSNAME, GetPathNameFileReturnsLastOpenedOrCreatedPath)
 
 TEST(UNITTEST_XFILE_CLASSNAME, IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug)
 {
-  // Real, concrete XUtils bug (not fixed, per the hard rule): XLINUXFILE::Open(XCHAR* xpath, bool
-  // isreadonly) (XLINUXFile.cpp) receives its `isreadonly` argument as a plain local parameter
-  // and only ever reads it to pick an fopen() mode string ("rb" vs "r+b") -- it never assigns
-  // that value to `this->isreadonly` (the protected XFILE member IsReadOnly() actually returns).
-  // That member is set to `false` exactly once, in XFILE::Clean() (XFile.cpp), and never touched
-  // again anywhere in XFile.cpp/XLINUXFile.cpp/XLINUXFile.h -- confirmed by grep. As a result,
-  // IsReadOnly() unconditionally reports false for every XLINUXFILE, regardless of whether the
-  // file was actually opened read-only (Open(path, true)) or read-write (Open(path, false)).
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_isreadonlybug.bin"));
+  // Real, concrete XUtils bug on Linux (not fixed, per the hard rule): XLINUXFILE::Open(XCHAR*
+  // xpath, bool isreadonly) (XLINUXFile.cpp) receives its `isreadonly` argument as a plain local
+  // parameter and only ever reads it to pick an fopen() mode string ("rb" vs "r+b") -- it never
+  // assigns that value to `this->isreadonly` (the protected XFILE member IsReadOnly() actually
+  // returns). That member is set to `false` exactly once, in XFILE::Clean() (XFile.cpp), and
+  // never touched again anywhere in XFile.cpp/XLINUXFile.cpp/XLINUXFile.h -- confirmed by grep.
+  // As a result, IsReadOnly() unconditionally reports false for every XLINUXFILE, regardless of
+  // whether the file was actually opened read-only (Open(path, true)) or read-write
+  // (Open(path, false)).
+  //
+  // XWINDOWSFILE::Open() (XWINDOWSFile.cpp) does NOT have this bug -- it assigns
+  // `this->isreadonly = isreadonly;` up front, so on Windows IsReadOnly() correctly reflects the
+  // open mode. This is a genuine, reported (not fixed) cross-platform inconsistency in GEN: the
+  // exact same bug name/scenario legitimately produces opposite, platform-correct results.
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_isreadonlybug.bin"));
 
   {
     XFILE* cleanup = CreateConcreteFile();
@@ -344,8 +373,13 @@ TEST(UNITTEST_XFILE_CLASSNAME, IsReadOnlyNeverReflectsTheOpenModeItWasGivenBug)
 
   // Genuinely opened read-only ...
   ASSERT_TRUE(xfile->Open(xpath, true));
-  // ... yet IsReadOnly() reports false -- the bug.
+#if defined(LINUX)
+  // ... yet IsReadOnly() reports false -- the Linux-only bug documented above.
   EXPECT_FALSE(xfile->IsReadOnly());
+#elif defined(WINDOWS)
+  // ... and on Windows IsReadOnly() correctly reports true.
+  EXPECT_TRUE(xfile->IsReadOnly());
+#endif
   xfile->Close();
 
   xfile->Erase(xpath);
@@ -365,7 +399,7 @@ TEST(UNITTEST_XFILE_CLASSNAME, GetFileSizeMacroNeverSetsItsOwnOutputParameter)
   // never touched by that first line and is only not a hard compile error here because we have
   // deliberately declared a variable with that exact name in scope, purely to demonstrate the bug
   // without hiding it: the macro is invoked completely unmodified.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfile_macrobug.bin"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfile_macrobug.bin"));
 
   {
     XFILE* cleanup = GEN_XFACTORY.Create_File();

@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFileDFU.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XBuffer.h"
 
@@ -62,6 +63,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILEDFU
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -180,7 +193,7 @@ static void BuildMinimalDFUImage(XBUFFER& buffer, XBYTE lastdatabyte)
 TEST(UNITTEST_XFILEDFU_CLASSNAME, ReadAllParsesAWellFormedPrefixImageElementAndSuffix)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_dfu_good.dfu");
+  BuildTestFilePath(xpath, __L("xutils_unittests_dfu_good.dfu"));
   RemoveIfExists(xpath);
 
   XBUFFER filedata;
@@ -235,7 +248,7 @@ TEST(UNITTEST_XFILEDFU_CLASSNAME, ReadAllParsesAWellFormedPrefixImageElementAndS
 TEST(UNITTEST_XFILEDFU_CLASSNAME, ReadAllRejectsAFileWhoseContentWasCorruptedAfterTheCRCWasComputed)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_dfu_badcrc.dfu");
+  BuildTestFilePath(xpath, __L("xutils_unittests_dfu_badcrc.dfu"));
   RemoveIfExists(xpath);
 
   XBUFFER filedata;
@@ -264,7 +277,7 @@ TEST(UNITTEST_XFILEDFU_CLASSNAME, ReadAllRejectsAFileWhoseContentWasCorruptedAft
 TEST(UNITTEST_XFILEDFU_CLASSNAME, OpenOfANonexistentFileFailsGracefully)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_dfu_does_not_exist.dfu");
+  BuildTestFilePath(xpath, __L("xutils_unittests_dfu_does_not_exist.dfu"));
   RemoveIfExists(xpath);
 
   XFILEDFU dfu;

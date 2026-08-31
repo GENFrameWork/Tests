@@ -45,6 +45,7 @@
 #include "XFileCFG.h"
 #include "XFileINI.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XString.h"
 #include "XVariant.h"
@@ -65,6 +66,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILECFG
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -307,7 +320,7 @@ TEST(UNITTEST_XFILECFG_CLASSNAME, AddRemarkAndGetRemarks)
 
 TEST(UNITTEST_XFILECFG_CLASSNAME, SaveThenLoadRoundTripsIntAndStringValuesThroughARealFile)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecfg_roundtrip.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecfg_roundtrip.ini"));
   RemoveIfExists(xpath);
 
   {
@@ -362,7 +375,7 @@ TEST(UNITTEST_XFILECFG_CLASSNAME, IniLifecycleCreatesFileWithDefaultsOnFirstRunD
   // content. Net effect: Ini<T>() reports false on every single first run, even on complete
   // success -- a caller who only checks Ini<T>()'s return value cannot use it to distinguish
   // "first run, everything defaulted and saved correctly" from a genuine failure.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecfg_ini_lifecycle.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecfg_ini_lifecycle.ini"));
   RemoveIfExists(xpath);
 
   {
@@ -398,7 +411,7 @@ TEST(UNITTEST_XFILECFG_CLASSNAME, AddValueSecuenceGeneratesMinCountKeysOnAFreshE
 {
   // On a fresh file with none of the sequence keys present yet, GetCountKeys() (which underlies
   // AddValueSecuence<T>) finds zero existing matches, so the sequence falls back to mincount.
-  XPATH xpath(__L("/tmp/xutils_unittests_xfilecfg_secuence.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfilecfg_secuence.ini"));
   RemoveIfExists(xpath);
 
   XFILECFG cfg;
@@ -435,6 +448,13 @@ TEST(UNITTEST_XFILECFG_CLASSNAME, AddValueSecuenceGeneratesMinCountKeysOnAFreshE
 
   cfg.EndFile();
   cfg.DeleteAllValues();
+
+  // AddValueSecuence<T>() heap-allocates each T via GEN_NEW and Add()s it into our local `values`
+  // vector (XFileCFG.h ~line 218) -- ownership of those 3 ints is ours, not cfg's (DeleteAllValues()
+  // only clears cfg's own XFILECFGVALUE bookkeeping; `valuesvector` is stored as an untyped void*
+  // for reference only and is never freed by XFILECFG). Without this, the 3 ints leak.
+  values.DeleteContents();
+
   RemoveIfExists(xpath);
 }
 

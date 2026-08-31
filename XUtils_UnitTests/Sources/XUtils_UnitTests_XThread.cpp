@@ -38,11 +38,10 @@
 #include "gtest/gtest.h"
 #endif
 
-//#include <unistd.h>
-
 #include "XFactory.h"
 #include "XThread.h"
 #include "XTimer.h"
+#include "XSleep.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -70,6 +69,26 @@ struct XTHREADTESTDATA
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         static void EnsureXSleepInstance()
+* @brief      Ensures that the XSleep singleton instance exists (GEN's own portable sleep API is used
+*             instead of any STL/POSIX sleep function, per project policy).
+* @ingroup    UNIT TEST
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void EnsureXSleepInstance()
+{
+  if(!XSLEEP::GetIsInstanced())
+    {
+      XSLEEP* instance = GEN_NEW XSLEEP();
+      XSLEEP::SetInstance(instance);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         static void IncrementWorker(void* data)
 * @brief      Worker used by real-thread tests: increments a shared counter and sleeps briefly so the
 *             calling thread's IsInFunction() window is wide enough to be observed deterministically.
@@ -83,7 +102,8 @@ static void IncrementWorker(void* data)
 
   testdata->counter++;
 
-  usleep(10000); // 10 ms in-function window
+  EnsureXSleepInstance();
+  GEN_XSLEEP.MicroSeconds(10000); // 10 ms in-function window
 }
 
 
@@ -97,6 +117,8 @@ static void IncrementWorker(void* data)
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool WaitForCounterAtLeast(XTHREADTESTDATA* testdata, XDWORD target, int timeoutseconds)
 {
+  EnsureXSleepInstance();
+
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
   if(!xtimer) return false;
 
@@ -110,7 +132,7 @@ static bool WaitForCounterAtLeast(XTHREADTESTDATA* testdata, XDWORD target, int 
           break;
         }
 
-      usleep(1000);
+      GEN_XSLEEP.MicroSeconds(1000);
     }
 
   GEN_XFACTORY.DeleteTimer(xtimer);
@@ -128,6 +150,8 @@ static bool WaitForCounterAtLeast(XTHREADTESTDATA* testdata, XDWORD target, int 
 * --------------------------------------------------------------------------------------------------------------------*/
 static bool WaitForInFunction(XTHREAD* xthread, int timeoutseconds)
 {
+  EnsureXSleepInstance();
+
   XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
   if(!xtimer) return false;
 
@@ -141,7 +165,7 @@ static bool WaitForInFunction(XTHREAD* xthread, int timeoutseconds)
           break;
         }
 
-      usleep(200);
+      GEN_XSLEEP.MicroSeconds(200);
     }
 
   GEN_XFACTORY.DeleteTimer(xtimer);
@@ -379,9 +403,12 @@ TEST(UNITTEST_XTHREAD_CLASSNAME, MutexUsedFromWorkerThreadProtectsCounter)
       guarded->counter++;
       guarded->xmutex->UnLock();
 
-      usleep(1000);
+      EnsureXSleepInstance();
+      GEN_XSLEEP.MicroSeconds(1000);
     }
   };
+
+  EnsureXSleepInstance();
 
   GUARDEDCOUNTER guarded;
   guarded.xmutex  = GEN_XFACTORY.Create_Mutex();
@@ -404,7 +431,7 @@ TEST(UNITTEST_XTHREAD_CLASSNAME, MutexUsedFromWorkerThreadProtectsCounter)
 
       if(enough) { reached = true; break; }
 
-      usleep(1000);
+      GEN_XSLEEP.MicroSeconds(1000);
     }
   GEN_XFACTORY.DeleteTimer(xtimer);
 

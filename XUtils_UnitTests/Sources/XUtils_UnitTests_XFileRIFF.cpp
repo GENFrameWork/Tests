@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFileRIFF.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XBuffer.h"
 #include "XString.h"
@@ -63,6 +64,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILERIFF
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -187,7 +200,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, ListAccessorsGetSetRoundTripAndIsTypeList)
 TEST(UNITTEST_XFILERIFF_CLASSNAME, ReadAllListsParsesNestedListsAndChunksFromARealFile)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_riff_good.riff");
+  BuildTestFilePath(xpath, __L("xutils_unittests_riff_good.riff"));
   RemoveIfExists(xpath);
 
   XBUFFER filedata;
@@ -247,7 +260,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, ReadAllListsRejectsWrongMagicZeroSizeAndTrunc
   // Wrong magic (neither "RIFF" nor "LIST").
   {
     XPATH xpath;
-    xpath = __L("/tmp/xutils_unittests_riff_badmagic.riff");
+    BuildTestFilePath(xpath, __L("xutils_unittests_riff_badmagic.riff"));
     RemoveIfExists(xpath);
 
     XBUFFER filedata;
@@ -271,7 +284,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, ReadAllListsRejectsWrongMagicZeroSizeAndTrunc
   // size == 0 must be rejected outright.
   {
     XPATH xpath;
-    xpath = __L("/tmp/xutils_unittests_riff_zerosize.riff");
+    BuildTestFilePath(xpath, __L("xutils_unittests_riff_zerosize.riff"));
     RemoveIfExists(xpath);
 
     XBUFFER filedata;
@@ -294,7 +307,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, ReadAllListsRejectsWrongMagicZeroSizeAndTrunc
   // Truncated right after the declared size (missing the typelist FOURCC entirely).
   {
     XPATH xpath;
-    xpath = __L("/tmp/xutils_unittests_riff_truncated.riff");
+    BuildTestFilePath(xpath, __L("xutils_unittests_riff_truncated.riff"));
     RemoveIfExists(xpath);
 
     XBUFFER filedata;
@@ -344,7 +357,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, CreateListNodeAndCreateChunkNodeBuildCorrectl
 TEST(UNITTEST_XFILERIFF_CLASSNAME, WriteListToFileWritesAPlainChunkHeaderAndDataAtItsPosition)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_riff_write.riff");
+  BuildTestFilePath(xpath, __L("xutils_unittests_riff_write.riff"));
   RemoveIfExists(xpath);
 
   XFILERIFF riff;
@@ -384,7 +397,7 @@ TEST(UNITTEST_XFILERIFF_CLASSNAME, WriteListToFileWritesAPlainChunkHeaderAndData
 TEST(UNITTEST_XFILERIFF_CLASSNAME, AdjustSizeOfListsComputesTotalSizeOfAOneLevelChunkList)
 {
   XPATH xpath;
-  xpath = __L("/tmp/xutils_unittests_riff_adjust.riff");
+  BuildTestFilePath(xpath, __L("xutils_unittests_riff_adjust.riff"));
   RemoveIfExists(xpath);
 
   XFILERIFF riff;

@@ -44,6 +44,7 @@
 #include "XFactory.h"
 #include "XFileINI.h"
 #include "XPath.h"
+#include "XPathsManager.h"
 #include "XFile.h"
 #include "XString.h"
 
@@ -62,6 +63,18 @@
 #ifdef GOOGLETEST_ACTIVE
 namespace TEST_XFILEINI
 {
+
+// Test files are written under this GEN application's own portable ROOT path (via
+// GEN_XPATHSMANAGER, exactly as XUtils_UnitTests.cpp's own bootstrap resolves it) instead of a
+// hardcoded Unix path like "/tmp/..." -- "/tmp" does not exist on Windows, which silently made
+// every Create()/Open() call in this file fail there (confirmed against a real Windows/clang-cl
+// run: every disk-touching test here failed with "Create(xpath) == false").
+static void BuildTestFilePath(XPATH& xpath, const XCHAR* relativename)
+{
+  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpath);
+  xpath += relativename;
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -220,7 +233,7 @@ TEST(UNITTEST_XFILEINI_CLASSNAME, GetNextKeyIterationAndResetSelectionKey)
 
 TEST(UNITTEST_XFILEINI_CLASSNAME, OpenParsesHandWrittenINIWithMultipleSectionsAndKeys)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfileini_parse.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfileini_parse.ini"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,
@@ -255,7 +268,7 @@ TEST(UNITTEST_XFILEINI_CLASSNAME, OpenParsesHandWrittenINIWithMultipleSectionsAn
 
 TEST(UNITTEST_XFILEINI_CLASSNAME, RemarksAreRecognizedAndTextIsCaptured)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfileini_remarks.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfileini_remarks.ini"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,
@@ -306,7 +319,7 @@ TEST(UNITTEST_XFILEINI_CLASSNAME, RemarksAreRecognizedAndTextIsCaptured)
 
 TEST(UNITTEST_XFILEINI_CLASSNAME, WriteThenCloseThenReopenRoundTrip)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfileini_roundtrip.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfileini_roundtrip.ini"));
   RemoveIfExists(xpath);
 
   {
@@ -354,7 +367,7 @@ TEST(UNITTEST_XFILEINI_CLASSNAME, WriteThenCloseThenReopenRoundTrip)
 
 TEST(UNITTEST_XFILEINI_CLASSNAME, ReadKeyMapBulkReadsMultipleKeysAtOnce)
 {
-  XPATH xpath(__L("/tmp/xutils_unittests_xfileini_keymap.ini"));
+  XPATH xpath; BuildTestFilePath(xpath, __L("xutils_unittests_xfileini_keymap.ini"));
   RemoveIfExists(xpath);
 
   WriteRawTextFile(xpath,
