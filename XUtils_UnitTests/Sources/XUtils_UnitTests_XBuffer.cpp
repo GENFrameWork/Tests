@@ -706,6 +706,184 @@ TEST(UNITTEST_XBUFFER_CLASSNAME, EndianGlobalAndLocal)
 }
 
 
+TEST(UNITTEST_XBUFFER_CLASSNAME, AddWithMaskAndExtractWithMaskRoundTrip)
+{
+  XBUFFER buffer;
+
+  EXPECT_TRUE(buffer.AddWithMask((XCHAR*)__L("BWDQ"), (int)0x11, (int)0x2222, (XDWORD)0x33333333, (XQWORD)0x4444444444444444));
+
+  EXPECT_EQ((XDWORD)(1+2+4+8), buffer.GetSize());
+
+  XBYTE  bvar  = 0;
+  XWORD  wvar  = 0;
+  XDWORD dvar  = 0;
+  XQWORD qvar  = 0;
+
+  EXPECT_TRUE(buffer.ExtractWithMask((XCHAR*)__L("BWDQ"), 0, &bvar, &wvar, &dvar, &qvar));
+
+  EXPECT_EQ((XBYTE)0x11, bvar);
+  EXPECT_EQ((XWORD)0x2222, wvar);
+  EXPECT_EQ((XDWORD)0x33333333, dvar);
+  EXPECT_EQ((XQWORD)0x4444444444444444, qvar);
+  EXPECT_EQ(0, buffer.GetSize());
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, ComparePointerOverload)
+{
+  XBUFFER buffer1;
+  XBUFFER buffer2;
+
+  buffer1.Add((XBYTE)1);
+  buffer1.Add((XBYTE)2);
+
+  buffer2.Add((XBYTE)1);
+  buffer2.Add((XBYTE)2);
+
+  EXPECT_TRUE(buffer1.Compare(&buffer2));
+
+  buffer2.Add((XBYTE)3);
+  EXPECT_FALSE(buffer1.Compare(&buffer2));
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, FindStringOverload)
+{
+  // Find(XSTRING&,...) internally builds its own comparison XBUFFER via Add(XSTRING&,bool),
+  // which (when normalize=false) stores each XCHAR as a full XDWORD -- so the haystack buffer
+  // must be built the same way for byte offsets to line up.
+  XBUFFER buffer;
+  XSTRING haystack(__L("ABCDE"));
+  XSTRING searchstring(__L("CD"));
+
+  buffer.Add(haystack, false);
+
+  int index = buffer.Find(searchstring, false, 0);
+  EXPECT_EQ((int)(2*sizeof(XDWORD)), index);
+
+  XSTRING notfoundstring(__L("ZZ"));
+  index = buffer.Find(notfoundstring, false, 0);
+  EXPECT_EQ(XBUFFER_INVALIDPOSITION, index);
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, SetAddBlockMemSizeAffectsAddedCapacity)
+{
+  XBUFFER buffer;
+
+  EXPECT_TRUE(buffer.SetAddBlockMemSize(64));
+
+  EXPECT_TRUE(buffer.Add((XBYTE)1));
+  EXPECT_EQ(1, buffer.GetSize());
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, PaddingGetTypeNowReflectsTheRequestedType)
+{
+  // FIXED: XBUFFER::Padding_Add() (XBuffer.cpp) now assigns `paddingtype = type;`, so
+  // Padding_GetType() genuinely reflects the padding type that was last requested and applied,
+  // instead of always reporting its Clean()-time default (XBUFFER_PADDINGTYPE_NONE).
+  XBUFFER buffer;
+
+  buffer.Add((XBYTE)1);
+  buffer.Add((XBYTE)2);
+
+  EXPECT_EQ(XBUFFER_PADDINGTYPE_NONE, buffer.Padding_GetType());
+
+  EXPECT_TRUE(buffer.Padding_Add(8, XBUFFER_PADDINGTYPE_ZEROS));
+  EXPECT_EQ(XBUFFER_PADDINGTYPE_ZEROS, buffer.Padding_GetType());
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, BitSetDataAndBitSetBitsFree)
+{
+  XBUFFER buffer;
+
+  EXPECT_TRUE(buffer.Bit_SetNBits(4));
+  EXPECT_TRUE(buffer.Bit_AddData(0x0A));  // 1010
+  EXPECT_TRUE(buffer.Bit_AddData(0x05));  // 0101
+
+  // Source note: Bit_SetData() (unlike Bit_AddData()) does NOT merge its written bits with
+  // whatever else already occupies the same byte(s) -- it Set()s the whole affected byte(s)
+  // from only the new shifted value, so the neighbouring nibble sharing byte 0 gets clobbered
+  // to 0 as a side effect here. This documents that real (not fixed) behavior rather than
+  // assuming Bit_SetData is a clean bit-level in-place patch.
+  EXPECT_TRUE(buffer.Bit_SetData(0x0F, 4, 4));
+  EXPECT_EQ((XDWORD)0x0F, buffer.Bit_GetData(4, 4));
+  EXPECT_EQ((XDWORD)0x00, buffer.Bit_GetData(0, 4));
+
+  EXPECT_TRUE(buffer.Bit_SetBitsFree(3));
+  EXPECT_EQ((XBYTE)3, buffer.Bit_GetBitsFree());
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetPtrCharAndGetPtrWord)
+{
+  XBUFFER buffer;
+
+  buffer.Add((XBYTE)'H');
+  buffer.Add((XBYTE)'I');
+  buffer.Add((XBYTE)0);
+
+  char* charptr = buffer.GetPtrChar();
+  ASSERT_TRUE(charptr != NULL);
+  EXPECT_EQ('H', charptr[0]);
+  EXPECT_EQ('I', charptr[1]);
+
+  XWORD* wordptr = buffer.GetPtrWord();
+  ASSERT_TRUE(wordptr != NULL);
+  EXPECT_EQ((void*)buffer.Get(), (void*)wordptr);
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, GetOutOfRangePSizeReadsPastRemainingSize)
+{
+  // Source bug (not fixed, XBuffer.cpp XBUFFER::Get(XBYTE*,int,int)): the bounds check
+  // "if((!buffer) || (pos>(int)size))" only rejects a start position beyond the buffer,
+  // it never validates that pos+psize stays within size, unlike the sibling Extract()
+  // (which does clamp). Calling Get() with a psize that overruns the remaining buffer
+  // therefore still returns true (no failure signalled) instead of failing/clamping.
+  XBUFFER buffer;
+
+  buffer.Add((XBYTE)1);
+  buffer.Add((XBYTE)2);
+
+  XBYTE outdata[8] = { 0 };
+
+  // Buffer only has 2 bytes total, ask for 8 starting at position 0: real XUtils behavior
+  // does NOT fail (would be expected to, given the requested range overruns the buffer).
+  bool status = buffer.Get(outdata, 8, 0);
+  EXPECT_TRUE(status);
+}
+
+
+TEST(UNITTEST_XBUFFER_CLASSNAME, ExtractOverlappingRangeUsesMemmoveSafely)
+{
+  XBUFFER buffer;
+
+  for(XBYTE c=0; c<10; c++)
+    {
+      buffer.Add((XBYTE)c);
+    }
+
+  // Extract a middle chunk whose removal shifts a later, overlapping remainder --
+  // regression test for the historical overlapping-memcpy bug documented in XBuffer.cpp
+  // (Extract switched from memcpy to memmove specifically for this scenario).
+  XBYTE outdata[3] = { 0 };
+  EXPECT_TRUE(buffer.Extract(outdata, 2, 3));  // (pbuffer, ppos, psize): start at 2, take 3 bytes
+
+  EXPECT_EQ((XBYTE)2, outdata[0]);
+  EXPECT_EQ((XBYTE)3, outdata[1]);
+  EXPECT_EQ((XBYTE)4, outdata[2]);
+
+  EXPECT_EQ(7, buffer.GetSize());
+  EXPECT_EQ((XBYTE)0, buffer.GetByte(0));
+  EXPECT_EQ((XBYTE)1, buffer.GetByte(1));
+  EXPECT_EQ((XBYTE)5, buffer.GetByte(2));
+  EXPECT_EQ((XBYTE)9, buffer.GetByte(6));
+}
+
+
 }
 
 

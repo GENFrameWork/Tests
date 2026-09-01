@@ -138,6 +138,20 @@ TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
 */
 
 
+TEST(UNITTEST_XSLEEP_CLASSNAME, Nanoseconds)
+{
+  EnsureXSleepInstance();
+  XTIMER* xtimer = GEN_XFACTORY.CreateTimer();
+  EXPECT_NE(xtimer, nullptr);
+
+  GEN_XSLEEP.NanoSeconds(100000000);  // 100 ms
+
+  EXPECT_GE(xtimer->GetMeasureMilliSeconds(), 100);
+
+  GEN_XFACTORY.DeleteTimer(xtimer);
+}
+
+
 TEST(UNITTEST_XSLEEP_CLASSNAME, SetInstanceNull)
 {
   EXPECT_FALSE(XSLEEP::SetInstance(NULL));

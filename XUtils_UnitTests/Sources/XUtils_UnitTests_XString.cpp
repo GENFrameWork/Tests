@@ -40,6 +40,7 @@
 
 #include "XBuffer.h"
 #include "XString.h"
+#include "XVector.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -620,6 +621,257 @@ TEST(UNITTEST_XSTRING_CLASSNAME, AdjustSizeAutoTrim)
   EXPECT_TRUE(string.AdjustSize());
   EXPECT_EQ(3, string.GetSize());
   EXPECT_EQ(0, string.Compare(__L("abc"), false));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, CopySubstringOverloads)
+{
+  XSTRING string = __L("abcdefgh");
+  XSTRING result;
+
+  EXPECT_NE(XSTRING_NOTFOUND, string.Copy(2, 5, result));
+  EXPECT_EQ(0, result.Compare(__L("cde"), false));
+
+  EXPECT_NE(XSTRING_NOTFOUND, string.Copy(3, result));
+  EXPECT_EQ(0, result.Compare(__L("defgh"), false));
+
+  // startindex >= endindex is documented as a NOTFOUND rejection.
+  EXPECT_EQ(XSTRING_NOTFOUND, string.Copy(5, 2, result));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, SplitBySeparator)
+{
+  XSTRING             string = __L("one,two,three");
+  XVECTOR<XSTRING*>   parts;
+
+  EXPECT_TRUE(string.Split(__C(','), parts, false));
+  ASSERT_EQ((XDWORD)3, parts.GetSize());
+
+  EXPECT_EQ(0, parts.Get(0)->Compare(__L("one"),   false));
+  EXPECT_EQ(0, parts.Get(1)->Compare(__L("two"),   false));
+  EXPECT_EQ(0, parts.Get(2)->Compare(__L("three"), false));
+
+  for(XDWORD c=0; c<parts.GetSize(); c++)
+    {
+      GEN_DELETE parts.Get(c);
+    }
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, ExplodeBySeparator)
+{
+  XSTRING           string = __L("a::b::c");
+  XVECTOR<XSTRING*> tokens;
+
+  EXPECT_TRUE(string.Explode(__C(':'), &tokens));
+
+  // Explode skips zero-length runs (consecutive separators collapse), unlike Split's
+  // "addsubstringempty" option -- confirms the two vector-splitting methods have different
+  // ownership/empty-token semantics.
+  ASSERT_EQ((XDWORD)3, tokens.GetSize());
+  EXPECT_EQ(0, tokens.Get(0)->Compare(__L("a"), false));
+  EXPECT_EQ(0, tokens.Get(1)->Compare(__L("b"), false));
+  EXPECT_EQ(0, tokens.Get(2)->Compare(__L("c"), false));
+
+  for(XDWORD c=0; c<tokens.GetSize(); c++)
+    {
+      GEN_DELETE tokens.Get(c);
+    }
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, FormatAddFormatAndUnFormat)
+{
+  XSTRING string;
+
+  // FIXED: XSTRING::Format()/AddFormat() used to "return 0;" (false) unconditionally, even though
+  // the real work is done by the internal FormatArg() helper, which itself returns true on the
+  // happy path -- so both wrappers always reported failure despite succeeding. They now return
+  // FormatArg()'s real status.
+  EXPECT_TRUE(string.Format(__L("ID-%02d"), 7));
+  EXPECT_EQ(0, string.Compare(__L("ID-07"), false));
+
+  EXPECT_TRUE(string.AddFormat(__L("/%d"), 42));
+  EXPECT_EQ(0, string.Compare(__L("ID-07/42"), false));
+
+  int number1 = 0;
+  int number2 = 0;
+
+  EXPECT_TRUE(string.UnFormat(__L("ID-%02d/%d"), &number1, &number2));
+  EXPECT_EQ(7,  number1);
+  EXPECT_EQ(42, number2);
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertToPascalAndFromPascal)
+{
+  XSTRING     string = __L("Pascal!");
+  SHORTSTRING pascalstring;
+  XSTRING     roundtrip;
+
+  EXPECT_TRUE(string.ConvertToPascal(pascalstring));
+  EXPECT_EQ((XBYTE)string.GetSize(), pascalstring.size);
+
+  EXPECT_TRUE(roundtrip.ConvertFromPascal(pascalstring));
+  EXPECT_EQ(0, roundtrip.Compare(__L("Pascal!"), false));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, Swab)
+{
+  XSTRING string = __L("abcd");
+
+  EXPECT_TRUE(string.Swab());
+  EXPECT_EQ(0, string.Compare(__L("badc"), false));
+
+  XSTRING empty;
+  EXPECT_FALSE(empty.Swab());
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, BinaryCompare)
+{
+  XSTRING a = __L("same");
+  XSTRING b = __L("same");
+  XSTRING c = __L("diff");
+  XSTRING d = __L("longer text");
+
+  EXPECT_TRUE(a.BinaryCompare(b));
+  EXPECT_FALSE(a.BinaryCompare(c));
+  EXPECT_FALSE(a.BinaryCompare(d));  // different size -> immediate false
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, GetTypeOfLineEnd)
+{
+  XSTRING string = __L("line1\r\nline2\r\n");
+  XSTRING lineend;
+
+  EXPECT_TRUE(string.GetTypeOfLineEnd(lineend));
+  EXPECT_EQ(0, lineend.Compare(__L("\r\n"), false));
+
+  XSTRING toosmall = __L("a");
+  XSTRING lineend2;
+  EXPECT_FALSE(toosmall.GetTypeOfLineEnd(lineend2));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, HexConversionRoundTrip)
+{
+  XSTRING string = __L("Hi!");
+  XSTRING hexstring;
+  XBUFFER buffer;
+  XSTRING roundtrip;
+
+  EXPECT_TRUE(string.ConvertToHexString(hexstring, true));
+  EXPECT_EQ(0, hexstring.Compare(__L("486921"), true));  // 'H'=0x48 'i'=0x69 '!'=0x21
+
+  EXPECT_TRUE(hexstring.ConvertHexStringToBuffer(buffer));
+  EXPECT_EQ((XDWORD)3, buffer.GetSize());
+  EXPECT_EQ((XBYTE)'H', buffer.GetByte(0));
+  EXPECT_EQ((XBYTE)'i', buffer.GetByte(1));
+  EXPECT_EQ((XBYTE)'!', buffer.GetByte(2));
+
+  EXPECT_TRUE(roundtrip.ConvertHexStringFromBuffer(buffer, true));
+  EXPECT_EQ(0, roundtrip.Compare(hexstring, false));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, FindCharacterFromSetAndAreValidCharacters)
+{
+  XSTRING string = __L("hello world");
+
+  EXPECT_EQ(5, string.FindCharacterFromSet(__L(" ,;")));
+
+  XSTRING noneofthese = __L("abc");
+  EXPECT_EQ((int)noneofthese.GetSize(), noneofthese.FindCharacterFromSet(__L("xyz")));
+
+  EXPECT_TRUE(string.AreValidCharacters((XCHAR*)__L("helo wrd")));
+  EXPECT_FALSE(string.AreValidCharacters((XCHAR*)__L("hel")));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, CharacterFamilyHelpers)
+{
+  XSTRING string = __L("abc");
+
+  EXPECT_TRUE(string.Character_IsAlpha(__C('a')));
+  EXPECT_FALSE(string.Character_IsAlpha(__C('5')));
+
+  EXPECT_TRUE(string.Character_IsUpperCase(__C('A')));
+  EXPECT_FALSE(string.Character_IsUpperCase(__C('a')));
+
+  EXPECT_TRUE(string.Character_IsLowerCase(__C('a')));
+  EXPECT_FALSE(string.Character_IsLowerCase(__C('A')));
+
+  EXPECT_TRUE(string.Character_IsNumber(__C('7')));
+  EXPECT_FALSE(string.Character_IsNumber(__C('x')));
+
+  EXPECT_EQ(__C('A'), string.Character_ToUpper(__C('a')));
+  EXPECT_EQ(__C('a'), string.Character_ToLower(__C('A')));
+
+  EXPECT_EQ(__C('a'), string.Character_GetFirst());
+  EXPECT_EQ(__C('c'), string.Character_GetLast());
+
+  EXPECT_TRUE(string.Character_Change(__C('b'), __C('Z')));
+  EXPECT_EQ(0, string.Compare(__L("aZc"), false));
+  EXPECT_FALSE(string.Character_Change(__C('x'), __C('Y')));  // not present -> no change made
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, HaveNumbersAndIsNumberFamily)
+{
+  XSTRING alphaonly   = __L("abc");
+  XSTRING mixed       = __L("ab12");
+  XSTRING numbersonly = __L("12345");
+  XSTRING decimal     = __L("123.45");
+
+  EXPECT_FALSE(alphaonly.HaveNumbers());
+  EXPECT_TRUE(mixed.HaveNumbers());
+  EXPECT_FALSE(mixed.HaveOnlyNumbers());
+  EXPECT_TRUE(numbersonly.HaveOnlyNumbers());
+
+  EXPECT_TRUE(numbersonly.IsNumber());
+  EXPECT_FALSE(alphaonly.IsNumber());
+
+  int ndecimals = 0;
+  EXPECT_TRUE(decimal.IsDecimalNumber(&ndecimals));
+  // Source quirk (not a crash, just a naming/off-by-one surprise): ndecimals is computed as
+  // "size - indexof('.')", which includes the decimal separator character itself in the
+  // count, not just the digits after it -- so "123.45" (2 real decimal digits) reports 3.
+  EXPECT_EQ(3, ndecimals);
+  EXPECT_FALSE(alphaonly.IsDecimalNumber());
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, ToUpperCaseAndToLowerCase)
+{
+  XSTRING string = __L("MixedCase123");
+
+  EXPECT_TRUE(string.ToUpperCase());
+  EXPECT_EQ(0, string.Compare(__L("MIXEDCASE123"), false));
+
+  EXPECT_TRUE(string.ToLowerCase());
+  EXPECT_EQ(0, string.Compare(__L("mixedcase123"), false));
+}
+
+
+TEST(UNITTEST_XSTRING_CLASSNAME, ConvertFromBooleanShortWordLongLong)
+{
+  XSTRING string;
+
+  EXPECT_TRUE(string.ConvertFromBoolean(true, XSTRINGBOOLEANMODE_COMPUTER));
+  EXPECT_FALSE(string.IsEmpty());
+
+  EXPECT_TRUE(string.ConvertFromShort((short)-123));
+  EXPECT_EQ(-123, string.ConvertToInt());
+
+  EXPECT_TRUE(string.ConvertFromWord((XWORD)6789));
+  EXPECT_EQ(6789, string.ConvertToInt());
+
+  EXPECT_TRUE(string.ConvertFromLongLong((long long)-987654321LL));
+  EXPECT_EQ((long long)-987654321LL, string.ConvertToLongLong());
 }
 
 

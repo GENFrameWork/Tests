@@ -838,6 +838,158 @@ TEST(UNITTEST_XDATETIME_CLASSNAME, StringFormatsPostgreSQLAndFirstTime)
 }
 
 
+TEST(UNITTEST_XDATETIME_CLASSNAME, AddSubtractHoursMinutesMonthsYears)
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+
+  EXPECT_NE((void*)datetime, (void*)NULL);
+
+  SetKnownDateTime(datetime, 15, 6, 2020, 10, 30, 0, 0);
+
+  datetime->AddHours(5);
+  EXPECT_EQ(datetime->GetHours(), 15);
+
+  datetime->AddMinutes(40);
+  EXPECT_EQ(datetime->GetHours(),   16);
+  EXPECT_EQ(datetime->GetMinutes(), 10);
+
+  datetime->SubtractHours(5);
+  EXPECT_EQ(datetime->GetHours(), 11);
+
+  datetime->SubtractMinutes(40);
+  EXPECT_EQ(datetime->GetHours(),   10);
+  EXPECT_EQ(datetime->GetMinutes(), 30);
+
+  // Back to the exact starting point
+  EXPECT_EQ(datetime->GetDay(),   15);
+  EXPECT_EQ(datetime->GetMonth(), 6);
+  EXPECT_EQ(datetime->GetYear(),  2020);
+
+  // SubtractMonths() by an amount that stays within the same year works correctly.
+  datetime->SubtractMonths(3);
+  EXPECT_EQ(datetime->GetMonth(), 3);
+  EXPECT_EQ(datetime->GetYear(),  2020);
+
+  datetime->SubtractYears(20);
+  EXPECT_EQ(datetime->GetYear(), 2000);
+
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
+
+
+TEST(UNITTEST_XDATETIME_CLASSNAME, SubtractMonthsCrossingYearBoundaryNowWrapsCorrectly)
+{
+  // FIXED: XDATETIME::SubtractMonths() (XDateTime.cpp) used to set "this->month = 13 + rest;"
+  // when "this->month -= rest" underflowed below 1, producing a nonsensical out-of-range month
+  // (13 + rest, e.g. 19 for rest=6) and even moving the year the wrong direction. It now correctly
+  // does "SubtractYears(1); this->month += 12;", wrapping into December of the previous year.
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+
+  EXPECT_NE((void*)datetime, (void*)NULL);
+
+  SetKnownDateTime(datetime, 15, 6, 2020, 10, 30, 0, 0);
+
+  datetime->SubtractMonths(6);
+
+  // Correct behavior: month=12, year=2019 (December of the previous year).
+  EXPECT_EQ(datetime->GetMonth(), 12);
+  EXPECT_EQ(datetime->GetYear(),  2019);
+}
+
+
+TEST(UNITTEST_XDATETIME_CLASSNAME, MonthStringAndDayOfWeekString)
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  XSTRING    string;
+
+  EXPECT_NE((void*)datetime, (void*)NULL);
+
+  SetKnownDateTime(datetime, 1, 1, 2001, 0, 0, 0, 0);
+  EXPECT_TRUE(datetime->GetMonthString(string));
+  EXPECT_EQ(string.Compare(__L("January")), 0);
+
+  // Dec 31, 2000 was a Sunday
+  SetKnownDateTime(datetime, 31, 12, 2000, 0, 0, 0, 0);
+  EXPECT_TRUE(datetime->GetDayOfWeekString(string));
+  EXPECT_EQ(string.Compare(__L("Sunday")), 0);
+
+  // Jan 1, 2001 was a Monday
+  SetKnownDateTime(datetime, 1, 1, 2001, 0, 0, 0, 0);
+  EXPECT_TRUE(datetime->GetDayOfWeekString(string));
+  EXPECT_EQ(string.Compare(__L("Monday")), 0);
+
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
+
+
+TEST(UNITTEST_XDATETIME_CLASSNAME, EPOCHFormatIsPlausibleForCurrentClock)
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+
+  EXPECT_NE((void*)datetime, (void*)NULL);
+
+  // GetEPOCHFormat() internally calls Read() (real OS clock), so we can't assert an exact
+  // value -- only that it's a plausible number of elapsed seconds since 1970 for "now"
+  // being at or after year 2023 (well past this environment's actual current date).
+  XQWORD epochseconds = datetime->GetEPOCHFormat();
+
+  EXPECT_GT(epochseconds, (XQWORD)1672531200);  // 2023-01-01 00:00:00 UTC
+
+  GEN_XFACTORY.DeleteDateTime(datetime);
+}
+
+
+TEST(UNITTEST_XDATETIME_CLASSNAME, SetFromDateTimePointerAndReference)
+{
+  XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
+  XDATETIME* datetimeB = GEN_XFACTORY.CreateDateTime();
+  XDATETIME* datetimeC = GEN_XFACTORY.CreateDateTime();
+
+  EXPECT_NE((void*)datetimeA, (void*)NULL);
+  EXPECT_NE((void*)datetimeB, (void*)NULL);
+  EXPECT_NE((void*)datetimeC, (void*)NULL);
+
+  SetKnownDateTime(datetimeA, 15, 6, 2020, 10, 30, 0, 0);
+
+  EXPECT_TRUE(datetimeB->Set(datetimeA));
+  EXPECT_TRUE((*datetimeA) == (*datetimeB));
+
+  datetimeC->Set(*datetimeA);
+  EXPECT_TRUE((*datetimeA) == (*datetimeC));
+
+  GEN_XFACTORY.DeleteDateTime(datetimeA);
+  GEN_XFACTORY.DeleteDateTime(datetimeB);
+  GEN_XFACTORY.DeleteDateTime(datetimeC);
+}
+
+
+TEST(UNITTEST_XDATETIME_CLASSNAME, SecondsRoundTripJulian)
+{
+  XDATETIME* datetimeA = GEN_XFACTORY.CreateDateTime();
+  XDATETIME* datetimeB = GEN_XFACTORY.CreateDateTime();
+
+  EXPECT_NE((void*)datetimeA, (void*)NULL);
+  EXPECT_NE((void*)datetimeB, (void*)NULL);
+
+  SetKnownDateTime(datetimeA, 15, 6, 2020, 10, 30, 45, 0);
+
+  XQWORD seconds = datetimeA->GetSeconsFromDate(true);
+
+  datetimeB->SetToZero();
+  EXPECT_TRUE(datetimeB->SetDateFromSeconds(seconds, true));
+
+  EXPECT_EQ(datetimeB->GetDay(),     datetimeA->GetDay());
+  EXPECT_EQ(datetimeB->GetMonth(),   datetimeA->GetMonth());
+  EXPECT_EQ(datetimeB->GetYear(),    datetimeA->GetYear());
+  EXPECT_EQ(datetimeB->GetHours(),   datetimeA->GetHours());
+  EXPECT_EQ(datetimeB->GetMinutes(), datetimeA->GetMinutes());
+  EXPECT_EQ(datetimeB->GetSeconds(), datetimeA->GetSeconds());
+
+  GEN_XFACTORY.DeleteDateTime(datetimeA);
+  GEN_XFACTORY.DeleteDateTime(datetimeB);
+}
+
+
 }
 #endif
 
