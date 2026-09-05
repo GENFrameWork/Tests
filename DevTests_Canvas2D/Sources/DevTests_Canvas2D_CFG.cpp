@@ -1,0 +1,382 @@
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @file       DevTests_Canvas2D_CFG.cpp
+*
+* @class      DEVTESTS_CANVAS2D_CFG
+* @brief      Developed tests Canvas 2D configuration class
+* @ingroup    TESTS
+*
+* @copyright  EndoraSoft. All rights reserved.
+*
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Defines.h"
+
+
+/*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+
+#include "DevTests_Canvas2D_CFG.h"
+
+#include "XLog.h"
+
+#include "DevTests_Canvas2D.h"
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Control.h"
+
+
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+DEVTESTS_CANVAS2D_CFG* DEVTESTS_CANVAS2D_CFG::instance = NULL;
+
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D_CFG::GetIsInstanced()
+* @brief      Checks if the singleton instance is created.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D_CFG::GetIsInstanced()
+{
+  return instance!=NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CANVAS2D_CFG& DEVTESTS_CANVAS2D_CFG::GetInstance(bool ini)
+* @brief      Gets the singleton instance.
+* @ingroup    TESTS
+*
+* @param[in]  ini : true to initialize the singleton instance; false to return the current instance.
+*
+* @return     DEVTESTS_CANVAS2D_CFG& : reference returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CANVAS2D_CFG& DEVTESTS_CANVAS2D_CFG::GetInstance(bool ini)
+{
+  if(!instance) instance = GEN_NEW DEVTESTS_CANVAS2D_CFG(APPLICATION_NAMEFILE);
+
+  return (*instance);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D_CFG::DelInstance()
+* @brief      Deletes the singleton instance.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D_CFG::DelInstance()
+{
+  if(instance)
+    {
+      GEN_DELETE instance;
+      instance = NULL;
+
+      return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D_CFG::DoVariableMapping()
+* @brief      Maps configuration variables.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D_CFG::DoVariableMapping()
+{
+  if(!APPFLOWCFG::DoVariableMapping())
+    {
+      return false;
+    }
+
+  //-----------------------------------------------------
+  // GENERAL
+ 
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_POSX                , &screen_posx);
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_POSY                , &screen_posy);
+
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_WIDTH               , &screen_width); 
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_HEIGHT              , &screen_height);
+
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_MAXWIDTH            , &screen_maxwidth); 
+  AddValue(XFILECFG_VALUETYPE_INT	  , DEVTESTS_CANVAS2DCFG_SECTIONGENERAL        , DEVTESTS_CANVAS2DCFG_GENERAL_SCREEN_MAXHEIGHT           , &screen_maxheight);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D_CFG::DoDefault()
+* @brief      Loads default configuration values.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D_CFG::DoDefault()
+{
+  if(!APPFLOWCFG::DoDefault()) 
+    {
+      return false;
+    }
+
+  //------------------------------------------------------------------------------
+
+  GEN_XTRACE_NET_CFG_DEFAULT_01
+
+  screen_posx       = 400;    
+  screen_posy       = 100;    
+
+  screen_width      = 800;    
+  screen_height     = 600;      
+
+  screen_maxwidth   = 1024;    
+  screen_maxheight  = 800;    
+
+  //------------------------------------------------------------------------------
+
+  log_isactive                          = true;
+  log_backupisactive                    = true;
+  log_backupmaxfiles                    = 10;
+  log_backupiscompress                  = true;
+
+  log_activesectionsID.Empty();
+
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_INITIATION;
+  log_activesectionsID                  += __L(",");
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_GENERIC;
+  log_activesectionsID                  += __L(",");
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_STATUSAPP;
+  log_activesectionsID                  += __L(",");
+  log_activesectionsID                  += APPFLOW_CFG_LOG_SECTIONID_ENDING;
+
+  log_levelmask                         = XLOGLEVEL_ALL;
+  log_maxsize                           = 3000;
+  log_reductionpercent                  = 10;
+
+  //------------------------------------------------------------------------------
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetPosX()
+* @brief      Gets the screen pos x.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetPosX()
+{
+  return screen_posx;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetPosY()
+* @brief      Gets the screen pos y.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetPosY()
+{
+  return screen_posy;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DEVTESTS_CANVAS2D_CFG::Screen_SetPosX(int posx)
+* @brief      Sets the screen pos x.
+* @ingroup    TESTS
+*
+* @param[in]  posx : screen horizontal position.
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTS_CANVAS2D_CFG::Screen_SetPosX(int posx)
+{
+  this->screen_posx = posx;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DEVTESTS_CANVAS2D_CFG::Screen_SetPosY(int posy)
+* @brief      Sets the screen pos y.
+* @ingroup    TESTS
+*
+* @param[in]  posy : screen vertical position.
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTS_CANVAS2D_CFG::Screen_SetPosY(int posy)
+{
+  this->screen_posy = posy;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetWidth()
+* @brief      Gets the screen width.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetWidth()
+{
+  return screen_width;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetHeight()
+* @brief      Gets the screen height.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetHeight()
+{
+  return screen_height;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetMaxWidth()
+* @brief      Gets the screen max width.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetMaxWidth()
+{
+  return screen_maxwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CANVAS2D_CFG::Screen_GetMaxHeight()
+* @brief      Gets the screen max height.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CANVAS2D_CFG::Screen_GetMaxHeight()
+{
+  return screen_maxheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CANVAS2D_CFG::DEVTESTS_CANVAS2D_CFG(XCHAR* namefile)
+* @brief      Constructor of class.
+* @ingroup    TESTS
+*
+* @param[in]  namefile : configuration file name.
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CANVAS2D_CFG::DEVTESTS_CANVAS2D_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
+{
+  Clean();
+
+  if(namefile)
+    {
+      Ini<DEVTESTS_CANVAS2D_CFG>();
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CANVAS2D_CFG::~DEVTESTS_CANVAS2D_CFG()
+* @brief      Destructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CANVAS2D_CFG::~DEVTESTS_CANVAS2D_CFG()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DEVTESTS_CANVAS2D_CFG::Clean()
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTS_CANVAS2D_CFG::Clean()
+{
+  screen_posx         = 0;    
+  screen_posy         = 0;    
+
+  screen_width        = 0;    
+  screen_height       = 0;    
+
+  screen_maxwidth     = 0;    
+  screen_maxheight    = 0;    
+}
+
+

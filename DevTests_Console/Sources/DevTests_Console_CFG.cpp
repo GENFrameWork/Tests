@@ -1,0 +1,355 @@
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @file       DevTests_Console_CFG.cpp
+*
+* @class      DEVTESTS_CONSOLE_CFG
+* @brief      Developed tests console configuration class
+* @ingroup    TESTS
+*
+* @copyright  EndoraSoft. All rights reserved.
+*
+* @cond
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+* documentation files(the "Software"), to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense, and/ or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+* the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+* THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* @endcond
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Defines.h"
+
+
+/*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
+
+#include "DevTests_Console_CFG.h"
+
+#include "XLog.h"
+
+#include "DevTests_Console.h"
+
+
+/*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
+
+#include "GEN_Control.h"
+
+
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+DEVTESTS_CONSOLE_CFG* DEVTESTS_CONSOLE_CFG::instance = NULL;
+
+
+/*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CONSOLE_CFG::GetIsInstanced()
+* @brief      Checks if the singleton instance is created.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CONSOLE_CFG::GetIsInstanced()
+{
+  return instance!=NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CONSOLE_CFG& DEVTESTS_CONSOLE_CFG::GetInstance(bool ini)
+* @brief      Gets the singleton instance.
+* @ingroup    TESTS
+*
+* @param[in]  ini : true to initialize the singleton instance; false to return the current instance.
+*
+* @return     DEVTESTS_CONSOLE_CFG& : reference returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CONSOLE_CFG& DEVTESTS_CONSOLE_CFG::GetInstance(bool ini)
+{
+  if(!instance) instance = GEN_NEW DEVTESTS_CONSOLE_CFG(ini?APPLICATION_NAMEFILE:NULL);
+
+  return (*instance);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CONSOLE_CFG::DelInstance()
+* @brief      Deletes the singleton instance.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CONSOLE_CFG::DelInstance()
+{
+  if(instance)
+    {
+      GEN_DELETE instance;
+      instance = NULL;
+
+      return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CONSOLE_CFG::DoVariableMapping()
+* @brief      Maps configuration variables.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CONSOLE_CFG::DoVariableMapping()
+{
+  if(!APPFLOWCFG::DoVariableMapping())
+    {
+      return false;
+    }
+
+  //-----------------------------------------------------
+  // DATABASE
+
+  AddRemark(DEVTESTS_CONSOLE_CFG_SECTION_DATABASE, __L("-------------------------------------------------------"), 0, 1);
+  AddRemark(DEVTESTS_CONSOLE_CFG_SECTION_DATABASE, __L("Database config")                                        , 0, 2);
+  
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_URL                , &db_URL);                       AddRemark(DEVTESTS_CONSOLE_CFG_SECTION_DATABASE, DEVTESTS_CONSOLE_CFG_DATABASE_URL          ,  __L("URL for database")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_PORT               , &db_port);                      AddRemark(DEVTESTS_CONSOLE_CFG_SECTION_DATABASE, DEVTESTS_CONSOLE_CFG_DATABASE_PORT         ,  __L("Port for database") , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_DATABASENAME       , &db_databasename);              AddRemark(DEVTESTS_CONSOLE_CFG_SECTION_DATABASE, DEVTESTS_CONSOLE_CFG_DATABASE_DATABASENAME ,  __L("Database Name")     , APPFLOW_CFG_DEFAULT_REMARK_COLUMN, 0);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_USER               , &db_user);
+  AddValue(XFILECFG_VALUETYPE_STRING  , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_PASSWORD           , &db_password);
+  AddValue(XFILECFG_VALUETYPE_INT     , DEVTESTS_CONSOLE_CFG_SECTION_DATABASE      , DEVTESTS_CONSOLE_CFG_DATABASE_TIMEOUTCONNECTION  , &db_timeoutconnection);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CONSOLE_CFG::DoDefault()
+* @brief      Loads default configuration values.
+* @ingroup    TESTS
+*
+* @return     bool : true if it is successful.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CONSOLE_CFG::DoDefault()
+{
+  if(!APPFLOWCFG::DoDefault()) 
+    {
+      return false;
+    }
+
+  //------------------------------------------------------------------------------
+
+  GEN_XTRACE_NET_CFG_DEFAULT_01
+  GEN_XTRACE_NET_CFG_DEFAULT_LOCAL
+
+  //------------------------------------------------------------------------------
+
+  checkresourceshardware_memstatuscheckcadence          = 30;
+  checkresourceshardware_memstatuslimitpercent          = 5;
+  checkresourceshardware_totalcpuusagecheckcadence      = 20;
+  checkresourceshardware_totalcpuusagelimitpercent      = 90;  
+  checkresourceshardware_appcpuusagecheckcadence        = 20;
+  checkresourceshardware_appcpuusagelimitpercent        = 90;  
+  checkresourceshardware_appcpuusageprocessname         = APPLICATION_NAMEAPP; 
+
+  //------------------------------------------------------------------------------
+
+  log_isactive                                          = true;
+  log_backupisactive                                    = true;
+  log_backupmaxfiles                                    = 10;
+  log_backupiscompress                                  = true;
+
+  log_activesectionsID.Empty();
+
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_INITIATION;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_GENERIC;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_STATUSAPP;
+  log_activesectionsID                                 += __L(",");
+  log_activesectionsID                                 += APPFLOW_CFG_LOG_SECTIONID_ENDING;
+
+  log_levelmask                                         = XLOGLEVEL_ALL;
+  log_maxsize                                           = 3000;
+  log_reductionpercent                                  = 10;
+
+  //------------------------------------------------------------------------------
+
+  db_URL                                                = __L("");
+  db_port                                               = 0;
+  db_databasename                                       = __L("");
+  db_user                                               = __L("");
+  db_password                                           = __L("");
+  db_timeoutconnection                                  = 30;
+
+  //------------------------------------------------------------------------------
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetURL()
+* @brief      Database Get URL.
+* @ingroup    TESTS
+*
+* @return     XSTRING* : pointer returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetURL()
+{
+  return &db_URL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD DEVTESTS_CONSOLE_CFG::Database_GetPort()
+* @brief      Database Get Port.
+* @ingroup    TESTS
+*
+* @return     XDWORD : generated DWORD value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DEVTESTS_CONSOLE_CFG::Database_GetPort()
+{
+  return db_port;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTS_CONSOLE_CFG::Database_DatabaseName()
+* @brief      Database Database Name.
+* @ingroup    TESTS
+*
+* @return     XSTRING* : pointer returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTS_CONSOLE_CFG::Database_DatabaseName()
+{
+  return &db_databasename;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetUser()
+* @brief      Database Get User.
+* @ingroup    TESTS
+*
+* @return     XSTRING* : pointer returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetUser()
+{
+  return &db_user;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetPassword()
+* @brief      Database Get Password.
+* @ingroup    TESTS
+*
+* @return     XSTRING* : pointer returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DEVTESTS_CONSOLE_CFG::Database_GetPassword()
+{
+  return &db_password;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         int DEVTESTS_CONSOLE_CFG::Database_GetTimeoutConnection()
+* @brief      Database Get Timeout Connection.
+* @ingroup    TESTS
+*
+* @return     int : result code returned by the operation.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+int DEVTESTS_CONSOLE_CFG::Database_GetTimeoutConnection()
+{
+  return db_timeoutconnection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CONSOLE_CFG::DEVTESTS_CONSOLE_CFG(XCHAR* namefile)
+* @brief      Constructor of class.
+* @ingroup    TESTS
+*
+* @param[in]  namefile : configuration file name.
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CONSOLE_CFG::DEVTESTS_CONSOLE_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
+{
+  Clean();
+
+  if(namefile)
+    {
+      Ini<DEVTESTS_CONSOLE_CFG>();
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DEVTESTS_CONSOLE_CFG::~DEVTESTS_CONSOLE_CFG()
+* @brief      Destructor of class.
+* @ingroup    TESTS
+*
+* @return     Does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DEVTESTS_CONSOLE_CFG::~DEVTESTS_CONSOLE_CFG()
+{
+  End();
+
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DEVTESTS_CONSOLE_CFG::Clean()
+* @brief      Cleans the object internal state.
+* @ingroup    TESTS
+*
+* @return     void : does not return anything.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DEVTESTS_CONSOLE_CFG::Clean()
+{
+
+}
+
+
