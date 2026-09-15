@@ -94,9 +94,9 @@ typedef bool (*DEVTESTS_CANVAS2D_FUNCTION)(DEVTESTS_CANVAS2D* tests);
 
 typedef struct
 {
-  bool                        active;
-  DEVTESTS_CANVAS2D_FUNCTION   function;
-  XCHAR*                      namefunction;
+  bool                          active;
+  DEVTESTS_CANVAS2D_FUNCTION    function;
+  XCHAR*                        namefunction;
 
 } DEVTESTS_CANVAS2D_LIST_FUNCTION;
 
@@ -111,6 +111,22 @@ typedef struct
 #define APPLICATION_OWNER                         __L("EndoraSoft")
 
 #define APPLICATION_YEAROFCREATION                2023
+
+
+#define APPLICATION_CFG_NAMEFILE                  APPLICATION_NAMEFILE
+#define APPLICATION_LNG_NAMEFILE                  APPLICATION_NAMEFILE
+#define APPLICATION_LOG_NAMEFILE                  APPLICATION_NAMEFILE
+
+#define APPLICATION_DIRECTORYMAIN                 __L("assets")
+#define APPLICATION_DIRECTORYWEB                  __L("web")
+
+#define HOMESERVER_PROTOCOLCLI_ID                 __L("homeserver")
+
+#define HOMESERVER_MAXCOMPUTER_CHECK              3
+
+#define APPLICATION_GUI_STATUS_VIEWPORT_ID        __L("frame_viewport")
+#define APPLICATION_GUI_MENU_VIEWPORT_ID          __L("menu_viewport")
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -140,18 +156,29 @@ class SCRIPT;
 class DEVTESTS_CANVAS2D_CFG;
 
 
-class DEVTESTS_CANVAS2D : public APPFLOWGRAPHICS, public XFSMACHINE
+class DEVTESTS_CANVAS2D :
+#ifdef APPFLOW_GRAPHICS_ACTIVE
+public APPFLOWGRAPHICS,
+#else
+public APPFLOWCONSOLE,
+public XOBSERVER, 
+#endif
+public XFSMACHINE
 {
   public:
-                                    DEVTESTS_CANVAS2D                        ();
-    virtual                        ~DEVTESTS_CANVAS2D                        ();
+                                    DEVTESTS_CANVAS2D                       ();
+    virtual                        ~DEVTESTS_CANVAS2D                       ();
 
-    bool                            InitFSMachine                           ();
+    bool                            IniFSMachine                            ();
 
     bool                            AppProc_Ini                             ();
     bool                            AppProc_FirstUpdate                     ();
     bool                            AppProc_Update                          ();
     bool                            AppProc_End                             ();
+
+    bool                            KeyValidSecuences                       (int key);
+
+    bool                            Show_AllStatus                          ();
    
   private:
 
@@ -174,8 +201,11 @@ class DEVTESTS_CANVAS2D : public APPFLOWGRAPHICS, public XFSMACHINE
 
     void                            Clean                                   ();
 
-    XTIMER*                         xtimer;
 
+    XTIMER*                         xtimerupdateconsole;
+    XMUTEX*                         xmutexshowallstatus;
+
+  
     INPBUTTON*                      button[DEVTESTS_CANVAS2D_BUTTON_MAX];
     INPCURSOR*                      cursor;
 

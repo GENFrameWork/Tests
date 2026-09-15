@@ -21,12 +21,19 @@ option(XMEMORY_CONTROL_FEATURE                                  "XMemory Control
 option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON )
 
 option(LINUX_X11_FEATURE                                        "Linux X11"                                               ON )
-       
-option(APPFLOW_FEATURE                                          "Application Flow modules"                                ON )
-option(APPFLOW_EXTENDED_FEATURE                                 "Application Flow Extended"                               ON )
-option(APPFLOW_LOG_FEATURE                                      "Application Flow Log"                                    ON )
-option(APPFLOW_GRAPHICS_FEATURE                                 "Application Flow Graphics"                               ON )
-                                                                             
+ 
+option(APPFLOW_FEATURE                                          "Application modules"                                     ON )
+option(APPFLOW_EXTENDED_FEATURE                                 "Application Extended"                                    ON )  
+option(APPFLOW_EXTENDED_APPLICATIONHEADER_FEATURE               "Application Extended Aplication Header"                  ON )  
+option(APPFLOW_EXTENDED_APPLICATIONSTATUS_FEATURE               "Application Extended Aplication Status"                  ON )  
+option(APPFLOW_EXTENDED_INTERNETSTATUS_FEATURE                  "Application Extended Internet Status"                    ON )  
+option(APPFLOW_CHECKRESOURCESHARDWARE_FEATURE                   "Application Check Resources Hardware"                    ON )
+option(APPFLOW_GRAPHICS_FEATURE                                 "Application Graphics"                                    ON )
+option(APPFLOW_CONSOLE_FEATURE                                  "Application Console"                                     ON )  
+option(APPFLOW_INTERNETSERVICES_FEATURE                         "Application Internet Services"                           ON )
+option(APPFLOW_LOG_FEATURE                                      "Application Log"                                         ON )
+
+
 option(APPFLOW_CFG_GENERAL_FEATURE                              "Application Flow CFG General"                            ON )  
 option(APPFLOW_CFG_LOG_FEATURE                                  "Application Flow CFG LOG"                                ON )
 option(APPFLOW_CFG_SCRIPTS_FEATURE                              "Application Flow Scripts List"                           ON )  
@@ -55,8 +62,10 @@ option(SCRIPT_LIB_PROCESS_FEATURE                               "Script Lib Proc
 option(SCRIPT_LIB_LOG_FEATURE                                   "Script Lib Log"                                          ON )    
 option(SCRIPT_LIB_CONSOLE_FEATURE                               "Script Lib Console"                                      ON ) 
 option(SCRIPT_LIB_WINDOW_FEATURE                                "Script Lib Window"                                       ON ) 
-option(SCRIPT_LIB_INPUTSIMULATE_FEATURE                         "Script Lib Input Simulated"                              ON )    
+option(SCRIPT_LIB_INPUTSIMULATE_FEATURE                         "Script Lib Input Simulated"                              ON ) 
 
+option(USERINTERFACE_FEATURE                                    "User Interace"                                           ON )
+#option(USERINTERFACE_DEBUG_FEATURE                              "Debug User Interace"                                     ON )
 
 
 # --------------------------------------------------------------------

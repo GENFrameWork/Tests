@@ -158,14 +158,14 @@ DEVTESTS_CANVAS2D::~DEVTESTS_CANVAS2D()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DEVTESTS_CANVAS2D::InitFSMachine()
+* @fn         bool DEVTESTS_CANVAS2D::IniFSMachine()
 * @brief      Initializes the finite state machine.
 * @ingroup    TESTS
 *
 * @return     bool : true if it is successful.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DEVTESTS_CANVAS2D::InitFSMachine()
+bool DEVTESTS_CANVAS2D::IniFSMachine()
 {
   if(!AddState( DEVTESTS_CANVAS2D_XFSMSTATE_NONE            ,
                 DEVTESTS_CANVAS2D_XFSMEVENT_INI             , DEVTESTS_CANVAS2D_XFSMSTATE_INI           ,
@@ -207,64 +207,98 @@ bool DEVTESTS_CANVAS2D::AppProc_Ini()
   XSTRING   stringresult;
 
   //-------------------------------------------------------------------------------------------------
-
+  
   GEN_SET_VERSION(APPLICATION_NAMEAPP, APPLICATION_NAMEFILE, APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR, APPLICATION_OWNER, APPLICATION_YEAROFCREATION)
 
   Application_GetName()->Set(APPLICATION_NAMEAPP);
 
+  #ifdef APPFLOW_GRAPHICS_ACTIVE
   SetInitOptions( APPFLOWGRAPHICS_INIOPTION_CREATEMAINSCREEN    |
                   APPFLOWGRAPHICS_INIOPTION_SHOWMAINSCREEN      |
                   APPFLOWGRAPHICS_INIOPTION_INPUT);
+  #endif
 
-  //--------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------
 
   XTRACE_SETAPPLICATIONNAME((*Application_GetName()));
   XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
   XTRACE_SETAPPLICATIONID(string);
 
-  //--------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------
 
-  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPFLOW_DEFAULT_DIRECTORY_ROOT);
+  GEN_XPATHSMANAGER.AdjustRootPathDefault(APPLICATION_DIRECTORYMAIN);
 
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS      , APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FONTS         , APPFLOW_DEFAULT_DIRECTORY_FONTS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS    , APPFLOW_DEFAULT_DIRECTORY_UI_LAYOUTS);
-  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS       , APPFLOW_DEFAULT_DIRECTORY_SCRIPTS);
-
-
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_GRAPHICS    , APPFLOW_DEFAULT_DIRECTORY_GRAPHICS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_FONTS       , APPFLOW_DEFAULT_DIRECTORY_FONTS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_UI_LAYOUTS  , APPFLOW_DEFAULT_DIRECTORY_UI_LAYOUTS);
+  GEN_XPATHSMANAGER.AddPathSection(XPATHSMANAGERSECTIONTYPE_WEB         , APPLICATION_DIRECTORYWEB);
+  
   GEN_XPATHSMANAGER.CreateAllPathSectionOnDisk();
 
+
+  //-------------------------------------------------------------------------------------------------
+
+  IniFSMachine();
+
+  //--------------------------------------------------------------------------------------
+
+  //Test_DIOWifiManagerMode(this);
+
+  XTRACE_SETAPPLICATIONNAME((*Application_GetName()));
+  XTRACE_SETAPPLICATIONVERSION(APPLICATION_VERSION, APPLICATION_SUBVERSION, APPLICATION_SUBVERSIONERR);
+  XTRACE_SETAPPLICATIONID(string);
+  //XTRACE_SETLOCALIPFILTER(172);
+
+  
+  //--------------------------------------------------------------------------------------
+
+  
+  // GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
+  // xpath.Create(3 , xpathsection.Get(), DEVTESTSCONSOLE_LNG_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
+
+  // if(!GEN_XTRANSLATION.Ini(xpath))
+  //  {
+  //    return false;
+  //  }
+
+
+  GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_SPA); 
+
   //--------------------------------------------------------------------------------------------------
-
-  InitFSMachine();
-
-  //--------------------------------------------------------------------------------------
-
-  xtimer = GEN_XFACTORY.CreateTimer();
-  if(!xtimer) return false;
-
-  //--------------------------------------------------------------------------------------
-
-  /*
-  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
-  xpath.Create(3 , xpathsection.Get(), SCRIPTS_LNG_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
-
-  if(!GEN_XTRANSLATION.Ini(xpath))
-    {
-      return false;
-    }
-  */
-
-  GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_SPA);
-
-  //--------------------------------------------------------------------------------------
 
   APPFLOW_CFG_SETAUTOMATICTRACETARGETS
 
-  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------------------
+  
+  #ifdef APPFLOW_CFG_DNSRESOLVER_ACTIVE
 
-  APPFLOW_EXTENDED.APPStart(&APPFLOW_CFG);
+  APPFLOW_CFG.SetAutomaticDNSResolver();
 
+  #endif
+
+  //--------------------------------------------------------------------------------------------------
+
+  XTRACE_CLEARSCREEN;
+  XTRACE_CLEARMSGSSTATUS;
+  
+  //--------------------------------------------------------------------------------------------------
+
+  
+  // GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
+  // xpath.Create(3 , xpathsection.Get(), MINIWEBSERVER_LNG_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
+
+  // if(!GEN_XTRANSLATION.Ini(xpath))
+  //  {
+  //    return false;
+  //  }
+  
+
+  GEN_XTRANSLATION.SetActual(XLANGUAGE_ISO_639_3_CODE_ENG);
+
+  //--------------------------------------------------------------------------------------------------
+  
+  APPFLOW_EXTENDED.APPStart(&APPFLOW_CFG, this);
+  
   //--------------------------------------------------------------------------------------
 
   SetEvent(DEVTESTS_CANVAS2D_XFSMEVENT_INI);
@@ -284,6 +318,15 @@ bool DEVTESTS_CANVAS2D::AppProc_Ini()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTS_CANVAS2D::AppProc_FirstUpdate()
 {
+
+  //--------------------------------------------------------------------------------------------------
+
+  xtimerupdateconsole = GEN_XFACTORY.CreateTimer();
+  if(!xtimerupdateconsole) return false;
+
+  xmutexshowallstatus = GEN_XFACTORY.Create_Mutex();
+  if(!xmutexshowallstatus) return false;
+
   //--------------------------------------------------------------------------------------
 
   INPDEVICE* inpdevice;
@@ -352,19 +395,36 @@ bool DEVTESTS_CANVAS2D::AppProc_Update()
     {
       switch(GetCurrentState())
         {
-          case DEVTESTS_CANVAS2D_XFSMSTATE_NONE        : break;
+          case DEVTESTS_CANVAS2D_XFSMSTATE_NONE         : break;
 
-          case DEVTESTS_CANVAS2D_XFSMSTATE_INI         : break;
+          case DEVTESTS_CANVAS2D_XFSMSTATE_INI          : break;
 
-          case DEVTESTS_CANVAS2D_XFSMSTATE_UPDATE      : { UpdateInput();
+          case DEVTESTS_CANVAS2D_XFSMSTATE_UPDATE       : if(GetExitType() == APPFLOWBASE_EXITTYPE_UNKNOWN)
+                                                            {
+                                                              if(xtimerupdateconsole)
+                                                                {
+                                                                  if(xtimerupdateconsole->GetMeasureSeconds() >= 1)
+                                                                    {
+                                                                      Show_AllStatus();
+                                                                      xtimerupdateconsole->Reset();
+                                                                    }
 
-                                                          DrawFrame();
+                                                                  if(console->KBHit())
+                                                                    {
+                                                                      int key = console->GetChar();
+                                                                      KeyValidSecuences(key);
+                                                                    }
+                                                                }
+                                                             
+                                                              UpdateInput();
 
-                                                          GetMainScreen()->UpdateViewports();
-                                                        }
-                                                        break;
+                                                              DrawFrame();
 
-          case DEVTESTS_CANVAS2D_XFSMSTATE_END         : break;
+                                                              GetMainScreen()->UpdateViewports();
+                                                            }
+                                                            break;
+
+          case DEVTESTS_CANVAS2D_XFSMSTATE_END            : break;
 
         }
     }
@@ -376,14 +436,14 @@ bool DEVTESTS_CANVAS2D::AppProc_Update()
 
           switch(GetCurrentState())
             {
-              case DEVTESTS_CANVAS2D_XFSMSTATE_NONE    : break;
+              case DEVTESTS_CANVAS2D_XFSMSTATE_NONE       : break;
 
-              case DEVTESTS_CANVAS2D_XFSMSTATE_INI     : SetEvent(DEVTESTS_CANVAS2D_XFSMEVENT_UPDATE);                                                       
-                                                        break;
+              case DEVTESTS_CANVAS2D_XFSMSTATE_INI        : SetEvent(DEVTESTS_CANVAS2D_XFSMEVENT_UPDATE);                                                       
+                                                            break;
 
-              case DEVTESTS_CANVAS2D_XFSMSTATE_UPDATE  : break;
+              case DEVTESTS_CANVAS2D_XFSMSTATE_UPDATE     : break;
 
-              case DEVTESTS_CANVAS2D_XFSMSTATE_END     : break;
+              case DEVTESTS_CANVAS2D_XFSMSTATE_END        : break;
             }
         }
     }
@@ -420,10 +480,16 @@ bool DEVTESTS_CANVAS2D::AppProc_End()
 
   //--------------------------------------------------------------------------------------
 
-  if(xtimer)
+  if(xmutexshowallstatus)
     {
-      GEN_XFACTORY.DeleteTimer(xtimer);
-      xtimer = NULL;
+      GEN_XFACTORY.Delete_Mutex(xmutexshowallstatus);
+      xmutexshowallstatus = NULL;
+    }
+
+  if(xtimerupdateconsole)
+    {
+      GEN_XFACTORY.DeleteTimer(xtimerupdateconsole);
+      xtimerupdateconsole = NULL;
     }
 
   //--------------------------------------------------------------------------------------
@@ -432,8 +498,38 @@ bool DEVTESTS_CANVAS2D::AppProc_End()
   APPFLOW_EXTENDED.DelInstance();  
   APPFLOW_CFG.DelInstance();
 
-
   //--------------------------------------------------------------------------------------
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D::KeyValidSecuences(int key)
+* @brief      Processes valid key sequences.
+* @ingroup    EXAMPLES
+*
+* @param[in]  key : Key code to process.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D::KeyValidSecuences(int key)
+{
+  XCHAR character = (XCHAR)key;
+
+  if((character<32) || (character>127)) character = __C('?');
+  APPFLOW_LOG_ENTRY(XLOGLEVEL_WARNING, APPFLOW_CFG_LOG_SECTIONID_STATUSAPP, false, __L("Key pressed: 0x%02X [%c]"), key, character);
+
+  console->Printf(__L("\r    \r"));
+
+  switch(key)
+    {
+      case 0x1B : // ESC Exit application
+                  SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                  break;
+    }
 
   return true;
 }
@@ -493,21 +589,21 @@ bool DEVTESTS_CANVAS2D::UpdateInput()
               switch(c)
                 {
                   case DEVTESTS_CANVAS2D_BUTTON_ESC      : { int x = 0;
-                                                            int y = 0;
+                                                             int y = 0;
 
-                                                            GetMainScreen()->Get_Position(x, y);
+                                                             GetMainScreen()->Get_Position(x, y);
 
-                                                            APPFLOW_CFG.Screen_SetPosX(x);
-                                                            APPFLOW_CFG.Screen_SetPosY(y);
+                                                             APPFLOW_CFG.Screen_SetPosX(x);
+                                                             APPFLOW_CFG.Screen_SetPosY(y);
 
-                                                            APPFLOW_CFG.Save();
+                                                             APPFLOW_CFG.Save();
 
-                                                            SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
-                                                          }
-                                                          break; 
+                                                             SetExitType(APPFLOWBASE_EXITTYPE_BY_USER);
+                                                           }
+                                                           break; 
 
                     case DEVTESTS_CANVAS2D_BUTTON_SPACE  : Do_Tests();
-                                                          break;
+                                                           break;
                 }
             }
 
@@ -679,9 +775,9 @@ bool DEVTESTS_CANVAS2D::DrawFrame()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DEVTESTS_CANVAS2D::Do_Tests()
 {
-  DEVTESTS_CANVAS2D_LIST_FUNCTION listfunctions[] =  {   { false  , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    },
-                                                        { true   , Test_LoadVectorFileDXF           , __L("Test Load Vector File DXF")                          }                                                     
-                                                    };
+  DEVTESTS_CANVAS2D_LIST_FUNCTION listfunctions[] =  {   { true   , Test_ScriptLibInputSimulated     , __L("Test Script Lib Input Simulated")                    },
+                                                         { false  , Test_LoadVectorFileDXF           , __L("Test Load Vector File DXF")                          }                                                     
+                                                     };
 
   for(int c=0; c<(sizeof(listfunctions)/sizeof(DEVTESTS_CANVAS2D_LIST_FUNCTION)); c++)
     {
@@ -774,6 +870,30 @@ void DEVTESTS_CANVAS2D::AdjustLibraries(SCRIPT* script)
   #ifdef SCRIPT_LIB_WINDOWS_DEBUG  
   SCRIPT_SET_LIB_APPFLOWGRAPHICS(script, devtests_canvas2d)
   #endif
+}
+
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DEVTESTS_CANVAS2D::Show_AllStatus()
+* @brief      Shows all status information.
+* @ingroup    EXAMPLES
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+*---------------------------------------------------------------------------------------------------------------------*/
+bool DEVTESTS_CANVAS2D::Show_AllStatus()
+{
+  console->Clear();
+
+  if(xmutexshowallstatus) xmutexshowallstatus->Lock();
+
+  APPFLOW_EXTENDED.ShowAll();
+
+  if(xmutexshowallstatus) xmutexshowallstatus->UnLock();
+
+  return true;
 }
 
 
@@ -902,7 +1022,8 @@ void DEVTESTS_CANVAS2D::HandleEvent(XEVENT* xevent)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DEVTESTS_CANVAS2D::Clean()
 {
-  xtimer                      = NULL;
+  xtimerupdateconsole         = NULL;
+  xmutexshowallstatus         = NULL;
 
   for(int c=0; c<DEVTESTS_CANVAS2D_BUTTON_MAX; c++)
     {
