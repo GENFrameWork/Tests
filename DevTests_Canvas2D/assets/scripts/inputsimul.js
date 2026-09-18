@@ -12,6 +12,8 @@ function main()
   var maskbitmapname  = "inputsimul.png";
   var maskbitmapname2 = "inputsimul2.png";
 
+  Log_Ini("","scripts.log"); 
+
   Log_AddEntry(1, "Script", "[script %s] Iniciado Test...", scriptname);
 
   ExecApplication(apppath);
