@@ -1531,6 +1531,69 @@ TEST(UI_PropertyRegistry, ExpandCSSShorthand4WithFourValuesAssignsEachSlotInOrde
 }
 
 
+// Fase 8: UI_LENGTH_CONTEXT-aware length tokens for stylesheet layouts.
+TEST(UI_PropertyRegistry, ResolveLengthTokenRemUsesRootFontSize)
+{
+  XSTRING           raw(__L("0.5rem"));
+  UI_LENGTH_CONTEXT ctx = { 0.0, 30.0, 16.0, 1440.0, 900.0 };
+  double            out = -1.0;
+
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveLengthToken(raw, ctx, out));
+  EXPECT_EQ(out, 8.0);   // 0.5 * 16 (root), not element fontsize 30
+}
+
+
+// Track L.2: gap / flex-basis authors use the same ResolveLengthToken path as padding.
+TEST(UI_PropertyRegistry, ResolveLengthTokenOnePointThreeSevenFiveRemIsTwentyTwoPxAtRootSixteen)
+{
+  XSTRING           raw(__L("1.375rem"));
+  UI_LENGTH_CONTEXT ctx = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double            out = -1.0;
+
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveLengthToken(raw, ctx, out));
+  EXPECT_EQ(out, 22.0);  // cards-grid column-gap demo
+}
+
+
+TEST(UI_PropertyRegistry, ResolveLengthTokenVwUsesViewportWidth)
+{
+  XSTRING           raw(__L("10vw"));
+  UI_LENGTH_CONTEXT ctx = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double            out = -1.0;
+
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveLengthToken(raw, ctx, out));
+  EXPECT_EQ(out, 144.0);
+}
+
+
+TEST(UI_PropertyRegistry, ExpandCSSShorthand4LengthsResolvesMixedRemAndPx)
+{
+  XSTRING           raw(__L("0.5rem 8"));
+  UI_LENGTH_CONTEXT ctx = { 200.0, 16.0, 16.0, 1440.0, 900.0 };
+  double            out[4] = { -1.0, -1.0, -1.0, -1.0 };
+
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ExpandCSSShorthand4Lengths(raw, ctx, out));
+  // 2-value: vertical / horizontal -> TOP=BOTTOM=8, LEFT=RIGHT=8
+  EXPECT_EQ(out[0], 8.0);
+  EXPECT_EQ(out[1], 8.0);
+  EXPECT_EQ(out[2], 8.0);
+  EXPECT_EQ(out[3], 8.0);
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesWithLengthContextResolvesRemLonghand)
+{
+  UI_STYLE style;
+  style.Set(__L("margin-top"), __L("0.5rem"));
+
+  UI_LENGTH_CONTEXT ctx = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double            edges[4] = { -1.0, -1.0, -1.0, -1.0 };
+
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, true, edges, &ctx));
+  EXPECT_EQ(edges[2], 8.0);   // UP = margin-top
+}
+
+
 // Phase 0: margin 4-value CSS TRBL expansion (used when a layout has a stylesheet).
 TEST(UI_PropertyRegistry, MarginFourValueTRBLExpansionMatchesPaddingOrder)
 {
