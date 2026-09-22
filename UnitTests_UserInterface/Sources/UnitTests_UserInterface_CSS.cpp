@@ -497,11 +497,50 @@ TEST(UI_CSSParser, SkipsUnsupportedAtRuleAndKeepsParsingFollowingRules)
   UI_STYLESHEET  sheet;
   XSTRING        text;
 
-  text.Set(__L("@media (min-width: 100) { .x { color: red; } } .ok { color: 1,2,3,255; }"));
+  // Track B owns @media; use another at-rule to assert recovery still works.
+  text.Set(__L("@font-face { font-family: X; } .ok { color: 1,2,3,255; }"));
 
   EXPECT_TRUE(parser.ParseText(text, sheet));
   ASSERT_EQ(sheet.Rules_Count(), 1);
   EXPECT_EQ(sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0)->GetClasses().Get(0)->Compare(__L("ok"), true), 0);
+}
+
+
+// Track Q: parse hygiene counters (XTRACE already warns; getters are the testable contract).
+TEST(UI_CSSParser, DiagnosticsCountDiscardedMalformedRules)
+{
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  XSTRING       text(__L(".ok { color: 1,2,3,255; } { orphan-block } .also { color: 4,5,6,255; }"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  EXPECT_GE(parser.GetLastRulesKept(), 1);
+  EXPECT_GE(parser.GetLastRulesDiscarded(), 1);
+  EXPECT_EQ(parser.GetLastUnterminatedComments(), 0);
+}
+
+
+TEST(UI_CSSParser, DiagnosticsDetectUnterminatedComment)
+{
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  // Comment never closed -- rest of file may be swallowed; counter must fire.
+  XSTRING text(__L("/* broken comment without end\n.ok { color: 1,2,3,255; }\n"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  EXPECT_GE(parser.GetLastUnterminatedComments(), 1);
+}
+
+
+TEST(UI_CSSParser, DiagnosticsZeroKeptWhenEverythingDiscarded)
+{
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  XSTRING       text(__L("{ only-orphans } {{{"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  EXPECT_EQ(parser.GetLastRulesKept(), 0);
+  EXPECT_GE(parser.GetLastRulesDiscarded(), 1);
 }
 
 
@@ -5539,6 +5578,74 @@ TEST(UI_StyleSheet, AncestorSelectedCombinatorRestylesDescendantWhenAncestorHasS
   EXPECT_TRUE(color.Find(__L("88"), true) != NOTFOUND);
 
   EXPECT_TRUE(sheet.HasPseudoRulesFor(etype, eid, eclasses, &ancestors));
+}
+
+
+// Track B: @media (max-width) applies only when stylesheet media viewport matches.
+TEST(UI_CSSParser, MediaMaxWidthRuleAppliesOnlyInsideViewport)
+{
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  XSTRING       text(__L(
+    ".card { color: 1,1,1,100; }\n"
+    "@media (max-width: 1000px) {\n"
+    "  .card { color: 9,9,9,100; }\n"
+    "}\n"));
+
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+  EXPECT_GE(sheet.Rules_Count(), 2);
+
+  XSTRING           etype(__L("form"));
+  XSTRING           eid(__L("x"));
+  XVECTOR<XSTRING*> eclasses;
+  XSTRING           c(__L("card"));
+  eclasses.Add(&c);
+  XVECTOR<XSTRING*> nopseudos;
+
+  sheet.SetMediaViewport(800, 600);
+  UI_STYLE narrow;
+  ASSERT_TRUE(sheet.Resolve(etype, eid, eclasses, nopseudos, narrow));
+  XSTRING color_n;
+  ASSERT_TRUE(narrow.Get(__L("color"), color_n));
+  EXPECT_TRUE(color_n.Find(__L("9,9,9"), true) != NOTFOUND);
+
+  sheet.SetMediaViewport(1440, 900);
+  UI_STYLE wide;
+  ASSERT_TRUE(sheet.Resolve(etype, eid, eclasses, nopseudos, wide));
+  XSTRING color_w;
+  ASSERT_TRUE(wide.Get(__L("color"), color_w));
+  EXPECT_TRUE(color_w.Find(__L("1,1,1"), true) != NOTFOUND);
+}
+
+
+TEST(UI_CSSParser, MediaMinWidthAndMaxWidthCombined)
+{
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  XSTRING       text(__L(
+    "@media (min-width: 800px) and (max-width: 1200px) {\n"
+    "  .hit { background-color: 2,2,2,100; }\n"
+    "}\n"));
+
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+  EXPECT_EQ(sheet.Rules_Count(), 1);
+
+  XSTRING           etype(__L("form"));
+  XSTRING           eid(__L("x"));
+  XVECTOR<XSTRING*> eclasses;
+  XSTRING           c(__L("hit"));
+  eclasses.Add(&c);
+  XVECTOR<XSTRING*> nopseudos;
+
+  sheet.SetMediaViewport(1000, 600);
+  UI_STYLE mid;
+  EXPECT_TRUE(sheet.Resolve(etype, eid, eclasses, nopseudos, mid));
+  XSTRING bg;
+  EXPECT_TRUE(mid.Get(__L("background-color"), bg));
+
+  sheet.SetMediaViewport(700, 600);
+  UI_STYLE low;
+  EXPECT_FALSE(sheet.Resolve(etype, eid, eclasses, nopseudos, low));
 }
 
 
